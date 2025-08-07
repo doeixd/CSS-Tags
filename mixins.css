@@ -1,0 +1,180 @@
+/**
+ * mixins.css
+ *
+ * A library of reusable CSS Functions and Mixins.
+ * ------------------------------------------------------------------------------
+ * This file contains a collection of helpful utilities based on the proposed
+ * CSS @function and @mixin specification.
+ *
+ * ==============================================================================
+ * ⚠️ IMPORTANT: PROPOSED FEATURE NOTICE ⚠️
+ * The @function and @mixin rules are NOT SUPPORTED in any browser as of late 2025.
+ * This file demonstrates a forward-looking, pre-processor-free approach.
+ * ==============================================================================
+ */
+
+/* --- FUNCTIONS (return single values) --- */
+
+/** @function --rem: Converts pixels to rems. */
+@function --rem(--px type(<number>), --base type(<number>): 16) returns type(<length>) {
+  result: calc(var(--px) / var(--base) * 1rem);
+}
+
+/** @function --fluid: Creates a fluid value that scales with the viewport. */
+@function --fluid(
+  --min-val type(<length>),
+  --max-val type(<length>),
+  --min-vp type(<length>): 375px,
+  --max-vp type(<length>): 1280px
+) returns type(<length>) {
+  --slope: calc((var(--max-val) - var(--min-val)) / (var(--max-vp) - var(--min-vp)));
+  --intercept: calc(var(--min-val) - var(--slope) * var(--min-vp));
+  --preferred-val: calc(var(--slope) * 100vw + var(--intercept));
+  result: clamp(var(--min-val), var(--preferred-val), var(--max-val));
+}
+
+/** @function --contrast-color: Calculates black or white for best contrast. */
+@function --contrast-color(
+  --bg-color type(<color>),
+  --threshold type(<number>): 0.65
+) returns type(<color>) {
+  --l-result: clamp(0, (l / var(--threshold) - 1) * -infinity, 1);
+  result: oklch(from var(--bg-color) var(--l-result) 0 h);
+}
+
+/* --- MIXINS (apply blocks of declarations) --- */
+
+/** @mixin --center-grid: Centers content using grid. */
+@mixin --center-grid {
+  display: grid;
+  place-content: center;
+}
+
+/** @mixin --elevation: Applies a consistent box-shadow from a scale. */
+@mixin --elevation(--level type(<integer>)) {
+  --shadow-1: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-2: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-3: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  @when (var(--level) = 1) { box-shadow: var(--shadow-1); }
+  @when (var(--level) = 2) { box-shadow: var(--shadow-2); }
+  @when (var(--level) = 3) { box-shadow: var(--shadow-3); }
+}
+
+/** @mixin --visually-hidden: For accessibility. */
+@mixin --visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border-width: 0;
+}
+
+/** @mixin --contrast-text: Applies accessible text color with fallbacks. */
+@mixin --contrast-text(--bg-color, --threshold: 0.65) {
+  @property --bg-color { syntax: "<color>"; inherits: true; initial-value: transparent; }
+  color: white;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  @supports (color: oklch(from red l c h)) {
+    --l-result: clamp(0, (l / var(--threshold) - 1) * -infinity, 1);
+    color: oklch(from var(--bg-color) var(--l-result) 0 h);
+    text-shadow: none;
+  }
+  @supports (color: contrast-color(red)) {
+    color: contrast-color(var(--bg-color) to black or white);
+    text-shadow: none;
+  }
+}
+
+/* Theme mixins: property-driven role system */
+
+@mixin --surface-role(--role type(<custom-ident>)) {
+  @when (var(--role) = muted) {
+    --bg: var(--surface-muted);
+    --border: var(--outline-subtle);
+    --text: var(--text-default);
+  }
+  @when (var(--role) = subtle) {
+    --bg: var(--surface-subtle);
+    --border: var(--outline-subtle);
+    --text: var(--text-default);
+  }
+  @when (var(--role) = default) {
+    --bg: var(--surface-default);
+    --border: var(--outline-default);
+    --text: var(--text-default);
+  }
+  @when (var(--role) = overt) {
+    --bg: var(--surface-overt-dark);
+    --border: var(--outline-overt);
+    --text: var(--text-overt);
+  }
+}
+
+@mixin --state-adjust {
+  transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+              border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+              color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+              box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out);
+  &:hover:not([disabled]) {
+    --bg: oklch(from var(--bg) calc(l + var(--l-delta-1)) c h);
+    --border: oklch(from var(--border) calc(l + var(--l-delta-1)) c h);
+  }
+  &:active:not([disabled]) {
+    --bg: oklch(from var(--bg) calc(l + var(--l-delta-1-down)) c h);
+    --border: oklch(from var(--border) calc(c + var(--c-delta-1)) l h);
+  }
+  &:focus-visible {
+    outline: var(--border-width-thick, 2px) solid var(--outline-focus);
+    outline-offset: 2px;
+  }
+}
+
+@mixin --contrast-text-for-bg {
+  --auto-contrast-text: oklch(from var(--bg, currentColor) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h);
+
+  color: var(--auto-contrast-text, oklch(
+    from var(--bg, currentColor)
+    clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+    min(c, var(--c-threshold, 0.08))
+    h
+  ));
+}
+
+@mixin --button-role(--role: default, --accent-color: var(--accent)) {
+  @mixin --surface-role(var(--role));
+  background-color: var(--bg);
+  border: var(--border-width, 1px) solid var(--border);
+  @mixin --contrast-text-for-bg;
+  @apply --state-adjust;
+}
+
+@mixin --input-role(--role: subtle) {
+  @mixin --surface-role(var(--role));
+  background-color: var(--bg);
+  border: var(--border-width, 1px) solid var(--border);
+  color: var(--text);
+  @apply --state-adjust;
+}
+
+@mixin --feedback-role(--kind type(<custom-ident>)) {
+  @when (var(--kind) = success) {
+    --bg: var(--surface-success);
+    --border: var(--outline-success);
+    --text: var(--text-success);
+  }
+  @when (var(--kind) = warning) {
+    --bg: var(--surface-warning);
+    --border: var(--outline-warning);
+    --text: var(--text-warning);
+  }
+  @when (var(--kind) = error) {
+    --bg: var(--surface-error);
+    --border: var(--outline-error);
+    --text: var(--text-error);
+  }
+  @when (var(--kind) = info) {
+    --bg: var(--surface-info);
+    --border: var(--outline-info);
+    --text: var(--text-info);
+  }
+}

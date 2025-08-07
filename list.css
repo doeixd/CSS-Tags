@@ -1,0 +1,64 @@
+/**
+ * list.css
+ *
+ * A flexible and styleable list component.
+ * ------------------------------------------------------------------------------
+ * @feature {CSS Nesting} - For organized styling of items and markers.
+ * @feature {::marker} - For direct styling of list item markers.
+ * @feature {attr()} - For custom icon URLs and colors via CSS masks.
+ */
+
+list {
+    --b-p: attr(padding type(<length>), 0);
+    --b-m: attr(margin type(<length>), 0);
+    display: flex;
+    flex-direction: column;
+    gap: attr(gap type(<length>), var(--l-gap, 0.5rem));
+    padding-inline-start: attr(indent type(<length>), 1.5rem);
+    list-style-position: outside;
+    margin: 0;
+    /* Style for inline lists */
+    &[inline] {
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding-inline-start: 0;
+      list-style: none;
+    }
+
+    & > list-item {
+      position: relative;
+
+      /* Style the native list item marker */
+      &::marker {
+        color: attr(marker-color type(<color>), var(--theme-primary));
+        content: attr(type type(string), '•') ' '; /* Default marker is a bullet */
+      }
+
+      /* Support for custom icons using modern CSS masks */
+      &[icon] {
+        list-style: none;
+        padding-inline-start: calc(attr(icon-size type(<length>), 1.2em) + 0.5rem);
+
+        &::before {
+          content: '';
+          position: absolute;
+          inset-inline-start: 0; /* Logical property */
+          top: 0.15em;
+          width: attr(icon-size type(<length>), 1.2em);
+          height: attr(icon-size type(<length>), 1.2em);
+          background-color: attr(icon-color type(<color>), var(--theme-primary));
+          mask-image: url(attr(icon type(<url>)));
+          mask-size: contain;
+          mask-repeat: no-repeat;
+          mask-position: center;
+      }
+    }
+
+    & > list-divider {
+      height: 1px;
+      background-color: oklch(from var(--theme-text) l c h / 0.1);
+      margin-block: attr(gap type(<length>), 0.5rem); /* Logical property */
+      border: 0;
+    }
+  }
+}

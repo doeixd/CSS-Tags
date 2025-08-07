@@ -1,0 +1,118 @@
+/**
+ * view-transitions.css
+ *
+ * Styles for the native View Transitions API.
+ * ------------------------------------------------------------------------------
+ * This stylesheet provides default animations for creating smooth, app-like
+ * transitions between page states or full page loads.
+ *
+ * --- HOW TO USE ---
+ *
+ * 1. FOR MULTI-PAGE APPS (MPA):
+ *    - Add `<meta name="view-transition" content="same-origin" />` to your HTML `<head>`.
+ *    - Standard link clicks will now automatically use these animations.
+ *    - No JavaScript is needed.
+ *
+ * 2. FOR SINGLE-PAGE APPS (SPA):
+ *    - Use the `<view-page>` and `<nav-trigger>` elements in your HTML.
+ *    - Include the `view-transitions.js` script to handle the routing logic.
+ *
+ * @feature {View Transitions API} - For creating seamless, animated transitions.
+ * @feature {::view-transition-group} - Allows for distinct "hero" animations.
+ * @feature {Custom Easing} - Uses `cubic-bezier` for more natural motion.
+ */
+
+/*
+ * ==============================================================================
+ * 1. ROOT TRANSITION: Default animation for the entire page.
+ * ==============================================================================
+ */
+
+/*
+ * Animate the old and new views (screenshots of the old and new pages).
+ * We define the duration and easing function here.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); /* An elegant ease-in-out */
+  animation-fill-mode: both;
+}
+
+/* The old page slides out to the left and fades. */
+::view-transition-old(root) {
+  animation-name: slide-to-left-fade-out;
+}
+
+/* The new page slides in from the right and fades. */
+::view-transition-new(root) {
+  animation-name: slide-from-right-fade-in;
+}
+
+/*
+ * ==============================================================================
+ * 2. SHARED ELEMENT TRANSITION: For "hero" elements.
+ * ==============================================================================
+ *
+ * To use this, give an element on both the old and new page the same
+ * unique `view-transition-name` in your CSS or style attribute.
+ *
+ * @example: <img style="view-transition-name: product-image-123;" src="...">
+ */
+::view-transition-group(hero-element) {
+  /* Use a more spring-like timing function for a playful morph effect. */
+  animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/*
+ * ==============================================================================
+ * 3. SPA-SPECIFIC STYLES: For the <view-page> component.
+ * ==============================================================================
+ */
+
+/* The container for all virtual pages in an SPA setup. */
+view-transitions {
+  position: relative;
+  display: block;
+}
+
+/*
+ * Each <view-page> is positioned absolutely. The `active` attribute, toggled
+ * by the JS router, controls its visibility.
+ */
+view-page {
+  display: none; /* Hidden by default */
+}
+
+view-page[active] {
+  display: block; /* The active page is made visible */
+}
+
+
+/*
+ * ==============================================================================
+ * 4. KEYFRAME DEFINITIONS
+ * ==============================================================================
+ */
+
+@keyframes slide-to-left-fade-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+@keyframes slide-from-right-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

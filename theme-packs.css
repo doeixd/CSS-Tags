@@ -1,0 +1,28 @@
+/* theme-packs.css */
+
+/* Ocean */
+:root[data-theme="ocean"] {
+  --accent-h: 200; --accent-c: 0.16; --accent-l: 60%;
+  --secondary-hue-shift: 40; --tertiary-hue-shift: -80;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="ocean"] { --accent-c: 0.20; --accent-l: 70%; }
+}
+
+/* Sunrise */
+:root[data-theme="sunrise"] {
+  --accent-h: 30; --accent-c: 0.18; --accent-l: 62%;
+  --secondary-hue-shift: 60; --tertiary-hue-shift: -90;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="sunrise"] { --accent-c: 0.22; --accent-l: 72%; }
+}
+
+/* Forest */
+:root[data-theme="forest"] {
+  --accent-h: 145; --accent-c: 0.16; --accent-l: 58%;
+  --secondary-hue-shift: 50; --tertiary-hue-shift: -100;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="forest"] { --accent-c: 0.18; --accent-l: 68%; }
+}

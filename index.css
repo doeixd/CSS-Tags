@@ -1,0 +1,55 @@
+/**
+ * Modern CSS Reset & Component Library
+ * A comprehensive CSS reset and component library with design tokens, theme engine, 
+ * enhanced accessibility features, and utility-first approach.
+ * 
+ * Features:
+ * - Zero-specificity CSS reset using :where()
+ * - Modern color handling with OKLCH
+ * - Comprehensive design token system
+ * - Auto-calculated contrast for text
+ * - Enhanced high contrast mode handling
+ * - Comprehensive shadow system
+ * - Enhanced focus state handling
+ * - Explicit link styling
+ * - Named container query breakpoints
+ * - Built-in dark mode support
+ * - Extensive utility class system
+ * - Layout primitives
+ */
+
+/* Define the CSS cascade layers in specific order of precedence */
+@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts;
+
+/* Import all the layers in the defined cascade order */
+@import url("reset.css") layer(reset);
+@import url("tokens.css") layer(tokens);
+@import url("engine.css") layer(engine);
+@import url("theme.css") layer(theme);
+@import url("palette.css") layer(palette);
+@import url("theme-packs.css") layer(theme);
+@import url("defaults.css") layer(defaults);
+/* @import url("components.css"); */
+@import url("utilities.css") layer(utilities);
+@import url("utilities-extra.css") layer(utilities);
+@import url("layout.css") layer(layouts);
+@import url("layout-extra.css") layer(layouts);
+@import url("layout-extras-helpers.css") layer(layouts);
+@import url('base.css') layer(base);
+@import url('mixins.css') layer(base);
+@import url('container.css') layer(components);
+@import url('grid.css') layer(components);
+@import url('flex.css') layer(components);
+@import url('card.css') layer(components);
+@import url('box.css') layer(components);
+@import url('box-extra.css') layer(components);
+@import url('badge.css') layer(components);
+@import url('chip.css') layer(components);
+@import url('alert.css') layer(components);
+@import url('modal.css') layer(components);
+@import url('tooltip.css') layer(components);
+@import url('list.css') layer(components);
+@import url('carousel.css') layer(components);
+@import url('popover.css') layer(components);
+@import url('view-transition.css') layer(components);
+@import url('masonry.css') layer(components);

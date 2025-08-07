@@ -1,0 +1,159 @@
+/* ================================================ */
+/* ==               @layer tokens                == */
+/* ================================================ */
+  /* Register CSS Custom Properties */
+  @property --color-h { syntax: '<number>'; inherits: true; initial-value: 250; }
+  @property --color-c { syntax: '<number>'; inherits: true; initial-value: 0.1; }
+  @property --color-l { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+  @property --color-a { syntax: '<number>'; inherits: true; initial-value: 1; }
+  @property --l-threshold { syntax: '<number>'; inherits: true; initial-value: 0.65; }
+  @property --c-threshold { syntax: '<number>'; inherits: true; initial-value: 0.08; }
+  @property --bg { syntax: '<color>'; inherits: false; initial-value: transparent }
+  @property --fg { syntax: '<color>'; inherits: true; initial-value: currentColor; }
+  @property --l-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+  @property --c-delta { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+
+  :root {
+    /* ========== COLOR SCALES ========== */
+    /* Lightness Scale (0-14) */
+    --scale-l-0: 99%; --scale-l-1: 95%; --scale-l-2: 90%; --scale-l-3: 82%;
+    --scale-l-4: 74%; --scale-l-5: 66%; --scale-l-6: 58%; --scale-l-7: 50%;
+    --scale-l-8: 42%; --scale-l-9: 34%; --scale-l-10: 26%; --scale-l-11: 18%;
+    --scale-l-12: 10%; --scale-l-13: 5%; --scale-l-14: 1%;
+
+    /* Chroma Scale (0-12) */
+    --scale-c-0: 0; --scale-c-1: 0.02; --scale-c-2: 0.04; --scale-c-3: 0.06;
+    --scale-c-4: 0.08; --scale-c-5: 0.1; --scale-c-6: 0.12; --scale-c-7: 0.15;
+    --scale-c-8: 0.18; --scale-c-9: 0.22; --scale-c-10: 0.26; --scale-c-11: 0.3;
+    --scale-c-12: 0.37;
+
+    /* Alpha Scale (0-8) */
+    --alpha-0: 0; --alpha-1: 0.05; --alpha-2: 0.1; --alpha-3: 0.2;
+    --alpha-4: 0.4; --alpha-5: 0.6; --alpha-6: 0.75; --alpha-7: 0.9;
+    --alpha-8: 1;
+
+    /* Contrast Ratios */
+    --contrast-ratio-low: 3; --contrast-ratio-medium: 4.5; --contrast-ratio-high: 7;
+
+    /* Max Chroma per Lightness Band */
+    --max-chroma-0: 0.04; --max-chroma-1: 0.08; --max-chroma-2: 0.15;
+    --max-chroma-3: 0.22; --max-chroma-4: 0.18; --max-chroma-5: 0.12;
+    --max-chroma-6: 0.06;
+
+    /* Base Hue Definitions for Palette */
+    --hue-gray: 250; --hue-slate: 215; --hue-red: 25; --hue-orange: 40;
+    --hue-amber: 55; --hue-yellow: 90; --hue-lime: 120; --hue-green: 145;
+    --hue-emerald: 160; --hue-teal: 180; --hue-cyan: 195; --hue-sky: 210;
+    --hue-blue: 245; --hue-indigo: 265; --hue-violet: 285; --hue-purple: 300;
+    --hue-fuchsia: 320; --hue-pink: 340; --hue-rose: 355;
+    
+    /* ========== SHADOW SYSTEM ========== */
+    /* Shadow color base using HSL format for easier adjustments */
+    --shadow-color-base: 220 10% 10%;
+    --shadow-color-dark: 220 20% 90%;
+    
+    /* Light mode shadows */
+    --shadow-sm: 0 1px 2px oklch(from hsl(var(--shadow-color-base)) l c h / 7%);
+    --shadow-md: 0 4px 6px -1px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 
+                 0 2px 4px -2px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+    --shadow-lg: 0 10px 15px -3px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 
+                 0 4px 6px -4px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+    --shadow-xl: 0 20px 25px -5px oklch(from hsl(var(--shadow-color-base)) l c h / 10%), 
+                 0 8px 10px -6px oklch(from hsl(var(--shadow-color-base)) l c h / 10%);
+    --shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 5%);
+    
+    /* Semantic shadow assignments */
+    --shadow-button: var(--shadow-sm);
+    --shadow-button-hover: var(--shadow-md);
+    --shadow-button-active: var(--shadow-inner);
+    --shadow-card: var(--shadow-md);
+    --shadow-dropdown: var(--shadow-lg);
+    --shadow-modal: var(--shadow-xl);
+    
+    /* ========== SPACING SYSTEM ========== */
+    /* Spacing Scale */
+    --spacing-0: 0;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
+    
+    /* ========== TYPOGRAPHY SYSTEM ========== */
+    /* Font Size Scale */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    
+    /* Font Weight Scale */
+    --font-weight-thin: 100;
+    --font-weight-extralight: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    
+    /* Line Height Scale */
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+    
+    /* Letter Spacing Scale */
+    --letter-spacing-tighter: -0.05em;
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+    --letter-spacing-wider: 0.05em;
+    --letter-spacing-widest: 0.1em;
+    
+    /* ========== POSITIONING & LAYOUT SYSTEM ========== */
+    /* Positioning Scale */
+    --inset-0: 0;
+    --inset-xs: 0.25rem;
+    --inset-sm: 0.5rem;
+    --inset-md: 1rem;
+    
+    /* Z-Index Scale */
+    --z-index-0: 0;
+    --z-index-10: 10;
+    --z-index-20: 20;
+    --z-index-30: 30;
+    --z-index-40: 40;
+    --z-index-50: 50;
+    --z-index-auto: auto;
+    
+    /* Flex Values */
+    --flex-1: 1 1 0%;
+    --flex-auto: 1 1 auto;
+    --flex-initial: 0 1 auto;
+    --flex-none: none;
+    
+    /* Grid Template Sizes */
+    --grid-cols-1: repeat(1, minmax(0, 1fr));
+    --grid-cols-2: repeat(2, minmax(0, 1fr));
+    --grid-cols-3: repeat(3, minmax(0, 1fr));
+    --grid-cols-4: repeat(4, minmax(0, 1fr));
+    --grid-cols-6: repeat(6, minmax(0, 1fr));
+    --grid-cols-12: repeat(12, minmax(0, 1fr));
+    
+    /* Container Query Breakpoints */
+    --cq-bp-xs: 20em;  /* ~320px */
+    --cq-bp-sm: 30em;  /* ~480px */
+    --cq-bp-md: 45em;  /* ~720px */
+    --cq-bp-lg: 60em;  /* ~960px */
+    --cq-bp-xl: 80em;  /* ~1280px */
+    --cq-bp-2xl: 96em; /* ~1536px */
+}

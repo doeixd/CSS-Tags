@@ -1,0 +1,26 @@
+/* alert.css */
+
+.alert {
+  @apply --feedback-role(info);
+  background-color: var(--bg);
+  border: var(--border-width, 1px) solid var(--border);
+  border-radius: var(--radius-md, 6px);
+  padding: var(--l-padding, var(--spacing-md));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--l-gap, var(--spacing-md));
+  align-items: start;
+  @apply --contrast-text-for-bg;
+}
+.alert__icon { align-self: start; }
+.alert__title { font-weight: 600; }
+.alert__body { }
+.alert__actions { display: inline-flex; gap: var(--l-gap, 0.5rem); }
+
+.alert[density="compact"] { --l-gap: var(--spacing-sm); --l-padding: var(--spacing-sm); }
+.alert[density="spacious"] { --l-gap: var(--spacing-lg); --l-padding: var(--spacing-lg); }
+
+.alert[status="success"] { @apply --feedback-role(success); background-color: var(--bg); border-color: var(--border); }
+.alert[status="warning"] { @apply --feedback-role(warning); background-color: var(--bg); border-color: var(--border); }
+.alert[status="error"]   { @apply --feedback-role(error);   background-color: var(--bg); border-color: var(--border); }
+.alert[status="info"]    { @apply --feedback-role(info);    background-color: var(--bg); border-color: var(--border); }

@@ -1,0 +1,19 @@
+/* layout-extras-helpers.css */
+
+/* Density presets */
+:root[data-density="compact"] { --l-gap: var(--spacing-sm); --l-padding: var(--spacing-sm); }
+:root[data-density="comfortable"] { --l-gap: var(--spacing-md); --l-padding: var(--spacing-md); }
+:root[data-density="spacious"] { --l-gap: var(--spacing-lg); --l-padding: var(--spacing-lg); }
+
+/* Threshold presets for switcher/sidebar */
+:root[data-threshold="tight"] { --l-threshold: 24rem; }
+:root[data-threshold="normal"] { --l-threshold: 30rem; }
+:root[data-threshold="loose"] { --l-threshold: 40rem; }
+
+/* Container query helpers */
+@container layout-container (max-width: 30rem) {
+  .hide-on-narrow { display: none !important; }
+}
+@container layout-container (min-width: 60rem) {
+  .only-on-wide { display: initial !important; }
+}

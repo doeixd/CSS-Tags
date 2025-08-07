@@ -1,0 +1,204 @@
+/**
+ * box-extra.css
+ *
+ * A supplementary library of mixins and utilities for the box model.
+ * ------------------------------------------------------------------------------
+ * This file provides the CSS-centric counterpart to the `<box>` component.
+ * It contains a powerful `@mixin --box` that allows you to apply the same
+ * declarative styling to any selector in your stylesheet.
+ *
+ * --- PHILOSOPHY ---
+ * - CSS-First: Apply box-model styling directly in your CSS where it belongs,
+ *   without needing a specific HTML tag.
+ * - Reusability: Use the mixin to create consistent, custom components.
+ * - Convenience: Use the utility classes for common, one-off patterns.
+ *
+ * ==============================================================================
+ * ⚠️ IMPORTANT: PROPOSED FEATURE NOTICE ⚠️
+ * The @mixin rule is NOT SUPPORTED in any browser as of late 2025.
+ * This file demonstrates a forward-looking, pre-processor-free approach.
+ * ==============================================================================
+ *
+ * --- TABLE OF CONTENTS ---
+ *
+ * 1.  CORE BOX MIXIN
+ *     - `@mixin --box`
+ *
+ * 2.  UTILITY CLASSES
+ *     - `.u-panel`: A lightly styled container.
+ *     - `.u-well`: An inset container.
+ *     - `.u-spacer-block`: A vertical spacer.
+ *
+ */
+
+/*
+ * ==============================================================================
+ * 1. CORE BOX MIXIN (Proposed Syntax)
+ * ==============================================================================
+ */
+
+/**
+ * @mixin --box
+ * A comprehensive "Swiss Army Knife" mixin for applying common box-model and
+ * layout styles to any selector. It replicates the full functionality of the
+ * <box> component.
+ *
+ * -- SPACING PARAMETERS --
+ * @param {<length>} --p - Shorthand for block and inline padding.
+ * @param {<length>} --px - Overrides inline (horizontal) padding.
+ * @param {<length>} --py - Overrides block (vertical) padding.
+ * @param {<length>} --m - Shorthand for block and inline margin.
+ * @param {<length>} --mx - Overrides inline (horizontal) margin.
+ * @param {<length>} --my - Overrides block (vertical) margin.
+ *
+ * -- APPEARANCE PARAMETERS --
+ * @param {<color>} --bg - The background color.
+ * @param {<color>} --color - The text color.
+ * @param {string} --border - The full border property string.
+ * @param {<length>} --radius - The border-radius.
+ *
+ * -- LAYOUT & SIZING PARAMETERS --
+ * @param {string} --display - The display property (e.g., 'block', 'flex', 'grid').
+ * @param {<length>} --width, --height, --max-width - Sizing properties.
+ * @param {string} --align - The text-align property.
+ *
+ * @example
+ *   .custom-alert {
+ *     @apply --box(
+ *       --display: flex,
+ *       --p: var(--space-lg),
+ *       --bg: var(--surface-error),
+ *       --radius: var(--radius-md)
+ *     );
+ *   }
+ */
+@mixin --box(
+  /* Spacing */
+  --p: 0,
+  --px: null,
+  --py: null,
+  --m: 0,
+  --mx: null,
+  --my: null,
+  /* Appearance */
+  --bg: transparent,
+  --color: inherit,
+  --border: none,
+  --radius: 0,
+  /* Layout & Sizing */
+  --display: block,
+  --width: auto,
+  --height: auto,
+  --max-width: none,
+  --align: start
+) {
+  display: var(--display);
+
+  /*
+   * The var() fallback mechanism cleverly handles shorthands.
+   * If --px is provided, it's used; otherwise, it falls back to --p.
+   */
+  padding-inline: var(--px, var(--p));
+  padding-block: var(--py, var(--p));
+  margin-inline: var(--mx, var(--m));
+  margin-block: var(--my, var(--m));
+
+  width: var(--width);
+  height: var(--height);
+  max-width: var(--max-width);
+
+  background-color: var(--bg);
+  color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
+  color: var(--color);
+  border: var(--border);
+  border-radius: var(--radius);
+
+  text-align: var(--align);
+}
+
+
+/*
+ * ==============================================================================
+ * 2. UTILITY CLASSES
+ * ==============================================================================
+ * A few common UI patterns, built using the --box mixin for consistency.
+ */
+
+/**
+ * .u-panel
+ * A general-purpose container with padding, a subtle background, and rounded corners.
+ *
+ * @example
+ *   <div class="u-panel">This content is inside a panel.</div>
+ */
+.u-panel {
+  @apply --box(
+    --p: var(--space-md, 1.5rem),
+    --bg: var(--surface-subtle),
+    --radius: var(--radius-lg, 8px)
+  );
+}
+
+/**
+ * .u-well
+ * An inset panel, often used for code blocks or read-only information.
+ *
+ * @example
+ *   <div class="u-well">This content is inside a well.</div>
+ */
+.u-well {
+  @apply --box(
+    --p: var(--space-md, 1.5rem),
+    --bg: var(--surface-muted),
+    --border: 1px solid var(--outline-muted),
+    --radius: var(--radius-md, 6px)
+  );
+}
+
+/**
+ * .u-spacer-block
+ * A simple utility for adding vertical space between elements.
+ * Customize the height with the `--_height` local variable.
+ *
+ * @example
+ *   <p>First paragraph.</p>
+ *   <div class="u-spacer-block" style="--_height: 4rem;"></div>
+ *   <p>Second paragraph.</p>
+ */
+.u-spacer-block {
+  --_height: var(--space-lg, 2rem);
+
+  @apply --box(
+    --display: block,
+    --height: var(--_height)
+  );
+}
+
+
+/*
+ * ==============================================================================
+ * 3. COMPOSITION EXAMPLE: STYLING A CALLOUT COMPONENT
+ * ==============================================================================
+ * This example shows how you could use the --box mixin to quickly build a new,
+ * fully-styled custom component from a semantic element.
+ */
+.callout-info {
+  /* Apply base styles using the box mixin */
+  @apply --box(
+    --display: grid,
+    --p: var(--space-lg, 2rem),
+    --bg: var(--surface-info),
+    --border: 1px solid var(--info),
+    --radius: var(--radius-lg, 8px)
+  );
+
+  /* Add additional styles specific to this component */
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-md, 1.5rem);
+  align-items: center;
+
+  &::before {
+    content: 'ℹ️'; /* Info icon */
+    font-size: 1.5em;
+  }
+}

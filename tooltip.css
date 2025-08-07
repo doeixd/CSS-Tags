@@ -1,0 +1,36 @@
+/* tooltip.css */
+
+tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+tooltip[content]::after {
+  content: attr(content);
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -0.5em);
+  white-space: nowrap;
+  pointer-events: none;
+  --role: overt;
+  @apply --surface-role(var(--role));
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--l-padding, 0.25em 0.5em);
+  font-size: 0.85em;
+  max-width: 60ch;
+  @apply --contrast-text-for-bg;
+}
+
+/* placements */
+tooltip[place="top"][content]::after { inset-block-end: 100%; inset-inline-start: 50%; transform: translate(-50%, -0.5em); }
+tooltip[place="right"][content]::after { inset-block: 50% auto; inset-inline-start: 100%; transform: translate(0.5em, -50%); }
+tooltip[place="bottom"][content]::after { inset-block-start: 100%; inset-inline-start: 50%; transform: translate(-50%, 0.5em); }
+tooltip[place="left"][content]::after { inset-block: 50% auto; inset-inline-end: 100%; transform: translate(-0.5em, -50%); }
+
+@media (prefers-reduced-motion: reduce) {
+  tooltip[content]::after { transition: none; }
+}
+

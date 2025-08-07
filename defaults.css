@@ -1,0 +1,438 @@
+/* ================================================ */
+/* ==            @layer defaults                 == */
+/* ================================================ */
+/* Purpose: Apply structural styles and basic appearance */
+/* using variables defined in the NEW @layer theme. */
+
+  /* --- Base Body & Document Styles --- */
+  body {
+    font-family: var(--font-primary, sans-serif); /* Keep font variables if defined elsewhere */
+    color: var(--text-default); /* UPDATED */
+    background-color: var(--base); /* UPDATED */
+    line-height: var(--body-line-height, 1.5);
+
+    -webkit-font-smoothing: var(--font-smoothing-webkit, antialiased);
+    -moz-osx-font-smoothing: var(--font-smoothing-moz, grayscale);
+    font-synthesis: var(--font-synthesis, none);
+    text-rendering: var(--text-rendering, optimizeLegibility);
+    hyphens: var(--body-hyphens, auto);
+    scroll-behavior: var(--scroll-behavior, smooth);
+  }
+
+  /* ::selection is handled in @theme */
+
+  /* --- Typography Defaults --- */
+  h1, h2, h3, h4, h5, h6, p, ul, ol, dl, pre, blockquote, figure, table, hr, details {
+    margin-block: 0 var(--space-flow, 1em);
+  }
+  :is(article, section, aside, div, li, dd, dt, blockquote) > :last-child {
+    margin-block-end: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-heading, 600);
+    line-height: var(--line-height-heading, 1.2);
+    color: var(--text-overt); /* UPDATED */
+    letter-spacing: var(--letter-spacing-heading, normal);
+  }
+  h1 { font-size: var(--font-size-h1, 2.5rem); }
+  h2 { font-size: var(--font-size-h2, 2.0rem); }
+  h3 { font-size: var(--font-size-h3, 1.75rem); }
+  h4 { font-size: var(--font-size-h4, 1.5rem); }
+  h5 { font-size: var(--font-size-h5, 1.25rem); }
+  h6 { font-size: var(--font-size-h6, 1.0rem); letter-spacing: var(--letter-spacing-h6, 0.5px); text-transform: var(--text-transform-h6, uppercase); }
+
+  p {
+    line-height: var(--body-line-height, 1.6);
+    color: var(--text-default); /* UPDATED (use default body text) */
+  }
+
+  /* Lists */
+  ul, ol { padding-inline-start: var(--space-list-indent, 1.5em); }
+  ul { list-style: var(--list-style-unordered, disc); }
+  ol { list-style: var(--list-style-ordered, decimal); }
+  li { margin-block-end: var(--space-list-item, 0.5em); }
+  li > ul, li > ol { margin-block-start: var(--space-list-item, 0.5em); margin-block-end: 0; }
+  dt { font-weight: var(--font-weight-medium, 500); color: var(--text-overt); } /* UPDATED */
+  dd { padding-inline-start: var(--space-list-indent, 1.5em); color: var(--text-subtle); } /* UPDATED */
+  dd + dt { margin-block-start: var(--space-md, 1rem); }
+
+  /* Links - Styling primarily handled in @components */
+  a {
+    /* Base color set in @components */
+    text-decoration: var(--link-decoration, none); /* Keep structural */
+  }
+
+  /* Code blocks and inline code - Structure only, colors in @components */
+  pre, code, kbd, samp {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--font-size-code, 0.9em);
+    line-height: var(--line-height-code, 1.4);
+    /* color: handled in @components */
+  }
+  pre {
+    padding: var(--space-code-block-y, 0.8em) var(--space-code-block-x, 1em);
+    border-radius: var(--radius-md, 6px);
+    overflow-x: auto;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* background/border color: handled in @components */
+  }
+  :not(pre) > code, kbd, samp {
+    padding: var(--space-code-inline-y, 0.2em) var(--space-code-inline-x, 0.4em);
+    border-radius: var(--radius-sm, 3px);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    /* background/border color: handled in @components */
+  }
+  kbd { letter-spacing: 0.5px; }
+
+  /* Blockquotes - Structure only, colors in @components */
+  blockquote {
+    margin-inline: var(--space-blockquote-margin-inline, 1em);
+    padding-inline-start: var(--space-blockquote-pad, 1em);
+    border-inline-start-width: var(--border-width-blockquote, 3px);
+    border-inline-start-style: solid;
+    /* color/border color: handled in @components */
+  }
+
+  /* Horizontal Rule - Structure only, colors in @components */
+  hr {
+    border: none;
+    border-block-start-width: var(--border-width, 1px);
+    border-block-start-style: solid;
+    /* color: handled in @components */
+  }
+
+  /* --- Form Element Defaults --- */
+  input, select, textarea, fieldset {
+    padding: var(--space-input-y, 0.6em) var(--space-input-x, 0.8em);
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-md, 6px);
+    font-size: var(--font-size-input, 1rem);
+    transition: border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out);
+    width: 100%;
+    /* color/border/background: handled in @components */
+  }
+  }
+  fieldset {
+    padding: var(--space-fieldset-y, 1.5em) var(--space-fieldset-x, 1.2em);
+    border-color: var(--outline-default); /* UPDATED */
+  }
+  legend {
+    padding-inline: var(--space-xs, 0.5rem);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--text-overt); /* UPDATED */
+  }
+  input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], input[type="reset"], button {
+    width: auto;
+  }
+
+  /* Button Structure - Colors applied via utilities in @utilities */
+  button, input[type="button"], input[type="submit"], input[type="reset"] {
+    padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
+    border-radius: var(--radius-md, 6px);
+    font-weight: var(--font-weight-button, 500);
+    border-width: var(--border-width-button, 1px);
+    border-style: solid;
+    transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
+                transform calc(var(--transition-duration, 150ms) / 2) var(--transition-timing, ease-out);
+    line-height: 1;
+    box-shadow: var(--shadow-button, none); /* Keep shadows if defined elsewhere */
+    /* Colors/borders applied via utility classes */
+  }
+  /* Hover/Active structure - styles may be overridden by utilities */
+  button:hover:not([disabled]),
+  input[type="button"]:hover:not([disabled]),
+  input[type="submit"]:hover:not([disabled]),
+  input[type="reset"]:hover:not([disabled]) {
+    transform: var(--transform-button-hover, translateY(-1px));
+    box-shadow: var(--shadow-button-hover, 0 2px 4px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1)); /* Example subtle shadow */
+  }
+  button:active:not([disabled]),
+  input[type="button"]:active:not([disabled]),
+  input[type="submit"]:active:not([disabled]),
+  input[type="reset"]:active:not([disabled]) {
+    transform: var(--transform-button-active, translateY(0px));
+    box-shadow: var(--shadow-button-active, none);
+  }
+
+  /* Select element structure - Arrow appearance handled in @components */
+  select {
+    padding-right: var(--space-select-arrow-gap, calc(var(--space-input-x, 0.8em) * 3));
+  }
+
+  /* Checkbox/Radio structure - Colors handled in @components */
+  input[type="checkbox"], input[type="radio"] {
+    appearance: var(--appearance-checkbox-radio, none);
+    -webkit-appearance: none; -moz-appearance: none;
+    border-width: var(--border-width, 1px); border-style: solid;
+    width: var(--size-checkbox-radio, 1.1em); height: var(--size-checkbox-radio, 1.1em);
+    margin-inline-end: var(--space-checkbox-radio-label-gap, 0.5em);
+    vertical-align: middle; position: relative; display: inline-grid; place-content: center;
+    /* border-color: handled in @components */
+  }
+  input[type="checkbox"] { border-radius: var(--radius-sm, 3px); }
+  input[type="radio"] { border-radius: 50%; }
+  /* Indicator structure */
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    content: ''; width: 60%; height: 60%; transform: scale(0);
+    transition: transform 100ms ease-in-out;
+    /* background/box-shadow color: handled in @components */
+  }
+  input[type="radio"]::before { border-radius: 50%; }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before { transform: scale(1); }
+
+  /* Disabled State Opacity */
+  button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
+    opacity: var(--opacity-disabled, 0.5);
+  }
+  fieldset[disabled] * { cursor: not-allowed; }
+
+  /* --- Table Defaults - Structure only, colors in @components --- */
+  table {
+    width: 100%;
+    border-width: var(--border-width, 1px);
+    border-style: solid;
+    border-radius: var(--radius-lg, 8px);
+    overflow: hidden;
+    /* border-color: handled in @components */
+  }
+  th, td {
+    padding: var(--space-table-cell-y, 0.8em) var(--space-table-cell-x, 1em);
+    text-align: left; vertical-align: top;
+    border-bottom-width: var(--border-width, 1px); border-bottom-style: solid;
+    /* border-bottom-color: handled in @components */
+  }
+  thead th {
+    font-weight: var(--font-weight-heading, 600);
+    border-bottom-width: calc(var(--border-width, 1px) * 2);
+    vertical-align: bottom;
+    /* background/color: handled in @components */
+  }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+
+  /* --- Basic Utilities Setup --- */
+  .container {
+    width: min(100% - (var(--space-container-padding, 1rem) * 2), var(--width-container-max, 1100px));
+    margin-inline: auto;
+  }
+  .display-none { display: none !important; }
+  .box { padding: var(--b-p, 0); margin: var(--b-m, 0); border-width: var(--b-bw, 0); border-style: solid; border-color: var(--b-bc, transparent); border-radius: var(--b-r, 0); background-color: var(--b-bg, transparent); color: var(--b-fg, inherit); }
+  .box[style*="--b-px"] { padding-inline: var(--b-px); }
+  .box[style*="--b-py"] { padding-block: var(--b-py); }
+  .box[style*="--b-mx"] { margin-inline: var(--b-mx); }
+  .box[style*="--b-my"] { margin-block: var(--b-my); }
+  .cq-container, .cq { container-type: var(--cq-type, inline-size); container-name: var(--cq-name, default); }
+
+  /* --- Accessibility Enhancements --- */
+  :focus-visible { /* Structure only, color handled in @components */
+    outline-style: solid;
+    outline-width: var(--focus-ring-width, 2px);
+    outline-offset: var(--focus-ring-offset, 2px);
+    box-shadow: none;
+  }
+  :target { scroll-margin-block-start: var(--space-target-margin, 5ex); }
+
+  /* --- Reduced Motion Preferences --- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
+  }
+
+  /* --- View Transition Structure --- */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--transition-duration-page, 300ms); animation-timing-function: var(--transition-timing-page, ease-in-out); }
+  ::view-transition-old(root) { animation-name: var(--view-transition-old, fade-out); }
+  ::view-transition-new(root) { animation-name: var(--view-transition-new, fade-in); z-index: 1; }
+  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes fade-out { to { opacity: 0; } }
+
+    /* Apply base styles to common elements using NEW theme variables */
+  body {
+    background-color: var(--base);
+    color: var(--text-default);
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: var(--link-decoration);
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: var(--link-underline-offset);
+    transition: color var(--link-transition-duration) var(--link-transition-timing),
+                text-decoration-color var(--link-transition-duration) var(--link-transition-timing);
+  }
+  a:hover, a:focus-visible {
+    color: var(--text-link-hover);
+    text-decoration: var(--link-decoration-hover);
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: var(--link-underline-offset);
+  }
+
+  /* Basic Button Styling (Structure in defaults, base style here) */
+  .button {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.6em 1.2em; border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default); /* Default outline */
+    background-color: var(--surface-default); /* Default surface */
+    color: var(--text-default); /* Use default text */
+    font-weight: 500; text-align: center; cursor: pointer;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+    user-select: none; line-height: 1.2;
+  }
+   .button:hover:not([disabled]) {
+     border-color: var(--outline-overt);
+     background-color: var(--highlight-bg-subtle); /* Subtle highlight on hover */
+   }
+  .button:focus-visible {
+     outline: var(--border-width-thick) solid var(--outline-focus);
+     outline-offset: 2px;
+     border-color: transparent; /* Hide border when outline is visible */
+  }
+  .button[disabled] {
+    opacity: 0.5; cursor: not-allowed;
+    background-color: var(--highlight-bg-muted);
+    border-color: var(--outline-muted);
+  }
+
+  /* Input field styling */
+  .input-field {
+    display: block; width: 100%; padding: 0.6em 0.8em;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--outline-default);
+    background-color: var(--surface-subtle);
+    color: var(--text-default);
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .input-field::placeholder { color: var(--text-muted); opacity: 1; }
+  .input-field:hover:not([disabled]) { border-color: var(--outline-overt); }
+  .input-field:focus, .input-field:focus-visible {
+    outline: none; border-color: var(--outline-focus);
+    box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--outline-focus) l c h / 0.3);
+  }
+  .input-field[disabled] { opacity: 0.6; background-color: var(--surface-muted); border-color: var(--outline-subtle); cursor: not-allowed; }
+  .input-field:invalid { border-color: var(--error); box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--error) l c h / 0.3); }
+
+  /* Custom Select Arrow */
+  select.input-field {
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-subtle) 50%), linear-gradient(135deg, var(--text-subtle) 50%, transparent 50%);
+    background-position: right 0.8em top 55%, right calc(0.8em + 5px) top 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+  select.input-field:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--text-default); }
+
+  /* Checkbox/Radio Theming */
+  input[type="checkbox"], input[type="radio"] {
+    border-color: var(--outline-default);
+    background-color: var(--surface-subtle);
+  }
+  input[type="checkbox"]:hover:not(:checked):not([disabled]),
+  input[type="radio"]:hover:not(:checked):not([disabled]) {
+    border-color: var(--outline-overt);
+    background-color: var(--highlight-bg-subtle);
+  }
+  input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+  input[type="checkbox"]:checked:hover:not([disabled]),
+  input[type="radio"]:checked:hover:not([disabled]) {
+    background-color: var(--accent-overt);
+    border-color: var(--accent-overt);
+  }
+  input[type="checkbox"]::before, input[type="radio"]::before {
+    box-shadow: inset 1em 1em var(--text-on-accent); /* Use contrast text */
+  }
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+     /* Style for the checkmark/dot */
+  }
+
+  /* Basic card structure */
+  .card {
+     --bg: var(--surface-default); /* Set local --bg */
+     background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
+     color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Use auto-contrast */
+     border-radius: var(--radius-lg);
+     padding: 1.5rem;
+     border: var(--border-width) solid var(--outline-subtle);
+     box-shadow: 0 2px 5px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1);
+  }
+
+  /* Code block styling */
+  pre {
+    background-color: var(--code-block-bg);
+    border-color: var(--code-block-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  :not(pre) > code, kbd, samp {
+    background-color: var(--code-inline-bg);
+    border-color: var(--code-inline-border);
+    color: var(--text-default); /* Or define --text-code */
+  }
+  /* Blockquote styling */
+  blockquote {
+    border-inline-start-color: var(--blockquote-border);
+    color: var(--text-subtle);
+  }
+  /* Horizontal Rule styling */
+  hr { border-block-start-color: var(--hr-color); }
+  /* Table styling */
+  table { border-color: var(--table-border); }
+  th, td { border-bottom-color: var(--table-border); }
+  thead th {
+    background-color: var(--table-header-bg);
+    color: var(--text-overt); /* Use overt text for header */
+   }
+  tbody tr:hover {
+    --bg: var(--table-row-hover-bg); /* Set local --bg */
+    background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+)); /* Auto contrast on hover */
+  }
+  /* Enhanced Form Focus States */
+  input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: var(--input-focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--input-focus-ring-offset);
+    background-color: var(--input-focus-bg);
+    border-color: var(--outline-focus);
+  }
+
+  button:focus-visible, 
+  a:focus-visible,
+  [tabindex]:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: none;
+  }
+  
+  /* Focus Ring Color */
+  :focus-visible { outline-color: var(--outline-focus); }
+
+  /* Contrast Pair Component */
+  .contrast-pair {
+    --bg: var(--pair-color, var(--accent));
+    background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
+    color:     var(--auto-contrast-text, oklch(
+  from var(--bg, currentColor)
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+));
+    padding: 1rem; border-radius: var(--radius-md);
+  }
+

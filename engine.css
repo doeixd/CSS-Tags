@@ -1,0 +1,32 @@
+/* ================================================ */
+/* ==              @layer engine                 == */
+/* ================================================ */
+ :root {
+    /* Lightness delta percentages */
+    --l-delta-0: calc(0 / 100); --l-delta-1: calc(2 / 100); --l-delta-2: calc(4 / 100); --l-delta-3: calc(7 / 100);
+    --l-delta-4: calc(10 / 100); --l-delta-5: calc(14 / 100); --l-delta-6: calc(19 / 100); --l-delta-7: calc(25 / 100);
+    --l-delta-8: calc(32 / 100); --l-delta-9: calc(40 / 100); --l-delta-10: calc(50 / 100); --l-delta-11: calc(60 / 100);
+    --l-delta-12: calc(70 / 100); --l-delta-13: calc(80 / 100); --l-delta-14: calc(90 / 100);
+    --l-delta-0-down: calc(-1 * var(--l-delta-0)); --l-delta-1-down: calc(-1 * var(--l-delta-1));
+    --l-delta-2-down: calc(-1 * var(--l-delta-2)); --l-delta-3-down: calc(-1 * var(--l-delta-3));
+    --l-delta-4-down: calc(-1 * var(--l-delta-4)); --l-delta-5-down: calc(-1 * var(--l-delta-5));
+    --l-delta-6-down: calc(-1 * var(--l-delta-6)); --l-delta-7-down: calc(-1 * var(--l-delta-7));
+    --l-delta-8-down: calc(-1 * var(--l-delta-8)); --l-delta-9-down: calc(-1 * var(--l-delta-9));
+    --l-delta-10-down: calc(-1 * var(--l-delta-10)); --l-delta-11-down: calc(-1 * var(--l-delta-11));
+    --l-delta-12-down: calc(-1 * var(--l-delta-12)); --l-delta-13-down: calc(-1 * var(--l-delta-13));
+    --l-delta-14-down: calc(-1 * var(--l-delta-14));
+
+    /* Chroma delta percentages */
+    --c-delta-0: calc(0 / 100); --c-delta-1: calc(10 / 100); --c-delta-2: calc(20 / 100); --c-delta-3: calc(30 / 100);
+    --c-delta-4: calc(40 / 100); --c-delta-5: calc(50 / 100); --c-delta-6: calc(60 / 100); --c-delta-7: calc(70 / 100);
+    --c-delta-8: calc(80 / 100); --c-delta-9: calc(90 / 100); --c-delta-10: calc(100 / 100);
+    --c-delta-0-down: calc(-1 * var(--c-delta-0)); --c-delta-1-down: calc(-1 * var(--c-delta-1));
+    --c-delta-2-down: calc(-1 * var(--c-delta-2)); --c-delta-3-down: calc(-1 * var(--c-delta-3));
+    --c-delta-4-down: calc(-1 * var(--c-delta-4)); --c-delta-5-down: calc(-1 * var(--c-delta-5));
+    --c-delta-6-down: calc(-1 * var(--c-delta-6)); --c-delta-7-down: calc(-1 * var(--c-delta-7));
+    --c-delta-8-down: calc(-1 * var(--c-delta-8)); --c-delta-9-down: calc(-1 * var(--c-delta-9));
+    --c-delta-10-down: calc(-1 * var(--c-delta-10));
+
+
+
+}

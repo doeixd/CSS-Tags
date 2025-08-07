@@ -1,0 +1,40 @@
+/**
+ * popover.css
+ *
+ * Styles for the native HTML Popover API.
+ * ------------------------------------------------------------------------------
+ * @feature {Popover API} - Provides styles for `[popover]` elements.
+ * @feature {::backdrop} - Styles the background overlay for modal popovers.
+ * @feature {Animations} - Uses `@starting-style` for robust entry/exit animations.
+ */
+
+[popover] {
+  --b-bg: var(--surface-default);
+  --b-bw: var(--border-width, 1px);
+  --b-bc: var(--outline-default);
+  --b-r: var(--radius-lg, 0.75rem);
+  --b-p: var(--spacing-lg, 1.5rem);
+  background: var(--b-bg);
+  color: var(--auto-contrast-text, oklch(from var(--b-bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
+  border: var(--b-bw) solid var(--b-bc);
+  border-radius: var(--b-r);
+  padding: var(--b-p);
+  max-width: clamp(250px, 90vw, 400px);
+  @apply --elevation(3);
+}
+[popover]::backdrop {
+  background-color: oklch(from black l c h / 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Modern entry/exit animation support */
+@starting-style {
+  [popover]:popover-open {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+[popover]:popover-open {
+  transition: opacity 300ms ease-out, transform 300ms ease-out, display 300ms;
+}

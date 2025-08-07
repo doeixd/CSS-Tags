@@ -1,0 +1,59 @@
+/**
+ * flex.css
+ *
+ * A declarative flexbox layout component.
+ * ------------------------------------------------------------------------------
+ * This component provides an intuitive way to create one-dimensional layouts
+ * using Flexbox, configured declaratively through HTML attributes.
+ *
+ * @feature {Flexbox} - For powerful and flexible one-dimensional layouts.
+ * @feature {CSS Custom Properties} - For clean and maintainable style definitions.
+ * @feature {attr()} - Powers the entire declarative API.
+ * @feature {CSS Nesting} - Co-locates child item styles for better organization.
+ */
+
+flex {
+  /* --- Core Flex Container Properties --- */
+  --flex-direction:   attr(direction type(string), row);
+  --flex-wrap:        attr(wrap type(string), nowrap);
+  --justify-content:  attr(justify type(string), flex-start);
+  --align-items:      attr(align type(string), stretch);
+  --gap:              attr(gap type(<length>), 1.5rem);
+
+  display: flex;
+  flex-direction: var(--flex-direction);
+  flex-wrap: var(--flex-wrap);
+  justify-content: var(--justify-content);
+  align-items: var(--align-items);
+  gap: var(--gap);
+
+  /*
+   * --- Flex Item Styling (applied to direct children) ---
+   * This uses the child combinator `>` to style any element placed
+   * directly inside the <flex> container.
+   */
+  & > * {
+    /* --- Individual Item Sizing and Ordering --- */
+    flex-grow:   attr(grow type(<number>), 0);
+    flex-shrink: attr(shrink type(<number>), 1);
+    flex-basis:  attr(basis type(<length-percentage>), auto);
+    order:       attr(order type(<integer>), 0);
+
+    /* --- Individual Item Alignment --- */
+    align-self:  attr(align-self type(<custom-ident>), auto);
+  }
+
+  /*
+   * --- Theming Example ---
+   * A `theme="brand"` attribute could apply a pre-defined theme mixin.
+   * This demonstrates how components can integrate with the mixin library.
+   */
+  &[theme="brand"] {
+    /*
+      @apply --theme-colors(
+        --primary: var(--brand-blue),
+        --bg: var(--brand-surface)
+      );
+    */
+  }
+}

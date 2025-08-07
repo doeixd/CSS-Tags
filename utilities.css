@@ -1,0 +1,57 @@
+/* utilities.css */
+
+/* Background role utilities */
+.bg-surface-muted { --bg: var(--surface-muted); background-color: var(--bg); }
+.bg-surface-subtle { --bg: var(--surface-subtle); background-color: var(--bg); }
+.bg-surface-default { --bg: var(--surface-default); background-color: var(--bg); }
+.bg-surface-overt { --bg: var(--surface-overt-dark); background-color: var(--bg); }
+
+/* Text role utilities */
+.text-muted { color: var(--text-muted); }
+.text-subtle { color: var(--text-subtle); }
+.text-default { color: var(--text-default); }
+.text-overt { color: var(--text-overt); }
+
+/* Outline/Border role utilities */
+.border-muted { border-color: var(--outline-muted) !important; }
+.border-subtle { border-color: var(--outline-subtle) !important; }
+.border-default { border-color: var(--outline-default) !important; }
+.border-overt { border-color: var(--outline-overt) !important; }
+
+/* Focus ring utility */
+.focus-ring { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+
+/* Spacing scale utilities (sample) */
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+/* Typography scale utilities (sample) */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+
+/* State helpers */
+.hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
+.active-press:active { background-color: var(--highlight-bg-muted); }
+
+/* Box variable utilities (canonical surface API) */
+.box-surface-muted { --b-bg: var(--surface-muted); --b-bc: var(--outline-subtle); }
+.box-surface-default { --b-bg: var(--surface-default); --b-bc: var(--outline-default); }
+.box-surface-overt { --b-bg: var(--surface-overt-dark); --b-bc: var(--outline-overt); --b-fg: var(--text-overt); }
+.box-rounded { --b-r: var(--radius-md); }
+.box-rounded-lg { --b-r: var(--radius-lg); }
+.box-elev-1 { --b-shadow: var(--shadow-sm); }
+.box-elev-2 { --b-shadow: var(--shadow-md); }
+.box-elev-3 { --b-shadow: var(--shadow-lg); }

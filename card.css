@@ -1,0 +1,43 @@
+/**
+ * card.css
+ *
+ * A responsive, self-contained card component.
+ * ------------------------------------------------------------------------------
+ * @feature {Container Queries} - The card adapts its layout to its own size.
+ * @feature {@scope} - Isolates the card's internal styles to prevent conflicts.
+ * @feature {CSS Nesting} - Keeps all card-related styles neatly organized.
+ */
+@scope (card) {
+:scope {
+    container-type: inline-size;
+    container-name: card-container;
+
+    display: flex;
+    flex-direction: column;
+    background-color: var(--b-bg, oklch(from var(--theme-bg) calc(l + 0.05) c h));
+    color: var(--b-fg, inherit);
+    border-radius: var(--b-r, attr(radius type(<length>), 0.75rem));
+    border: var(--b-bw, 0) solid var(--b-bc, transparent);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--b-shadow, none);
+    @apply --elevation(2);
+
+    &:hover {
+      transform: translateY(-5px);
+      @apply --elevation(3);
+    }
+  }
+  card-media { display: block; aspect-ratio: 16 / 9; object-fit: cover; }
+  card-body { display: flex; flex-direction: column; flex-grow: 1; padding: var(--b-p, 1.5rem); gap: 0.75rem; }
+  card-header { font-size: 1.25rem; font-weight: 600; }
+  card-content { flex-grow: 1; color: oklch(from var(--theme-text) l c h / 0.8); }
+  card-footer { margin-top: auto; color: oklch(from var(--theme-text) l c h / 0.6); font-size: 0.875rem; }
+
+  /* CONTAINER QUERY: When card is wider than 400px, switch to horizontal layout */
+  @container card-container (min-width: 400px) {
+    :scope { flex-direction: row; }
+    card-media { width: 150px; aspect-ratio: 1 / 1; }
+    card-body { flex-basis: 60%; }
+  }
+}

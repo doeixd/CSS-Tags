@@ -1,0 +1,55 @@
+/**
+ * container.css
+ *
+ * A responsive container powered by CSS Style Queries.
+ * ------------------------------------------------------------------------------
+ * This component is a showcase of modern CSS architecture. It contains no
+ * media queries. Instead, it reacts to the global `--breakpoint-active` variable
+ * set on an ancestor (e.g., <body>), making it truly context-aware.
+ *
+ * @feature {Style Queries} - `@container style(...)` makes the component
+ *   react to the computed value of a parent's custom property.
+ * @feature {Logical Properties} - `margin-inline` for automatic LTR/RTL support.
+ * @feature {attr()} - For per-element overrides of max-width values.
+ */
+
+container {
+  /*
+   * 1. Define the max-width values for EACH possible state.
+   *    These can be overridden per-element with HTML attributes.
+   */
+  --mw-sm: attr(max-width-sm type(<length-percentage>), 100%);
+  --mw-md: attr(max-width-md type(<length-percentage>), 768px);
+  --mw-lg: attr(max-width-lg type(<length-percentage>), 1024px);
+  --mw-xl: attr(max-width-xl type(<length-percentage>), 1280px);
+
+  /*
+   * 2. Initialize the master variable and apply base styles.
+   *    It defaults to the largest size.
+   */
+  --container-max-width: var(--mw-xl);
+  --container-padding-inline: attr(pad type(<length>), 1.5rem);
+
+  display: block;
+  width: 100%;
+  margin-inline: auto; /* auto centers the container */
+  padding-inline: var(--container-padding-inline);
+  max-width: var(--container-max-width);
+}
+
+/*
+ * 3. Use Style Queries to update the master variable.
+ *    The component checks the value of `--breakpoint-active` from its query
+ *    container (e.g., <body>) and updates its own max-width accordingly.
+ */
+@container style(--breakpoint-active = lg) {
+  container { --container-max-width: var(--mw-lg); }
+}
+
+@container style(--breakpoint-active = md) {
+  container { --container-max-width: var(--mw-md); }
+}
+
+@container style(--breakpoint-active = sm) {
+  container { --container-max-width: var(--mw-sm); }
+}
