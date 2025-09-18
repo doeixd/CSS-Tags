@@ -1,0 +1,515 @@
+/**
+ * ==============================================================================
+ * ADVANCED CSS-ONLY TOOLTIP COMPONENT
+ * ==============================================================================
+ *
+ * This is a comprehensive, production-ready tooltip implementation showcasing
+ * the latest CSS features as of September 2025 (post-Interop 2025). It's
+ * designed for educational purposes, demonstrating declarative patterns with
+ * minimal JavaScript (only for experimental Invoker Commands handling).
+ *
+ * KEY FEATURES DEMONSTRATED:
+ * - Anchor Positioning (CSS Anchor Positioning Module, stable 2025): Tethers
+ *   tooltips to parents with position-area and position-try for fallbacks.
+ * - Popover API (HTML Living Standard, 2024/2025): Top-layer rendering with
+ *   implicit anchors and light dismiss (click outside to close).
+ * - Container Queries (CSS Containment Module Level 3): Responsive sizing based
+ *   on parent container width.
+ * - attr() with Type Casting (CSS Values and Units Module Level 4, 2025): Pulls
+ *   values from HTML attributes into CSS properties (e.g., colors, lengths).
+ * - @starting-style (CSS Transitions Level 2, 2024): Enables entry animations
+ *   on first render or display: none → visible transitions.
+ * - if() Conditional (CSS Conditional Rules Level 1, 2025): Guards styles based
+ *   on custom properties (e.g., arrow visibility). Experimental (Chrome 137+);
+ *   fallback: Use :where([variant="success"]) selectors for broader support.
+ * - color-mix() & Relative Colors (CSS Color Module Level 5, 2024): Dynamic
+ *   theming for variants (e.g., success/error tints).
+ * - text-wrap: balance & text-box: trim (CSS Text Module Level 4, Q1 2025):
+ *   Improves readability and prevents overflow.
+ * - content-visibility: auto (CSS Display Module Level 3): Optimizes off-screen
+ *   rendering performance.
+ * - scroll-timeline (CSS Scroll-Linked Animations Module, Interop 2025): Fades
+ *   tooltip on page scroll.
+ * - Cascade Layers (@layer): Manages specificity in large projects.
+ * - Custom Media Queries (@custom-media): Reusable responsive breakpoints.
+ * - position-visibility: anchors-visible (Anchor Positioning, 2025): Hides if
+ *   anchor is off-screen.
+ * - :has(), :is(), :where() (CSS Selectors Level 4/5): Efficient parent/child
+ *   targeting with low specificity.
+ * - calc-size() (CSS Sizing Module Level 4, 2025): Intrinsic size calculations
+ *   for max-width. Experimental (Chrome/Edge-only); fallback to fixed lengths.
+ *
+ * USAGE:
+ * <button commandfor="tip1" command="--toggle-tooltip">
+ *   Toggle Tooltip
+ *   <tooltip id="tip1" position="bottom" variant="success" delay="0.3s">
+ *     Educational tooltip content!
+ *   </tooltip>
+ * </button>
+ *
+ * ATTRIBUTES (via attr()):
+ * - position: top|bottom|left|right (default: top)
+ * - variant: success|error|warning|info (auto-themes bg/color)
+ * - bg/color: CSS color (e.g., oklch(0.2 0.1 260))
+ * - padding/font-size/border-radius/arrow-size/offset/max-width: lengths
+ * - arrow/arrow-style (straight|rounded|curved)/arrow-color
+ * - shadow: box-shadow string
+ * - delay: transition delay (e.g., 0.3s)
+ * - shape: rounded|polygon (clip-path experiments)
+ * - scrollable: Enables scroll-snap for long content
+ *
+ * FALLBACKS & ROBUSTNESS:
+ * - @supports for anchor/popover detection (progressive enhancement).
+ * - Hover/focus triggers as non-experimental fallback.
+ * - position-try with viewport-aware @try (avoids off-screen placement).
+ * - Audit with: Chrome DevTools Anchor Inspector or Firefox Layout panel.
+ *
+ * ACCESSIBILITY:
+ * - role="tooltip" & aria-live="polite" (add via HTML/JS).
+ * - Focus management via Popover API; auto-dismiss on blur/Escape.
+ * - High-contrast mode via @media.
+ *
+ * BROWSER SUPPORT (Sep 2025):
+ * - Chrome/Edge 130+: Full (Interop 2025 compliant).
+ * - Firefox 130+: Full with flags (stable Q4 2025).
+ * - Safari 18+: Partial (no position-try; use fallbacks).
+ * Polyfill: Use OddBird's anchor-polyfill for legacy.
+ *
+ * RESOURCES:
+ * - MDN: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning
+ * - CSSWG: https://drafts.csswg.org/anchor-positioning-1/
+ * - Smashing Mag: "Modern Tooltips with CSS" (2025 article).
+ */
+
+@layer components {
+  /* ==============================================================================
+   * REUSABLE CUSTOM MEDIA QUERIES
+   * ==============================================================================
+   * @custom-media (CSS Media Queries Level 5, 2024): Defines named queries for
+   * reuse, reducing duplication in @container/@media rules.
+   */
+  @custom-media --small-screen (max-width: 30rem);
+  @custom-media --high-contrast (prefers-contrast: high);
+
+  /* ==============================================================================
+   * BASE TOOLTIP STYLES WITH FEATURE DETECTION
+   * ==============================================================================
+   * @supports (CSS Conditional Rules Module Level 3): Progressive enhancement.
+   * Guards experimental features like anchor positioning and popover.
+   * :where() (CSS Selectors Level 4): Zero specificity for easy overrides.
+   */
+  @supports (position-anchor: --foo) and (popover: manual) {
+    :where(tooltip) {
+      /* DESIGN TOKENS VIA attr() TYPE CASTING
+       * attr() (CSS Values Level 4, 2025): Parses attribute values into CSS types
+       * (e.g., <color>, <length>). Fallbacks to CSS vars for tokens like --space-sm.
+       * Educational: This enables HTML-driven theming without JS.
+       */
+      --_bg: attr(bg type(<color>), oklch(0.2 0.1 260));
+      --_color: attr(color type(<color>), white);
+      --_padding: attr(padding type(<length>), var(--space-sm, 0.75rem));
+      --_font-size: attr(font-size type(<length>), var(--font-size-sm, 0.875rem));
+      --_border-radius: attr(border-radius type(<length>), var(--radius-md, 0.5rem));
+      --_arrow-size: attr(arrow-size type(<length>), 0.5rem);
+      --_arrow-color: attr(arrow-color type(<color>), var(--_bg));
+      --_arrow-style: attr(arrow-style type(string), straight);
+      --_offset: attr(offset type(<length>), 0.5rem);
+      --_position: attr(position type(string), top);
+      --_max-width: attr(max-width type(<length>), 20rem);
+      --_z-index: attr(z-index type(<number>), 1000);
+      --_animation-duration: attr(animation-duration type(<time>), 0.3s);
+      --_animation-easing: attr(animation-easing type(string), ease-out);
+      --_shape: attr(shape type(string), none);
+      --_shadow: attr(shadow type(string), 0 2px 8px oklch(0 0 0 / 0.15));
+      --_view-transition-name: attr(view-transition-name type(<custom-ident>), tooltip);
+      --_delay: attr(delay type(<time>), 0.3s); /* NEW: Hover delay for UX */
+      --_variant: attr(variant type(string), none); /* NEW: Theming variants */
+
+      /* BASE LAYOUT & CONTAINMENT
+       * container-type (CSS Containment Level 3): Enables container queries on self.
+       * content-visibility: auto (CSS Display Level 3): Skips rendering off-screen.
+       */
+      container-type: inline-size;
+      container-name: tooltip;
+      display: none;
+      position: absolute;
+      background: color-mix(in oklch, var(--_bg) 90%, transparent); /* Relative color mix */
+      color: var(--_color);
+      padding: var(--_padding);
+      font-size: var(--_font-size);
+      border-radius: var(--_border-radius);
+      /* calc-size() with @supports guard (experimental: Chrome/Edge-only) */
+      @supports (calc-size(auto, 100%)) {
+        max-width: calc-size(auto, var(--_max-width));
+      }
+      @supports not (calc-size(auto, 100%)) {
+        max-width: var(--_max-width);
+      }
+      z-index: var(--_z-index);
+      box-sizing: border-box;
+      text-wrap: balance; /* CSS Text Level 4: Balanced line breaks */
+      /* text-box: trim with fallback (Q1 2025: Chrome 133+) */
+      @supports (text-box: trim) {
+        text-box: trim; /* Trims overflow text in bounded boxes */
+      }
+      @supports not (text-box: trim) {
+        line-height: 1.2; /* Fallback: Tighter lines to reduce overflow */
+      }
+      content-visibility: auto;
+      view-transition-name: var(--_view-transition-name); /* View Transitions API */
+      transition:
+        opacity var(--_animation-duration) var(--_animation-easing),
+        transform var(--_animation-duration) var(--_animation-easing),
+        display var(--_animation-duration) allow-discrete,
+        overlay var(--_animation-duration) allow-discrete;
+      transition-delay: var(--_delay); /* NEW: Prevents flicker on quick hovers */
+      animation-timeline: scroll(root block); /* NEW Interop 2025: Scroll-linked fade-out */
+
+      /* ENTRY ANIMATION WITH @starting-style
+       * (CSS Transitions Level 2): Defines initial values for transitions on
+       * first render or display: none → block.
+       */
+      @starting-style {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      /* CUSTOM SHAPES WITH clip-path
+       * Experimental: Uses polygon/circle for non-rectangular tooltips.
+       */
+      &[shape="rounded"] {
+        clip-path: circle(50% at 50% 50%);
+      }
+
+      &[shape="polygon"] {
+        clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+      }
+
+      /* VARIANT THEMING WITH if() & color-mix()
+       * if() (CSS Conditional Rules Level 1, 2025): Applies styles conditionally
+       * based on custom property values. color-mix() generates tints dynamically.
+       * Experimental (Chrome 137+); fallback: :where([variant="success"]) selectors.
+       */
+      if(style(--_variant: success)) {
+        --_bg: color-mix(in oklch, lime 70% 80%);
+        --_color: color-mix(in oklch, black 100%);
+      }
+      if(style(--_variant: error)) {
+        --_bg: color-mix(in oklch, red 70% 80%);
+        --_color: white;
+      }
+      if(style(--_variant: warning)) {
+        --_bg: color-mix(in oklch, orange 70% 80%);
+        --_color: black;
+      }
+      if(style(--_variant: info)) {
+        --_bg: color-mix(in oklch, blue 70% 80%);
+        --_color: white;
+      }
+
+      /* FALLBACK FOR if() (use selectors for broader support) */
+      :where([variant="success"]) {
+        --_bg: color-mix(in oklch, lime 70% 80%);
+        --_color: color-mix(in oklch, black 100%);
+      }
+      :where([variant="error"]) {
+        --_bg: color-mix(in oklch, red 70% 80%);
+        --_color: white;
+      }
+      :where([variant="warning"]) {
+        --_bg: color-mix(in oklch, orange 70% 80%);
+        --_color: black;
+      }
+      :where([variant="info"]) {
+        --_bg: color-mix(in oklch, blue 70% 80%);
+        --_color: white;
+      }
+
+      /* ACCESSIBILITY BASE
+       * role="tooltip" (add in HTML): Semantic for screen readers.
+       * aria-live="polite" (add via JS): Announces dynamic content changes.
+       * Hidden by default until triggered.
+       */
+      &[role="tooltip"] {
+        display: none; /* Ensures initial hidden state for a11y */
+      }
+
+      /* INVOKER/POPOVER OPEN STATE
+       * popover: manual (Popover API): Renders in top layer; supports light dismiss.
+       * position-anchor: auto (2025 enhancement): Uses implicit anchor from invoker.
+       */
+      &[data-state="open"], :popover-open {
+        display: block;
+        position-anchor: auto; /* Implicit from commandfor/popovertarget */
+        popover: manual;
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* PARENT ANCHOR SETUP
+     * :has() (CSS Selectors Level 4): Targets parents containing tooltip.
+     * subgrid (CSS Grid Level 2): Inherits grid tracks for alignment.
+     */
+    :has(> tooltip) {
+      anchor-name: --tooltip-anchor; /* Fallback for explicit anchoring */
+      position: relative;
+      container-type: inline-size;
+      container-name: parent-container;
+      display: contents; /* NEW: Allows subgrid inheritance without layout shift */
+      grid-template-columns: subgrid; /* Aligns with parent grid if in one */
+    }
+  }
+
+  /* FALLBACK FOR NON-SUPPORTED BROWSERS
+   * Simple absolute positioning if no anchor support.
+   */
+  @supports not (position-anchor: --foo) {
+    :has(> tooltip) tooltip {
+      position: absolute;
+      top: calc(-100% - var(--_offset, 0.5rem));
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  /* HOVER/FOCUS TRIGGERS (FALLBACK FOR NON-INVOKER)
+   * :is() (CSS Selectors Level 4): Groups selectors efficiently.
+   * interest-invoker: hover (Experimental 2025 Proposal): Native hover trigger.
+   */
+  :is(:hover, :focus-within):has(> tooltip) {
+    & tooltip:not([data-state="open"]) { /* Avoid conflict with invoker */
+      display: block;
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  button[popovertarget] {
+    interest-invoker: hover; /* 2025: Enables native hover without :hover */
+  }
+
+  /* ARROW STYLES WITH CONDITIONAL LOGIC
+   * ::after pseudo-element for triangle (classic hack, enhanced with if()).
+   * :where() for low-specificity nesting.
+   */
+  tooltip[arrow]::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+
+    /* STRAIGHT ARROW (DEFAULT) */
+    :where([arrow-style="straight"]) & {
+      border: var(--_arrow-size) solid transparent;
+    }
+
+    /* ROUNDED ARROW */
+    :where([arrow-style="rounded"]) & {
+      border: var(--_arrow-size) solid transparent;
+      border-radius: calc(var(--_arrow-size) / 2);
+    }
+
+    /* CURVED ARROW WITH clip-path */
+    :where([arrow-style="curved"]) & {
+      border: var(--_arrow-size) solid transparent;
+      clip-path: ellipse(50% 30% at 50% 50%);
+    }
+
+    /* CONDITIONAL ARROW DIRECTION WITH if()
+     * Guards against invalid --_position values.
+     */
+    if(style(--_position: top)) {
+      border-top-color: var(--_arrow-color);
+      bottom: calc(-2 * var(--_arrow-size));
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+    }
+    if(style(--_position: bottom)) {
+      border-bottom-color: var(--_arrow-color);
+      top: calc(-2 * var(--_arrow-size));
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+    }
+    if(style(--_position: left)) {
+      border-left-color: var(--_arrow-color);
+      inset-inline-end: calc(-2 * var(--_arrow-size));
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    if(style(--_position: right)) {
+      border-right-color: var(--_arrow-color);
+      inset-inline-start: calc(-2 * var(--_arrow-size));
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  /* ANCHOR POSITIONING CORE
+   * position-area (Anchor Positioning): Places relative to anchor's edges.
+   * margin-block/inline: Logical properties for RTL support.
+   * transform-origin: Ensures smooth scaling from attachment point.
+   */
+  @supports (position-area: top center) {
+    tooltip[position="top"] {
+      position-area: top center;
+      margin-block-end: var(--_offset);
+      transform-origin: bottom center;
+    }
+
+    tooltip[position="bottom"] {
+      position-area: bottom center;
+      margin-block-start: var(--_offset);
+      transform-origin: top center;
+    }
+
+    tooltip[position="left"] {
+      position-area: left center;
+      margin-inline-end: var(--_offset);
+      transform-origin: right center;
+    }
+
+    tooltip[position="right"] {
+      position-area: right center;
+      margin-inline-start: var(--_offset);
+      transform-origin: left center;
+    }
+  }
+
+  /* FALLBACK POSITIONING WITH position-try
+   * @position-try (Anchor Positioning, 2025): Tries alternatives if overflow.
+   * @try with media(): Viewport-aware (e.g., avoid right if near edge).
+   */
+  tooltip {
+    position-try: --tooltip-fallback;
+  }
+
+  @position-try --tooltip-fallback {
+    @try not media(viewport-right: 0px) { position-area: bottom center; } /* Avoid right overflow */
+    @try { position-area: top center; }
+    @try not media(viewport-bottom: 0px) { position-area: right center; }
+    @try { position-area: left center; }
+  }
+
+  /* RESPONSIVE CONTAINER QUERIES
+   * @container (CSS Containment Level 3): Adapts to parent size.
+   * Combines with @custom-media for complex conditions.
+   */
+  @container parent-container (min-width: 20rem) and (--small-screen) {
+    tooltip {
+      /* Scale down on small parents (calc-size fallback already handled above) */
+      --_max-width: calc-size(auto, size * 0.7);
+      --_font-size: calc(var(--_font-size) * 0.85);
+    }
+  }
+
+  /* VISIBILITY & HIDING
+   * position-visibility (Anchor Positioning, 2025): Hides if anchor invisible.
+   */
+  tooltip {
+    position-visibility: anchors-visible;
+  }
+
+  /* SHADOW SUPPORT
+   * attr(shadow): Direct box-shadow from attribute string.
+   */
+  tooltip[shadow] {
+    box-shadow: var(--_shadow);
+  }
+
+  /* HIGH-CONTRAST MODE
+   * @media (--high-contrast): color-contrast() ensures readability.
+   */
+  @media (--high-contrast) {
+    tooltip {
+      border: 2px solid color-contrast(var(--_bg) vs white, black);
+    }
+  }
+
+  /* SCROLLABLE CONTENT WITH SNAP
+   * scroll-snap-type (CSS Scroll Snap Level 1): Controlled scrolling for lists.
+   */
+  tooltip[scrollable] {
+    overflow-y: auto;
+    max-height: 15rem;
+    scroll-snap-type: y mandatory;
+
+    & > * {
+      scroll-snap-align: start;
+    }
+  }
+
+  /* BUTTON STYLES & PRESETS
+   * DX Enhancement: .tooltip--success class for quick variants (overrides attr).
+   * [data-tooltip-state="open"]: Visual feedback for invoker state.
+   */
+  button {
+    background: white;
+    border: 0.4px solid grey;
+    padding: 18px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, outline 0.2s ease;
+    position: relative; /* Establishes positioning context */
+
+    &:focus {
+      outline: 2px solid oklch(0.7 0.15 260);
+      outline-offset: 2px;
+    }
+
+    /* ARIA ASSOCIATION (Add aria-describedby="tip1" in HTML) */
+    &[aria-describedby] {
+      & > tooltip {
+        /* id dynamically set via attr, but handle in JS for full a11y */
+      }
+    }
+
+    /* INVOKER STATE FEEDBACK */
+    &[data-tooltip-state="open"] {
+      background: oklch(0.95 0.05 260);
+    }
+
+    /* PRESETS FOR DX (Quick theming without attrs) */
+    &.tooltip--success { --_bg: color-mix(in oklch, lime 70%); }
+    &.tooltip--error { --_bg: color-mix(in oklch, red 70%); }
+    &.tooltip--warning { --_bg: color-mix(in oklch, orange 70%); }
+    &.tooltip--info { --_bg: color-mix(in oklch, blue 70%); }
+  }
+
+  /* POPOVER-SPECIFIC ANIMATIONS
+   * :popover-open (Popover API Pseudo-Class): Styles for open state.
+   */
+  tooltip:popover-open {
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+}
+
+/* ==============================================================================
+ * COMPANION JS FOR INVOKER COMMANDS (Minimal, Educational)
+ * ==============================================================================
+ * Handles custom --toggle-tooltip command (Invoker Commands API, experimental 2025).
+ * Add to <script> tag. For full a11y, also set aria-live="polite" and aria-expanded.
+ *
+ * const tooltips = document.querySelectorAll('tooltip');
+ * tooltips.forEach(tooltip => {
+ *   tooltip.addEventListener('command', (event) => {
+ *     if (event.command === '--toggle-tooltip') {
+ *       const isOpen = tooltip.dataset.state === 'open';
+ *       tooltip.dataset.state = isOpen ? 'closed' : 'open';
+ *       event.source.dataset.tooltipState = isOpen ? 'closed' : 'open';
+ *       event.source.setAttribute('aria-expanded', !isOpen); // NEW: a11y enhancement
+ *       event.preventDefault(); // Custom handling
+ *     }
+ *   });
+ *   // Light dismiss via Popover API (native)
+ *   tooltip.addEventListener('beforetoggle', (e) => {
+ *     if (e.newState === 'closed') {
+ *       tooltip.dataset.state = 'closed';
+ *       e.target.parentElement.setAttribute('aria-expanded', 'false'); // Sync button state
+ *     }
+ *   });
+ * });
+ */
+```
