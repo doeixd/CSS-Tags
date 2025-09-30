@@ -227,6 +227,13 @@ Text colors automatically adjust for readability:
 --code-inline-bg: var(--surface-muted);
 ```
 
+### Anchor Positioning
+```css
+--anchor-offset: 0.5rem;        /* Spacing between anchored elements */
+--anchor-max-width: 20rem;      /* Maximum width for anchored elements */
+--anchor-z-index: 1000;         /* Z-index for anchored elements */
+```
+
 ## Customization
 
 ### Brand Color Override

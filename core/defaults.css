@@ -4,6 +4,27 @@
 /* Purpose: Apply structural styles and basic appearance */
 /* using variables defined in the NEW @layer theme. */
 
+@property --font-smoothing-moz {
+  syntax: '*';
+  initial-value: grayscale;
+  inherits: true;
+}
+@property --scroll-behavior {
+  syntax: '*';
+  initial-value: smooth;
+  inherits: true;
+}
+@property --font-smoothing-webkit {
+  syntax: '*';
+  initial-value: antialiased;
+  inherits: true;
+}
+@property --body-line-height {
+  syntax: '<number>';
+  initial-value: 1.5;
+  inherits: true;
+}
+
   /* --- Base Body & Document Styles --- */
   body {
      font-family: system-ui, sans-serif; /* Consistent with base.css */

@@ -69,11 +69,12 @@
   /* TEXT COLORS - Auto-contrast calculation     */
   /* ============================================ */
 
-  /* Base text colors */
-  --text-muted: oklch(45% calc(var(--surface-saturation) * 1.5 * var(--contrast-factor)) var(--neutral-h));
-  --text-subtle: oklch(35% calc(var(--surface-saturation) * 1.8 * var(--contrast-factor)) var(--neutral-h));
-  --text: oklch(20% calc(var(--surface-saturation) * 2 * var(--contrast-factor)) var(--neutral-h));
-  --text-overt: oklch(10% calc(var(--surface-saturation) * 2.2 * var(--contrast-factor)) var(--neutral-h));
+   /* Base text colors */
+   --text-muted: oklch(45% calc(var(--surface-saturation) * 1.5 * var(--contrast-factor)) var(--neutral-h));
+   --text-subtle: oklch(35% calc(var(--surface-saturation) * 1.8 * var(--contrast-factor)) var(--neutral-h));
+   --text: oklch(20% calc(var(--surface-saturation) * 2 * var(--contrast-factor)) var(--neutral-h));
+   --text-overt: oklch(10% calc(var(--surface-saturation) * 2.2 * var(--contrast-factor)) var(--neutral-h));
+   --text-default: var(--text); /* Alias for default body text */
 
    /* Auto-contrast text on surfaces (simplified for better browser support) */
    --text-on-base: oklch(15% 0.02 var(--neutral-h)); /* Dark text on light base */
@@ -115,10 +116,18 @@
   /* HIGHLIGHT & INTERACTION COLORS              */
   /* ============================================ */
 
-  /* Selection and hover backgrounds */
-  --highlight-muted: oklch(from var(--base) calc(l - 0.01) c h);
-  --highlight-subtle: oklch(from var(--base) calc(l - 0.03) c h);
-  --highlight-overt: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+   /* Selection and hover backgrounds */
+   --highlight-muted: oklch(from var(--base) calc(l - 0.01) c h);
+   --highlight-subtle: oklch(from var(--base) calc(l - 0.03) c h);
+   --highlight-overt: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+
+   /* Background highlight variants */
+   --highlight-bg-muted: var(--highlight-muted);
+   --highlight-bg-subtle: var(--highlight-subtle);
+   --highlight-bg-overt: var(--highlight-overt);
+
+   /* Table-specific hover backgrounds */
+   --table-row-hover-bg: var(--highlight-bg-subtle);
 
   /* Scrim */
   --scrim: oklch(0% 0 0 / 0.5);
@@ -216,9 +225,26 @@
   --link-transition-duration: 150ms;
   --link-transition-timing: ease-out;
 
-  /* Container query configuration */
-  --cq-type: inline-size;
-  --cq-name: default;
+   /* Container query configuration */
+   --cq-type: inline-size;
+   --cq-name: default;
+
+   /* Anchor positioning configuration */
+   @property --anchor-offset {
+     syntax: '<length>';
+     initial-value: 0.5rem;
+     inherits: false;
+   }
+   @property --anchor-max-width {
+     syntax: '<length>';
+     initial-value: 20rem;
+     inherits: false;
+   }
+   @property --anchor-z-index {
+     syntax: '<number>';
+     initial-value: 1000;
+     inherits: false;
+   }
 
   /* Typography (from tokens) */
   --font-family: system-ui, -apple-system, sans-serif;
@@ -252,11 +278,12 @@
      --surface: oklch(25% var(--surface-saturation) var(--neutral-h));
      --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
 
-     /* Adjust text for dark backgrounds */
-     --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
-     --text-subtle: oklch(75% calc(var(--surface-saturation) * 1.0) var(--neutral-h));
-     --text: oklch(88% calc(var(--surface-saturation) * 0.8) var(--neutral-h));
-     --text-overt: oklch(95% calc(var(--surface-saturation) * 0.6) var(--neutral-h));
+      /* Adjust text for dark backgrounds */
+      --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+      --text-subtle: oklch(75% calc(var(--surface-saturation) * 1.0) var(--neutral-h));
+      --text: oklch(88% calc(var(--surface-saturation) * 0.8) var(--neutral-h));
+      --text-overt: oklch(95% calc(var(--surface-saturation) * 0.6) var(--neutral-h));
+      --text-default: var(--text); /* Alias for default body text */
 
      /* Auto-contrast text on surfaces for dark mode */
      --text-on-base: oklch(90% 0.02 var(--neutral-h)); /* Light text on dark base */

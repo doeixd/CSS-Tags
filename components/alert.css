@@ -4,7 +4,7 @@
   @apply --feedback-role(info);
   background-color: var(--bg);
   border: var(--border-width, 1px) solid var(--border);
-  border-radius: var(--radius-md, 6px);
+   border-radius: var(--border-radius-md, 6px);
   padding: var(--l-padding, var(--spacing-md));
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -20,7 +20,7 @@
 .alert[density="compact"] { --l-gap: var(--spacing-sm); --l-padding: var(--spacing-sm); }
 .alert[density="spacious"] { --l-gap: var(--spacing-lg); --l-padding: var(--spacing-lg); }
 
-.alert[status="success"] { @apply --feedback-role(success); background-color: var(--bg); border-color: var(--border); }
-.alert[status="warning"] { @apply --feedback-role(warning); background-color: var(--bg); border-color: var(--border); }
-.alert[status="error"]   { @apply --feedback-role(error);   background-color: var(--bg); border-color: var(--border); }
-.alert[status="info"]    { @apply --feedback-role(info);    background-color: var(--bg); border-color: var(--border); }
+.alert[status="success"] { @apply --feedback-role(success); --bg: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
+.alert[status="warning"] { @apply --feedback-role(warning); --bg: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
+.alert[status="error"]   { @apply --feedback-role(error);   --bg: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
+.alert[status="info"]    { @apply --feedback-role(info);    --bg: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }

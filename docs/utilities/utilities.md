@@ -83,17 +83,19 @@ Font size utilities using the typography scale.
 **Token Dependencies:**
 - `--font-size-xs` through `--font-size-2xl`
 
-## State Helpers
+## Interactive State Utilities
 
-Interactive state utilities for hover and active states.
+Enhanced interactive state utilities for better user experience.
 
 - `.hover-highlight:hover`: Subtle background highlight on hover
-- `.active-press:active`: Muted background press effect on active
+- `.active-press:active`: Scale-down effect on active/press
+- `.focus-ring:focus`: Proper focus ring with theme colors
 
 **CSS:**
 ```css
 .hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
-.active-press:active { background-color: var(--highlight-bg-muted); }
+.active-press:active { transform: scale(0.98); }
+.focus-ring:focus { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 ```
 
 ## Outline and Ring Utilities
@@ -128,6 +130,37 @@ Interactive state utilities for hover and active states.
 
 ### Overflow
 - `.overflow-auto/hidden/scroll/visible`: Overflow control
+
+## Anchor Positioning Utilities
+
+CSS Anchor Positioning utilities for creating positioned elements that tether to other elements with automatic collision detection.
+
+### Anchor Name Utilities
+Define elements as anchor references:
+- `.anchor-name-top/bottom/left/right/center`: Creates named anchor points
+
+### Position Anchor Utilities
+Reference anchor elements:
+- `.position-anchor-top/bottom/left/right/center`: Links to named anchors
+
+### Position Area Utilities
+Control positioning relative to anchors:
+- `.position-area-top/bottom/left/right`: Basic positioning
+- `.position-area-top-left/top-right/bottom-left/bottom-right`: Corner positioning
+- `.position-area-center`: Center positioning
+
+### Fallback Positioning
+- `.position-try-fallback`: Automatic repositioning to avoid viewport overflow
+
+**Usage Example:**
+```html
+<button class="anchor-name-tooltip">Hover me</button>
+<div class="position-anchor-tooltip position-area-bottom position-try-fallback">
+  Tooltip content that automatically positions and avoids edges
+</div>
+```
+
+**Browser Support:** Modern browsers with CSS Anchor Positioning support. Falls back gracefully.
 
 ## Scrim Utilities
 

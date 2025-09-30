@@ -9,7 +9,7 @@ badge {
   --b-bg: var(--bg);
   --b-bw: var(--border-width, 1px);
   --b-bc: var(--border);
-  --b-r: var(--radius-full, 9999px);
+   --b-r: var(--border-radius-full, 9999px);
   --b-px: 0.55em;
   --b-py: 0.15em;
   background-color: var(--b-bg);
@@ -31,7 +31,7 @@ badge[role="default"] { --role: default; }
 badge[role="muted"] { --role: muted; }
 
 /* status variants */
-badge[status="success"] { @apply --feedback-role(success); background-color: var(--bg); border-color: var(--border); @apply --contrast-text-for-bg; }
-badge[status="warning"] { @apply --feedback-role(warning); background-color: var(--bg); border-color: var(--border); @apply --contrast-text-for-bg; }
-badge[status="error"]   { @apply --feedback-role(error);   background-color: var(--bg); border-color: var(--border); @apply --contrast-text-for-bg; }
-badge[status="info"]    { @apply --feedback-role(info);    background-color: var(--bg); border-color: var(--border); @apply --contrast-text-for-bg; }
+badge[status="success"] { @apply --feedback-role(success); --bg: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
+badge[status="warning"] { @apply --feedback-role(warning); --bg: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
+badge[status="error"]   { @apply --feedback-role(error);   --bg: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
+badge[status="info"]    { @apply --feedback-role(info);    --bg: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }

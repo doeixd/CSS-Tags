@@ -20,17 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!slidesContainer || items.length === 0) return;
 
-    let currentIndex = 0;
     const totalSlides = items.length;
     const isLooping = carousel.hasAttribute('loop');
 
-    // Disable native scroll-snap as JS is controlling the view.
-    slidesContainer.style.overflowX = 'hidden';
+    // Set the slides container width to accommodate all slides
+    slidesContainer.style.width = `${totalSlides * 100}%`;
+
+    // Set each item width to match the carousel width
+    items.forEach(item => {
+      item.style.width = `${100 / totalSlides}%`;
+    });
+
+    let currentIndex = 0;
 
     function updateCarousel(isInstant = false) {
       if (isInstant) slidesContainer.style.transition = 'none';
 
-      slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+      slidesContainer.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
 
       if (isInstant) {
         // Restore transition after the instant move

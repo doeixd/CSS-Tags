@@ -8,7 +8,7 @@
  * @feature {Focus Management} - Enhanced focus states.
  */
 
-@scope (form-input, form-button, form-select, form-textarea) {
+@scope (.form-input, .form-button, .form-select, .form-textarea) {
   /* Base form element styles */
   :scope {
     font-family: inherit;
@@ -17,8 +17,8 @@
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
 
-  /* Input styles */
-  form-input :scope, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="url"], input[type="search"] {
+   /* Input styles */
+   .form-input, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="url"], input[type="search"] {
     display: block;
     width: 100%;
     padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
@@ -42,8 +42,8 @@
     }
   }
 
-  /* Button styles */
-  form-button :scope, button, input[type="submit"], input[type="button"] {
+   /* Button styles */
+   .form-button, button, input[type="submit"], input[type="button"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -72,8 +72,8 @@
     }
   }
 
-  /* Select styles */
-  form-select :scope, select {
+   /* Select styles */
+   .form-select, select {
     display: block;
     width: 100%;
     padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
@@ -89,8 +89,8 @@
     }
   }
 
-  /* Textarea styles */
-  form-textarea :scope, textarea {
+   /* Textarea styles */
+   .form-textarea, textarea {
     display: block;
     width: 100%;
     min-height: 6rem;

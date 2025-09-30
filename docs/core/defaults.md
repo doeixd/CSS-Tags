@@ -14,7 +14,9 @@ The `defaults.css` file applies structural styles and basic appearance to HTML e
 
 ### Base Body Styles
 - **Font Family**: System UI fonts with smoothing
-- **Line Height**: 1.5 for optimal readability
+- **Line Height**: Configurable via `--body-line-height` (default: 1.5)
+- **Font Smoothing**: Cross-browser smoothing via `--font-smoothing-webkit` and `--font-smoothing-moz`
+- **Scroll Behavior**: Smooth scrolling via `--scroll-behavior`
 - **Text Rendering**: Optimized for legibility
 - **Hyphenation**: Automatic for better text flow
 

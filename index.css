@@ -46,6 +46,7 @@
 @import url('components/form.css') layer(components);
 @import url('components/navigation.css') layer(components);
 @import url('components/masonry.css') layer(components);
+@import url('components/img-container.css') layer(components);
 
 /* Optional Theme Generator */
 /* @import url("theme-generator.css"); */

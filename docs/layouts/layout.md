@@ -15,8 +15,10 @@ All layout components inherit these default CSS custom properties:
 
 ```css
 --l-gap: var(--space-md, 1.5rem);
---l-breakpoint: var(--bp-md, 48em);
+--l-breakpoint: var(--bp-sm, 30em);
 --l-padding: var(--space-md, 1.5rem);
+--l-gutters: 1.5rem;              /* Side margins for centering layouts */
+--l-max-width: 65ch;              /* Maximum width for readable content */
 ```
 
 These can be overridden globally or per-component.
@@ -204,6 +206,24 @@ Centers content horizontally with max-width for readability.
 <layout-center max-width="50ch" and-text>
   <p>Centered content</p>
 </layout-center>
+```
+
+### `<layout-inline-center>`
+
+Centers content horizontally without a max-width constraint, useful for full-width centering.
+
+**CSS Properties:**
+- `--l-gutters`: Side padding (default: var(--space-md, 1.5rem))
+
+**HTML Attributes:**
+- `gutters`: Override gutters
+- `and-text`: Also center text
+
+**Usage:**
+```html
+<layout-inline-center gutters="2rem" and-text>
+  <p>Centered content without width limit</p>
+</layout-inline-center>
 ```
 
 ### `<layout-frame>`

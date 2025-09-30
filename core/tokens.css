@@ -125,6 +125,13 @@
     --inset-xs: 0.25rem;
     --inset-sm: 0.5rem;
     --inset-md: 1rem;
+
+    /* Space Scale */
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
     
     /* Z-Index Scale */
     --z-index-0: 0;

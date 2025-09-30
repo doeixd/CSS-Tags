@@ -8,9 +8,9 @@
  * @feature {CSS Nesting} - Organized styles.
  */
 
-@scope (nav-navbar, nav-sidebar) {
-  /* Navbar styles */
-  nav-navbar :scope {
+@scope (.navbar, .sidebar) {
+   /* Navbar styles */
+   .navbar {
     container-type: inline-size;
     container-name: navbar-container;
 
@@ -25,7 +25,7 @@
     z-index: var(--z-index-50, 50);
   }
 
-  nav-navbar .nav-brand {
+   .navbar .nav-brand {
     font-size: var(--font-size-lg, 1.125rem);
     font-weight: var(--font-weight-bold, 700);
     color: var(--text-overt);
@@ -40,7 +40,7 @@
     gap: var(--spacing-md, 1rem);
   }
 
-  nav-navbar .nav-link {
+   .navbar .nav-link {
     color: var(--text-default);
     text-decoration: none;
     padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
@@ -52,7 +52,7 @@
     }
   }
 
-  nav-navbar .nav-toggle {
+     .navbar .nav-toggle {
     display: none;
     background: none;
     border: none;
@@ -63,7 +63,7 @@
 
   /* Mobile responsive */
   @container navbar-container (max-width: 768px) {
-    nav-navbar .nav-links {
+    .navbar .nav-links {
       display: none;
       flex-direction: column;
       position: absolute;
@@ -75,17 +75,17 @@
       padding: var(--spacing-md, 1rem);
     }
 
-    nav-navbar .nav-links.active {
+     .navbar .nav-links.active {
       display: flex;
     }
 
-    nav-navbar .nav-toggle {
+    .navbar .nav-toggle {
       display: block;
     }
   }
 
-  /* Sidebar styles */
-  nav-sidebar :scope {
+   /* Sidebar styles */
+   .sidebar {
     width: var(--width, 250px);
     background-color: var(--bg, var(--surface-default));
     border-right: var(--border-width, 1px) solid var(--outline-subtle);
@@ -96,13 +96,13 @@
     overflow-y: auto;
   }
 
-  nav-sidebar .sidebar-nav {
+   .sidebar .sidebar-nav {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  nav-sidebar .sidebar-link {
+   .sidebar .sidebar-link {
     display: block;
     color: var(--text-default);
     text-decoration: none;
@@ -116,15 +116,32 @@
     }
   }
 
-  nav-sidebar .sidebar-section {
+   .sidebar .sidebar-section {
     margin-top: var(--spacing-lg, 1.5rem);
     font-weight: var(--font-weight-semibold, 600);
     color: var(--text-overt);
   }
 }
 
+/* Sidebar layout */
+.sidebar-layout {
+   display: flex;
+   gap: var(--spacing-lg, 2rem);
+   flex-wrap: wrap;
+}
+
+.sidebar-layout .sidebar {
+   flex-basis: 200px;
+   flex-grow: 1;
+}
+
+.sidebar-layout main {
+   flex-grow: 9999;
+   flex-basis: 50%;
+}
+
 /* Utility classes */
 .nav-link-active {
-  background-color: var(--accent-subtle);
-  color: var(--text-overt);
-}
+   background-color: var(--accent-subtle);
+   color: var(--text-overt);
+ }

@@ -14,7 +14,7 @@
     <!-- Optional: Inter font for a clean look (the reset defaults to system-ui) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.wght.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         /* Demo-specific styles just to make the sections clear */
@@ -164,7 +164,7 @@
                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
                              <h3><code>&lt;layout-split&gt;</code></h3>
                             <p>Splits at a breakpoint (resize window to see it stack).</p>
-                            <layout-split fraction="1fr" breakpoint="600px" gap="1rem">
+                            <layout-split fraction="1fr 1fr" breakpoint="600px" gap="1rem">
                                 <box bg="var(--surface-default)" p="1rem">Side A</box>
                                 <box bg="var(--surface-default)" p="1rem">Side B</box>
                             </layout-split>
@@ -323,23 +323,23 @@
                       <p>This is rendered in the top layer. Click outside or hit Esc to close.</p>
                     </div>
 
-                    <h3>Advanced Tooltip</h3>
-                    <p>Uses Anchor Positioning to tether to its button.</p>
-                    <layout-cluster gap="2rem">
-                        <button popovertarget="tip1">
-                          Top Success
-                          <tooltip id="tip1" position="top" variant="success" arrow>
-                            Anchored to the top!
-                          </tooltip>
-                        </button>
+                     <h3>Advanced Tooltip</h3>
+                     <p>Uses Anchor Positioning to tether to its button.</p>
+                     <layout-cluster gap="2rem">
+                         <button aria-describedby="tip1">
+                           Top Success
+                           <tooltip id="tip1" position="top" variant="success" arrow>
+                             Anchored to the top!
+                           </tooltip>
+                         </button>
 
-                         <button popovertarget="tip2">
-                          Right Error (with delay)
-                          <tooltip id="tip2" position="right" variant="error" delay="0.5s" arrow>
-                            Anchored to the right!
-                          </tooltip>
-                        </button>
-                    </layout-cluster>
+                          <button aria-describedby="tip2">
+                           Right Error (with delay)
+                           <tooltip id="tip2" position="right" variant="error" delay="0.5s" arrow>
+                             Anchored to the right!
+                           </tooltip>
+                         </button>
+                     </layout-cluster>
 
                     <h3>Modal</h3>
                     <button onclick="document.getElementById('demo-modal').style.display = 'grid'">Open Modal</button>
@@ -479,8 +479,9 @@
          Required JavaScript files 
          Assuming these are in the same ../ directory
      -->
-     <script src="../carousel.js"></script>
-     <script src="../view-transitions.js"></script>
+      <script src="../carousel.js" defer></script>
+      <script src="../view-transition.js" defer></script>
+      <script src="../components/img-container.js" defer></script>
     
     <!-- Simple Theme Switcher Script -->
     <script>

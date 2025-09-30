@@ -402,12 +402,77 @@
   .overflow-scroll { overflow: scroll; }
   .overflow-visible { overflow: visible; }
 
-  /* ============================================ */
-  /* IMPROVED SCRIM UTILITIES                    */
-  /* ============================================ */
+   /* ============================================ */
+   /* IMPROVED INTERACTIVE STATE UTILITIES        */
+   /* ============================================ */
 
-  .scrim { background-color: var(--scrim); }
-  .scrim-light { background-color: var(--scrim-light); }
+   .hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
+   .active-press:active { transform: scale(0.98); }
+   .focus-ring:focus { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+
+   /* ============================================ */
+   /* IMPROVED ANCHOR POSITIONING UTILITIES       */
+   /* ============================================ */
+   /*
+    * CSS Anchor Positioning utilities for creating positioned elements
+    * that tether to other elements (anchors) with automatic collision detection.
+    *
+    * Usage:
+    * 1. Add .anchor-name-* to the element you want to anchor to
+    * 2. Add .position-anchor-* to the positioned element
+    * 3. Add .position-area-* to control the positioning relative to the anchor
+    * 4. Optionally add .position-try-fallback for automatic repositioning
+    *
+    * Example:
+    * <button class="anchor-name-tooltip">Hover me</button>
+    * <div class="position-anchor-tooltip position-area-bottom position-try-fallback">
+    *   Tooltip content
+    * </div>
+    */
+
+   /* Anchor name utilities for creating anchor references */
+   .anchor-name-top { anchor-name: --anchor-top; }
+   .anchor-name-bottom { anchor-name: --anchor-bottom; }
+   .anchor-name-left { anchor-name: --anchor-left; }
+   .anchor-name-right { anchor-name: --anchor-right; }
+   .anchor-name-center { anchor-name: --anchor-center; }
+
+   /* Position anchor utilities for referencing anchors */
+   .position-anchor-top { position-anchor: --anchor-top; }
+   .position-anchor-bottom { position-anchor: --anchor-bottom; }
+   .position-anchor-left { position-anchor: --anchor-left; }
+   .position-anchor-right { position-anchor: --anchor-right; }
+   .position-anchor-center { position-anchor: --anchor-center; }
+
+   /* Position area utilities for common anchor positions */
+   @supports (position-area: top center) {
+     .position-area-top { position-area: top center; }
+     .position-area-bottom { position-area: bottom center; }
+     .position-area-left { position-area: left center; }
+     .position-area-right { position-area: right center; }
+     .position-area-top-left { position-area: top left; }
+     .position-area-top-right { position-area: top right; }
+     .position-area-bottom-left { position-area: bottom left; }
+     .position-area-bottom-right { position-area: bottom right; }
+     .position-area-center { position-area: center; }
+   }
+
+   /* Position try utilities for fallback positioning */
+   .position-try-fallback { position-try: --fallback-positions; }
+
+   @position-try --fallback-positions {
+     @try not media(viewport-right: 0px) { position-area: bottom center; }
+     @try { position-area: top center; }
+     @try not media(viewport-bottom: 0px) { position-area: right center; }
+     @try { position-area: left center; }
+   }
+
+   /* ============================================ */
+   /* IMPROVED SCRIM UTILITIES                    */
+   /* ============================================ */
+
+   .scrim { background-color: var(--scrim); }
+   .scrim-light { background-color: var(--scrim-light); }
 
   /* ============================================ */
   /* OUTLINE AND RING UTILITIES                  */

@@ -63,162 +63,6 @@
         <main>
 
             <!-- ================================================================== -->
-            <!-- SECTION 1: THE CORE <BOX> -->
-            <!-- ================================================================== -->
-            <section>
-                <h2>1. The Core: <code>&lt;box&gt;</code> and <code>attr()</code></h2>
-                <p class="section-desc">The "Swiss Army Knife" tag. Control CSS properties directly via HTML attributes, powered by the modern <code>attr()</code> function.</p>
-
-                <layout-stack gap="1.5rem">
-                    
-                    <div class="example-block">
-                        <h3>Styling via Attributes</h3>
-                        <box 
-                            p="2rem" 
-                            bg="var(--surface-info)" 
-                            radius="12px" 
-                            border="2px solid var(--outline-info)"
-                            color="var(--text-info)"
-                        >
-                            This <code>&lt;box&gt;</code> has padding, background, radius, border, and text color all defined in HTML attributes.
-                        </box>
-                    </div>
-
-                    <div class="example-block">
-                        <h3>Layout and Spacers</h3>
-                        <box bg="var(--surface-muted)" p="1rem">Box 1</box>
-                        <!-- Using box as a simple spacer -->
-                        <box height="2rem"></box>
-                        <box bg="var(--surface-muted)" p="1rem">Box 2 (separated by a 2rem <code>&lt;box height="2rem"&gt;</code> spacer)</box>
-                    </div>
-
-                </layout-stack>
-            </section>
-
-            <!-- ================================================================== -->
-            <!-- SECTION 2: LAYOUT PRIMITIVES -->
-            <!-- ================================================================== -->
-            <section>
-                <h2>2. Layout Primitives: <code>&lt;grid&gt;</code> &amp; <code>&lt;flex&gt;</code></h2>
-                <p class="section-desc">Declarative access to CSS Grid and Flexbox.</p>
-
-                <layout-stack gap="1.5rem">
-
-                    <div class="example-block">
-                        <h3><code>&lt;grid&gt;</code></h3>
-                        <grid columns="1fr 2fr 1fr" gap="1rem">
-                            <box bg="var(--surface-muted)" p="1rem">1</box>
-                            <box bg="var(--surface-muted)" p="1rem">2</box>
-                            <box bg="var(--surface-muted)" p="1rem">3</box>
-                            <!-- Child placement with attributes -->
-                            <box bg="var(--theme-primary)" color="white" p="1rem" col="span 3">
-                                Spanning all 3 columns using <code>col="span 3"</code>
-                            </box>
-                            <box bg="var(--surface-muted)" p="1rem">5</box>
-                            <box bg="var(--surface-muted)" p="1rem">6</box>
-                            <box bg="var(--surface-muted)" p="1rem">7</box>
-                        </grid>
-                    </div>
-
-                    <div class="example-block">
-                        <h3><code>&lt;flex&gt;</code></h3>
-                        <flex gap="1rem" align="center" justify="space-between" bg="var(--surface-subtle)" p="1rem">
-                            <box>Logo</box>
-                            <flex gap="0.5rem">
-                                <a href="#">Home</a>
-                                <a href="#">About</a>
-                                <a href="#">Contact</a>
-                            </flex>
-                            <button>Sign In</button>
-                        </flex>
-                    </div>
-
-                </layout-stack>
-            </section>
-
-             <!-- ================================================================== -->
-            <!-- SECTION 3: THE "EVERY LAYOUT" SYSTEM -->
-            <!-- ================================================================== -->
-            <section>
-                <h2>3. The "Every Layout" System</h2>
-                <p class="section-desc">Composable layout components that solve common UI patterns.</p>
-
-                <layout-stack gap="2rem">
-
-                    <div class="example-block">
-                        <h3><code>&lt;layout-stack&gt;</code></h3>
-                        <p>Vertical stacking with consistent gaps.</p>
-                        <layout-stack gap="1rem">
-                            <box bg="var(--surface-muted)" p="1rem">Item 1</box>
-                            <box bg="var(--surface-muted)" p="1rem">Item 2</box>
-                            <box bg="var(--surface-muted)" p="1rem">Item 3</box>
-                        </layout-stack>
-                    </div>
-
-                    <div class="example-block">
-                        <h3><code>&lt;layout-cluster&gt;</code></h3>
-                        <p>Great for tags, badges, or buttons that should wrap.</p>
-                        <layout-cluster gap="0.5rem">
-                            <badge>UI Design</badge>
-                            <badge>UX Research</badge>
-                            <badge>CSS</badge>
-                            <badge>HTML</badge>
-                            <badge>JavaScript</badge>
-                            <badge>Accessibility</badge>
-                            <badge>Design Systems</badge>
-                        </layout-cluster>
-                    </div>
-
-                    <div class="example-block">
-                        <h3><code>&lt;layout-split&gt;</code></h3>
-                        <p>Two-column layout that stacks on smaller screens. (Resize window to test).</p>
-                        <layout-split fraction="1fr" gap="1.5rem">
-                            <box bg="var(--surface-muted)" p="2rem">Side A</box>
-                            <box bg="var(--surface-muted)" p="2rem">Side B</box>
-                        </layout-split>
-                    </div>
-
-                    <div class="example-block">
-                        <h3><code>&lt;layout-sidebar&gt;</code></h3>
-                        <p>Main content and a fixed-width sidebar. Stacks when constrained.</p>
-                         <layout-sidebar side-width="250px" gap="1.5rem">
-                            <box bg="var(--surface-default)" p="2rem">
-                                <h4>Main Content</h4>
-                                <p>This is the primary content area. It will grow to fill the available space.</p>
-                            </box>
-                            <box slot="aside" bg="var(--surface-subtle)" p="2rem">
-                                <h4>Sidebar</h4>
-                                <p>This is the sidebar, fixed at 250px.</p>
-                            </box>
-                        </layout-sidebar>
-                    </div>
-
-                     <div class="example-block">
-                        <h3><code>&lt;layout-switcher&gt;</code></h3>
-                        <p>Switches from horizontal to vertical when children become narrower than the <code>threshold</code>.</p>
-                        <layout-switcher threshold="500px" gap="1rem">
-                            <box bg="var(--surface-muted)" p="1rem">Item A</box>
-                            <box bg="var(--surface-muted)" p="1rem">Item B</box>
-                            <box bg="var(--surface-muted)" p="1rem">Item C</box>
-                        </layout-switcher>
-                    </div>
-                    
-                    <div class="example-block">
-                        <h3><code>&lt;layout-reel&gt;</code></h3>
-                        <p>Horizontally scrolling container.</p>
-                        <layout-reel gap="1rem" p="0.5rem">
-                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 1</box>
-                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 2</box>
-                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 3</box>
-                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 4</box>
-                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 5</box>
-                        </layout-reel>
-                    </div>
-
-                </layout-stack>
-            </section>
-
-            <!-- ================================================================== -->
             <!-- SECTION 4: UI COMPONENTS -->
             <!-- ================================================================== -->
             <section>
@@ -228,110 +72,251 @@
                  <layout-stack gap="2rem">
 
                     <div class="example-block">
-                        <h3><code>&lt;card&gt;</code> with Container Query</h3>
-                        <p>This card uses a container query to switch from a vertical stack to a horizontal layout when it has enough width. Resize the browser to see it adapt.</p>
-                        
-                        <layout-grid columns="repeat(auto-fit, minmax(350px, 1fr))" gap="1.5rem">
-                            <card>
-                                <card-media>
-                                    <img src="https://picsum.photos/seed/css1/400/300" alt="Placeholder">
-                                </card-media>
-                                <card-body>
-                                    <card-header>Responsive Card</card-header>
-                                    <card-content>
-                                        I am a smart card. When I am narrow, I stack. When I have room (min-width: 400px), I go horizontal.
-                                    </card-content>
-                                    <card-footer>Read More →</card-footer>
-                                </card-body>
-                            </card>
-                            <card>
-                                <card-media>
-                                    <img src="https://picsum.photos/seed/css2/400/300" alt="Placeholder">
-                                </card-media>
-                                <card-body>
-                                    <card-header>Another Card</card-header>
-                                    <card-content>
-                                        Try changing the theme at the top of the page to see me change color.
-                                    </card-content>
-                                    <card-footer>Read More →</card-footer>
-                                </card-body>
-                            </card>
-                        </layout-grid>
-                    </div>
+                        <h3>Card Components</h3>
+                        <p>Beautiful, responsive cards with container queries, hover effects, and flexible layouts.</p>
 
-                    <div class="example-block">
-                        <h3>Alerts</h3>
-                        <layout-stack gap="1rem">
-                            <div class="alert" status="success">
-                                <div class="alert__icon">✅</div>
-                                <div class="alert__title">Success!</div>
-                                <div class="alert__body">Your changes have been saved successfully.</div>
+                        <layout-stack gap="2rem">
+
+                            <div>
+                                <h4>Basic Card Grid</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(300px, 1fr))" gap="1.5rem">
+                                    <card style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                        <card-media>
+                                            <img src="https://picsum.photos/400/250?random=1" alt="Beautiful landscape">
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Serene Mountains</card-header>
+                                            <card-content>
+                                                Discover the breathtaking beauty of mountain landscapes that inspire and rejuvenate the soul.
+                                            </card-content>
+                                            <card-footer>Explore Nature →</card-footer>
+                                        </card-body>
+                                    </card>
+                                    <card style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                                        <card-media>
+                                            <img src="https://picsum.photos/400/250?random=2" alt="Urban architecture">
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Modern Architecture</card-header>
+                                            <card-content>
+                                                Innovative designs that blend functionality with aesthetic excellence in urban environments.
+                                            </card-content>
+                                            <card-footer>View Projects →</card-footer>
+                                        </card-body>
+                                    </card>
+                                    <card style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                                        <card-media>
+                                            <img src="https://picsum.photos/400/250?random=3" alt="Ocean waves">
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Ocean Adventures</card-header>
+                                            <card-content>
+                                                Embark on unforgettable journeys across vast oceans and discover hidden underwater worlds.
+                                            </card-content>
+                                            <card-footer>Start Journey →</card-footer>
+                                        </card-body>
+                                    </card>
+                                </layout-grid>
                             </div>
-                             <div class="alert" status="warning">
-                                <div class="alert__icon">⚠️</div>
-                                <div class="alert__title">Warning</div>
-                                <div class="alert__body">Your account is about to expire.</div>
+
+                            <div>
+                                <h4>Horizontal Cards (Wide Layout)</h4>
+                                <layout-stack gap="1rem">
+                                    <card style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                        <card-media>
+                                            <img src="https://picsum.photos/200/150?random=4" alt="Technology">
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Innovation Hub</card-header>
+                                            <card-content>
+                                                Cutting-edge technology solutions that drive progress and transform industries. Our team of experts delivers unparalleled innovation.
+                                            </card-content>
+                                            <card-footer>Learn More →</card-footer>
+                                        </card-body>
+                                    </card>
+                                    <card style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                                        <card-media>
+                                            <img src="https://picsum.photos/200/150?random=5" alt="Creative workspace">
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Creative Studio</card-header>
+                                            <card-content>
+                                                Where imagination meets execution. We craft compelling visual stories that captivate and inspire audiences worldwide.
+                                            </card-content>
+                                            <card-footer>View Portfolio →</card-footer>
+                                        </card-body>
+                                    </card>
+                                </layout-stack>
                             </div>
-                             <div class="alert" status="error">
-                                <div class="alert__icon">❌</div>
-                                <div class="alert__title">Error</div>
-                                <div class="alert__body">Unable to connect to the server.</div>
+
+                            <div>
+                                <h4>Compact Cards</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
+                                    <card radius="0.5rem" style="background: #f0f9ff;">
+                                        <card-body style="padding: 1rem;">
+                                            <card-header style="font-size: 1rem;">Quick Tip</card-header>
+                                            <card-content style="font-size: 0.875rem;">
+                                                Small changes can lead to big improvements in productivity and well-being.
+                                            </card-content>
+                                            <card-footer style="font-size: 0.75rem;">Read More →</card-footer>
+                                        </card-body>
+                                    </card>
+                                    <card radius="0.5rem" style="background: #fef3c7;">
+                                        <card-body style="padding: 1rem;">
+                                            <card-header style="font-size: 1rem;">Daily Inspiration</card-header>
+                                            <card-content style="font-size: 0.875rem;">
+                                                Every day is a new opportunity to create something amazing and meaningful.
+                                            </card-content>
+                                            <card-footer style="font-size: 0.75rem;">Get Inspired →</card-footer>
+                                        </card-body>
+                                    </card>
+                                    <card radius="0.5rem" style="background: #e0f2fe;">
+                                        <card-body style="padding: 1rem;">
+                                            <card-header style="font-size: 1rem;">Tech Update</card-header>
+                                            <card-content style="font-size: 0.875rem;">
+                                                Stay ahead with the latest developments in web technology and design trends.
+                                            </card-content>
+                                            <card-footer style="font-size: 0.75rem;">Stay Updated →</card-footer>
+                                        </card-body>
+                                    </card>
+                                </layout-grid>
                             </div>
-                             <div class="alert" status="info">
-                                <div class="alert__icon">ℹ️</div>
-                                <div class="alert__title">Note</div>
-                                <div class="alert__body">Scheduled maintenance tonight at 2 AM.</div>
+
+                            <div>
+                                <h4>Feature Cards with Actions</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(280px, 1fr))" gap="1.5rem">
+                                    <card style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
+                                        <card-media style="background: linear-gradient(135deg, var(--hue-blue), var(--hue-purple)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
+                                            <span style="font-size: 2rem;">🚀</span>
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Premium Plan</card-header>
+                                            <card-content>
+                                                Unlock advanced features and priority support with our premium subscription.
+                                            </card-content>
+                                            <flex gap="0.5rem" style="margin-top: 1rem;">
+                                                <button class="button" style="flex: 1;">Upgrade</button>
+                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Learn More</button>
+                                            </flex>
+                                        </card-body>
+                                    </card>
+                                    <card style="background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);">
+                                        <card-media style="background: linear-gradient(135deg, var(--hue-green), var(--hue-emerald)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
+                                            <span style="font-size: 2rem;">📊</span>
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Analytics Dashboard</card-header>
+                                            <card-content>
+                                                Comprehensive insights and data visualization to drive informed decisions.
+                                            </card-content>
+                                            <flex gap="0.5rem" style="margin-top: 1rem;">
+                                                <button class="button" style="flex: 1;">View Dashboard</button>
+                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Demo</button>
+                                            </flex>
+                                        </card-body>
+                                    </card>
+                                    <card style="background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);">
+                                        <card-media style="background: linear-gradient(135deg, var(--hue-orange), var(--hue-red)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
+                                            <span style="font-size: 2rem;">🎨</span>
+                                        </card-media>
+                                        <card-body>
+                                            <card-header>Design System</card-header>
+                                            <card-content>
+                                                Consistent, scalable design components that maintain brand integrity across platforms.
+                                            </card-content>
+                                            <flex gap="0.5rem" style="margin-top: 1rem;">
+                                                <button class="button" style="flex: 1;">Explore</button>
+                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Documentation</button>
+                                            </flex>
+                                        </card-body>
+                                    </card>
+                                </layout-grid>
                             </div>
+
                         </layout-stack>
                     </div>
 
                     <div class="example-block">
-                        <h3>Badges &amp; Chips</h3>
-                        <layout-stack gap="1rem">
-                            <flex gap="0.5rem" align="center">
-                                <strong>Status:</strong>
-                                <badge status="success">Active</badge>
-                                <badge status="warning">Pending</badge>
-                                <badge status="error">Inactive</badge>
-                            </flex>
-                            <flex gap="0.5rem" align="center">
-                                <strong>Sizes:</strong>
-                                <badge size="sm" role="subtle">Small</badge>
-                                <badge size="md" role="subtle">Medium</badge>
-                                <badge size="lg" role="subtle">Large</badge>
-                            </flex>
-                             <flex gap="0.5rem" align="center">
-                                <strong>Chips:</strong>
-                                <chip>Standard Chip</chip>
-                                <chip removable>Removable Chip</chip>
-                            </flex>
+                        <h3><code>&lt;img-container&gt;</code></h3>
+                        <p>Advanced image container with aspect ratios, lazy loading, and responsive features.</p>
+
+                        <layout-stack gap="2rem">
+
+                            <div>
+                                <h4>Basic Aspect Ratios</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="1rem">
+                                    <img-container aspect-ratio="16/9" radius="0.5rem">
+                                        <img src="https://picsum.photos/400/225?random=10" alt="Landscape image" />
+                                    </img-container>
+                                    <img-container aspect-ratio="1" radius="0.5rem">
+                                        <img src="https://picsum.photos/400/400?random=11" alt="Square image" />
+                                    </img-container>
+                                    <img-container aspect-ratio="4/3" radius="0.5rem">
+                                        <img src="https://picsum.photos/400/300?random=12" alt="Portrait image" />
+                                    </img-container>
+                                </layout-grid>
+                            </div>
+
+                            <div>
+                                <h4>Object Fit Options</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(150px, 1fr))" gap="1rem">
+                                    <div>
+                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Cover</p>
+                                        <img-container aspect-ratio="1" object-fit="cover" radius="0.25rem">
+                                            <img src="https://picsum.photos/200/300?random=13" alt="Cover fit" />
+                                        </img-container>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Contain</p>
+                                        <img-container aspect-ratio="1" object-fit="contain" bg="#f5f5f5" radius="0.25rem">
+                                            <img src="https://picsum.photos/200/300?random=13" alt="Contain fit" />
+                                        </img-container>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Fill</p>
+                                        <img-container aspect-ratio="1" object-fit="fill" radius="0.25rem">
+                                            <img src="https://picsum.photos/200/300?random=13" alt="Fill fit" />
+                                        </img-container>
+                                    </div>
+                                </layout-grid>
+                            </div>
+
+                            <div>
+                                <h4>Themed Containers</h4>
+                                <layout-grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="1rem">
+                                    <img-container theme="card" aspect-ratio="3/4">
+                                        <img src="https://picsum.photos/300/400?random=14" alt="Card theme" />
+                                    </img-container>
+                                    <img-container theme="hero" aspect-ratio="21/9">
+                                        <img src="https://picsum.photos/600/286?random=15" alt="Hero theme" />
+                                    </img-container>
+                                    <img-container theme="thumbnail" aspect-ratio="1">
+                                        <img src="https://picsum.photos/200/200?random=16" alt="Thumbnail theme" />
+                                    </img-container>
+                                </layout-grid>
+                            </div>
+
+                            <div>
+                                <h4>Lazy Loading</h4>
+                                <p>Scroll down to see images load lazily.</p>
+                                <layout-grid columns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
+                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
+                                        <img data-src="https://picsum.photos/400/225?random=17" alt="Lazy loaded 1" />
+                                    </img-container>
+                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
+                                        <img data-src="https://picsum.photos/400/225?random=18" alt="Lazy loaded 2" />
+                                    </img-container>
+                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
+                                        <img data-src="https://picsum.photos/400/225?random=19" alt="Lazy loaded 3" />
+                                    </img-container>
+                                </layout-grid>
+                            </div>
+
                         </layout-stack>
                     </div>
 
-                     <div class="example-block">
-                        <h3><code>&lt;list&gt;</code></h3>
-                        <p>Standard lists and custom icons utilizing CSS masks and <code>attr()</code>.</p>
-                        <layout-split>
-                             <list>
-                                <list-item>Standard Item 1</list-item>
-                                <list-item>Standard Item 2</list-item>
-                                <list-divider></list-divider>
-                                <list-item>Standard Item 3</list-item>
-                            </list>
-                            <!-- Note: Using a data URI for the SVG icon to make the demo self-contained -->
-                            <list gap="1rem">
-                                <list-item icon icon-color="var(--success)" icon="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
-                                    Task Completed
-                                </list-item>
-                                <list-item icon icon-color="var(--error)" icon="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z'/%3E%3C/svg%3E">
-                                    Task Failed
-                                </list-item>
-                            </list>
-                        </layout-split>
-                    </div>
-
-                 </layout-stack>
-             </section>
+                  </layout-stack>
+              </section>
 
              <!-- ================================================================== -->
              <!-- SECTION 5: NEW COMPONENTS -->
@@ -378,18 +363,18 @@
                          <p>Accessible form elements with focus states and variants.</p>
                          <form>
                              <layout-stack gap="1rem">
-                                 <form-input type="text" placeholder="Enter your name" required></form-input>
-                                 <form-input type="email" placeholder="Enter your email" required></form-input>
-                                 <form-select>
-                                     <option>Select role</option>
-                                     <option>Developer</option>
-                                     <option>Designer</option>
-                                 </form-select>
-                                 <form-textarea placeholder="Your message"></form-textarea>
-                                 <flex gap="1rem">
-                                     <form-button type="submit" class="btn-primary">Submit</form-button>
-                                     <form-button type="reset" class="btn-secondary">Reset</form-button>
-                                 </flex>
+                                  <input type="text" class="form-input" placeholder="Enter your name" required>
+                                  <input type="email" class="form-input" placeholder="Enter your email" required>
+                                  <select class="form-select">
+                                      <option>Select role</option>
+                                      <option>Developer</option>
+                                      <option>Designer</option>
+                                  </select>
+                                  <textarea class="form-textarea" placeholder="Your message"></textarea>
+                                  <flex gap="1rem">
+                                      <button type="submit" class="form-button btn-primary">Submit</button>
+                                      <button type="reset" class="form-button btn-secondary">Reset</button>
+                                  </flex>
                              </layout-stack>
                          </form>
                      </div>
@@ -397,34 +382,34 @@
                      <div class="example-block">
                          <h3>Navigation Components</h3>
                          <p>Responsive navbar and sidebar for site navigation.</p>
-                         <nav-navbar>
-                             <div class="nav-brand">My Site</div>
-                             <ul class="nav-links">
-                                 <li><a href="#" class="nav-link">Home</a></li>
-                                 <li><a href="#" class="nav-link">About</a></li>
-                                 <li><a href="#" class="nav-link">Contact</a></li>
-                             </ul>
-                             <button class="nav-toggle">☰</button>
-                         </nav-navbar>
-                         <layout-sidebar side-width="200px" style="margin-top: 1rem;">
-                             <nav slot="aside" class="nav-sidebar">
-                                 <div class="sidebar-section">Menu</div>
-                                 <ul class="sidebar-nav">
-                                     <li><a href="#" class="sidebar-link">Dashboard</a></li>
-                                     <li><a href="#" class="sidebar-link">Profile</a></li>
-                                     <li><a href="#" class="sidebar-link">Settings</a></li>
-                                 </ul>
-                             </nav>
-                             <div>Main content area</div>
-                         </layout-sidebar>
+                          <nav class="navbar">
+                              <div class="nav-brand">My Site</div>
+                              <ul class="nav-links">
+                                  <li><a href="#" class="nav-link">Home</a></li>
+                                  <li><a href="#" class="nav-link">About</a></li>
+                                  <li><a href="#" class="nav-link">Contact</a></li>
+                              </ul>
+                              <button class="nav-toggle">☰</button>
+                          </nav>
+                          <div class="sidebar-layout" style="margin-top: 1rem;">
+                              <aside class="sidebar">
+                                  <div class="sidebar-section">Menu</div>
+                                  <ul class="sidebar-nav">
+                                      <li><a href="#" class="sidebar-link">Dashboard</a></li>
+                                      <li><a href="#" class="sidebar-link">Profile</a></li>
+                                      <li><a href="#" class="sidebar-link">Settings</a></li>
+                                  </ul>
+                              </aside>
+                              <main>Main content area</main>
+                          </div>
                      </div>
 
                  </layout-stack>
              </section>
 
-              <!-- ================================================================== -->
-             <!-- SECTION 6: MODERN INTERACTIVE -->
-             <!-- ================================================================== -->
+            <!-- ================================================================== -->
+            <!-- SECTION 5: MODERN INTERACTIVE -->
+            <!-- ================================================================== -->
             <section>
                 <h2>5. Modern Interactive (Popover API &amp; Anchor Positioning)</h2>
                 <p class="section-desc">Using the native Popover API and Anchor Positioning. No JS required for the basic functionality.</p>
@@ -445,23 +430,23 @@
                         <h3>Advanced Tooltip</h3>
                         <p>Uses <b>Anchor Positioning</b> to tether to its button, and the <b>Popover API</b> to appear on top.</p>
                          <flex gap="2rem" wrap="wrap" justify="center" p="3rem">
-                            
-                            <button popovertarget="tt-top" class="button">
-                                Top Tooltip
-                                <tooltip id="tt-top" position="top" arrow>I'm tethered to the top!</tooltip>
-                            </button>
 
-                             <button popovertarget="tt-right" class="button">
-                                Right Tooltip
-                                <tooltip id="tt-right" position="right" variant="info" arrow>Info on the right.</tooltip>
-                            </button>
+                             <button aria-describedby="tt-top" class="button">
+                                 Top Tooltip
+                                 <tooltip id="tt-top" position="top" arrow>I'm tethered to the top!</tooltip>
+                             </button>
 
-                             <button popovertarget="tt-bottom" class="button">
-                                Bottom Tooltip
-                                <tooltip id="tt-bottom" position="bottom" variant="success" arrow>Success on the bottom.</tooltip>
-                            </button>
-                            
-                        </flex>
+                              <button aria-describedby="tt-right" class="button">
+                                 Right Tooltip
+                                 <tooltip id="tt-right" position="right" variant="info" arrow>Info on the right.</tooltip>
+                             </button>
+
+                              <button aria-describedby="tt-bottom" class="button">
+                                 Bottom Tooltip
+                                 <tooltip id="tt-bottom" position="bottom" variant="success" arrow>Success on the bottom.</tooltip>
+                             </button>
+
+                         </flex>
                     </div>
                     
                     <div class="example-block">
@@ -483,26 +468,100 @@
                 </layout-stack>
             </section>
 
-              <!-- ================================================================== -->
-             <!-- SECTION 7: ADVANCED LAYOUTS -->
-             <!-- ================================================================== -->
-             <section>
+            <!-- ================================================================== -->
+            <!-- SECTION 6: ADVANCED LAYOUTS -->
+            <!-- ================================================================== -->
+            <section>
                 <h2>6. Advanced Layouts</h2>
                 <p class="section-desc">Experimental or slightly enhanced layouts.</p>
 
                  <layout-stack gap="2rem">
                     <div class="example-block">
-                        <h3>Carousel (with JS enhancement)</h3>
-                        <p>Basic CSS scroll-snap, enhanced with JS for touch swipe and transform-based sliding.</p>
-                        <carousel loop>
-                            <div class="carousel-slides">
-                                <carousel-item><box bg="var(--hue-blue)" p="5rem" align="center" color="white">Slide 1</box></carousel-item>
-                                <carousel-item><box bg="var(--hue-green)" p="5rem" align="center" color="white">Slide 2</box></carousel-item>
-                                <carousel-item><box bg="var(--hue-red)" p="5rem" align="center" color="white">Slide 3</box></carousel-item>
+                        <h3>Carousel Components</h3>
+                        <p>Responsive carousels with touch support, scroll-snap fallback, and customizable animations.</p>
+
+                        <layout-stack gap="2rem">
+
+                            <div>
+                                <h4>Basic Carousel</h4>
+                                <carousel>
+                                    <div class="carousel-slides">
+                                        <carousel-item><box bg="var(--hue-blue)" p="4rem" align="center" color="white">Slide 1</box></carousel-item>
+                                        <carousel-item><box bg="var(--hue-green)" p="4rem" align="center" color="white">Slide 2</box></carousel-item>
+                                        <carousel-item><box bg="var(--hue-red)" p="4rem" align="center" color="white">Slide 3</box></carousel-item>
+                                    </div>
+                                    <carousel-trigger direction="prev">←</carousel-trigger>
+                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                </carousel>
                             </div>
-                            <carousel-trigger direction="prev">←</carousel-trigger>
-                            <carousel-trigger direction="next">→</carousel-trigger>
-                        </carousel>
+
+                            <div>
+                                <h4>Looping Carousel</h4>
+                                <carousel loop>
+                                    <div class="carousel-slides">
+                                        <carousel-item><box bg="var(--hue-purple)" p="4rem" align="center" color="white">Infinite 1</box></carousel-item>
+                                        <carousel-item><box bg="var(--hue-orange)" p="4rem" align="center" color="white">Infinite 2</box></carousel-item>
+                                        <carousel-item><box bg="var(--hue-cyan)" p="4rem" align="center" color="white">Infinite 3</box></carousel-item>
+                                    </div>
+                                    <carousel-trigger direction="prev">←</carousel-trigger>
+                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                </carousel>
+                            </div>
+
+                            <div>
+                                <h4>Content Carousel</h4>
+                                <carousel loop duration="300ms">
+                                    <div class="carousel-slides">
+                                        <carousel-item>
+                                            <card>
+                                                <card-header>
+                                                    <h3>Feature One</h3>
+                                                </card-header>
+                                                <card-body>
+                                                    <p>Discover amazing features with smooth transitions.</p>
+                                                </card-body>
+                                            </card>
+                                        </carousel-item>
+                                        <carousel-item>
+                                            <card>
+                                                <card-header>
+                                                    <h3>Feature Two</h3>
+                                                </card-header>
+                                                <card-body>
+                                                    <p>Touch-friendly navigation and responsive design.</p>
+                                                </card-body>
+                                            </card>
+                                        </carousel-item>
+                                        <carousel-item>
+                                            <card>
+                                                <card-header>
+                                                    <h3>Feature Three</h3>
+                                                </card-header>
+                                                <card-body>
+                                                    <p>Built with modern CSS and enhanced with JavaScript.</p>
+                                                </card-body>
+                                            </card>
+                                        </carousel-item>
+                                    </div>
+                                    <carousel-trigger direction="prev">←</carousel-trigger>
+                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                </carousel>
+                            </div>
+
+                            <div>
+                                <h4>Image Carousel</h4>
+                                <carousel loop duration="400ms" timing-function="ease-in-out">
+                                    <div class="carousel-slides">
+                                        <carousel-item><img src="https://picsum.photos/600/300?random=1" alt="Random image 1" style="width: 100%; height: auto; display: block;"></carousel-item>
+                                        <carousel-item><img src="https://picsum.photos/600/300?random=2" alt="Random image 2" style="width: 100%; height: auto; display: block;"></carousel-item>
+                                        <carousel-item><img src="https://picsum.photos/600/300?random=3" alt="Random image 3" style="width: 100%; height: auto; display: block;"></carousel-item>
+                                    </div>
+                                    <carousel-trigger direction="prev">←</carousel-trigger>
+                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                </carousel>
+                            </div>
+
+                        </layout-stack>
                     </div>
 
                     <div class="example-block">
@@ -521,10 +580,10 @@
             </section>
 
 
-              <!-- ================================================================== -->
-             <!-- SECTION 8: VIEW TRANSITIONS (SPA) -->
-             <!-- ================================================================== -->
-             <section>
+            <!-- ================================================================== -->
+            <!-- SECTION 7: VIEW TRANSITIONS (SPA) -->
+            <!-- ================================================================== -->
+            <section>
                 <h2>7. View Transitions (SPA Example)</h2>
                 <p class="section-desc">A simple router using the View Transitions API for app-like state changes. Click the buttons below.</p>
 
@@ -576,9 +635,10 @@
 
     </layout-center>
 
-     <!-- Import required JavaScript -->
-     <script src="../carousel.js" defer></script>
-     <script src="../view-transitions.js" defer></script>
+      <!-- Import required JavaScript -->
+      <script src="../carousel.js" defer></script>
+       <script src="../view-transition.js" defer></script>
+       <script src="../components/img-container.js" defer></script>
 
-</body>
-</html>
+    </body>
+  </html>

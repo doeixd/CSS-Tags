@@ -1,11 +1,13 @@
-# Modern CSS Framework: A Comprehensive Guide
+# CSS Tags: Using Modern CSS to Bring Styling back to HTML
 
-A production-ready, educational CSS framework designed for modern web development. Built with advanced CSS features like cascade layers, OKLCH colors, and container queries, this framework provides a scalable, maintainable foundation for building accessible, performant interfaces.
+A production-ready, educational CSS framework that brings styling back to HTML tags using modern CSS techniques. This framework serves as both a practical toolkit and an educational resource, showcasing advanced CSS features like CSS Anchor Positioning, cascade layers, OKLCH colors, and container queries while demonstrating how to style semantic HTML directly instead of relying on utility classes.
 
 ## 🎯 Philosophy & Core Principles
 
-This framework is built on principles that prioritize developer experience, accessibility, and future-proofing:
+This framework is built on principles that prioritize developer experience, accessibility, and future-proofing. As a showcase of modern CSS, it demonstrates advanced techniques while remaining practical for production use:
 
+- **Semantic Styling**: Brings styling back to HTML tags using modern CSS techniques
+- **Educational Showcase**: Demonstrates cutting-edge CSS features and best practices
 - **Progressive Enhancement**: Starts with a solid baseline and enhances for capable browsers
 - **Cascade Layering**: Explicit cascade order prevents specificity conflicts
 - **Design Token System**: Single source of truth for all design values
@@ -42,6 +44,28 @@ This framework is built on principles that prioritize developer experience, acce
 - **Modern Browser Features**: Leverages CSS custom properties, `@property`, `@scope`
 - **Tree-Shakable**: Only include what you use
 
+## 🎨 CSS Features Showcase
+
+This framework demonstrates the latest CSS capabilities available in modern browsers:
+
+### Cutting-Edge Features
+- **CSS Anchor Positioning**: Tether elements to other elements with automatic collision detection
+- **CSS Layers (@layer)**: Explicit cascade control for predictable styling
+- **Container Queries**: Component-level responsive design
+- **OKLCH Color Space**: Perceptually uniform color manipulation
+- **CSS Custom Properties (@property)**: Typed CSS variables with animation support
+- **CSS Scope (@scope)**: Isolated component styling
+- **Popover API**: Native modal and overlay management
+- **View Transitions**: Smooth page transitions
+- **Scroll-Driven Animations**: Animation based on scroll position
+
+### Advanced Techniques
+- **Cascade Layers**: Organized specificity management
+- **Design Tokens**: Comprehensive token system with auto-contrast
+- **Auto-Context Styling**: Automatic text color adjustment
+- **Mathematical Color Functions**: Dynamic color manipulation
+- **Progressive Enhancement**: Graceful fallbacks for older browsers
+
 ## 📦 Installation & Setup
 
 ### Quick Start
@@ -76,43 +100,43 @@ This framework is built on principles that prioritize developer experience, acce
 
 ## 🎨 Usage Examples
 
-### Basic Styling with Utilities
+### Styling HTML Tags Directly
 ```html
-<div class="bg-surface-default p-md rounded-md shadow-sm">
-  <h2 class="text-xl font-bold text-default mb-sm">Card Title</h2>
-  <p class="text-subtle mb-md">This card uses utility classes for rapid styling.</p>
-  <button class="button button-filled-accent">Action Button</button>
-</div>
+<box bg="var(--surface-default)" p="var(--space-md)" radius="var(--radius-md)" shadow="var(--shadow-sm)">
+  <h2>Card Title</h2>
+  <p>This card styles HTML tags directly using modern CSS techniques.</p>
+  <button>Action Button</button>
+</box>
 ```
 
-### Component Usage
+### Semantic Component Usage
 ```html
-<div class="card">
-  <div class="card__header">
-    <h3 class="card__title">Product Card</h3>
-  </div>
-  <div class="card__body">
-    <img src="product.jpg" alt="Product" class="w-full rounded">
-    <p class="mt-sm">Product description goes here.</p>
-  </div>
-  <div class="card__footer">
-    <button class="button button-outline-accent">Add to Cart</button>
-  </div>
-</div>
+<card>
+  <card-header>
+    <h3>Product Card</h3>
+  </card-header>
+  <card-body>
+    <img src="product.jpg" alt="Product">
+    <p>Product description goes here.</p>
+  </card-body>
+  <card-footer>
+    <button>Add to Cart</button>
+  </card-footer>
+</card>
 ```
 
 ### Layout Primitives
 ```html
-<div class="l-grid" style="--l-grid-min-item-size: 15rem;">
-  <div class="card">Grid Item 1</div>
-  <div class="card">Grid Item 2</div>
-  <div class="card">Grid Item 3</div>
-</div>
+<layout-grid min-item-size="15rem">
+  <card>Grid Item 1</card>
+  <card>Grid Item 2</card>
+  <card>Grid Item 3</card>
+</layout-grid>
 
-<div class="l-sidebar">
+<layout-sidebar>
   <main>Main content area</main>
-  <aside class="l-sidebar__aside">Sidebar content</aside>
-</div>
+  <aside>Sidebar content</aside>
+</layout-sidebar>
 ```
 
 ### Design Token Customization
@@ -293,8 +317,10 @@ The framework includes comprehensive accessibility features:
 
 ## 🌟 Why Choose This Framework?
 
+- **Semantic HTML First**: Styles HTML tags directly instead of requiring utility classes
+- **CSS Feature Showcase**: Demonstrates the latest CSS capabilities in a practical context
+- **Educational Resource**: Learn advanced CSS concepts through real-world examples
 - **Future-Proof**: Built with modern CSS standards and best practices
-- **Educational**: Designed to teach advanced CSS concepts through practical usage
 - **Flexible**: Highly customizable without sacrificing consistency
 - **Performant**: Optimized for minimal runtime overhead
 - **Accessible**: Built-in support for inclusive design

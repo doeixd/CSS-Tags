@@ -19,6 +19,33 @@
  * This file should be imported into the `components` layer in `index.css`.
  */
 
+/* Define custom properties for layout components */
+@property --l-fraction {
+  syntax: '<string>';
+  initial-value: '1fr';
+  inherits: false;
+}
+@property --l-justify {
+  syntax: '<string>';
+  initial-value: 'flex-start';
+  inherits: false;
+}
+@property --l-align {
+  syntax: '<string>';
+  initial-value: 'center';
+  inherits: false;
+}
+@property --l-gutters {
+  syntax: '<length>';
+  initial-value: 1.5rem;
+  inherits: false;
+}
+@property --l-max-width {
+  syntax: '<length>';
+  initial-value: 65ch;
+  inherits: false;
+}
+
 /*
  * ==============================================================================
  * DEFAULTS & BASE BEHAVIORS
@@ -27,17 +54,21 @@
  * We use `:where()` to set default variable values with ZERO specificity.
  * This makes them trivial for developers to override at any level.
  */
-:where(layout-grid, layout-split, layout-row, layout-stack, layout-cluster, layout-reel, layout-switcher, layout-spread, layout-pad, layout-center, layout-cover, layout-frame, layout-sidebar, layout-page, layout-media) {
+ :where(layout-grid, layout-split, layout-row, layout-stack, layout-cluster, layout-reel, layout-switcher, layout-spread, layout-pad, layout-center, layout-inline-center, layout-cover, layout-frame, layout-sidebar, layout-page, layout-media) {
   /*
    * Default values for layout properties, pulling from global tokens.
    * Assume tokens like `--space-md`, `--bp-md` are defined in `base.css`.
    */
   --l-gap: var(--space-md, 1.5rem);
-  --l-breakpoint: var(--bp-md, 48em);
+  --l-breakpoint: var(--bp-sm, 30em);
   --l-padding: var(--space-md, 1.5rem);
-}
+  --l-fraction: 1fr;
+  --l-justify: flex-start;
+  --l-align: center;
+ }
 
 /* Base styles for all layout components */
+:where(layout-grid, layout-split, layout-row, layout-stack, layout-cluster, layout-reel, layout-switcher, layout-spread, layout-pad, layout-center, layout-cover, layout-frame, layout-sidebar, layout-page, layout-media),
 [class^="layout-"] {
   display: block;
   container-type: inline-size;
@@ -88,13 +119,13 @@ layout-split {
   gap: var(--_gap);
   grid-template-columns: 1fr; /* Default to stacked */
 }
-@container layout-container (min-width: var(--_breakpoint)) {
+@media (min-width: 30em) {
   layout-split:not([force-stack]) {
-    grid-template-columns: var(--_fraction) 1fr;
+    grid-template-columns: var(--_fraction);
   }
 }
-:is(layout-split[no-stack]) {
-  grid-template-columns: var(--_fraction) 1fr;
+:is(layout-split[no-stack]):has(:nth-child(2):last-child) {
+  grid-template-columns: var(--_fraction);
 }
 
 /*
@@ -213,6 +244,21 @@ layout-center {
   box-sizing: content-box;
   margin-inline: auto;
   max-width: var(--_max-width);
+  padding-inline: var(--_gutters);
+  &[and-text] { text-align: center; }
+}
+
+/**
+ * <layout-inline-center>
+ * Centers content horizontally without a max-width constraint.
+ * @prop --l-gutters
+ * @attr gutters, and-text
+ */
+layout-inline-center {
+  --_gutters: attr(gutters type(<length>), var(--l-gutters, var(--space-md, 1.5rem)));
+
+  box-sizing: content-box;
+  margin-inline: auto;
   padding-inline: var(--_gutters);
   &[and-text] { text-align: center; }
 }

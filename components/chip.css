@@ -9,7 +9,7 @@ chip {
   --b-bg: var(--bg);
   --b-bw: var(--border-width, 1px);
   --b-bc: var(--border);
-  --b-r: var(--radius-full, 9999px);
+   --b-r: var(--border-radius-full, 9999px);
   --b-py: 0.35em;
   --b-px: 0.75em;
   background-color: var(--b-bg);

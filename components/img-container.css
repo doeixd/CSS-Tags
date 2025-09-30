@@ -1,0 +1,159 @@
+/**
+ * img-container.css
+ *
+ * A comprehensive image container component with advanced features.
+ * ------------------------------------------------------------------------------
+ * @feature {Aspect Ratio} - Maintains consistent proportions
+ * @feature {Responsive Images} - srcset and sizes support
+ * @feature {Lazy Loading} - Native lazy loading with fallbacks
+ * @feature {Object Fit} - Cover, contain, fill, none, scale-down
+ * @feature {Loading States} - Skeleton loading and error states
+ * @feature {Container Queries} - Responsive to container size
+ * @feature {attr()} - Declarative API for all features
+ */
+
+img-container {
+  --ic-aspect-ratio: attr(aspect-ratio type(*), auto);
+  --ic-object-fit: attr(object-fit type(*), cover);
+  --ic-object-position: attr(object-position type(*), center);
+  --ic-radius: attr(radius type(<length>), 0);
+  --ic-shadow: attr(shadow type(*), none);
+  --ic-bg: attr(bg type(<color>), transparent);
+  --ic-transition: attr(transition type(*), opacity 0.3s ease);
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: var(--ic-aspect-ratio);
+  border-radius: var(--ic-radius);
+  box-shadow: var(--ic-shadow);
+  background-color: var(--ic-bg);
+  transition: var(--ic-transition);
+
+  /* Container for responsive behavior */
+  container-type: inline-size;
+  container-name: img-container;
+
+  /* Loading skeleton */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hide skeleton when image loads */
+  &:has(img:not([data-loading]))::before,
+  &:has(img[loaded])::before {
+    opacity: 0;
+  }
+
+  /* Error state */
+  &:has(img[data-error]) {
+    background: #fee;
+    border: 2px dashed #fcc;
+  }
+
+  &:has(img[data-error])::after {
+    content: '⚠️ Image failed to load';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    color: #c33;
+    background: rgba(255, 238, 238, 0.9);
+  }
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Image styling */
+img-container img,
+img-container picture,
+img-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--ic-object-fit);
+  object-position: var(--ic-object-position);
+  border-radius: inherit;
+  transition: inherit;
+
+  /* Lazy loading */
+  &[lazy] { loading: lazy; }
+
+  /* Loading state */
+  &[data-loading] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Loaded state */
+  &[loaded] {
+    opacity: 1;
+  }
+
+  /* Error state */
+  &[data-error] {
+    display: none;
+  }
+}
+
+/* Picture element support */
+img-container picture {
+  width: 100%;
+  height: 100%;
+}
+
+/* Video support */
+img-container video {
+  object-fit: var(--ic-object-fit);
+  object-position: var(--ic-object-position);
+}
+
+/* Responsive image attributes */
+img-container img {
+  /* Apply srcset and sizes if provided */
+  &[srcset] { /* Browser handles this */ }
+}
+
+/* Fallback image */
+img-container img[data-fallback] {
+  /* Show fallback on error */
+}
+
+/* Container query variants */
+@container img-container (max-width: 480px) {
+  img-container[responsive] {
+    --ic-aspect-ratio: attr(mobile-aspect-ratio type(*), var(--ic-aspect-ratio));
+  }
+}
+
+@container img-container (min-width: 768px) {
+  img-container[responsive] {
+    --ic-aspect-ratio: attr(desktop-aspect-ratio type(*), var(--ic-aspect-ratio));
+  }
+}
+
+/* Theme variants */
+img-container[theme="card"] {
+  --ic-radius: 0.75rem;
+  --ic-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+img-container[theme="hero"] {
+  --ic-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+img-container[theme="thumbnail"] {
+  --ic-radius: 0.5rem;
+  --ic-aspect-ratio: 1;
+}

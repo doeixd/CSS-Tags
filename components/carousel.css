@@ -16,6 +16,7 @@ carousel {
   display: block;
   overflow: hidden;
   border-radius: attr(radius type(<length>), 0.75rem);
+  width: 300px;
 }
 
 /*
@@ -37,7 +38,6 @@ carousel {
 }
 
 carousel-item {
-  width: 100%;
   flex-shrink: 0;
   scroll-snap-align: start;
 }
