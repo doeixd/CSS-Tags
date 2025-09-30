@@ -23,31 +23,33 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 
 ## Import Structure
 
-### Core System (Layers 1-7)
+### Core System
 ```css
 @import url("core/reset.css") layer(reset);
 @import url("core/tokens.css") layer(tokens);
 @import url("core/engine.css") layer(engine);
 @import url("core/theme.css") layer(theme);
 @import url("core/palette.css") layer(palette);
-@import url("themes/theme-packs.css") layer(theme);
-@import url("themes/example-brand.css") layer(theme);
 @import url("core/defaults.css") layer(defaults);
-```
-
-### Utilities and Layouts (Layers 8-10)
-```css
-@import url("utilities/utilities.css") layer(utilities);
-@import url("utilities/utilities-extra.css") layer(utilities);
-@import url("layouts/layout.css") layer(layouts);
-@import url("layouts/layouts.old.css") layer(layouts);
-@import url("layouts/layout-extra.css") layer(layouts);
-@import url("layouts/layout-extras-helpers.css") layer(layouts);
 @import url('core/base.css') layer(base);
 @import url('core/mixins.css') layer(base);
 ```
 
-### Components (Layer 9)
+### Themes
+```css
+@import url("themes/theme-packs.css") layer(theme);
+@import url("themes/example-brand.css") layer(theme);
+```
+
+### Layouts & Utilities
+```css
+@import url("utilities/utilities.css") layer(utilities);
+@import url("layouts/layout.css") layer(layouts);
+@import url("layouts/layout-extra.css") layer(layouts);
+@import url("layouts/layout-extras-helpers.css") layer(layouts);
+```
+
+### Components
 ```css
 @import url('components/container.css') layer(components);
 @import url('components/grid.css') layer(components);
@@ -64,7 +66,7 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 @import url('components/list.css') layer(components);
 @import url('components/carousel.css') layer(components);
 @import url('components/popover.css') layer(components);
-@import url('components/view-transitions.css') layer(components);
+@import url('components/view-transition.css') layer(components);
 @import url('components/table.css') layer(components);
 @import url('components/form.css') layer(components);
 @import url('components/navigation.css') layer(components);

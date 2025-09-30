@@ -1,6 +1,6 @@
-# Core Utilities (`utilities/utilities.css`)
+# Utilities (`utilities/utilities.css`)
 
-This file provides essential utility classes for common styling needs, built on the framework's design tokens. These utilities offer quick access to colors, spacing, typography, and interactive states.
+This file provides comprehensive utility classes for styling, including colors, spacing, typography, layout, and interactive states. It combines core utilities with additional helpers for complete design system coverage.
 
 ## Background Utilities
 
@@ -96,6 +96,44 @@ Interactive state utilities for hover and active states.
 .active-press:active { background-color: var(--highlight-bg-muted); }
 ```
 
+## Outline and Ring Utilities
+
+- `.outline-thin`: Thin outline (1px solid)
+- `.outline`: Standard outline (2px solid)
+- `.outline-thick`: Thick outline (3px solid)
+- `.ring-1/2/3`: Box-shadow focus rings with increasing width
+
+## Gap Utilities
+
+- `.gap-x-xs/sm/md/lg/xl`: Column gap sizes
+- `.gap-y-xs/sm/md/lg/xl`: Row gap sizes
+
+## Grid Shorthands
+
+- `.grid-cols-1/2/3/4/6/12`: Grid template columns for responsive layouts
+
+## Layout Utilities
+
+### Display
+- `.d-block/inline/inline-block/flex/grid/none`: Display property utilities
+
+### Flexbox
+- `.flex-row/col`: Flex direction
+- `.flex-wrap`: Flex wrap
+- `.items-center`: Align items center
+- `.justify-center/between/around/end`: Justify content options
+
+### Position
+- `.pos-static/relative/absolute/fixed/sticky`: Position property
+
+### Overflow
+- `.overflow-auto/hidden/scroll/visible`: Overflow control
+
+## Scrim Utilities
+
+- `.scrim`: Semi-transparent dark overlay
+- `.scrim-light`: Light scrim overlay
+
 ## Box Model Utilities
 
 Advanced box styling utilities that set multiple CSS custom properties for use with box components.
@@ -151,10 +189,6 @@ Advanced box styling utilities that set multiple CSS custom properties for use w
 - Import this file in the utilities layer of `index.css`
 - Combine with component classes for complete styling
 - Use semantic utilities over arbitrary values
-- Extend with `utilities-extra.css` for additional utilities
-
 ## Related Files
-
-- `utilities/utilities-extra.css`: Extended utility classes
 - `core/tokens.css`: Defines all the tokens used by these utilities
 - `components/box.css`: Box component that uses `--b-*` properties

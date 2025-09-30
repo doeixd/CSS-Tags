@@ -1,14 +1,14 @@
 # View Transitions Component Documentation
 
 ## Overview
-The `view-transitions.css` file provides styles for the native View Transitions API, enabling smooth, app-like transitions between page states or full page loads. It includes default animations and support for shared element transitions.
+The `view-transition.css` file provides styles for the native View Transitions API, enabling smooth, app-like transitions between page states or full page loads. It includes default animations and support for shared element transitions.
 
 ## Key Features
 - **Page Transitions**: Smooth animations for multi-page apps (MPA)
 - **SPA Support**: Integration with `<view-page>` component
 - **Shared Elements**: "Hero" element transitions with `view-transition-name`
 - **Custom Easing**: Natural motion with `cubic-bezier` functions
-- **JavaScript Integration**: Works with `view-transitions.js` for routing
+- **JavaScript Integration**: Works with `view-transition.js` for routing
 
 ## Setup Requirements
 
@@ -20,12 +20,12 @@ Add to HTML head:
 Standard link clicks will automatically use transitions.
 
 ### Single-Page Apps (SPA)
-Use with `view-transitions.js`:
+Use with `view-transition.js`:
 ```html
-<view-transitions>
+<view-transition>
   <view-page active>Home content</view-page>
   <view-page>About content</view-page>
-</view-transitions>
+</view-transition>
 ```
 
 ## Transition Types
@@ -61,7 +61,7 @@ For elements that persist across page changes.
 
 ## SPA-Specific Elements
 
-### view-transitions
+### view-transition
 Container for all virtual pages.
 - **Position**: Relative
 - **Display**: Block
@@ -95,7 +95,7 @@ Individual page content.
 ```html
 <head>
   <meta name="view-transition" content="same-origin" />
-  <link rel="stylesheet" href="view-transitions.css" />
+   <link rel="stylesheet" href="view-transition.css" />
 </head>
 <body>
   <!-- Page content -->
@@ -104,7 +104,7 @@ Individual page content.
 
 ### SPA Setup
 ```html
-<view-transitions>
+<view-transition>
   <nav-trigger href="/home">Home</nav-trigger>
   <nav-trigger href="/about">About</nav-trigger>
 
@@ -117,9 +117,9 @@ Individual page content.
     <h2>About Page</h2>
     <img class="hero" view-transition-name="hero-image" src="about.jpg" />
   </view-page>
-</view-transitions>
+</view-transition>
 
-<script src="view-transitions.js"></script>
+<script src="view-transition.js"></script>
 ```
 
 ## Browser Support
@@ -130,7 +130,7 @@ Individual page content.
 - **Fallback**: Instant page changes without animation
 
 ## JavaScript Integration
-Works with `view-transitions.js` for:
+Works with `view-transition.js` for:
 - SPA routing logic
 - `nav-trigger` click handling
 - Page switching with `active` attribute

@@ -1,4 +1,4 @@
-# View Transitions JavaScript (`view-transitions.js`)
+# View Transitions JavaScript (`view-transition.js`)
 
 This JavaScript file implements a simple SPA router that uses the View Transitions API to create smooth, animated page transitions in single-page applications.
 
@@ -79,7 +79,7 @@ On page load:
     </view-page>
   </main>
 
-  <script src="view-transitions.js"></script>
+   <script src="view-transition.js"></script>
 </body>
 ```
 
@@ -93,7 +93,7 @@ On page load:
 
 - **SPA Only**: Designed for single-page applications with client-side routing
 - **MPA Alternative**: For multi-page apps, use `<meta name="view-transition" content="same-origin">` instead
-- **CSS Required**: Pair with `view-transitions.css` for transition animations
+- **CSS Required**: Pair with `view-transition.css` for transition animations
 - **Event Handling**: Uses event delegation for performance
 - **Accessibility**: Maintains focus management and screen reader compatibility
 
@@ -106,6 +106,6 @@ On page load:
 
 ## Related Files
 
-- `components/view-transitions.css`: CSS animations for transitions
+- `components/view-transition.css`: CSS animations for transitions
 - `examples/demo.html`: May include view transition examples
 - View Transitions API specification for advanced customization

@@ -1,14 +1,82 @@
 # Theme Core Documentation
 
 ## Overview
-The `theme.css` file defines the semantic color system and theming architecture for the CSS framework. It provides light and dark mode themes, high contrast support, and a comprehensive set of color roles for consistent UI theming.
+The `theme.css` file implements a **generative theme system** that automatically creates a complete semantic color palette from a minimal set of input variables. This approach ensures consistent, accessible theming across light and dark modes while providing extensive customization options.
 
 ## Key Features
-- **Semantic Color Roles**: Meaningful color names instead of generic colors
-- **Automatic Dark Mode**: `prefers-color-scheme` integration
+- **Generative System**: Entire palette generated from core inputs
+- **Semantic Color Roles**: Meaningful color names for UI consistency
+- **Automatic Dark Mode**: Seamless adaptation via `prefers-color-scheme`
 - **High Contrast Support**: Enhanced accessibility for visual impairments
-- **Dynamic Color Calculations**: OKLCH-based color derivations
-- **Theme Customization**: Easy brand color overrides
+- **Auto-Context Styling**: Automatic text color adjustment for readability
+- **OKLCH Color Space**: Perceptually uniform color manipulation
+
+## Core Input Variables
+
+The theme system starts with a minimal set of customizable variables that define your brand identity:
+
+```css
+:root {
+  /* Core Brand Color (OKLCH) */
+  --accent-h: 280;           /* Hue (0-360°) - e.g., 280 for purple */
+  --accent-c: 0.15;          /* Chroma (0-1) - saturation level */
+  --accent-l: 60%;           /* Lightness (0-100%) - brightness */
+
+  /* Theme Configuration */
+  --surface-saturation: 0.015;  /* Surface chroma multiplier */
+  --contrast-factor: 1.0;       /* Overall contrast multiplier */
+  --outline-width: 1px;         /* Default outline width */
+
+  /* Color Relationships */
+  --secondary-hue-shift: 60;    /* Degrees to shift for secondary color */
+  --tertiary-hue-shift: -90;    /* Degrees to shift for tertiary color */
+
+  /* Bedrock Mode */
+  --bedrock-mode: complementary; /* 'complementary' or 'dark' */
+}
+```
+
+These inputs control the entire visual identity of your application.
+
+## Automatic Palette Generation
+
+From these core inputs, the system automatically generates a complete semantic palette:
+
+### Derived Variables
+- **Secondary & Tertiary Hues**: Calculated shifts from the accent hue
+- **Feedback Colors**: Predefined hues for success (145°), warning (55°), error (25°), info (245°)
+- **Base & Bedrock Colors**: Fundamental background colors
+- **Surface Hierarchy**: Multiple surface levels for visual depth
+- **Text Colors**: Auto-contrast calculated text colors
+- **Interactive States**: Hover, active, focus variations
+
+### Surface Hierarchy
+The system creates a layered surface system for visual hierarchy:
+- `--base`: Primary background (light in light mode, dark in dark mode)
+- `--bedrock`: Opposite extreme for highlights/accents
+- `--surface-muted/subtle/default/overt`: Progressive surface elevations
+
+### Bedrock Color Purpose
+The bedrock color serves as the "opposite" background:
+- In light mode: Very light (near-white) for subtle highlights
+- In dark mode: Very dark (near-black) for strong contrasts
+- Used for navigation bars, tooltips, and accent backgrounds
+
+## Auto-Context Styling
+
+The theme includes intelligent auto-context styling that automatically adjusts text colors based on background:
+
+```css
+/* Automatic text color on surfaces */
+:where(.bg-base) .text,
+:where(.bg-base) p,
+:where(.bg-base) h1 { color: var(--text-on-base); }
+
+:where(.bg-bedrock) .text,
+:where(.bg-bedrock) p { color: var(--text-on-bedrock); }
+```
+
+This ensures optimal readability without manual color selection, using Lea Verou's contrast-color algorithm adapted for OKLCH.
 
 ## Color Architecture
 

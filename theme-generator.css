@@ -250,6 +250,390 @@
 }
 
 /* ============================================ */
+/* TAILWIND INTEGRATION                        */
+/* ============================================ */
+
+/*
+Tailwind Config Extension:
+
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        'base': 'var(--base)',
+        'bedrock': 'var(--bedrock)',
+        'surface': {
+          'muted': 'var(--surface-muted)',
+          'subtle': 'var(--surface-subtle)',
+          DEFAULT: 'var(--surface)',
+          'overt': 'var(--surface-overt)',
+        },
+        'text': {
+          'muted': 'var(--text-muted)',
+          'subtle': 'var(--text-subtle)',
+          DEFAULT: 'var(--text)',
+          'overt': 'var(--text-overt)',
+          'link': 'var(--text-link)',
+          'highlight': {
+            'subtle': 'var(--text-highlight-subtle)',
+            'overt': 'var(--text-highlight-overt)',
+          },
+        },
+        'accent': {
+          DEFAULT: 'var(--accent)',
+          'muted': 'var(--accent-muted)',
+          'subtle': 'var(--accent-subtle)',
+          'overt': 'var(--accent-overt)',
+        },
+        'secondary': 'var(--secondary)',
+        'tertiary': 'var(--tertiary)',
+        'success': 'var(--success)',
+        'warning': 'var(--warning)',
+        'error': 'var(--error)',
+        'info': 'var(--info)',
+      },
+      borderColor: {
+        'muted': 'var(--outline-muted)',
+        'subtle': 'var(--outline-subtle)',
+        DEFAULT: 'var(--outline)',
+        'overt': 'var(--outline-overt)',
+        'focus': 'var(--outline-focus)',
+        'error': 'var(--outline-error)',
+      },
+      backgroundColor: {
+        'highlight': {
+          'muted': 'var(--highlight-muted)',
+          'subtle': 'var(--highlight-subtle)',
+          'overt': 'var(--highlight-overt)',
+        },
+      },
+    },
+  },
+}
+*/
+
+/* ============================================ */
+/* DARK MODE SUPPORT                           */
+/* ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode adjustments */
+    --accent-l: 70%;
+    --accent-c: 0.18;
+    --surface-saturation: 0.02;
+
+    /* Invert surface hierarchy for dark backgrounds */
+    --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+    --bedrock: oklch(95% calc(var(--surface-saturation) * 0.7) var(--accent-h));
+
+    --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--accent-h));
+    --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--accent-h));
+    --surface: oklch(25% var(--surface-saturation) var(--accent-h));
+    --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--accent-h));
+
+    /* Adjust text for dark backgrounds */
+    --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--accent-h));
+    --text-subtle: oklch(75% calc(var(--surface-saturation) * 1.0) var(--accent-h));
+    --text: oklch(88% calc(var(--surface-saturation) * 0.8) var(--accent-h));
+    --text-overt: oklch(95% calc(var(--surface-saturation) * 0.6) var(--accent-h));
+
+    /* Dark mode semantic colors */
+    --success: oklch(65% 0.15 var(--success-h));
+    --warning: oklch(75% 0.15 var(--warning-h));
+    --error: oklch(70% 0.2 var(--error-h));
+    --info: oklch(75% 0.15 var(--info-h));
+  }
+}
+
+/* ============================================ */
+/* HIGH CONTRAST MODE SUPPORT                 */
+/* ============================================ */
+
+@media (prefers-contrast: high) {
+  :root {
+    --contrast-factor: 1.3;
+    --outline-width: 2px;
+    --outline-width-thick: 3px;
+
+    /* Enhanced contrasts */
+    --text-subtle: oklch(30% 0.03 var(--accent-h));
+    --text-muted: oklch(25% 0.02 var(--accent-h));
+    --outline-focus: oklch(50% 0.3 var(--accent-h));
+    --outline: oklch(from var(--base) calc(l - 0.08) calc(c + var(--surface-saturation) * 2) h);
+  }
+}
+
+/* ============================================ */
+/* USAGE EXAMPLES                              */
+/* ============================================ */
+
+/*
+Basic Usage:
+
+<main class="bg-base text-on-base">
+  <header class="bg-bedrock text-on-bedrock">
+    <h1 class="text-overt">Title</h1>
+    <p class="text-subtle">Subtitle</p>
+  </header>
+
+  <section class="bg-surface text-on-surface">
+    <h2 class="text-overt">Section Title</h2>
+    <p class="text">Main content with <a href="#" class="text-link">links</a></p>
+    <div class="bg-surface-subtle text-on-surface-subtle">
+      <p class="text-subtle">Secondary content</p>
+    </div>
+  </section>
+
+  <button class="button-primary">Primary Action</button>
+  <button class="button-outline">Secondary Action</button>
+  <button class="button-text">Text Button</button>
+</main>
+
+Customization:
+
+:root {
+  --accent-h: 45;     /* Yellow theme */
+  --accent-c: 0.14;   /* Moderate saturation */
+  --accent-l: 65%;    /* Good lightness */
+  --surface-saturation: 0.012;  /* Subtle surfaces */
+  --contrast-factor: 1.2;       /* Higher contrast */
+}
+*/
+
+@import url("core/tokens.css") layer(tokens); /* Optional: import existing tokens */
+
+:root {
+  /* ============================================ */
+  /* INPUT VARIABLES - Customize these values    */
+  /* ============================================ */
+
+  /* Core Brand Color (OKLCH) */
+  --accent-h: 280;           /* Hue (0-360°) - Purple by default */
+  --accent-c: 0.15;          /* Chroma (0-1) - Saturation */
+  --accent-l: 60%;           /* Lightness (0-100%) */
+
+  /* Theme Configuration */
+  --surface-saturation: 0.015;  /* Surface chroma multiplier (0-1) */
+  --contrast-factor: 1.0;       /* Overall contrast multiplier (0.5-2.0) */
+  --outline-width: 1px;         /* Default outline width */
+  --outline-width-thick: 2px;   /* Thick outline width */
+
+  /* Border Radius Scale */
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-xl: 12px;
+  --border-radius-full: 9999px;
+
+  /* Typography */
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size-base: 1rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-base: 1.5;
+
+  /* Color Relationships */
+  --secondary-hue-shift: 60;    /* Degrees to shift for secondary (+60° = complementary) */
+  --tertiary-hue-shift: -90;    /* Degrees to shift for tertiary (-90° = triadic) */
+
+  /* Bedrock Mode: 'complementary' or 'dark' */
+  --bedrock-mode: complementary;
+
+  /* ============================================ */
+  /* DERIVED VARIABLES - Auto-generated colors   */
+  /* ============================================ */
+
+  /* Secondary & Tertiary Hues */
+  --secondary-h: calc((var(--accent-h) + var(--secondary-hue-shift)) mod 360);
+  --tertiary-h: calc((var(--accent-h) + var(--tertiary-hue-shift)) mod 360);
+
+  /* Feedback Hues (Semantic colors) */
+  --success-h: 145;  /* Green */
+  --warning-h: 55;   /* Amber */
+  --error-h: 25;     /* Red */
+  --info-h: 245;     /* Blue */
+
+  /* Base & Bedrock Colors */
+  --base: oklch(97.5% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+  --bedrock: oklch(
+    var(--bedrock-mode, complementary) = complementary ?
+      calc(100% - oklch(from var(--base) l)) :
+      15%
+    calc(var(--surface-saturation) * 1.2) var(--accent-h)
+  );
+
+  /* Surface Hierarchy (content containers) */
+  --surface-muted: oklch(95% calc(var(--surface-saturation) * 0.8) var(--accent-h));
+  --surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--accent-h));
+  --surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--accent-h));
+  --surface-overt: oklch(77.5% calc(var(--surface-saturation) * 2.25) var(--accent-h));
+
+  /* ============================================ */
+  /* TEXT COLORS - Auto-contrast calculation     */
+  /* ============================================ */
+
+  /* Base text colors (for general use) */
+  --text-muted: oklch(45% calc(var(--surface-saturation) * 1.5 * var(--contrast-factor)) var(--accent-h));
+  --text-subtle: oklch(35% calc(var(--surface-saturation) * 1.8 * var(--contrast-factor)) var(--accent-h));
+  --text: oklch(20% calc(var(--surface-saturation) * 2 * var(--contrast-factor)) var(--accent-h));
+  --text-overt: oklch(10% calc(var(--surface-saturation) * 2.2 * var(--contrast-factor)) var(--accent-h));
+
+  /* Auto-contrast text on surfaces (Lea Verou method) */
+  /* These calculate optimal text color for readability on any background */
+  --text-on-base: oklch(from var(--base) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --text-on-bedrock: oklch(from var(--bedrock) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --text-on-surface-muted: oklch(from var(--surface-muted) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --text-on-surface-subtle: oklch(from var(--surface-subtle) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --text-on-surface: oklch(from var(--surface) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --text-on-surface-overt: oklch(from var(--surface-overt) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+
+  /* Link colors */
+  --text-link: oklch(from var(--accent) calc(l + 0.1) calc(c + 0.05) h);
+  --text-link-hover: oklch(from var(--text-link) calc(l - 0.1) c h);
+  --text-link-visited: oklch(from var(--text-link) calc(l - 0.05) calc(c + 0.02) h);
+
+  /* Highlighted text (code, emphasis) */
+  --text-highlight-subtle: oklch(from var(--accent) calc(l + 0.2) calc(c - 0.05) h);
+  --text-highlight-overt: oklch(from var(--accent) calc(l - 0.1) calc(c + 0.05) h);
+  --text-highlight-bg: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+
+  /* ============================================ */
+  /* OUTLINE & BORDER COLORS                     */
+  /* ============================================ */
+
+  /* General outlines */
+  --outline-muted: oklch(from var(--base) calc(l - 0.04) calc(c + var(--surface-saturation) * 0.5) h);
+  --outline-subtle: oklch(from var(--base) calc(l - 0.05) calc(c + var(--surface-saturation)) h);
+  --outline: oklch(from var(--base) calc(l - 0.06) calc(c + var(--surface-saturation) * 1.5) h);
+  --outline-overt: oklch(from var(--base) calc(l - 0.07) calc(c + var(--surface-saturation) * 2) h);
+
+  /* Semantic outlines */
+  --outline-focus: oklch(from var(--accent) calc(l - 0.1) calc(c + 0.1) h);
+  --outline-active: oklch(from var(--accent) calc(l - 0.05) calc(c + 0.05) h);
+  --outline-error: oklch(50% 0.2 var(--error-h));
+  --outline-warning: oklch(65% 0.15 var(--warning-h));
+  --outline-success: oklch(55% 0.15 var(--success-h));
+  --outline-info: oklch(60% 0.15 var(--info-h));
+
+  /* Highlight outlines */
+  --outline-highlight-subtle: oklch(from var(--accent) calc(l + 0.3) calc(c - 0.2) h);
+  --outline-highlight-overt: oklch(from var(--accent) calc(l + 0.1) calc(c - 0.1) h);
+
+  /* ============================================ */
+  /* HIGHLIGHT & INTERACTION COLORS              */
+  /* ============================================ */
+
+  /* Selection and hover backgrounds */
+  --highlight-muted: oklch(from var(--base) calc(l - 0.01) c h);
+  --highlight-subtle: oklch(from var(--base) calc(l - 0.03) c h);
+  --highlight-overt: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+
+  /* Scrim (overlay) */
+  --scrim: oklch(0% 0 0 / 0.5);
+  --scrim-light: oklch(100% 0 0 / 0.3);
+
+  /* ============================================ */
+  /* ACCENT COLOR SYSTEM                         */
+  /* ============================================ */
+
+  /* Primary accent variations */
+  --accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
+  --accent-muted: oklch(from var(--accent) calc(l + 0.15) calc(c - 0.05) h);
+  --accent-subtle: oklch(from var(--accent) calc(l + 0.05) calc(c - 0.02) h);
+  --accent-surface: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.1) h);
+  --accent-overt: oklch(from var(--accent) calc(l - 0.1) calc(c + 0.05) h);
+  --accent-highlight: oklch(from var(--accent) calc(l + 0.5) calc(c - 0.2) h);
+
+  /* Accent text on different surfaces */
+  --accent-on-base: oklch(from var(--base) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --accent-on-bedrock: oklch(from var(--bedrock) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+  --accent-on-surface: oklch(from var(--surface) calc(clamp(0, (0.5 - l) * -infinity, 1) * 0.8 + 0.2) calc(c * 0.1) h);
+
+  /* ============================================ */
+  /* SECONDARY & TERTIARY SYSTEMS                */
+  /* ============================================ */
+
+  /* Secondary colors */
+  --secondary: oklch(var(--accent-l) var(--accent-c) var(--secondary-h));
+  --secondary-muted: oklch(from var(--secondary) calc(l + 0.15) calc(c - 0.05) h);
+  --secondary-subtle: oklch(from var(--secondary) calc(l + 0.05) calc(c - 0.02) h);
+  --secondary-overt: oklch(from var(--secondary) calc(l - 0.1) calc(c + 0.05) h);
+
+  /* Tertiary colors */
+  --tertiary: oklch(var(--accent-l) var(--accent-c) var(--tertiary-h));
+  --tertiary-muted: oklch(from var(--tertiary) calc(l + 0.15) calc(c - 0.05) h);
+  --tertiary-subtle: oklch(from var(--tertiary) calc(l + 0.05) calc(c - 0.02) h);
+  --tertiary-overt: oklch(from var(--tertiary) calc(l - 0.1) calc(c + 0.05) h);
+
+  /* ============================================ */
+  /* SEMANTIC COLORS (Success, Warning, etc.)    */
+  /* ============================================ */
+
+  --success: oklch(55% 0.15 var(--success-h));
+  --warning: oklch(70% 0.15 var(--warning-h));
+  --error: oklch(60% 0.2 var(--error-h));
+  --info: oklch(65% 0.15 var(--info-h));
+
+  /* Semantic text colors */
+  --text-success: var(--success);
+  --text-warning: var(--warning);
+  --text-error: var(--error);
+  --text-info: var(--info);
+
+  /* Semantic surface colors */
+  --surface-success: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h);
+  --surface-warning: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h);
+  --surface-error: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h);
+  --surface-info: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h);
+
+  /* ============================================ */
+  /* BUTTON SYSTEM                               */
+  /* ============================================ */
+
+  /* Button base styles */
+  --button-padding-x: 1rem;
+  --button-padding-y: 0.5rem;
+  --button-font-weight: var(--font-weight-medium);
+  --button-border-width: var(--outline-width);
+  --button-transition: all 0.15s ease;
+
+  /* Button variants */
+  --button: var(--surface);
+  --button-hover: oklch(from var(--button) calc(l - 0.05) c h);
+  --button-active: oklch(from var(--button) calc(l - 0.08) c h);
+  --button-disabled: var(--surface-muted);
+
+  --button-primary: var(--accent);
+  --button-primary-hover: oklch(from var(--button-primary) calc(l - 0.05) c h);
+  --button-primary-active: oklch(from var(--button-primary) calc(l - 0.08) c h);
+  --button-primary-disabled: var(--accent-muted);
+
+  --button-secondary: var(--secondary);
+  --button-secondary-hover: oklch(from var(--button-secondary) calc(l - 0.05) c h);
+  --button-secondary-active: oklch(from var(--button-secondary) calc(l - 0.08) c h);
+  --button-secondary-disabled: var(--secondary-muted);
+
+  --button-outline: transparent;
+  --button-outline-hover: var(--highlight-subtle);
+  --button-outline-active: var(--highlight-overt);
+  --button-outline-disabled: transparent;
+
+  --button-ghost: transparent;
+  --button-ghost-hover: var(--highlight-subtle);
+  --button-ghost-active: var(--highlight-overt);
+  --button-ghost-disabled: transparent;
+
+  /* Button text colors */
+  --button-text: var(--accent);
+  --button-text-hover: oklch(from var(--button-text) calc(l - 0.05) c h);
+  --button-text-active: oklch(from var(--button-text) calc(l - 0.08) c h);
+  --button-text-disabled: var(--text-muted);
+}
+
+/* ============================================ */
 /* UTILITY CLASSES - For easy application      */
 /* ============================================ */
 

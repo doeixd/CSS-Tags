@@ -148,17 +148,18 @@ This framework is built on principles that prioritize developer experience, acce
 
 ## 🏗️ Architecture Overview
 
-The framework is organized into distinct cascade layers:
+The framework is organized into distinct cascade layers in the following order:
 
-1. **Reset Layer**: Zero-specificity browser normalization
-2. **Tokens Layer**: Raw design values as CSS custom properties
-3. **Engine Layer**: Mathematical calculations and color transformations
-4. **Theme Layer**: Semantic color roles and theme definitions
-5. **Palette Layer**: Complete color scales for UI and data visualization
-6. **Defaults Layer**: Base styling for HTML elements
-7. **Components Layer**: Reusable UI components
-8. **Utilities Layer**: Single-purpose utility classes
-9. **Layouts Layer**: Layout patterns and structural components
+1. **Base Layer**: Base styles and mixins
+2. **Reset Layer**: Zero-specificity browser normalization
+3. **Tokens Layer**: Raw design values as CSS custom properties
+4. **Engine Layer**: Mathematical calculations and color transformations
+5. **Theme Layer**: Semantic color roles and theme definitions
+6. **Palette Layer**: Complete color scales for UI and data visualization
+7. **Defaults Layer**: Base styling for HTML elements
+8. **Components Layer**: Reusable UI components
+9. **Utilities Layer**: Single-purpose utility classes
+10. **Layouts Layer**: Layout patterns and structural components
 
 This layered approach ensures predictable styling and easy customization.
 

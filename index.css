@@ -1,42 +1,31 @@
 /**
- * Modern CSS Reset & Component Library
- * A comprehensive CSS reset and component library with design tokens, theme engine, 
- * enhanced accessibility features, and utility-first approach.
- * 
- * Features:
- * - Zero-specificity CSS reset using :where()
- * - Modern color handling with OKLCH
- * - Comprehensive design token system
- * - Auto-calculated contrast for text
- * - Enhanced high contrast mode handling
- * - Comprehensive shadow system
- * - Enhanced focus state handling
- * - Explicit link styling
- * - Named container query breakpoints
- * - Built-in dark mode support
- * - Extensive utility class system
- * - Layout primitives
+ * Modern CSS Framework - Main Entry Point
+ * Revised import structure for clarity and correctness.
  */
 
-/* Define the CSS cascade layers in specific order of precedence */
 @layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts;
 
-/* Import all the layers in the defined cascade order */
+/* CORE SYSTEM */
 @import url("core/reset.css") layer(reset);
 @import url("core/tokens.css") layer(tokens);
 @import url("core/engine.css") layer(engine);
-@import url("core/theme-improved.css") layer(theme);
+@import url("core/theme.css") layer(theme); /* The new canonical theme file */
 @import url("core/palette.css") layer(palette);
-@import url("themes/theme-packs.css") layer(theme);
-@import url("themes/example-brand.css") layer(theme);
 @import url("core/defaults.css") layer(defaults);
-@import url("utilities/utilities-improved.css") layer(utilities);
-@import url("layouts/layout.css") layer(layouts);
-@import url("layouts/layouts.old.css") layer(layouts);
-@import url("layouts/layout-extra.css") layer(layouts);
-@import url("layouts/layout-extras-helpers.css") layer(layouts);
 @import url('core/base.css') layer(base);
 @import url('core/mixins.css') layer(base);
+
+/* THEMES */
+@import url("themes/theme-packs.css") layer(theme);
+@import url("themes/example-brand.css") layer(theme);
+
+/* LAYOUTS & UTILITIES */
+@import url("utilities/utilities.css") layer(utilities); /* The new canonical utilities file */
+@import url("layouts/layout.css") layer(layouts);
+@import url("layouts/layout-extra.css") layer(layouts);
+@import url("layouts/layout-extras-helpers.css") layer(layouts);
+
+/* COMPONENTS */
 @import url('components/container.css') layer(components);
 @import url('components/grid.css') layer(components);
 @import url('components/flex.css') layer(components);
@@ -52,14 +41,11 @@
 @import url('components/list.css') layer(components);
 @import url('components/carousel.css') layer(components);
 @import url('components/popover.css') layer(components);
-@import url('components/view-transitions.css') layer(components);
+@import url('components/view-transition.css') layer(components); /* Corrected path */
 @import url('components/table.css') layer(components);
 @import url('components/form.css') layer(components);
 @import url('components/navigation.css') layer(components);
 @import url('components/masonry.css') layer(components);
 
-/* ============================================ */
-/* OPTIONAL: Standalone Theme Generator        */
-/* ============================================ */
-/* Uncomment the line below to include the standalone theme generator */
-/* @import url("theme-generator.css") layer(theme-generator); */
+/* Optional Theme Generator */
+/* @import url("theme-generator.css"); */
