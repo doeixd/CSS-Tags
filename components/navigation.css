@@ -1,0 +1,130 @@
+/**
+ * navigation.css
+ *
+ * Responsive navigation components: navbar and sidebar.
+ * ------------------------------------------------------------------------------
+ * @feature {@scope} - Isolates navigation styles.
+ * @feature {Container Queries} - Mobile-first responsive design.
+ * @feature {CSS Nesting} - Organized styles.
+ */
+
+@scope (nav-navbar, nav-sidebar) {
+  /* Navbar styles */
+  nav-navbar :scope {
+    container-type: inline-size;
+    container-name: navbar-container;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md, 1rem);
+    background-color: var(--bg, var(--surface-default));
+    border-bottom: var(--border-width, 1px) solid var(--outline-subtle);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-index-50, 50);
+  }
+
+  nav-navbar .nav-brand {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--text-overt);
+    text-decoration: none;
+  }
+
+  nav-navbar .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--spacing-md, 1rem);
+  }
+
+  nav-navbar .nav-link {
+    color: var(--text-default);
+    text-decoration: none;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    border-radius: var(--radius-md, 6px);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--highlight-bg-subtle);
+    }
+  }
+
+  nav-navbar .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm, 0.5rem);
+    color: var(--text-default);
+  }
+
+  /* Mobile responsive */
+  @container navbar-container (max-width: 768px) {
+    nav-navbar .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--surface-default);
+      border-top: var(--border-width, 1px) solid var(--outline-subtle);
+      padding: var(--spacing-md, 1rem);
+    }
+
+    nav-navbar .nav-links.active {
+      display: flex;
+    }
+
+    nav-navbar .nav-toggle {
+      display: block;
+    }
+  }
+
+  /* Sidebar styles */
+  nav-sidebar :scope {
+    width: var(--width, 250px);
+    background-color: var(--bg, var(--surface-default));
+    border-right: var(--border-width, 1px) solid var(--outline-subtle);
+    padding: var(--spacing-lg, 1.5rem);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+
+  nav-sidebar .sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav-sidebar .sidebar-link {
+    display: block;
+    color: var(--text-default);
+    text-decoration: none;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    border-radius: var(--radius-md, 6px);
+    margin-bottom: var(--spacing-xs, 0.25rem);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--highlight-bg-subtle);
+    }
+  }
+
+  nav-sidebar .sidebar-section {
+    margin-top: var(--spacing-lg, 1.5rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--text-overt);
+  }
+}
+
+/* Utility classes */
+.nav-link-active {
+  background-color: var(--accent-subtle);
+  color: var(--text-overt);
+}

@@ -1,0 +1,56 @@
+/**
+ * grid.css
+ *
+ * A declarative, powerful, and comprehensive CSS grid system.
+ * ------------------------------------------------------------------------------
+ * @feature {CSS Grid} - With declarative areas, tracks, and placement.
+ * @feature {CSS Gap Decorations} (Experimental) - For styling grid lines.
+ * @feature {attr()} - Powers the entire declarative API.
+ * @feature {Subgrid} - Allows nested grids to align with the parent grid.
+ */
+
+grid {
+  /* --- Core Grid Layout & Template Properties --- */
+  --grid-columns: attr(columns type(*), none);
+  --grid-rows:    attr(rows type(*), none);
+  --grid-areas:   attr(areas type(*), none);
+  --grid-gap:     attr(gap type(<length>), 1.5rem);
+
+  display: grid;
+  grid-template-columns: var(--grid-columns);
+  grid-template-rows: var(--grid-rows);
+  grid-template-areas: var(--grid-areas);
+  gap: var(--grid-gap);
+
+  /* --- Grid-wide Item Alignment --- */
+  justify-items: attr(justify-items type(<custom-ident>), stretch);
+  align-items:   attr(align-items type(<custom-ident>), stretch);
+
+  /* --- CSS Gap Decoration Properties (Experimental) --- */
+  column-rule-width:  attr(col-rule-width type(*), none);
+  column-rule-style:  attr(col-rule-style type(*), none);
+  column-rule-color:  attr(col-rule-color type(<color>), currentColor);
+  row-rule-width:     attr(row-rule-width type(*), none);
+  row-rule-style:     attr(row-rule-style type(*), none);
+  row-rule-color:     attr(row-rule-color type(<color>), currentColor);
+}
+
+/* Target any direct child of <grid> for maximum flexibility */
+grid > * {
+  /* --- Item Placement Properties --- */
+  grid-area:    attr(area type(*), auto);
+  grid-column:  attr(col type(*), auto);
+  grid-row:     attr(row type(*), auto);
+
+  /* --- Individual Item Self-Alignment --- */
+  justify-self: attr(justify-self type(<custom-ident>), auto);
+  align-self:   attr(align-self type(<custom-ident>), auto);
+
+  /* --- Subgrid Capability --- */
+  &[subgrid] {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    gap: 0; /* Gaps are inherited from parent grid */
+  }
+}

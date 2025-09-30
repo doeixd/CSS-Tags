@@ -1,0 +1,90 @@
+/**
+ * table.css
+ *
+ * Responsive, accessible table component with design token integration.
+ * ------------------------------------------------------------------------------
+ * @feature {@scope} - Isolates table styles.
+ * @feature {Container Queries} - Adapts layout on small containers.
+ * @feature {CSS Nesting} - Organized internal styles.
+ */
+
+@scope (data-table) {
+  :scope {
+    container-type: inline-size;
+    container-name: table-container;
+
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg, var(--surface-default));
+    color: var(--fg, var(--text-default));
+    border: var(--border-width, 1px) solid var(--outline-default);
+    border-radius: var(--radius-md, 6px);
+    overflow: hidden;
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  th, td {
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    text-align: left;
+    border-bottom: 1px solid var(--outline-subtle);
+  }
+
+  th {
+    background-color: var(--surface-subtle);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--text-overt);
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: var(--highlight-bg-muted);
+  }
+
+  tbody tr:hover {
+    background-color: var(--highlight-bg-subtle);
+  }
+
+  /* Responsive: Stack on small containers */
+  @container table-container (max-width: 600px) {
+    :scope {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    th, td {
+      display: block;
+      text-align: right;
+      border-bottom: none;
+      border-right: 1px solid var(--outline-subtle);
+    }
+
+    th {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    td:before {
+      content: attr(data-label) ": ";
+      float: left;
+      font-weight: bold;
+    }
+  }
+}
+
+/* Utility classes for table */
+.table-striped tbody tr:nth-child(odd) {
+  background-color: var(--surface-muted);
+}
+
+.table-hover tbody tr:hover {
+  background-color: var(--highlight-bg-subtle);
+}
+
+.table-bordered {
+  border: var(--border-width-thick, 2px) solid var(--outline-default);
+}
+
+.table-borderless :scope {
+  border: none;
+}

@@ -1,0 +1,68 @@
+/**
+ * base.css
+ *
+ * Foundational Styles, Design Tokens, & Global State
+ * ------------------------------------------------------------------------------
+ * This module contains CSS resets, global design tokens (using typed custom
+ * properties), and a global state manager for responsive breakpoints.
+ *
+ * @feature {@property} - Defines typed CSS variables for type safety and animation.
+ * @feature {Style Queries} - The <body> is a style container, providing a global
+ *   `--breakpoint-active` state that all components can react to.
+ * @feature {Modern Color} - Uses `oklch` for more perceptually uniform colors.
+ */
+
+/* Universal box-sizing reset and modern reset for base elements. */
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, h3, h4, p { margin: 0; }
+
+:root {
+  /*
+   * 1. Define typed design tokens.
+   * Using @property allows for animation and type-checking.
+   */
+  @property --theme-primary { syntax: '<color>'; inherits: true; initial-value: oklch(55% 0.15 240); }
+  @property --theme-bg { syntax: '<color>'; inherits: true; initial-value: oklch(98% 0.01 240); }
+  @property --theme-text { syntax: '<color>'; inherits: true; initial-value: oklch(20% 0.02 240); }
+
+  /* 2. Define breakpoint thresholds as design tokens. */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+
+  /* Announce support for light/dark color schemes to the browser. */
+  color-scheme: light dark;
+}
+
+body {
+  /*
+   * 3. Set up the global breakpoint state machine.
+   * Make the body a container for style queries and initialize the state.
+   */
+  container-type: style;
+  --breakpoint-active: xl; /* Default to the largest state */
+
+  /* Apply base theme colors */
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+
+/*
+ * 4. Use media queries for ONE purpose: updating the global state variable.
+ */
+@media (max-width: var(--bp-xl)) { body { --breakpoint-active: lg; } }
+@media (max-width: var(--bp-lg)) { body { --breakpoint-active: md; } }
+@media (max-width: var(--bp-md)) { body { --breakpoint-active: sm; } }
+
+/* Automatic Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-bg: oklch(20% 0.02 240);
+    --theme-text: oklch(98% 0.01 240);
+    --theme-primary: oklch(65% 0.18 240);
+  }
+}

@@ -1,0 +1,39 @@
+/**
+ * masonry.css
+ *
+ * A declarative component and mixin for the experimental CSS Masonry Layout.
+ * ------------------------------------------------------------------------------
+ * ⚠️ IMPORTANT: EXPERIMENTAL FEATURE - Requires browser flag in Edge/Chrome 140+.
+ *
+ * @feature {CSS Masonry} - For creating packed, brick-like layouts.
+ */
+
+/* 1. MIXIN (for use in CSS) */
+@mixin --masonry(
+  --direction type(*): 'column',
+  --tracks type(*): 'repeat(auto-fill, auto)',
+  --gap type(<length>): 1.5rem
+) {
+  display: masonry;
+  masonry-direction: var(--direction);
+  gap: var(--gap);
+  @when (var(--direction) = 'column') { grid-template-columns: var(--tracks); }
+  @when (var(--direction) = 'row') { grid-template-rows: var(--tracks); }
+}
+
+/* 2. COMPONENT (for use in HTML) */
+masonry-layout {
+  display: masonry;
+  masonry-direction: attr(direction type(*), column);
+  gap: attr(gap type(<length>), 1.5rem);
+  item-tolerance: attr(tolerance type(<length>), 0);
+  /* Apply track definitions based on direction */
+  grid-template-columns: attr(cols type(*), 'repeat(auto-fill, auto)');
+  grid-template-rows: attr(rows type(*), none);
+}
+
+/* Item spanning for the component */
+masonry-layout > * {
+  grid-column: attr(col type(*), auto);
+  grid-row: attr(row type(*), auto);
+}

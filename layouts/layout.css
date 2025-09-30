@@ -1,0 +1,297 @@
+
+/**
+ * layouts.css
+ *
+ * A definitive library of declarative, property-driven layout components.
+ * ------------------------------------------------------------------------------
+ * This file provides a set of powerful, reusable layout patterns as custom
+ * elements that are deeply integrated with the library's design token system.
+ *
+ * --- PHILOSOPHY ---
+ * - Declarative & Semantic: Use `<layout-grid>` instead of `.l-grid`.
+ * - Property-Driven: Core logic is controlled by CSS Custom Properties (e.g., `--l-gap`),
+ *   which can be overridden by HTML attributes for convenience.
+ * - Token-Integrated: Default values are pulled from global design tokens
+ *   (e.g., `--space-md`, `--bp-md`) defined in `base.css`.
+ * - Composable & Context-Aware: Layouts are designed to be nested and use
+ *   container queries to adapt to their local context.
+ *
+ * This file should be imported into the `components` layer in `index.css`.
+ */
+
+/*
+ * ==============================================================================
+ * DEFAULTS & BASE BEHAVIORS
+ * ==============================================================================
+ *
+ * We use `:where()` to set default variable values with ZERO specificity.
+ * This makes them trivial for developers to override at any level.
+ */
+:where(layout-grid, layout-split, layout-row, layout-stack, layout-cluster, layout-reel, layout-switcher, layout-spread, layout-pad, layout-center, layout-cover, layout-frame, layout-sidebar, layout-page, layout-media) {
+  /*
+   * Default values for layout properties, pulling from global tokens.
+   * Assume tokens like `--space-md`, `--bp-md` are defined in `base.css`.
+   */
+  --l-gap: var(--space-md, 1.5rem);
+  --l-breakpoint: var(--bp-md, 48em);
+  --l-padding: var(--space-md, 1.5rem);
+}
+
+/* Base styles for all layout components */
+[class^="layout-"] {
+  display: block;
+  container-type: inline-size;
+  container-name: layout-container;
+
+  /* Prevent children from overflowing their container */
+  & > * {
+    min-width: 0;
+  }
+}
+
+/*
+ * ==============================================================================
+ * GRID-BASED LAYOUTS
+ * ==============================================================================
+ */
+
+/**
+ * <layout-grid>
+ * A responsive grid that automatically fits columns.
+ * @prop --l-min-item-size: The minimum size for each item.
+ * @prop --l-gap: The gap between items.
+ * @attr min-item-size, gap
+ */
+layout-grid {
+  --_min-item-size: attr(min-item-size type(*), var(--l-min-item-size, 16rem));
+  --_gap: attr(gap type(<length>), var(--l-gap));
+
+  display: grid;
+  gap: var(--_gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_min-item-size)), 1fr));
+}
+
+/**
+ * <layout-split>
+ * A two-column layout that splits at a breakpoint.
+ * @prop --l-fraction: The ratio for the first column (e.g., "2fr").
+ * @prop --l-breakpoint: The container width to split at.
+ * @prop --l-gap: The gap between columns.
+ * @attr fraction, breakpoint, gap, force-stack, no-stack
+ */
+layout-split {
+  --_fraction: attr(fraction type(*), var(--l-fraction, 1fr));
+  --_breakpoint: attr(breakpoint type(<length>), var(--l-breakpoint));
+  --_gap: attr(gap type(<length>), var(--l-gap));
+
+  display: grid;
+  gap: var(--_gap);
+  grid-template-columns: 1fr; /* Default to stacked */
+}
+@container layout-container (min-width: var(--_breakpoint)) {
+  layout-split:not([force-stack]) {
+    grid-template-columns: var(--_fraction) 1fr;
+  }
+}
+:is(layout-split[no-stack]) {
+  grid-template-columns: var(--_fraction) 1fr;
+}
+
+/*
+ * ==============================================================================
+ * FLEXBOX-BASED LAYOUTS
+ * ==============================================================================
+ */
+
+/**
+ * <layout-stack>
+ * A vertical stack with consistent spacing.
+ * @prop --l-gap, --l-align
+ * @attr gap, align
+ */
+layout-stack {
+  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_align: attr(align type(*), var(--l-align, stretch));
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: var(--_align);
+  gap: var(--_gap);
+}
+
+/**
+ * <layout-cluster>
+ * For grouping items that wrap onto new lines.
+ * @prop --l-gap, --l-justify, --l-align
+ * @attr gap, justify, align
+ */
+layout-cluster {
+  --_gap: attr(gap type(<length>), var(--space-sm, 0.75rem));
+  --_justify: attr(justify type(*), var(--l-justify, flex-start));
+  --_align: attr(align type(*), var(--l-align, center));
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_gap);
+  justify-content: var(--_justify);
+  align-items: var(--_align);
+}
+
+/**
+ * <layout-reel>
+ * A horizontally scrolling container.
+ * @prop --l-gap, --scrollbar-thumb, --scrollbar-track
+ * @attr gap, no-scrollbar
+ */
+layout-reel {
+  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_thumb: var(--scrollbar-thumb, oklch(from var(--theme-primary) l c h / 0.5));
+  --_track: var(--scrollbar-track, oklch(from var(--theme-bg) l c h / 0.5));
+
+  display: flex;
+  gap: var(--_gap);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--_thumb) var(--_track);
+
+  & > * { flex-shrink: 0; }
+  &[no-scrollbar] { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+}
+
+/**
+ * <layout-switcher>
+ * Switches from a stack to a row when items have enough space.
+ * @prop --l-threshold, --l-gap
+ * @attr threshold, gap
+ */
+layout-switcher {
+  --_threshold: attr(threshold type(<length>), var(--l-threshold, 30rem));
+  --_gap: attr(gap type(<length>), var(--l-gap));
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_gap);
+
+  & > * {
+    flex-grow: 1;
+    flex-basis: calc((var(--_threshold) - 100%) * 999);
+  }
+}
+
+/*
+ * ==============================================================================
+ * WRAPPER & CENTERING LAYOUTS
+ * ==============================================================================
+ */
+
+/**
+ * <layout-pad>
+ * Adds consistent padding to its content.
+ * @prop --l-padding, --l-padding-inline, --l-padding-block
+ * @attr padding, padding-x, padding-y
+ */
+layout-pad {
+  --_padding: attr(padding type(<length>), var(--l-padding));
+  --_padding-inline: attr(padding-x type(<length>), var(--_padding));
+  --_padding-block: attr(padding-y type(<length>), var(--_padding));
+
+  padding-inline: var(--_padding-inline);
+  padding-block: var(--_padding-block);
+}
+
+/**
+ * <layout-center>
+ * Centers content horizontally with a max-width for readability.
+ * @prop --l-max-width, --l-gutters
+ * @attr max-width, gutters, and-text
+ */
+layout-center {
+  --_max-width: attr(max-width type(<length>), var(--l-max-width, 65ch));
+  --_gutters: attr(gutters type(<length>), var(--l-gutters, var(--space-md, 1.5rem)));
+
+  box-sizing: content-box;
+  margin-inline: auto;
+  max-width: var(--_max-width);
+  padding-inline: var(--_gutters);
+  &[and-text] { text-align: center; }
+}
+
+/**
+ * <layout-frame>
+ * Creates a responsive container for media with a fixed aspect ratio.
+ * @prop --l-aspect-ratio
+ * @attr ratio
+ */
+layout-frame {
+  --_ratio: attr(ratio type(*), var(--l-aspect-ratio, 16 / 9));
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--_ratio);
+
+  & > :is(img, video) {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+}
+
+/*
+ * ==============================================================================
+ * COMPLEX LAYOUT PATTERNS
+ * ==============================================================================
+ */
+
+/**
+ * <layout-sidebar>
+ * A sidebar layout that stacks on small containers.
+ * @prop --l-breakpoint, --l-side-width, --l-content-min, --l-gap
+ * @attr breakpoint, side-width, side, gap
+ */
+layout-sidebar {
+  --_breakpoint: attr(breakpoint type(<length>), var(--l-breakpoint));
+  --_side-width: attr(side-width type(*), var(--l-side-width, 20rem));
+  --_content-min: attr(content-min-width type(*), var(--l-content-min, 50%));
+  --_gap: attr(gap type(<length>), var(--l-gap));
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_gap);
+
+  /* The "switcher" logic for the main content area */
+  & > :not([slot="aside"]) {
+    flex-grow: 9999;
+    flex-basis: var(--_content-min);
+  }
+
+  /* Sidebar sizing */
+  & > [slot="aside"] {
+    flex-grow: 1;
+    flex-basis: var(--_side-width);
+  }
+
+  /* Handle right-side sidebar using order */
+  &[side="right"] > [slot="aside"] {
+    order: 1;
+  }
+}
+
+/**
+ * <layout-page>
+ * A standard page layout with header, main content, and footer rows.
+ * @prop --l-min-height, --l-gap
+ * @attr min-height, gap
+ */
+layout-page {
+  --_min-height: attr(min-height type(<length>), var(--l-min-height, 100vh));
+  --_gap: attr(gap type(<length>), var(--l-gap, 0));
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: var(--_min-height);
+  gap: var(--_gap);
+}
+layout-page > [slot="header"] { grid-row: 1; }
+layout-page > [slot="main"] { grid-row: 2; }
+layout-page > [slot="footer"] { grid-row: 3; }

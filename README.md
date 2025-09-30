@@ -1,219 +1,327 @@
-# CSS Tags
+# Modern CSS Framework: A Comprehensive Guide
 
-**A declarative, HTML-first CSS library using custom elements as building blocks.**
+A production-ready, educational CSS framework designed for modern web development. Built with advanced CSS features like cascade layers, OKLCH colors, and container queries, this framework provides a scalable, maintainable foundation for building accessible, performant interfaces.
 
-CSS Tags is a forward-looking component library and design system that embraces the power and elegance of modern CSS. Instead of relying on thousands of utility classes, it provides a set of semantic, declarative custom elements—like `<grid>`, `<flex>`, and `<card>`—that you can configure directly in your HTML.
+## 🎯 Philosophy & Core Principles
 
-It's a showcase of cutting-edge features like Anchor Positioning, the Popover API, Style Queries, and a sophisticated OKLCH-based theming engine, all designed to create a powerful, pre-processor-free developer experience.
+This framework is built on principles that prioritize developer experience, accessibility, and future-proofing:
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version: 1.0.0](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org/)
+- **Progressive Enhancement**: Starts with a solid baseline and enhances for capable browsers
+- **Cascade Layering**: Explicit cascade order prevents specificity conflicts
+- **Design Token System**: Single source of truth for all design values
+- **Modern Color Science**: OKLCH for perceptually uniform color manipulation
+- **Accessibility First**: Built-in support for dark mode, high contrast, and reduced motion
+- **Utility-First Approach**: Rapid development with composable utility classes
+- **Component Autonomy**: Self-contained components using container queries
 
-**[➡️ View Live Demo](https://your-demo-link.com)** | **[🧩 See Composition Examples](https://your-demo-link.com/examples)**
+## 🚀 Key Features
 
----
+### Advanced CSS Architecture
+- **Zero-Specificity Reset**: Uses `:where()` for easy overrides without specificity wars
+- **CSS Layers**: Organized cascade with `@layer` for predictable styling order
+- **Design Tokens**: Comprehensive system covering colors, typography, spacing, shadows, animations
+- **OKLCH Color Space**: Perceptually uniform colors for better design consistency
+- **Auto-Contrast Calculation**: Dynamic text colors that ensure readability on any background
 
-## Philosophy
+### Accessibility & Theming
+- **Dark Mode Support**: Automatic adaptation based on `prefers-color-scheme`
+- **High Contrast Mode**: Enhanced visibility for users with visual impairments
+- **Reduced Motion**: Respects `prefers-reduced-motion` for better UX
+- **Focus Management**: Enhanced focus indicators for keyboard navigation
+- **Screen Reader Utilities**: Built-in utilities for assistive technologies
 
-Our design philosophy is built on a simple question: "Why write `<div class="grid...">` when you can just write `<grid>`?"
+### Modern Layout Techniques
+- **Container Queries**: Component-level responsive design that adapts to container size
+- **Layout Primitives**: Declarative layouts (grid, stack, center, sidebar, etc.)
+- **Responsive Utilities**: Breakpoint-specific classes for rapid prototyping
+- **Flexible Components**: Self-contained components with customizable properties
 
-1.  **Declarative & Semantic:** We believe your HTML should describe your content's structure, not its styling implementation. By using custom elements like `<grid columns="1fr 2fr">`, your markup becomes more readable, self-documenting, and easier to maintain.
+### Performance & Maintainability
+- **Modular Structure**: Organized into logical layers for easy maintenance
+- **Minimal Specificity**: Reduces style recalculation overhead
+- **Modern Browser Features**: Leverages CSS custom properties, `@property`, `@scope`
+- **Tree-Shakable**: Only include what you use
 
-2.  **Modern CSS First:** This library aggressively uses new and upcoming CSS features to push the boundaries of what's possible in the browser. We leverage Container Queries, `@scope`, `@layer`, typed custom properties, and the game-changing `attr()` function to deliver powerful results without a single line of JavaScript for styling.
+## 📦 Installation & Setup
 
-3.  **Property-Driven Architecture:** At its core, every component and utility is driven by CSS Custom Properties. This creates an incredibly flexible and predictable system. Global design tokens cascade down into semantic theme variables, which are then consumed by components, allowing for robust and effortless customization.
-
-## Core Features
-
--   **Declarative API with Typed `attr()`:** The star of the show. Configure dozens of CSS properties directly from HTML attributes with type-safety (`attr(radius type(<length>))`), a feature that fundamentally changes how we can write CSS.
--   **Context-Aware Layouts:** Components are truly responsive to their environment, not just the viewport, thanks to a powerful combination of **Container Queries** and a global **Style Query** state machine.
--   **Advanced Tooltip & Popover System:** A showcase component built with the latest APIs, including **CSS Anchor Positioning** for perfect placement, the native **Popover API** for top-layer rendering, and `position-try` for intelligent fallbacks.
--   **Sophisticated OKLCH Theming Engine:** Create beautiful, accessible, and brand-able themes by changing just a few root variables. The system automatically generates entire color palettes, surfaces, and accessible text colors for both **light and dark modes**.
--   **The "Every Layout" System:** A comprehensive suite of `<layout-*>` components that solve common layout problems with robust, composable primitives.
--   **Zero-Specificity Reset:** A modern CSS reset using `:where()` ensures that your custom styles will always take precedence without specificity wars.
-
-## Installation
-
-You can include CSS Tags in your project in a few ways.
-
-### 1. Using a CDN (Recommended for quick starts)
-
-For the simplest setup, link directly to the main stylesheet in the `<head>` of your HTML file.
+### Quick Start
+1. Download or clone the repository
+2. Include the main CSS file in your HTML:
 
 ```html
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!-- ... other head elements -->
-  <link rel="stylesheet" href="https://path-to-your-cdn/css-tags/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Project</title>
+  <link rel="stylesheet" href="path/to/index.css">
 </head>
+<body>
+  <!-- Your content here -->
+</body>
+</html>
 ```
 
-### 2. NPM / Package Manager
-
-Install the package using your preferred package manager.
-
-```bash
-npm install css-tags
-```
-
-Then, import the main CSS file into your project's entry point (e.g., `main.js` or `styles.css`).
-
-```javascript
-// main.js
-import 'css-tags/index.css';
-```
-
----
-
-## Getting Started: Core Concepts
-
-### The Layered Cascade (`@layer`)
-
-CSS Tags uses `@layer` to manage the CSS cascade in a predictable order. This prevents specificity issues and makes customization safe. Any custom styles you write will naturally override the library's styles without needing `!important`.
-
-The layers are loaded in this order of precedence:
-`base` → `reset` → `tokens` → `engine` → `theme` → `palette` → `defaults` → `components` → `utilities` → `layouts`
-
-### The Global Breakpoint System (`@container style()`)
-
-Unlike traditional frameworks, CSS Tags avoids littering components with media queries. Instead, `base.css` sets up a global state variable on the `<body>` element: `--breakpoint-active`.
+3. Or import in your existing CSS:
 
 ```css
-body {
-  container-type: style; /* Make the body a container for style queries */
-  --breakpoint-active: xl; /* Default state */
-}
-
-/* Media queries have only ONE job: update this single variable */
-@media (max-width: 1280px) { body { --breakpoint-active: lg; } }
-@media (max-width: 1024px) { body { --breakpoint-active: md; } }
-@media (max-width: 768px)  { body { --breakpoint-active: sm; } }
+@import url("path/to/index.css");
 ```
 
-Components like `<container>` then use **Style Queries** to listen for changes to this variable, making them responsive to a global context rather than the viewport directly. This is a more robust and component-oriented approach to responsive design.
-
-### Putting It All Together: A Composition Example
-
-Here’s how you can combine layout primitives and components to create a responsive profile card without writing any new CSS:
-
+### CDN Usage (Coming Soon)
 ```html
-<!-- A responsive card built by composing semantic tags -->
-<card radius="12px">
-  <layout-split fraction="100px" gap="1rem">
-    <!-- The avatar -->
-    <box>
-      <img src="avatar.jpg" alt="User Avatar" style="border-radius: 999px;">
-    </box>
-    
-    <!-- The user info, stacked vertically -->
-    <layout-stack gap="0.5rem">
-      <box color="var(--text-overt)" style="font-weight: 600;">Jane Doe</box>
-      <box color="var(--text-subtle)">Product Designer</box>
-      
-      <!-- A wrapping group of badges -->
-      <flex gap="0.5rem" wrap="wrap">
-        <badge role="subtle">UI Design</badge>
-        <badge role="subtle">UX Research</badge>
-        <badge role="subtle">CSS</badge>
-      </flex>
-    </layout-stack>
-  </layout-split>
-</card>
+<link rel="stylesheet" href="https://cdn.example.com/css-framework/index.css">
 ```
-This example demonstrates how declarative layouts create complex components that are readable, maintainable, and intrinsically responsive.
 
----
+## 🎨 Usage Examples
 
-## API Documentation
-
-### The Utility Component: `<box>`
-
-The `<box>` tag is the "Swiss Army Knife" of this library. It gives you direct, declarative control over dozens of common CSS properties. This is the perfect tool for creating wrappers, spacers, and one-off styled elements without writing a line of CSS.
-
-**This component is powered by the modern, typed `attr()` function.** Inside the CSS, a rule like `background: attr(bg type(<color>), transparent);` allows the browser to read the `bg` attribute from your HTML, validate it as a color, and apply it. This is a game-changer for creating dynamic, HTML-driven styles.
-
-**Example:**
+### Basic Styling with Utilities
 ```html
-<!-- A padded, rounded container with a subtle background -->
-<box display="flex" p="2rem" radius="8px" bg="var(--surface-subtle)">
-  <p>Content inside the box.</p>
-</box>
+<div class="bg-surface-default p-md rounded-md shadow-sm">
+  <h2 class="text-xl font-bold text-default mb-sm">Card Title</h2>
+  <p class="text-subtle mb-md">This card uses utility classes for rapid styling.</p>
+  <button class="button button-filled-accent">Action Button</button>
+</div>
 ```
 
-**Common Attributes:**
-- **Layout & Display:** `display`, `align` (text-align)
-- **Spacing:** `p` (padding), `px` (padding-inline), `py` (padding-block), `m` (margin), `mx`, `my`
-- **Sizing:** `width`, `height`, `max-width`
-- **Appearance:** `bg` (background), `color`, `border`, `radius`
+### Component Usage
+```html
+<div class="card">
+  <div class="card__header">
+    <h3 class="card__title">Product Card</h3>
+  </div>
+  <div class="card__body">
+    <img src="product.jpg" alt="Product" class="w-full rounded">
+    <p class="mt-sm">Product description goes here.</p>
+  </div>
+  <div class="card__footer">
+    <button class="button button-outline-accent">Add to Cart</button>
+  </div>
+</div>
+```
 
 ### Layout Primitives
-
-These custom elements form the foundation of your page structure.
-
-#### `<grid>` & `<flex>`
-
-Powerful, declarative implementations of CSS Grid and Flexbox. Control the entire layout of the container and its children directly from your HTML.
-
-**Example:**
 ```html
-<grid columns="2fr 1fr" gap="2rem">
-  <main area="main">Main content...</main>
-  <aside area="sidebar">Sidebar...</aside>
-</grid>
+<div class="l-grid" style="--l-grid-min-item-size: 15rem;">
+  <div class="card">Grid Item 1</div>
+  <div class="card">Grid Item 2</div>
+  <div class="card">Grid Item 3</div>
+</div>
+
+<div class="l-sidebar">
+  <main>Main content area</main>
+  <aside class="l-sidebar__aside">Sidebar content</aside>
+</div>
 ```
-*Full attribute tables available in the initial draft.*
 
-### The Every Layout System
-
-A comprehensive suite of `<layout-*>` components for solving common UI patterns with robust, composable primitives.
-
-| Tag | Description | Key Attributes |
-|---|---|---|
-| `<layout-stack>` | Stacks items vertically with consistent spacing. | `gap`, `align` |
-| `<layout-center>` | Centers content horizontally with a readable max-width. | `max-width`, `gutters` |
-| `<layout-split>` | A two-column layout that stacks at a breakpoint. | `fraction`, `breakpoint`, `gap`|
-| `<layout-sidebar>`| A sidebar layout that stacks on small containers. | `side` (left/right), `side-width`|
-| `<layout-switcher>`| Switches from a stack to a row when there's enough space. | `threshold`, `gap`|
-| `<layout-cluster>`| For grouping items that wrap onto new lines, like tags. | `justify`, `align`, `gap` |
-| `<layout-reel>` | Creates a horizontally scrolling container. | `gap`, `no-scrollbar` |
-
-### UI Components
-
-#### `<card>`
-A self-contained component that uses Container Queries to adapt its layout from vertical to horizontal based on its own width.
-
-#### Advanced Tooltip (`<tooltip>`)
-A cutting-edge, CSS-only tooltip component that showcases the latest browser APIs.
-
-**Usage:**
-```html
-<button popovertarget="tip1">
-  Hover Me
-  <tooltip id="tip1" position="bottom" variant="success" delay="0.3s">
-    This tooltip uses Anchor Positioning!
-  </tooltip>
-</button>
+### Design Token Customization
+```css
+:root {
+  /* Customize brand colors */
+  --primary-h: 280; /* Purple primary */
+  --accent: oklch(var(--scale-l-6) var(--scale-c-7) var(--primary-h));
+  
+  /* Adjust spacing */
+  --space-md: 1.25rem;
+  
+  /* Typography tweaks */
+  --font-family-sans: 'Inter', sans-serif;
+}
 ```
-- **Modern Features:**
-  - **CSS Anchor Positioning:** Tethers the tooltip perfectly to its parent (`popovertarget`).
-  - **Popover API:** Renders the tooltip in the top layer, handling all accessibility concerns.
-  - **`position-try`:** Intelligently tries fallback positions to avoid viewport collisions.
-- **Key Attributes:** `position` (top/bottom/left/right), `variant` (success/error/info), `delay`, `arrow`.
-- **Note:** This component relies on features that are new as of late 2025. Check browser compatibility before using in production.
+
+### Dark Mode Implementation
+```css
+/* Automatic dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --base: oklch(var(--scale-l-12) var(--scale-c-1) var(--gray-h));
+    --text-default: oklch(var(--scale-l-2) var(--scale-c-2) var(--gray-h));
+  }
+}
+
+/* Manual toggle */
+.dark {
+  --base: oklch(var(--scale-l-12) var(--scale-c-1) var(--gray-h));
+}
+```
+
+## 🏗️ Architecture Overview
+
+The framework is organized into distinct cascade layers:
+
+1. **Reset Layer**: Zero-specificity browser normalization
+2. **Tokens Layer**: Raw design values as CSS custom properties
+3. **Engine Layer**: Mathematical calculations and color transformations
+4. **Theme Layer**: Semantic color roles and theme definitions
+5. **Palette Layer**: Complete color scales for UI and data visualization
+6. **Defaults Layer**: Base styling for HTML elements
+7. **Components Layer**: Reusable UI components
+8. **Utilities Layer**: Single-purpose utility classes
+9. **Layouts Layer**: Layout patterns and structural components
+
+This layered approach ensures predictable styling and easy customization.
+
+## 🎨 Color System Deep Dive
+
+### OKLCH Color Space
+Unlike traditional RGB/HSL, OKLCH provides:
+- **Perceptual Uniformity**: Equal steps correspond to equal perceived changes
+- **Intuitive Manipulation**: Separate control over lightness, chroma, and hue
+- **Wide Gamut Support**: Access to colors outside sRGB
+
+### Automatic Contrast Calculation
+The framework includes a sophisticated contrast calculation engine:
+
+```css
+--auto-contrast-text: oklch(
+  from var(--bg, var(--base))
+  clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98)
+  min(c, var(--c-threshold, 0.08))
+  h
+);
+```
+
+This ensures text always has sufficient contrast against its background, adapting automatically to theme changes.
+
+### Color Scales
+Each color includes 13 systematic steps (0-12) for consistent hierarchies:
+
+- **Steps 0-2**: Subtle backgrounds and highlights
+- **Steps 3-5**: UI backgrounds and muted elements
+- **Steps 6-8**: Primary UI elements and borders
+- **Steps 9-11**: Text and prominent elements
+- **Step 12**: Headings and emphasis
+
+## 📱 Responsive Design with Container Queries
+
+Modern responsive design focuses on component-level adaptation:
+
+```css
+.responsive-card {
+  container-type: inline-size;
+  container-name: card;
+  display: flex;
+  flex-direction: column;
+}
+
+@container card (min-width: 30em) {
+  .responsive-card {
+    flex-direction: row;
+  }
+}
+```
+
+This approach creates truly reusable components that adapt to their context, not just the viewport.
+
+## ♿ Accessibility Best Practices
+
+The framework includes comprehensive accessibility features:
+
+- **Focus Management**: Visible focus indicators for keyboard navigation
+- **Color Contrast**: WCAG AA compliance with auto-adjusting colors
+- **Motion Preferences**: Reduced motion support for users with vestibular disorders
+- **Screen Reader Support**: Semantic HTML patterns and utility classes
+- **High Contrast Mode**: Enhanced visibility for low-vision users
+
+## 🛠️ Customization & Extension
+
+### Creating Custom Components
+```css
+@layer components {
+  .my-component {
+    background-color: var(--surface-default);
+    color: var(--text-default);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+}
+```
+
+### Extending the Token System
+```css
+@layer tokens {
+  :root {
+    --custom-spacing: 3rem;
+    --custom-color: oklch(50% 0.2 180);
+  }
+}
+```
+
+### Theme Customization
+```css
+.theme-ocean {
+  --primary-h: 200; /* Blue theme */
+  --success-h: 170; /* Teal accents */
+}
+```
+
+## 📚 Learning Resources
+
+### Documentation
+- [Architecture Guide](./docs/architecture.md): Deep dive into the layer system
+- [Color System Guide](./docs/guides/color-system.md): Understanding OKLCH and theming
+- [Accessibility Guide](./docs/guides/accessibility.md): Building inclusive interfaces
+- [Container Queries Guide](./docs/guides/container-queries.md): Modern responsive design
+- [Customization Guide](./docs/guides/customization.md): Extending the framework
+
+### Examples
+- [Demo Page](./examples/demo.html): Interactive examples of all features
+- [Component Showcase](./examples/demo2.html): Real-world component usage
+
+### Community & Support
+- [GitHub Issues](https://github.com/yourusername/css-framework/issues): Report bugs and request features
+- [Discussions](https://github.com/yourusername/css-framework/discussions): Ask questions and share ideas
+
+## 🔧 Development & Contributing
+
+### Local Development
+1. Clone the repository
+2. Make changes in feature branches
+3. Test across browsers and devices
+4. Ensure CSS validity and performance
+5. Submit pull requests with clear descriptions
+
+### Testing Checklist
+- [ ] CSS validates without errors
+- [ ] Works in Chrome, Firefox, Safari, Edge
+- [ ] Accessible with screen readers
+- [ ] Performance-optimized (no unnecessary repaints)
+- [ ] Responsive across device sizes
+- [ ] Dark mode and high contrast work correctly
+
+## 🌟 Why Choose This Framework?
+
+- **Future-Proof**: Built with modern CSS standards and best practices
+- **Educational**: Designed to teach advanced CSS concepts through practical usage
+- **Flexible**: Highly customizable without sacrificing consistency
+- **Performant**: Optimized for minimal runtime overhead
+- **Accessible**: Built-in support for inclusive design
+- **Maintainable**: Clear architecture makes updates and extensions straightforward
+
+## 📈 Performance Considerations
+
+- **CSS Size**: ~50KB minified (tree-shake unused utilities)
+- **Runtime Performance**: Minimal specificity reduces style recalculation
+- **Loading Strategy**: Critical CSS can be extracted from foundation layers
+- **Browser Caching**: Leverage long-term caching for static assets
+
+## 🔍 Browser Support Matrix
+
+| Feature | Chrome | Firefox | Safari | Edge |
+|---------|--------|---------|--------|------|
+| CSS Layers | ✅ 99+ | ✅ 97+ | ✅ 15.4+ | ✅ 99+ |
+| Container Queries | ✅ 105+ | ✅ 110+ | ✅ 16+ | ✅ 105+ |
+| OKLCH Colors | ✅ 111+ | ✅ 113+ | ✅ 15.4+ | ✅ 111+ |
+| @property | ✅ 85+ | ✅ 128+ | ✅ 16.4+ | ✅ 85+ |
+| @scope | ✅ 118+ | ✅ 128+ | ✅ 17.4+ | ✅ 118+ |
+
+For older browsers, the framework provides sensible defaults and graceful degradation.
+
+## 📄 License
+
+MIT License - Free to use in personal and commercial projects. See [LICENSE](./LICENSE) for full details.
 
 ---
 
-## Gotchas & Important Notes
-
-1.  **Browser Support:** This is a modern-only library. It makes no attempt to support older browsers and requires the latest versions of Chrome, Firefox, and Safari for full functionality. Always check [Can I Use](https://caniuse.com/) for specific features.
-
-2.  **Experimental Syntax:** Files containing `@mixin` and `@function` (`mixins.css`, `box-extra.css`) are for **demonstration purposes only** and will not work in any browser. They are a conceptual exploration of a pre-processor-free future.
-
-3.  **File Naming:** In the source, the file is named `view-transition.css` (singular). Ensure your imports match this, as some internal comments mistakenly use the plural form.
-
-4.  **Required JavaScript:** While styling is 100% CSS, some components require small JavaScript files for behavior that CSS cannot handle alone.
-    -   `carousel.js`: Adds `transform`-based sliding and touch support.
-    -   `view-transition.js`: A simple router for the SPA-style `<view-page>` implementation.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+**Ready to build something amazing?** Start with the [Quick Start Guide](./docs/quick-start.md) or explore the [full documentation](./docs/README.md).

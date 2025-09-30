@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Tags Demo</title>
+    
+    <!-- 
+      Import the main index file.
+      Assumes this file is in a folder sibling to 'src'.
+    -->
+    <link rel="stylesheet" href="../index.css">
+
+    <!-- Demo-specific styles (minimal, just using the library's own tokens) -->
+    <style>
+        /* Using the library's tokens for the demo page body */
+        body {
+            padding-block: var(--space-xl);
+        }
+        h1 {
+             color: var(--theme-primary);
+        }
+        h2 {
+            margin-top: var(--space-2xl);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--outline-subtle);
+            color: var(--text-overt);
+        }
+        .section-desc {
+            color: var(--text-subtle);
+            margin-bottom: var(--space-lg);
+        }
+        /* Visually separate examples */
+        .example-block {
+            border: 1px solid var(--outline-subtle);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            background-color: var(--surface-subtle);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Using <layout-center> to contain the entire demo page -->
+    <layout-center max-width="1200px">
+        
+        <header>
+            <layout-stack gap="1rem">
+                <h1>CSS Tags Demo</h1>
+                <p>A comprehensive showcase of the declarative components and features.</p>
+                
+                <!-- THEME SWITCHER -->
+                <flex gap="0.5rem" align="center" wrap="wrap">
+                    <strong>Try a theme:</strong>
+                    <button onclick="document.documentElement.dataset.theme=''">Default</button>
+                    <button onclick="document.documentElement.dataset.theme='ocean'">Ocean</button>
+                    <button onclick="document.documentElement.dataset.theme='sunrise'">Sunrise</button>
+                    <button onclick="document.documentElement.dataset.theme='forest'">Forest</button>
+                </flex>
+            </layout-stack>
+        </header>
+
+        <main>
+
+            <!-- ================================================================== -->
+            <!-- SECTION 1: THE CORE <BOX> -->
+            <!-- ================================================================== -->
+            <section>
+                <h2>1. The Core: <code>&lt;box&gt;</code> and <code>attr()</code></h2>
+                <p class="section-desc">The "Swiss Army Knife" tag. Control CSS properties directly via HTML attributes, powered by the modern <code>attr()</code> function.</p>
+
+                <layout-stack gap="1.5rem">
+                    
+                    <div class="example-block">
+                        <h3>Styling via Attributes</h3>
+                        <box 
+                            p="2rem" 
+                            bg="var(--surface-info)" 
+                            radius="12px" 
+                            border="2px solid var(--outline-info)"
+                            color="var(--text-info)"
+                        >
+                            This <code>&lt;box&gt;</code> has padding, background, radius, border, and text color all defined in HTML attributes.
+                        </box>
+                    </div>
+
+                    <div class="example-block">
+                        <h3>Layout and Spacers</h3>
+                        <box bg="var(--surface-muted)" p="1rem">Box 1</box>
+                        <!-- Using box as a simple spacer -->
+                        <box height="2rem"></box>
+                        <box bg="var(--surface-muted)" p="1rem">Box 2 (separated by a 2rem <code>&lt;box height="2rem"&gt;</code> spacer)</box>
+                    </div>
+
+                </layout-stack>
+            </section>
+
+            <!-- ================================================================== -->
+            <!-- SECTION 2: LAYOUT PRIMITIVES -->
+            <!-- ================================================================== -->
+            <section>
+                <h2>2. Layout Primitives: <code>&lt;grid&gt;</code> &amp; <code>&lt;flex&gt;</code></h2>
+                <p class="section-desc">Declarative access to CSS Grid and Flexbox.</p>
+
+                <layout-stack gap="1.5rem">
+
+                    <div class="example-block">
+                        <h3><code>&lt;grid&gt;</code></h3>
+                        <grid columns="1fr 2fr 1fr" gap="1rem">
+                            <box bg="var(--surface-muted)" p="1rem">1</box>
+                            <box bg="var(--surface-muted)" p="1rem">2</box>
+                            <box bg="var(--surface-muted)" p="1rem">3</box>
+                            <!-- Child placement with attributes -->
+                            <box bg="var(--theme-primary)" color="white" p="1rem" col="span 3">
+                                Spanning all 3 columns using <code>col="span 3"</code>
+                            </box>
+                            <box bg="var(--surface-muted)" p="1rem">5</box>
+                            <box bg="var(--surface-muted)" p="1rem">6</box>
+                            <box bg="var(--surface-muted)" p="1rem">7</box>
+                        </grid>
+                    </div>
+
+                    <div class="example-block">
+                        <h3><code>&lt;flex&gt;</code></h3>
+                        <flex gap="1rem" align="center" justify="space-between" bg="var(--surface-subtle)" p="1rem">
+                            <box>Logo</box>
+                            <flex gap="0.5rem">
+                                <a href="#">Home</a>
+                                <a href="#">About</a>
+                                <a href="#">Contact</a>
+                            </flex>
+                            <button>Sign In</button>
+                        </flex>
+                    </div>
+
+                </layout-stack>
+            </section>
+
+             <!-- ================================================================== -->
+            <!-- SECTION 3: THE "EVERY LAYOUT" SYSTEM -->
+            <!-- ================================================================== -->
+            <section>
+                <h2>3. The "Every Layout" System</h2>
+                <p class="section-desc">Composable layout components that solve common UI patterns.</p>
+
+                <layout-stack gap="2rem">
+
+                    <div class="example-block">
+                        <h3><code>&lt;layout-stack&gt;</code></h3>
+                        <p>Vertical stacking with consistent gaps.</p>
+                        <layout-stack gap="1rem">
+                            <box bg="var(--surface-muted)" p="1rem">Item 1</box>
+                            <box bg="var(--surface-muted)" p="1rem">Item 2</box>
+                            <box bg="var(--surface-muted)" p="1rem">Item 3</box>
+                        </layout-stack>
+                    </div>
+
+                    <div class="example-block">
+                        <h3><code>&lt;layout-cluster&gt;</code></h3>
+                        <p>Great for tags, badges, or buttons that should wrap.</p>
+                        <layout-cluster gap="0.5rem">
+                            <badge>UI Design</badge>
+                            <badge>UX Research</badge>
+                            <badge>CSS</badge>
+                            <badge>HTML</badge>
+                            <badge>JavaScript</badge>
+                            <badge>Accessibility</badge>
+                            <badge>Design Systems</badge>
+                        </layout-cluster>
+                    </div>
+
+                    <div class="example-block">
+                        <h3><code>&lt;layout-split&gt;</code></h3>
+                        <p>Two-column layout that stacks on smaller screens. (Resize window to test).</p>
+                        <layout-split fraction="1fr" gap="1.5rem">
+                            <box bg="var(--surface-muted)" p="2rem">Side A</box>
+                            <box bg="var(--surface-muted)" p="2rem">Side B</box>
+                        </layout-split>
+                    </div>
+
+                    <div class="example-block">
+                        <h3><code>&lt;layout-sidebar&gt;</code></h3>
+                        <p>Main content and a fixed-width sidebar. Stacks when constrained.</p>
+                         <layout-sidebar side-width="250px" gap="1.5rem">
+                            <box bg="var(--surface-default)" p="2rem">
+                                <h4>Main Content</h4>
+                                <p>This is the primary content area. It will grow to fill the available space.</p>
+                            </box>
+                            <box slot="aside" bg="var(--surface-subtle)" p="2rem">
+                                <h4>Sidebar</h4>
+                                <p>This is the sidebar, fixed at 250px.</p>
+                            </box>
+                        </layout-sidebar>
+                    </div>
+
+                     <div class="example-block">
+                        <h3><code>&lt;layout-switcher&gt;</code></h3>
+                        <p>Switches from horizontal to vertical when children become narrower than the <code>threshold</code>.</p>
+                        <layout-switcher threshold="500px" gap="1rem">
+                            <box bg="var(--surface-muted)" p="1rem">Item A</box>
+                            <box bg="var(--surface-muted)" p="1rem">Item B</box>
+                            <box bg="var(--surface-muted)" p="1rem">Item C</box>
+                        </layout-switcher>
+                    </div>
+                    
+                    <div class="example-block">
+                        <h3><code>&lt;layout-reel&gt;</code></h3>
+                        <p>Horizontally scrolling container.</p>
+                        <layout-reel gap="1rem" p="0.5rem">
+                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 1</box>
+                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 2</box>
+                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 3</box>
+                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 4</box>
+                            <box bg="var(--surface-muted)" p="3rem" style="min-width: 200px;">Card 5</box>
+                        </layout-reel>
+                    </div>
+
+                </layout-stack>
+            </section>
+
+            <!-- ================================================================== -->
+            <!-- SECTION 4: UI COMPONENTS -->
+            <!-- ================================================================== -->
+            <section>
+                <h2>4. UI Components</h2>
+                <p class="section-desc">Common UI patterns built with modern CSS.</p>
+
+                 <layout-stack gap="2rem">
+
+                    <div class="example-block">
+                        <h3><code>&lt;card&gt;</code> with Container Query</h3>
+                        <p>This card uses a container query to switch from a vertical stack to a horizontal layout when it has enough width. Resize the browser to see it adapt.</p>
+                        
+                        <layout-grid columns="repeat(auto-fit, minmax(350px, 1fr))" gap="1.5rem">
+                            <card>
+                                <card-media>
+                                    <img src="https://picsum.photos/seed/css1/400/300" alt="Placeholder">
+                                </card-media>
+                                <card-body>
+                                    <card-header>Responsive Card</card-header>
+                                    <card-content>
+                                        I am a smart card. When I am narrow, I stack. When I have room (min-width: 400px), I go horizontal.
+                                    </card-content>
+                                    <card-footer>Read More →</card-footer>
+                                </card-body>
+                            </card>
+                            <card>
+                                <card-media>
+                                    <img src="https://picsum.photos/seed/css2/400/300" alt="Placeholder">
+                                </card-media>
+                                <card-body>
+                                    <card-header>Another Card</card-header>
+                                    <card-content>
+                                        Try changing the theme at the top of the page to see me change color.
+                                    </card-content>
+                                    <card-footer>Read More →</card-footer>
+                                </card-body>
+                            </card>
+                        </layout-grid>
+                    </div>
+
+                    <div class="example-block">
+                        <h3>Alerts</h3>
+                        <layout-stack gap="1rem">
+                            <div class="alert" status="success">
+                                <div class="alert__icon">✅</div>
+                                <div class="alert__title">Success!</div>
+                                <div class="alert__body">Your changes have been saved successfully.</div>
+                            </div>
+                             <div class="alert" status="warning">
+                                <div class="alert__icon">⚠️</div>
+                                <div class="alert__title">Warning</div>
+                                <div class="alert__body">Your account is about to expire.</div>
+                            </div>
+                             <div class="alert" status="error">
+                                <div class="alert__icon">❌</div>
+                                <div class="alert__title">Error</div>
+                                <div class="alert__body">Unable to connect to the server.</div>
+                            </div>
+                             <div class="alert" status="info">
+                                <div class="alert__icon">ℹ️</div>
+                                <div class="alert__title">Note</div>
+                                <div class="alert__body">Scheduled maintenance tonight at 2 AM.</div>
+                            </div>
+                        </layout-stack>
+                    </div>
+
+                    <div class="example-block">
+                        <h3>Badges &amp; Chips</h3>
+                        <layout-stack gap="1rem">
+                            <flex gap="0.5rem" align="center">
+                                <strong>Status:</strong>
+                                <badge status="success">Active</badge>
+                                <badge status="warning">Pending</badge>
+                                <badge status="error">Inactive</badge>
+                            </flex>
+                            <flex gap="0.5rem" align="center">
+                                <strong>Sizes:</strong>
+                                <badge size="sm" role="subtle">Small</badge>
+                                <badge size="md" role="subtle">Medium</badge>
+                                <badge size="lg" role="subtle">Large</badge>
+                            </flex>
+                             <flex gap="0.5rem" align="center">
+                                <strong>Chips:</strong>
+                                <chip>Standard Chip</chip>
+                                <chip removable>Removable Chip</chip>
+                            </flex>
+                        </layout-stack>
+                    </div>
+
+                     <div class="example-block">
+                        <h3><code>&lt;list&gt;</code></h3>
+                        <p>Standard lists and custom icons utilizing CSS masks and <code>attr()</code>.</p>
+                        <layout-split>
+                             <list>
+                                <list-item>Standard Item 1</list-item>
+                                <list-item>Standard Item 2</list-item>
+                                <list-divider></list-divider>
+                                <list-item>Standard Item 3</list-item>
+                            </list>
+                            <!-- Note: Using a data URI for the SVG icon to make the demo self-contained -->
+                            <list gap="1rem">
+                                <list-item icon icon-color="var(--success)" icon="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
+                                    Task Completed
+                                </list-item>
+                                <list-item icon icon-color="var(--error)" icon="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z'/%3E%3C/svg%3E">
+                                    Task Failed
+                                </list-item>
+                            </list>
+                        </layout-split>
+                    </div>
+
+                 </layout-stack>
+             </section>
+
+             <!-- ================================================================== -->
+             <!-- SECTION 5: NEW COMPONENTS -->
+             <!-- ================================================================== -->
+             <section>
+                 <h2>5. New Components: Table, Form, Navigation</h2>
+                 <p class="section-desc">Recently added components for data display, user input, and site navigation.</p>
+
+                 <layout-stack gap="2rem">
+
+                     <div class="example-block">
+                         <h3><code>&lt;table&gt;</code> with Responsive Design</h3>
+                         <p>Responsive table that stacks on small screens using container queries.</p>
+                         <data-table>
+                             <table>
+                                 <thead>
+                                     <tr>
+                                         <th>Name</th>
+                                         <th>Email</th>
+                                         <th>Role</th>
+                                         <th>Status</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr>
+                                         <td data-label="Name">John Doe</td>
+                                         <td data-label="Email">john@example.com</td>
+                                         <td data-label="Role">Developer</td>
+                                         <td data-label="Status">Active</td>
+                                     </tr>
+                                     <tr>
+                                         <td data-label="Name">Jane Smith</td>
+                                         <td data-label="Email">jane@example.com</td>
+                                         <td data-label="Role">Designer</td>
+                                         <td data-label="Status">Pending</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                         </data-table>
+                     </div>
+
+                     <div class="example-block">
+                         <h3>Form Components</h3>
+                         <p>Accessible form elements with focus states and variants.</p>
+                         <form>
+                             <layout-stack gap="1rem">
+                                 <form-input type="text" placeholder="Enter your name" required></form-input>
+                                 <form-input type="email" placeholder="Enter your email" required></form-input>
+                                 <form-select>
+                                     <option>Select role</option>
+                                     <option>Developer</option>
+                                     <option>Designer</option>
+                                 </form-select>
+                                 <form-textarea placeholder="Your message"></form-textarea>
+                                 <flex gap="1rem">
+                                     <form-button type="submit" class="btn-primary">Submit</form-button>
+                                     <form-button type="reset" class="btn-secondary">Reset</form-button>
+                                 </flex>
+                             </layout-stack>
+                         </form>
+                     </div>
+
+                     <div class="example-block">
+                         <h3>Navigation Components</h3>
+                         <p>Responsive navbar and sidebar for site navigation.</p>
+                         <nav-navbar>
+                             <div class="nav-brand">My Site</div>
+                             <ul class="nav-links">
+                                 <li><a href="#" class="nav-link">Home</a></li>
+                                 <li><a href="#" class="nav-link">About</a></li>
+                                 <li><a href="#" class="nav-link">Contact</a></li>
+                             </ul>
+                             <button class="nav-toggle">☰</button>
+                         </nav-navbar>
+                         <layout-sidebar side-width="200px" style="margin-top: 1rem;">
+                             <nav slot="aside" class="nav-sidebar">
+                                 <div class="sidebar-section">Menu</div>
+                                 <ul class="sidebar-nav">
+                                     <li><a href="#" class="sidebar-link">Dashboard</a></li>
+                                     <li><a href="#" class="sidebar-link">Profile</a></li>
+                                     <li><a href="#" class="sidebar-link">Settings</a></li>
+                                 </ul>
+                             </nav>
+                             <div>Main content area</div>
+                         </layout-sidebar>
+                     </div>
+
+                 </layout-stack>
+             </section>
+
+              <!-- ================================================================== -->
+             <!-- SECTION 6: MODERN INTERACTIVE -->
+             <!-- ================================================================== -->
+            <section>
+                <h2>5. Modern Interactive (Popover API &amp; Anchor Positioning)</h2>
+                <p class="section-desc">Using the native Popover API and Anchor Positioning. No JS required for the basic functionality.</p>
+
+                <layout-stack gap="2rem">
+
+                    <div class="example-block">
+                        <h3>Native Popover</h3>
+                         <button popovertarget="demo-popover" class="button">Open Popover</button>
+                         <div id="demo-popover" popover>
+                            <h3>Hello!</h3>
+                            <p>I am a native <code>popover</code> element, styled by the library. Click outside or press Escape to close me.</p>
+                            <p>I automatically appear in the top layer and have built-in entry/exit animations.</p>
+                         </div>
+                    </div>
+
+                    <div class="example-block">
+                        <h3>Advanced Tooltip</h3>
+                        <p>Uses <b>Anchor Positioning</b> to tether to its button, and the <b>Popover API</b> to appear on top.</p>
+                         <flex gap="2rem" wrap="wrap" justify="center" p="3rem">
+                            
+                            <button popovertarget="tt-top" class="button">
+                                Top Tooltip
+                                <tooltip id="tt-top" position="top" arrow>I'm tethered to the top!</tooltip>
+                            </button>
+
+                             <button popovertarget="tt-right" class="button">
+                                Right Tooltip
+                                <tooltip id="tt-right" position="right" variant="info" arrow>Info on the right.</tooltip>
+                            </button>
+
+                             <button popovertarget="tt-bottom" class="button">
+                                Bottom Tooltip
+                                <tooltip id="tt-bottom" position="bottom" variant="success" arrow>Success on the bottom.</tooltip>
+                            </button>
+                            
+                        </flex>
+                    </div>
+                    
+                    <div class="example-block">
+                        <h3>Modal</h3>
+                        <button onclick="document.getElementById('demo-modal').style.display='grid'" class="button">Open Modal</button>
+                        
+                        <!-- Simple Modal structure -->
+                        <div id="demo-modal" class="modal" style="display: none;">
+                            <div class="modal__panel">
+                                <h3>Modal Title</h3>
+                                <p>This is the modal content. The backdrop is handled by the <code>.modal</code> wrapper.</p>
+                                <flex justify="end" gap="1rem" style="margin-top: 2rem;">
+                                    <button onclick="document.getElementById('demo-modal').style.display='none'" class="button">Close</button>
+                                </flex>
+                            </div>
+                        </div>
+                    </div>
+
+                </layout-stack>
+            </section>
+
+              <!-- ================================================================== -->
+             <!-- SECTION 7: ADVANCED LAYOUTS -->
+             <!-- ================================================================== -->
+             <section>
+                <h2>6. Advanced Layouts</h2>
+                <p class="section-desc">Experimental or slightly enhanced layouts.</p>
+
+                 <layout-stack gap="2rem">
+                    <div class="example-block">
+                        <h3>Carousel (with JS enhancement)</h3>
+                        <p>Basic CSS scroll-snap, enhanced with JS for touch swipe and transform-based sliding.</p>
+                        <carousel loop>
+                            <div class="carousel-slides">
+                                <carousel-item><box bg="var(--hue-blue)" p="5rem" align="center" color="white">Slide 1</box></carousel-item>
+                                <carousel-item><box bg="var(--hue-green)" p="5rem" align="center" color="white">Slide 2</box></carousel-item>
+                                <carousel-item><box bg="var(--hue-red)" p="5rem" align="center" color="white">Slide 3</box></carousel-item>
+                            </div>
+                            <carousel-trigger direction="prev">←</carousel-trigger>
+                            <carousel-trigger direction="next">→</carousel-trigger>
+                        </carousel>
+                    </div>
+
+                    <div class="example-block">
+                        <h3>Masonry Layout (Experimental)</h3>
+                        <p>Requires browser flag enabling. Falls back gracefully if not supported.</p>
+                        <masonry-layout cols="repeat(auto-fill, minmax(150px, 1fr))" gap="1rem">
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 100px;">1</box>
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 200px;">2</box>
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 150px;">3</box>
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 250px;">4</box>
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 120px;">5</box>
+                             <box bg="var(--surface-muted)" p="1rem" style="height: 180px;">6</box>
+                        </masonry-layout>
+                    </div>
+                 </layout-stack>
+            </section>
+
+
+              <!-- ================================================================== -->
+             <!-- SECTION 8: VIEW TRANSITIONS (SPA) -->
+             <!-- ================================================================== -->
+             <section>
+                <h2>7. View Transitions (SPA Example)</h2>
+                <p class="section-desc">A simple router using the View Transitions API for app-like state changes. Click the buttons below.</p>
+
+                 <div class="example-block" style="min-height: 300px;">
+                     
+                     <view-transitions>
+                         
+                         <!-- Page 1 -->
+                         <view-page id="page-1" active>
+                             <box p="2rem" bg="var(--surface-subtle)">
+                                 <h3>Page One</h3>
+                                 <p>This is the first page. Notice the "Hero Element" image below.</p>
+                                 <img src="https://picsum.photos/id/237/100/100" style="view-transition-name: hero-element; border-radius: 50%;">
+                                 <box m="2rem 0">
+                                     <nav-trigger to="page-2">
+                                         <button class="button">Go to Page Two →</button>
+                                     </nav-trigger>
+                                 </box>
+                             </box>
+                         </view-page>
+
+                         <!-- Page 2 -->
+                         <view-page id="page-2">
+                             <box p="2rem" bg="var(--surface-overt)">
+                                 <h3>Page Two</h3>
+                                 <p>The page slid in, and the "Hero Element" morphed to its new position and size.</p>
+                                  <img src="https://picsum.photos/id/237/300/200" style="view-transition-name: hero-element; border-radius: 12px;">
+                                 <box m="2rem 0">
+                                     <nav-trigger to="page-1">
+                                         <button class="button">← Go Back to Page One</button>
+                                     </nav-trigger>
+                                 </box>
+                             </box>
+                         </view-page>
+
+                     </view-transitions>
+
+                </div>
+            </section>
+
+
+        </main>
+        
+        <footer>
+             <box p="3rem 0" align="center" color="var(--text-subtle)">
+                 CSS Tags Demo
+             </box>
+        </footer>
+
+    </layout-center>
+
+     <!-- Import required JavaScript -->
+     <script src="../carousel.js" defer></script>
+     <script src="../view-transitions.js" defer></script>
+
+</body>
+</html>

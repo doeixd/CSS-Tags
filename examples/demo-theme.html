@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprehensive Theme Demo</title>
+  <link rel="stylesheet" href="../index.css">
+  <style>
+    /* Custom styles for demo */
+    .demo-section { margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--outline-subtle); border-radius: var(--radius-md); }
+    .customizer { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .customizer label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; }
+    .customizer input { width: 100%; accent-color: var(--accent); }
+    .theme-showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .color-display { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .color-swatch { width: 60px; height: 60px; border-radius: var(--radius-sm); border: 1px solid var(--outline-subtle); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--text-default); }
+    .ui-elements { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+    .ui-element { padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--outline-default); }
+    .semantic-colors { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; }
+    .semantic-color { padding: 0.5rem; border-radius: var(--radius-sm); font-size: 0.8rem; }
+    .scale-swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); gap: 1px; margin-top: 0.5rem; }
+    .scale-swatch { height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--outline-subtle); display: block; }
+    #theme-toggle { margin-bottom: 1rem; background: var(--accent); color: var(--text-on-accent); border: none; padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; }
+    /* Set accent-color for form controls */
+    accent-color: var(--accent);
+    .contrast-color {
+      /* Fallback */
+      background: hsl(0 0 0 / 50%);
+      color: white;
+
+      @supports (color: oklch(from red l c h)) {
+        --l: clamp(0, (l / var(--l-threshold, 0.65) - 1) * -infinity, 1);
+        color: oklch(from var(--color) var(--l) 0 h);
+        background: none;
+      }
+    }
+    /* Light mode text colors relative to base */
+    html:not([data-theme="dark"]) {
+      --text-l: clamp(0, (l / var(--l-threshold, 0.65) - 1) * -infinity, 1);
+      --text-default: oklch(from var(--base) var(--text-l) c h);
+      --text-subtle: oklch(from var(--base) calc(var(--text-l) - 0.1) c h);
+      --text-muted: oklch(from var(--base) calc(var(--text-l) - 0.2) c h);
+      --text-overt: oklch(from var(--base) calc(var(--text-l) + 0.1) c h);
+      --outline-default: oklch(from var(--base) calc(l + 0.05) c h);
+      --outline-subtle: oklch(from var(--base) calc(l + 0.02) c h);
+      --surface-subtle: oklch(from var(--base) calc(l + 0.02) c h);
+      --surface-muted: oklch(from var(--base) calc(l - 0.02) c h);
+      --highlight-bg-subtle: oklch(from var(--base) calc(l + 0.05) c h);
+    }
+    /* Dark mode styles */
+    html[data-theme="dark"] {
+      --accent-l: 70%; --accent-c: 0.18;
+      --surface-c: 0.02; --l-threshold: 0.6;
+      --base: oklch(var(--base-l, 22%) calc(var(--surface-c) * 0.9) var(--neutral-h));
+      --bedrock: oklch(95% calc(var(--surface-c) * 0.7) var(--neutral-h));
+      --surface-muted: oklch(20% calc(var(--surface-c) * 0.5) var(--neutral-h));
+      --surface-subtle: oklch(21% calc(var(--surface-c) * 0.7) var(--neutral-h));
+      --surface-default: oklch(25% var(--surface-c) var(--neutral-h));
+      --surface-overt: oklch(30% calc(var(--surface-c) * 1.2) var(--neutral-h));
+      --text-muted: oklch(65% calc(var(--surface-c) * 1.2) var(--neutral-h) / 0.8);
+      --text-subtle: oklch(75% calc(var(--surface-c) * 1.0) var(--neutral-h));
+      --text-default: oklch(88% calc(var(--surface-c) * 0.8) var(--neutral-h));
+      --text-overt: oklch(95% calc(var(--surface-c) * 0.6) var(--neutral-h));
+      --outline-subtle: oklch(from var(--base) calc(l + var(--l-delta-5)) c h);
+      --outline-default: oklch(from var(--base) calc(l + var(--l-delta-6)) calc(c + var(--c-delta-1)) h);
+      --outline-overt: oklch(from var(--base) calc(l + var(--l-delta-7)) calc(c + var(--c-delta-2)) h);
+      --highlight-bg-muted: oklch(from var(--base) calc(l + var(--l-delta-1)) c h);
+      --highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3)) c h);
+      --success-l: 65%; --warning-l: 75%; --error-l: 70%; --info-l: 75%;
+      --success: oklch(var(--success-l) var(--success-c) var(--success-h));
+      --warning: oklch(var(--warning-l) var(--warning-c) var(--warning-h));
+      --error: oklch(var(--error-l) var(--error-c) var(--error-h));
+      --info: oklch(var(--info-l) var(--info-c) var(--info-h));
+      --text-success: var(--success); --text-warning: var(--warning); --text-error: var(--error); --text-info: var(--info);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Comprehensive Theme Demo</h1>
+    <button onclick="toggleTheme()" id="theme-toggle">Switch to Dark Mode</button>
+
+    <!-- Theme Customizer -->
+    <section class="demo-section">
+      <h2>Theme Customizer</h2>
+      <p>Adjust core theme variables to see live changes.</p>
+      <div class="customizer">
+        <fieldset>
+          <legend>Accent Colors</legend>
+          <label>Accent Hue: <input type="range" id="accent-h" min="0" max="360" value="285" oninput="updateVar('--accent-h', this.value)"></label>
+          <label>Accent Lightness: <input type="range" id="accent-l" min="0" max="100" value="60" oninput="updateVar('--accent-l', this.value + '%')"></label>
+          <label>Accent Chroma: <input type="range" id="accent-c" min="0" max="50" value="15" oninput="updateVar('--accent-c', this.value / 100)"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Hue Shifts</legend>
+          <label>Secondary Hue Shift: <input type="range" id="secondary-hue-shift" min="-180" max="180" value="60" oninput="updateVar('--secondary-hue-shift', this.value)"></label>
+          <label>Tertiary Hue Shift: <input type="range" id="tertiary-hue-shift" min="-180" max="180" value="-90" oninput="updateVar('--tertiary-hue-shift', this.value)"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Surface & Contrast</legend>
+          <label>Surface Chroma: <input type="range" id="surface-c" min="0" max="10" value="1.5" oninput="updateVar('--surface-c', this.value / 100)"></label>
+          <label>Contrast Factor: <input type="range" id="contrast-factor" min="0.5" max="2" step="0.1" value="1" oninput="updateVar('--contrast-factor', this.value)"></label>
+          <label>L Threshold: <input type="range" id="l-threshold" min="0" max="1" step="0.01" value="0.65" oninput="updateVar('--l-threshold', this.value)"></label>
+          <label>C Threshold: <input type="range" id="c-threshold" min="0" max="0.2" step="0.01" value="0.08" oninput="updateVar('--c-threshold', this.value)"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Border & Radius</legend>
+          <label>Border Width: <input type="range" id="border-width" min="0" max="5" step="0.1" value="1" oninput="updateVar('--border-width', this.value + 'px')"></label>
+          <label>Radius MD: <input type="range" id="radius-md" min="0" max="20" value="6" oninput="updateVar('--radius-md', this.value + 'px')"></label>
+        </fieldset>
+        <button onclick="resetTheme()">Reset to Defaults</button>
+      </div>
+    </section>
+
+    <!-- Semantic Colors Display -->
+    <section class="demo-section">
+      <h2>Semantic Colors</h2>
+      <p>Live display of key semantic color variables.</p>
+      <div class="semantic-colors" id="semantic-colors"></div>
+    </section>
+
+    <!-- UI Elements Showcase -->
+    <section class="demo-section">
+      <h2>UI Elements Showcase</h2>
+      <p>Common UI components using theme variables.</p>
+      <div class="ui-elements">
+        <div class="ui-element" style="background: var(--surface-default); color: var(--text-default);">
+          <h3 style="color: var(--text-overt);">Surface Default</h3>
+          <p style="color: var(--text-subtle);">This is default surface with default text.</p>
+          <button style="background: var(--accent); color: var(--text-on-accent); border: none; padding: 0.5rem; border-radius: var(--radius-md);">Accent Button</button>
+        </div>
+        <div class="ui-element" style="background: var(--surface-subtle); color: var(--text-default);">
+          <h3 style="color: var(--text-overt);">Surface Subtle</h3>
+          <p style="color: var(--text-subtle);">Subtle surface variation.</p>
+          <input style="border: 1px solid var(--outline-default); padding: 0.5rem; border-radius: var(--radius-sm);" placeholder="Input field">
+        </div>
+        <div class="ui-element" style="background: var(--surface-muted); color: var(--text-muted);">
+          <h3 style="color: var(--text-overt);">Surface Muted</h3>
+          <p>Muted surface for disabled states.</p>
+          <div style="background: var(--highlight-bg-subtle); padding: 0.5rem; border-radius: var(--radius-sm);">Highlight Subtle</div>
+        </div>
+        <div class="ui-element" style="background: var(--base); color: var(--text-default);">
+          <h3 style="color: var(--text-overt);">Base Background</h3>
+          <p>Base color for backgrounds.</p>
+          <a href="#" style="color: var(--text-link);">Link</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Color Families Display -->
+    <section class="demo-section">
+      <h2>Color Families</h2>
+      <p>Accent, secondary, tertiary, and feedback color families.</p>
+      <div class="theme-showcase">
+        <div>
+          <h3>Accent Family</h3>
+          <div class="color-display">
+            <div class="color-swatch" style="background: var(--accent);">Accent</div>
+            <div class="color-swatch" style="background: var(--accent-muted);">Muted</div>
+            <div class="color-swatch" style="background: var(--accent-subtle);">Subtle</div>
+            <div class="color-swatch" style="background: var(--accent-overt);">Overt</div>
+          </div>
+        </div>
+        <div>
+          <h3>Secondary Family</h3>
+          <div class="color-display">
+            <div class="color-swatch" style="background: var(--secondary);">Secondary</div>
+            <div class="color-swatch" style="background: var(--secondary-muted);">Muted</div>
+            <div class="color-swatch" style="background: var(--secondary-subtle);">Subtle</div>
+            <div class="color-swatch" style="background: var(--secondary-overt);">Overt</div>
+          </div>
+        </div>
+        <div>
+          <h3>Tertiary Family</h3>
+          <div class="color-display">
+            <div class="color-swatch" style="background: var(--tertiary);">Tertiary</div>
+            <div class="color-swatch" style="background: var(--tertiary-muted);">Muted</div>
+            <div class="color-swatch" style="background: var(--tertiary-subtle);">Subtle</div>
+            <div class="color-swatch" style="background: var(--tertiary-overt);">Overt</div>
+          </div>
+        </div>
+        <div>
+          <h3>Feedback Colors</h3>
+          <div class="color-display">
+            <div class="color-swatch" style="background: var(--success);">Success</div>
+            <div class="color-swatch" style="background: var(--warning);">Warning</div>
+            <div class="color-swatch" style="background: var(--error);">Error</div>
+            <div class="color-swatch" style="background: var(--info);">Info</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Color Scales -->
+    <section class="demo-section">
+      <h2>Full Color Scales</h2>
+      <p>Complete 13-step scales for each color family.</p>
+      <div class="theme-showcase" id="color-scales"></div>
+    </section>
+  </div>
+
+  <script>
+    function updateVar(name, value) {
+      document.documentElement.style.setProperty(name, value);
+      displaySemanticColors();
+    }
+    function resetTheme() {
+      document.getElementById('accent-h').value = 285;
+      document.getElementById('accent-l').value = 60;
+      document.getElementById('accent-c').value = 15;
+      document.getElementById('secondary-hue-shift').value = 60;
+      document.getElementById('tertiary-hue-shift').value = -90;
+      document.getElementById('surface-c').value = 1.5;
+      document.getElementById('contrast-factor').value = 1;
+       document.getElementById('l-threshold').value = 0.65;
+       document.getElementById('c-threshold').value = 0.08;
+       document.getElementById('border-width').value = 1;
+       document.getElementById('radius-md').value = 6;
+       document.getElementById('contrast-factor').value = 1;
+      updateVar('--accent-h', 285);
+      updateVar('--accent-l', '60%');
+      updateVar('--accent-c', 0.15);
+      updateVar('--secondary-hue-shift', 60);
+      updateVar('--tertiary-hue-shift', -90);
+      updateVar('--surface-c', 0.015);
+      updateVar('--contrast-factor', 1);
+       updateVar('--l-threshold', 0.65);
+       updateVar('--c-threshold', 0.08);
+       updateVar('--border-width', '1px');
+       updateVar('--radius-md', '6px');
+       updateVar('--contrast-factor', 1);
+    }
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+      }
+    }
+    function displaySemanticColors() {
+      const root = document.documentElement;
+      const colors = [
+        { name: '--base', value: getComputedStyle(root).getPropertyValue('--base') },
+        { name: '--surface-default', value: getComputedStyle(root).getPropertyValue('--surface-default') },
+        { name: '--surface-subtle', value: getComputedStyle(root).getPropertyValue('--surface-subtle') },
+        { name: '--surface-muted', value: getComputedStyle(root).getPropertyValue('--surface-muted') },
+        { name: '--text-default', value: getComputedStyle(root).getPropertyValue('--text-default') },
+        { name: '--text-subtle', value: getComputedStyle(root).getPropertyValue('--text-subtle') },
+        { name: '--text-muted', value: getComputedStyle(root).getPropertyValue('--text-muted') },
+        { name: '--accent', value: getComputedStyle(root).getPropertyValue('--accent') },
+        { name: '--secondary', value: getComputedStyle(root).getPropertyValue('--secondary') },
+        { name: '--tertiary', value: getComputedStyle(root).getPropertyValue('--tertiary') },
+        { name: '--success', value: getComputedStyle(root).getPropertyValue('--success') },
+        { name: '--warning', value: getComputedStyle(root).getPropertyValue('--warning') },
+        { name: '--error', value: getComputedStyle(root).getPropertyValue('--error') },
+        { name: '--info', value: getComputedStyle(root).getPropertyValue('--info') },
+        { name: '--outline-default', value: getComputedStyle(root).getPropertyValue('--outline-default') },
+        { name: '--outline-subtle', value: getComputedStyle(root).getPropertyValue('--outline-subtle') },
+        { name: '--highlight-bg-subtle', value: getComputedStyle(root).getPropertyValue('--highlight-bg-subtle') },
+        { name: '--highlight-bg-overt', value: getComputedStyle(root).getPropertyValue('--highlight-bg-overt') }
+      ];
+      const container = document.getElementById('semantic-colors');
+      container.innerHTML = '';
+      colors.forEach(color => {
+        const div = document.createElement('div');
+        div.className = 'semantic-color';
+        div.style.backgroundColor = color.value;
+        div.style.color = 'var(--text-default)';
+        div.textContent = color.name;
+        container.appendChild(div);
+      });
+      generateColorScales();
+    }
+    function generateColorScales() {
+       const baseLightness = [0.98, 0.95, 0.90, 0.82, 0.74, 0.66, 0.58, 0.50, 0.42, 0.34, 0.26, 0.18, 0.10];
+       const chroma = [0.02, 0.02, 0.04, 0.06, 0.08, 0.10, 0.12, 0.15, 0.18, 0.22, 0.26, 0.30, 0.37];
+       const root = document.documentElement;
+       const contrastFactor = parseFloat(getComputedStyle(root).getPropertyValue('--contrast-factor')) || 1;
+       const lightness = baseLightness.map(l => (l - 0.5) * contrastFactor + 0.5);
+      const accentHue = parseFloat(getComputedStyle(root).getPropertyValue('--accent-h')) || 285;
+      const neutralChroma = parseFloat(getComputedStyle(root).getPropertyValue('--neutral-c')) || 0.01;
+      const families = [
+        { name: 'accent', hue: accentHue, useNeutralChroma: false },
+        { name: 'secondary', hue: (accentHue + 60) % 360, useNeutralChroma: false },
+        { name: 'tertiary', hue: (accentHue - 90 + 360) % 360, useNeutralChroma: false },
+        { name: 'neutral', hue: 0, useNeutralChroma: true },
+        { name: 'gray', hue: 220, useNeutralChroma: true },
+        { name: 'success', hue: parseFloat(getComputedStyle(root).getPropertyValue('--success-h')) || 160, useNeutralChroma: false },
+        { name: 'warning', hue: parseFloat(getComputedStyle(root).getPropertyValue('--warning-h')) || 35, useNeutralChroma: false },
+        { name: 'error', hue: parseFloat(getComputedStyle(root).getPropertyValue('--error-h')) || 355, useNeutralChroma: false },
+        { name: 'info', hue: parseFloat(getComputedStyle(root).getPropertyValue('--info-h')) || 200, useNeutralChroma: false },
+        { name: 'red', hue: 0, useNeutralChroma: false },
+        { name: 'orange', hue: 30, useNeutralChroma: false },
+        { name: 'amber', hue: 65, useNeutralChroma: false },
+        { name: 'yellow', hue: 85, useNeutralChroma: false },
+        { name: 'lime', hue: 120, useNeutralChroma: false },
+        { name: 'green', hue: 140, useNeutralChroma: false },
+        { name: 'emerald', hue: 160, useNeutralChroma: false },
+        { name: 'teal', hue: 175, useNeutralChroma: false },
+        { name: 'cyan', hue: 195, useNeutralChroma: false },
+        { name: 'sky', hue: 210, useNeutralChroma: false },
+        { name: 'blue', hue: 240, useNeutralChroma: false },
+        { name: 'indigo', hue: 265, useNeutralChroma: false },
+        { name: 'violet', hue: 285, useNeutralChroma: false },
+        { name: 'purple', hue: 300, useNeutralChroma: false },
+        { name: 'fuchsia', hue: 320, useNeutralChroma: false },
+        { name: 'pink', hue: 340, useNeutralChroma: false },
+        { name: 'rose', hue: 355, useNeutralChroma: false },
+        { name: 'slate', hue: 225, useNeutralChroma: false }
+      ];
+      const container = document.getElementById('color-scales');
+      container.innerHTML = '';
+      families.forEach(family => {
+        const familyDiv = document.createElement('div');
+        const title = document.createElement('h4');
+        title.textContent = family.name.charAt(0).toUpperCase() + family.name.slice(1);
+        familyDiv.appendChild(title);
+        const swatchesDiv = document.createElement('div');
+        swatchesDiv.className = 'scale-swatches';
+         for (let i = 0; i <= 12; i++) {
+           const swatch = document.createElement('div');
+           swatch.className = 'scale-swatch';
+           const baseC = family.useNeutralChroma ? neutralChroma : chroma[i];
+           const c = Math.min(baseC, i < 2 ? 0.03 : baseC);
+           const color = `oklch(${lightness[i]} ${c} ${family.hue})`;
+           swatch.style.backgroundColor = color;
+           swatch.title = `${family.name}-${i}: ${color}`;
+           const label = document.createElement('span');
+           label.textContent = i;
+           label.style.fontSize = '0.7rem';
+           label.className = 'contrast-color';
+           label.style.setProperty('--color', color);
+           swatch.appendChild(label);
+           swatchesDiv.appendChild(swatch);
+         }
+        familyDiv.appendChild(swatchesDiv);
+        container.appendChild(familyDiv);
+      });
+    }
+    resetTheme();
+    displaySemanticColors();
+  </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palette, Layouts & Container Queries Demo</title>
+  <link rel="stylesheet" href="../index.css">
+   <style>
+     /* Custom styles for demo */
+     .demo-section { margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--outline-subtle); border-radius: var(--radius-md); }
+     .customizer { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+     .customizer label { display: block; margin-bottom: 0.5rem; }
+     .customizer input { width: 100%; accent-color: var(--accent); }
+     .var-display { background: var(--surface-subtle); padding: 1rem; border-radius: var(--radius-md); font-family: monospace; }
+     .var-display dt { font-weight: bold; margin-top: 1rem; }
+     .var-display dd { margin: 0; color: var(--text-subtle); }
+      .var-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+      .var-category h3 { margin-bottom: 1rem; color: var(--text-overt); }
+      .scale-customizers { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1rem; }
+      .scale-group { border: 1px solid var(--outline-subtle); padding: 1rem; border-radius: var(--radius-md); }
+      .scale-group h3 { margin-top: 0; color: var(--text-overt); }
+     .palette-grid { margin-top: 1rem; display: block; }
+     .color-family h4 { margin-bottom: 0.5rem; text-align: center; }
+      .swatches { display: flex; gap: 2px; }
+      .swatch { height: 35px; width: 35px; border-radius: var(--radius-sm); border: 1px solid var(--outline-subtle); }
+     .contrast-examples { margin-top: 1rem; }
+     .contrast-example p { margin-bottom: 1rem; }
+     .component-demos { margin-top: 1rem; }
+     .component-demo h3 { margin-bottom: 1rem; }
+     .component-demo .button { margin-right: 0.5rem; margin-bottom: 0.5rem; }
+     .component-demo .input-field, .component-demo select, .component-demo textarea { margin-bottom: 0.5rem; }
+     .component-demo .card { margin-bottom: 1rem; }
+     #theme-toggle { margin-bottom: 1rem; background: var(--accent); color: var(--text-on-accent); border: none; padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; }
+     .layout-demo { background: var(--surface-muted); padding: 1rem; border-radius: var(--radius-md); }
+      .cq-demo { container-type: inline-size; container-name: demo; }
+      @container demo (min-width: 400px) { .cq-demo .responsive-card { flex-direction: row; } }
+      @container demo (min-width: 600px) { .cq-demo .responsive-card { flex-direction: column; } }
+      .contrast-color {
+        /* Fallback */
+        background: hsl(0 0 0 / 50%);
+        color: white;
+
+        @supports (color: oklch(from red l c h)) {
+          --l: clamp(0, (l / var(--l-threshold, 0.65) - 1) * -infinity, 1);
+          color: oklch(from var(--color) var(--l) 0 h);
+          background: none;
+        }
+      }
+      /* Set accent-color for form controls */
+      accent-color: var(--accent);
+    /* Light mode text colors relative to base */
+    html:not([data-theme="dark"]) {
+      --text-l: clamp(0, (l / var(--l-threshold, 0.65) - 1) * -infinity, 1);
+      --text-default: oklch(from var(--base) var(--text-l) c h);
+      --text-subtle: oklch(from var(--base) calc(var(--text-l) + var(--text-subtle-delta, -0.1)) c h);
+      --text-muted: oklch(from var(--base) calc(var(--text-l) - 0.2) c h);
+      --text-overt: oklch(from var(--base) calc(var(--text-l) + 0.1) c h);
+      --outline-default: oklch(from var(--base) calc(l + 0.05) c h);
+      --outline-subtle: oklch(from var(--base) calc(l + 0.02) c h);
+      --surface-subtle: oklch(from var(--base) calc(l + var(--surface-subtle-delta, 0.02)) c h);
+      --surface-muted: oklch(from var(--base) calc(l - 0.02) c h);
+      --highlight-bg-subtle: oklch(from var(--base) calc(l + 0.05) c h);
+    }
+      /* Dark mode styles */
+     html[data-theme="dark"] {
+       --accent-l: 70%; --accent-c: 0.18;
+       --surface-c: 0.02; --l-threshold: 0.6;
+       --base: oklch(var(--base-l, 22%) calc(var(--surface-c) * 0.9) var(--neutral-h));
+       --bedrock: oklch(95% calc(var(--surface-c) * 0.7) var(--neutral-h));
+       --surface-muted: oklch(20% calc(var(--surface-c) * 0.5) var(--neutral-h));
+       --surface-subtle: oklch(21% calc(var(--surface-c) * 0.7) var(--neutral-h));
+       --surface-default: oklch(25% var(--surface-c) var(--neutral-h));
+       --surface-overt: oklch(30% calc(var(--surface-c) * 1.2) var(--neutral-h));
+       --text-muted: oklch(65% calc(var(--surface-c) * 1.2) var(--neutral-h) / 0.8);
+       --text-subtle: oklch(75% calc(var(--surface-c) * 1.0) var(--neutral-h));
+       --text-default: oklch(88% calc(var(--surface-c) * 0.8) var(--neutral-h));
+       --text-overt: oklch(95% calc(var(--surface-c) * 0.6) var(--neutral-h));
+       --outline-subtle: oklch(from var(--base) calc(l + var(--l-delta-5)) c h);
+       --outline-default: oklch(from var(--base) calc(l + var(--l-delta-6)) calc(c + var(--c-delta-1)) h);
+       --outline-overt: oklch(from var(--base) calc(l + var(--l-delta-7)) calc(c + var(--c-delta-2)) h);
+       --highlight-bg-muted: oklch(from var(--base) calc(l + var(--l-delta-1)) c h);
+       --highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3)) c h);
+       --success-l: 65%; --warning-l: 75%; --error-l: 70%; --info-l: 75%;
+       --success: oklch(var(--success-l) var(--success-c) var(--success-h));
+       --warning: oklch(var(--warning-l) var(--warning-c) var(--warning-h));
+       --error: oklch(var(--error-l) var(--error-c) var(--error-h));
+       --info: oklch(var(--info-l) var(--info-c) var(--info-h));
+       --text-success: var(--success); --text-warning: var(--warning); --text-error: var(--error); --text-info: var(--info);
+     }
+   </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Palette, Layouts & Container Queries Demo</h1>
+    <button onclick="toggleTheme()" id="theme-toggle">Switch to Dark Mode</button>
+
+     <!-- Palette Customizer -->
+     <section class="demo-section">
+       <h2>Customizable Palette</h2>
+       <p>Adjust parameters for each color scale. Sliders control the base properties, and swatches show the full scale.</p>
+       <div class="scale-customizers">
+         <div class="scale-group">
+           <h3>Accent Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="accent-h" min="0" max="360" value="220" oninput="updateVar('--accent-h', this.value)"></label>
+             <label>Lightness: <input type="range" id="accent-l" min="0" max="100" value="60" oninput="updateVar('--accent-l', this.value + '%')"></label>
+             <label>Chroma: <input type="range" id="accent-c" min="0" max="50" value="15" oninput="updateVar('--accent-c', this.value / 100)"></label>
+           </div>
+           <div class="swatches" id="accent-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Secondary Scale</h3>
+           <div class="customizer">
+             <label>Hue Shift: <input type="range" id="secondary-hue-shift" min="-180" max="180" value="60" oninput="updateVar('--secondary-hue-shift', this.value)"></label>
+           </div>
+           <div class="swatches" id="secondary-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Tertiary Scale</h3>
+           <div class="customizer">
+             <label>Hue Shift: <input type="range" id="tertiary-hue-shift" min="-180" max="180" value="-90" oninput="updateVar('--tertiary-hue-shift', this.value)"></label>
+           </div>
+           <div class="swatches" id="tertiary-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Neutral Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="neutral-h" min="0" max="360" value="220" oninput="updateVar('--neutral-h', this.value)"></label>
+             <label>Chroma: <input type="range" id="neutral-c" min="0" max="10" value="1" oninput="updateVar('--neutral-c', this.value / 100)"></label>
+           </div>
+           <div class="swatches" id="neutral-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Gray Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="gray-h" min="0" max="360" value="220" oninput="updateVar('--gray-h', this.value)"></label>
+           </div>
+           <div class="swatches" id="gray-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Success Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="success-h" min="0" max="360" value="160" oninput="updateVar('--success-h', this.value)"></label>
+           </div>
+           <div class="swatches" id="success-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Warning Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="warning-h" min="0" max="360" value="35" oninput="updateVar('--warning-h', this.value)"></label>
+           </div>
+           <div class="swatches" id="warning-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Error Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="error-h" min="0" max="360" value="355" oninput="updateVar('--error-h', this.value)"></label>
+           </div>
+           <div class="swatches" id="error-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Info Scale</h3>
+           <div class="customizer">
+             <label>Hue: <input type="range" id="info-h" min="0" max="360" value="200" oninput="updateVar('--info-h', this.value)"></label>
+           </div>
+           <div class="swatches" id="info-swatches"></div>
+         </div>
+         <div class="scale-group">
+           <h3>Global Settings</h3>
+           <div class="customizer">
+             <label>Surface Chroma: <input type="range" id="surface-c" min="0" max="10" value="1.5" oninput="updateVar('--surface-c', this.value / 100)"></label>
+             <label>Base Lightness: <input type="range" id="base-l" min="0" max="100" value="97.5" oninput="updateVar('--base-l', this.value + '%')"></label>
+             <label>Contrast Factor: <input type="range" id="contrast-factor" min="0.5" max="2" step="0.1" value="1" oninput="updateVar('--contrast-factor', this.value)"></label>
+             <label>L Threshold: <input type="range" id="l-threshold" min="0" max="1" step="0.01" value="0.65" oninput="updateVar('--l-threshold', this.value)"></label>
+             <label>Text Subtle Delta: <input type="range" id="text-subtle-delta" min="-0.5" max="0.5" step="0.01" value="-0.1" oninput="updateVar('--text-subtle-delta', this.value)"></label>
+             <label>Surface Subtle Delta: <input type="range" id="surface-subtle-delta" min="-0.1" max="0.1" step="0.01" value="0.02" oninput="updateVar('--surface-subtle-delta', this.value)"></label>
+           </div>
+         </div>
+       </div>
+       <button onclick="resetPalette()">Reset to Defaults</button>
+     </section>
+
+
+
+    <!-- Text Contrast Examples -->
+    <section class="demo-section">
+      <h2>Text Contrast Examples</h2>
+      <p>Examples of text on different backgrounds, using auto-contrast for readability.</p>
+      <div class="contrast-examples" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+         <div class="contrast-example" style="background: var(--accent); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-accent);">Text on Accent Background</p>
+           <button class="button" style="--bg: var(--secondary);">Button on Accent</button>
+         </div>
+         <div class="contrast-example" style="background: var(--secondary); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-secondary);">Text on Secondary Background</p>
+           <button class="button" style="--bg: var(--tertiary);">Button on Secondary</button>
+         </div>
+         <div class="contrast-example" style="background: var(--tertiary); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-tertiary);">Text on Tertiary Background</p>
+           <button class="button" style="--bg: var(--accent);">Button on Tertiary</button>
+         </div>
+         <div class="contrast-example" style="background: var(--surface-default); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-default);">Text on Surface Default</p>
+           <button class="button" style="--bg: var(--accent);">Button on Surface</button>
+         </div>
+         <div class="contrast-example" style="background: var(--success); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-success);">Text on Success Background</p>
+           <button class="button" style="--bg: var(--surface-default);">Button on Success</button>
+         </div>
+         <div class="contrast-example" style="background: var(--warning); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-warning);">Text on Warning Background</p>
+           <button class="button" style="--bg: var(--surface-default);">Button on Warning</button>
+         </div>
+         <div class="contrast-example" style="background: var(--error); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-error);">Text on Error Background</p>
+           <button class="button" style="--bg: var(--surface-default);">Button on Error</button>
+         </div>
+         <div class="contrast-example" style="background: var(--info); padding: 1rem; border-radius: var(--radius-md);">
+           <p style="color: var(--text-on-info);">Text on Info Background</p>
+           <button class="button" style="--bg: var(--surface-default);">Button on Info</button>
+         </div>
+      </div>
+    </section>
+
+    <!-- Variable Display -->
+    <section class="demo-section">
+      <h2>All CSS Variables</h2>
+      <p>Live display of key CSS variables. Use customizers to see changes.</p>
+      <div class="var-categories">
+        <div class="var-category">
+          <h3>Color Hues & Base</h3>
+          <dl class="var-display">
+            <dt>--accent-h</dt><dd id="var-accent-h"></dd>
+            <dt>--accent-l</dt><dd id="var-accent-l"></dd>
+            <dt>--accent-c</dt><dd id="var-accent-c"></dd>
+            <dt>--base-l</dt><dd id="var-base-l"></dd>
+            <dt>--surface-c</dt><dd id="var-surface-c"></dd>
+            <dt>--neutral-h</dt><dd id="var-neutral-h"></dd>
+            <dt>--success-h</dt><dd id="var-success-h"></dd>
+            <dt>--warning-h</dt><dd id="var-warning-h"></dd>
+            <dt>--error-h</dt><dd id="var-error-h"></dd>
+            <dt>--info-h</dt><dd id="var-info-h"></dd>
+          </dl>
+        </div>
+        <div class="var-category">
+          <h3>Semantic Colors</h3>
+          <dl class="var-display">
+            <dt>--accent</dt><dd id="var-accent"></dd>
+            <dt>--base</dt><dd id="var-base"></dd>
+            <dt>--surface-default</dt><dd id="var-surface-default"></dd>
+            <dt>--text-default</dt><dd id="var-text-default"></dd>
+            <dt>--outline-default</dt><dd id="var-outline-default"></dd>
+            <dt>--success</dt><dd id="var-success"></dd>
+            <dt>--warning</dt><dd id="var-warning"></dd>
+            <dt>--error</dt><dd id="var-error"></dd>
+            <dt>--info</dt><dd id="var-info"></dd>
+          </dl>
+        </div>
+        <div class="var-category">
+          <h3>Spacing & Sizing</h3>
+          <dl class="var-display">
+            <dt>--space-md</dt><dd id="var-space-md"></dd>
+            <dt>--radius-md</dt><dd id="var-radius-md"></dd>
+            <dt>--font-size-h1</dt><dd id="var-font-size-h1"></dd>
+            <dt>--bodyFontSize</dt><dd id="var-bodyFontSize"></dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Component Demos -->
+    <section class="demo-section">
+      <h2>Component Demos</h2>
+      <p>Interactive demos of components using the customizable variables.</p>
+      <div class="component-demos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+        <div class="component-demo">
+          <h3>Buttons</h3>
+          <button class="button">Default Button</button>
+          <button class="button button-filled-accent">Accent Button</button>
+          <button class="button button-filled-success">Success Button</button>
+          <button class="button button-outline">Outline Button</button>
+        </div>
+        <div class="component-demo">
+          <h3>Form Elements</h3>
+          <input class="input-field" placeholder="Input Field" />
+          <select class="input-field"><option>Select Option</option></select>
+          <textarea class="input-field" placeholder="Textarea"></textarea>
+        </div>
+        <div class="component-demo">
+          <h3>Cards</h3>
+          <div class="card">
+            <h4>Card Title</h4>
+            <p>This card uses surface-default background and text-default color.</p>
+            <button class="button button-small">Action</button>
+          </div>
+        </div>
+        <div class="component-demo">
+          <h3>Table</h3>
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Value</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Item 1</td><td>100</td><td><span class="text-success">Active</span></td></tr>
+              <tr><td>Item 2</td><td>200</td><td><span class="text-warning">Pending</span></td></tr>
+              <tr><td>Item 3</td><td>300</td><td><span class="text-error">Error</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout Demos -->
+    <section class="demo-section">
+      <h2>Layout Demos</h2>
+      <div class="layout-demo">
+        <h3>Grid Layout</h3>
+        <div class="l-grid" style="--l-grid-min-item-size: 10rem;">
+          <div class="bg-surface-subtle p-md rounded-md">Grid Item 1</div>
+          <div class="bg-surface-subtle p-md rounded-md">Grid Item 2</div>
+          <div class="bg-surface-subtle p-md rounded-md">Grid Item 3</div>
+          <div class="bg-surface-subtle p-md rounded-md">Grid Item 4</div>
+        </div>
+      </div>
+      <div class="layout-demo">
+        <h3>Sidebar Layout</h3>
+        <div class="l-sidebar">
+          <main class="bg-surface-subtle p-md rounded-md">Main Content</main>
+          <aside class="l-sidebar__aside bg-surface-muted p-md rounded-md">Sidebar</aside>
+        </div>
+      </div>
+      <div class="layout-demo">
+        <h3>Stack Layout</h3>
+        <div class="l-stack gap-lg">
+          <div class="bg-surface-subtle p-md rounded-md">Stack Item 1</div>
+          <div class="bg-surface-subtle p-md rounded-md">Stack Item 2</div>
+          <div class="bg-surface-subtle p-md rounded-md">Stack Item 3</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Container Queries Demo -->
+    <section class="demo-section">
+      <h2>Container Queries</h2>
+      <p>Resize the container to see responsive behavior.</p>
+      <div class="cq-demo" style="resize: horizontal; overflow: auto; min-width: 200px; max-width: 800px;">
+        <div class="responsive-card bg-surface-default p-md rounded-md shadow-md" style="display: flex; flex-direction: column; gap: 1rem;">
+          <h3>Responsive Card</h3>
+          <p>This card adapts based on container width.</p>
+          <button class="button button-filled-accent">Action</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function updateVar(name, value) {
+      document.documentElement.style.setProperty(name, value);
+      displayVars();
+      setTimeout(generateSwatches, 50);
+    }
+    function displayVars() {
+      // Color Hues & Base
+      document.getElementById('var-accent-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--accent-h');
+      document.getElementById('var-accent-l').textContent = getComputedStyle(document.documentElement).getPropertyValue('--accent-l');
+      document.getElementById('var-accent-c').textContent = getComputedStyle(document.documentElement).getPropertyValue('--accent-c');
+      document.getElementById('var-base-l').textContent = getComputedStyle(document.documentElement).getPropertyValue('--base-l');
+      document.getElementById('var-surface-c').textContent = getComputedStyle(document.documentElement).getPropertyValue('--surface-c');
+      document.getElementById('var-neutral-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--neutral-h');
+      document.getElementById('var-success-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--success-h');
+      document.getElementById('var-warning-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--warning-h');
+      document.getElementById('var-error-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--error-h');
+      document.getElementById('var-info-h').textContent = getComputedStyle(document.documentElement).getPropertyValue('--info-h');
+      // Semantic Colors
+      document.getElementById('var-accent').textContent = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+      document.getElementById('var-base').textContent = getComputedStyle(document.documentElement).getPropertyValue('--base');
+      document.getElementById('var-surface-default').textContent = getComputedStyle(document.documentElement).getPropertyValue('--surface-default');
+      document.getElementById('var-text-default').textContent = getComputedStyle(document.documentElement).getPropertyValue('--text-default');
+      document.getElementById('var-outline-default').textContent = getComputedStyle(document.documentElement).getPropertyValue('--outline-default');
+      document.getElementById('var-success').textContent = getComputedStyle(document.documentElement).getPropertyValue('--success');
+      document.getElementById('var-warning').textContent = getComputedStyle(document.documentElement).getPropertyValue('--warning');
+      document.getElementById('var-error').textContent = getComputedStyle(document.documentElement).getPropertyValue('--error');
+      document.getElementById('var-info').textContent = getComputedStyle(document.documentElement).getPropertyValue('--info');
+      // Spacing & Sizing
+      document.getElementById('var-space-md').textContent = getComputedStyle(document.documentElement).getPropertyValue('--space-md');
+      document.getElementById('var-radius-md').textContent = getComputedStyle(document.documentElement).getPropertyValue('--radius-md');
+      document.getElementById('var-font-size-h1').textContent = getComputedStyle(document.documentElement).getPropertyValue('--font-size-h1');
+      document.getElementById('var-bodyFontSize').textContent = getComputedStyle(document.documentElement).getPropertyValue('--bodyFontSize');
+    }
+      function generateSwatches() {
+        const baseLightness = [0.98, 0.95, 0.90, 0.82, 0.74, 0.66, 0.58, 0.50, 0.42, 0.34, 0.26, 0.18, 0.10];
+        const chroma = [0.02, 0.02, 0.04, 0.06, 0.08, 0.10, 0.12, 0.15, 0.18, 0.22, 0.26, 0.30, 0.37];
+        const root = document.documentElement;
+        const contrastFactor = parseFloat(getComputedStyle(root).getPropertyValue('--contrast-factor')) || 1;
+        const lightness = baseLightness.map(l => (l - 0.5) * contrastFactor + 0.5);
+        const accentHue = parseFloat(getComputedStyle(root).getPropertyValue('--accent-h')) || 220;
+        const neutralChroma = parseFloat(getComputedStyle(root).getPropertyValue('--neutral-c')) || 0.01;
+        const secondaryHue = (accentHue + parseFloat(getComputedStyle(root).getPropertyValue('--secondary-hue-shift')) || 60) % 360;
+        const tertiaryHue = (accentHue + parseFloat(getComputedStyle(root).getPropertyValue('--tertiary-hue-shift')) || -90 + 360) % 360;
+        const grayHue = parseFloat(getComputedStyle(root).getPropertyValue('--gray-h')) || 220;
+        const scales = [
+          { name: 'accent', hue: accentHue, useNeutralChroma: false },
+          { name: 'secondary', hue: secondaryHue, useNeutralChroma: false },
+          { name: 'tertiary', hue: tertiaryHue, useNeutralChroma: false },
+          { name: 'neutral', hue: parseFloat(getComputedStyle(root).getPropertyValue('--neutral-h')) || 220, useNeutralChroma: true },
+          { name: 'gray', hue: grayHue, useNeutralChroma: true },
+          { name: 'success', hue: parseFloat(getComputedStyle(root).getPropertyValue('--success-h')) || 160, useNeutralChroma: false },
+          { name: 'warning', hue: parseFloat(getComputedStyle(root).getPropertyValue('--warning-h')) || 35, useNeutralChroma: false },
+          { name: 'error', hue: parseFloat(getComputedStyle(root).getPropertyValue('--error-h')) || 355, useNeutralChroma: false },
+          { name: 'info', hue: parseFloat(getComputedStyle(root).getPropertyValue('--info-h')) || 200, useNeutralChroma: false }
+        ];
+       scales.forEach(scale => {
+         const container = document.getElementById(`${scale.name}-swatches`);
+         if (container) {
+           container.innerHTML = '';
+           for (let i = 0; i <= 12; i++) {
+             const swatch = document.createElement('div');
+             swatch.className = 'swatch';
+             const baseC = scale.useNeutralChroma ? neutralChroma : chroma[i];
+             const c = Math.min(baseC, i < 2 ? 0.03 : baseC); // clamp for light colors
+             const color = `oklch(${lightness[i]} ${c} ${scale.hue})`;
+             swatch.style.backgroundColor = color;
+             swatch.title = `${scale.name}-${i}: ${color}`;
+              const label = document.createElement('span');
+              label.textContent = i;
+              label.style.fontSize = '0.7rem';
+              label.className = 'contrast-color';
+              label.style.setProperty('--color', color);
+              swatch.appendChild(label);
+             container.appendChild(swatch);
+           }
+         }
+       });
+     }
+    function resetPalette() {
+       document.getElementById('accent-h').value = 220;
+       document.getElementById('accent-l').value = 60;
+       document.getElementById('accent-c').value = 15;
+       document.getElementById('secondary-hue-shift').value = 60;
+       document.getElementById('tertiary-hue-shift').value = -90;
+       document.getElementById('neutral-h').value = 220;
+       document.getElementById('gray-h').value = 220;
+       document.getElementById('success-h').value = 160;
+       document.getElementById('warning-h').value = 35;
+       document.getElementById('error-h').value = 355;
+       document.getElementById('info-h').value = 200;
+        document.getElementById('surface-c').value = 1.5;
+        document.getElementById('base-l').value = 97.5;
+        document.getElementById('neutral-h').value = 220;
+        document.getElementById('neutral-c').value = 1;
+        document.getElementById('text-subtle-delta').value = -0.1;
+        document.getElementById('surface-subtle-delta').value = 0.02;
+        document.getElementById('contrast-factor').value = 1;
+      document.getElementById('space-md').value = 1;
+      document.getElementById('radius-md').value = 6;
+      document.getElementById('font-size-h1').value = 2.5;
+      document.getElementById('bodyFontSize').value = 16;
+       updateVar('--accent-h', 220);
+       updateVar('--accent-l', '60%');
+       updateVar('--accent-c', 0.15);
+       updateVar('--secondary-hue-shift', 60);
+       updateVar('--tertiary-hue-shift', -90);
+       updateVar('--neutral-h', 220);
+       updateVar('--gray-h', 220);
+       updateVar('--success-h', 160);
+       updateVar('--warning-h', 35);
+       updateVar('--error-h', 355);
+       updateVar('--info-h', 200);
+        updateVar('--surface-c', 0.015);
+        updateVar('--base-l', '97.5%');
+        updateVar('--neutral-h', 220);
+        updateVar('--neutral-c', 0.01);
+       updateVar('--text-subtle-delta', -0.1);
+       updateVar('--surface-subtle-delta', 0.02);
+        updateVar('--contrast-factor', 1);
+      updateVar('--space-md', '1rem');
+      updateVar('--radius-md', '6px');
+      updateVar('--font-size-h1', '2.5rem');
+      updateVar('--bodyFontSize', '16px');
+    }
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+      }
+    }
+     resetPalette();
+  </script>
+</body>
+</html>

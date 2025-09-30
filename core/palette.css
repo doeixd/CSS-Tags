@@ -1,0 +1,7 @@
+ /* ================================================ */
+ /* ==               @layer palette               == */
+ /* ================================================ */
+@import url("core/palette-base.css") layer(palette);
+@import url("core/palette-accent.css") layer(palette);
+@import url("core/palette-feedback.css") layer(palette);
+@import url("core/palette-extended.css") layer(palette);

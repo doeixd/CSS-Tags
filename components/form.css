@@ -1,0 +1,119 @@
+/**
+ * form.css
+ *
+ * Accessible form components with design token integration.
+ * ------------------------------------------------------------------------------
+ * @feature {@scope} - Isolates form element styles.
+ * @feature {CSS Nesting} - Organized styles.
+ * @feature {Focus Management} - Enhanced focus states.
+ */
+
+@scope (form-input, form-button, form-select, form-textarea) {
+  /* Base form element styles */
+  :scope {
+    font-family: inherit;
+    font-size: var(--font-size-base, 1rem);
+    line-height: var(--line-height-normal, 1.5);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  /* Input styles */
+  form-input :scope, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="url"], input[type="search"] {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    background-color: var(--bg, var(--surface-default));
+    color: var(--fg, var(--text-default));
+    border: var(--border-width, 1px) solid var(--outline-default);
+    border-radius: var(--radius-md, 6px);
+    outline: none;
+
+    &:focus {
+      border-color: var(--outline-focus);
+      box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+    }
+
+    &:hover:not(:focus) {
+      border-color: var(--outline-overt);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+
+  /* Button styles */
+  form-button :scope, button, input[type="submit"], input[type="button"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-lg, 1.5rem);
+    background-color: var(--bg, var(--accent));
+    color: var(--fg, var(--text-on-accent, white));
+    border: none;
+    border-radius: var(--radius-md, 6px);
+    font-weight: var(--font-weight-medium, 500);
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out;
+    text-decoration: none;
+
+    &:focus {
+      outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset, 2px);
+    }
+
+    &:hover {
+      background-color: var(--accent-overt);
+    }
+
+    &:active {
+      transform: scale(0.98);
+      background-color: var(--accent-muted);
+    }
+  }
+
+  /* Select styles */
+  form-select :scope, select {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    background-color: var(--surface-default);
+    color: var(--text-default);
+    border: var(--border-width, 1px) solid var(--outline-default);
+    border-radius: var(--radius-md, 6px);
+    cursor: pointer;
+
+    &:focus {
+      border-color: var(--outline-focus);
+      box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+    }
+  }
+
+  /* Textarea styles */
+  form-textarea :scope, textarea {
+    display: block;
+    width: 100%;
+    min-height: 6rem;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    background-color: var(--surface-default);
+    color: var(--text-default);
+    border: var(--border-width, 1px) solid var(--outline-default);
+    border-radius: var(--radius-md, 6px);
+    resize: vertical;
+
+    &:focus {
+      border-color: var(--outline-focus);
+      box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+    }
+  }
+}
+
+/* Utility classes for form variants */
+.btn-primary { --bg: var(--accent); --fg: var(--text-on-accent); }
+.btn-secondary { --bg: var(--secondary); --fg: var(--text-on-secondary); }
+.btn-success { --bg: var(--success); --fg: var(--text-on-success); }
+.btn-warning { --bg: var(--warning); --fg: var(--text-on-warning); }
+.btn-error { --bg: var(--error); --fg: var(--text-on-error); }
+
+.input-error { border-color: var(--outline-error); }
+.input-success { border-color: var(--outline-success); }

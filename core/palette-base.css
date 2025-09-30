@@ -1,0 +1,19 @@
+ /* Additional Hues */
+ --hue-brown: 30;
+ --hue-gold: 50;
+ --hue-olive: 95;
+ --hue-magenta: 320;
+ /* Max Chroma Clamps */
+ --clamp-max-c-0: var(--max-chroma-0); --clamp-max-c-1: var(--max-chroma-1);
+ --clamp-max-c-2: var(--max-chroma-2); --clamp-max-c-3: var(--max-chroma-3);
+ --clamp-max-c-4: var(--max-chroma-4); --clamp-max-c-5: var(--max-chroma-5);
+ --clamp-max-c-6: var(--max-chroma-6);
+ --clamp-error-max-c-2: calc(var(--max-chroma-2) * 1.1); --clamp-error-max-c-3: calc(var(--max-chroma-3) * 1.1); --clamp-error-max-c-4: calc(var(--max-chroma-4) * 1.1);
+ --clamp-orange-max-c-2: calc(var(--max-chroma-2) * 1.1); --clamp-orange-max-c-3: calc(var(--max-chroma-3) * 1.1); --clamp-orange-max-c-4: calc(var(--max-chroma-4) * 1.1);
+ --clamp-neutral-max-c-0: calc(var(--max-chroma-0) * 0.5); --clamp-neutral-max-c-1: calc(var(--max-chroma-1) * 0.5); --clamp-neutral-max-c-2: calc(var(--max-chroma-2) * 0.5);
+ --clamp-neutral-max-c-3: calc(var(--max-chroma-3) * 0.5); --clamp-neutral-max-c-4: calc(var(--max-chroma-4) * 0.5); --clamp-neutral-max-c-5: calc(var(--max-chroma-5) * 0.5); --clamp-neutral-max-c-6: calc(var(--max-chroma-6) * 0.5);
+
+ /* Gray Scale */
+ --gray-0: oklch(var(--scale-l-0) 0 0); --gray-1: oklch(var(--scale-l-1) 0 0); --gray-2: oklch(var(--scale-l-2) 0 0); --gray-3: oklch(var(--scale-l-3) 0 0); --gray-4: oklch(var(--scale-l-4) 0 0); --gray-5: oklch(var(--scale-l-5) 0 0); --gray-6: oklch(var(--scale-l-6) 0 0); --gray-7: oklch(var(--scale-l-7) 0 0); --gray-8: oklch(var(--scale-l-8) 0 0); --gray-9: oklch(var(--scale-l-9) 0 0); --gray-10: oklch(var(--scale-l-10) 0 0); --gray-11: oklch(var(--scale-l-11) 0 0); --gray-12: oklch(var(--scale-l-12) 0 0);
+ /* Neutral Scale */
+ --neutral-0: oklch(var(--scale-l-0) min(var(--scale-c-0), var(--clamp-neutral-max-c-0)) var(--neutral-h)); --neutral-1: oklch(var(--scale-l-1) min(var(--scale-c-1), var(--clamp-neutral-max-c-0)) var(--neutral-h)); --neutral-2: oklch(var(--scale-l-2) min(var(--scale-c-1), var(--clamp-neutral-max-c-1)) var(--neutral-h)); --neutral-3: oklch(var(--scale-l-3) min(var(--scale-c-1), var(--clamp-neutral-max-c-1)) var(--neutral-h)); --neutral-4: oklch(var(--scale-l-4) min(var(--scale-c-1), var(--clamp-neutral-max-c-2)) var(--neutral-h)); --neutral-5: oklch(var(--scale-l-5) min(var(--scale-c-2), var(--clamp-neutral-max-c-2)) var(--neutral-h)); --neutral-6: oklch(var(--scale-l-6) min(var(--scale-c-2), var(--clamp-neutral-max-c-3)) var(--neutral-h)); --neutral-7: oklch(var(--scale-l-7) min(var(--scale-c-2), var(--clamp-neutral-max-c-3)) var(--neutral-h)); --neutral-8: oklch(var(--scale-l-8) min(var(--scale-c-2), var(--clamp-neutral-max-c-4)) var(--neutral-h)); --neutral-9: oklch(var(--scale-l-9) min(var(--scale-c-2), var(--clamp-neutral-max-c-4)) var(--neutral-h)); --neutral-10: oklch(var(--scale-l-10) min(var(--scale-c-1), var(--clamp-neutral-max-c-5)) var(--neutral-h)); --neutral-11: oklch(var(--scale-l-11) min(var(--scale-c-1), var(--clamp-neutral-max-c-5)) var(--neutral-h)); --neutral-12: oklch(var(--scale-l-12) min(var(--scale-c-1), var(--clamp-neutral-max-c-6)) var(--neutral-h));

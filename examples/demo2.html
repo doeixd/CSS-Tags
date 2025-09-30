@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Tags Demo & Kitchen Sink</title>
+
+    <!-- 
+      IMPORT THE LIBRARY 
+      Assuming this file is in a /demo folder and the source is in /src 
+    -->
+    <link rel="stylesheet" href="../index.css">
+
+    <!-- Optional: Inter font for a clean look (the reset defaults to system-ui) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.wght.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Demo-specific styles just to make the sections clear */
+        section { scroll-margin-top: 2rem; }
+        hr { margin-block: 3rem; border-color: var(--outline-subtle); }
+        h2 { color: var(--theme-primary); }
+        .demo-swatch { width: 50px; height: 50px; border-radius: var(--radius-md); border: 1px solid var(--outline-default); }
+    </style>
+</head>
+<body>
+
+    <!-- 
+      GLOBAL BREAKPOINT STATE 
+      The <body> is already a style container (via base.css).
+      <container> elements will react to the body's --breakpoint-active state.
+    -->
+
+    <layout-center max-width="1200px" padding-y="3rem">
+        <header>
+            <layout-stack gap="1rem">
+                <h1>CSS Tags <badge status="info" size="lg">v1.0.0</badge></h1>
+                <p class="text-subtle">A declarative, HTML-first CSS library using custom elements. This page demonstrates every component and feature.</p>
+                
+                <!-- THEME SWITCHER -->
+                <flex gap="1rem" align="center" wrap="wrap">
+                    <strong>Try a Theme:</strong>
+                    <button onclick="setTheme('')">Default (Violet)</button>
+                    <button onclick="setTheme('ocean')">Ocean</button>
+                    <button onclick="setTheme('sunrise')">Sunrise</button>
+                    <button onclick="setTheme('forest')">Forest</button>
+                </flex>
+            </layout-stack>
+        </header>
+
+        <hr>
+
+        <main>
+             <layout-stack gap="4rem">
+
+                <!-- ================================================================== -->
+                <!-- 1. THE UTILITY BOX (<box>) -->
+                <!-- ================================================================== -->
+                <section>
+                     <h2>1. The Utility Box (<code>&lt;box&gt;</code>)</h2>
+                     <p>The swiss army knife. Control CSS properties directly via attributes, powered by the modern <code>attr()</code> function.</p>
+                    
+                    <layout-stack gap="1rem">
+                        <!-- Simple Spacer -->
+                        <box bg="var(--surface-muted)" p="1rem">I'm a basic box with padding.</box>
+                        <box height="1rem"></box> <!-- Acts as a spacer -->
+                        
+                        <!-- Combining multiple attributes -->
+                        <box 
+                            display="flex" 
+                            align="center"
+                            p="2rem" 
+                            bg="var(--surface-info)" 
+                            radius="12px"
+                            border="2px dashed var(--info)"
+                        >
+                           <span style="font-size: 2rem; margin-right: 1rem;">ℹ️</span>
+                           <div>
+                               <strong>Styled entirely via attributes.</strong>
+                               <p>Padding, background, radius, and border are all set in HTML.</p>
+                           </div>
+                        </box>
+
+                         <!-- Using raw color values in attr() -->
+                         <box 
+                            p="1rem" 
+                            bg="oklch(0.6 0.18 30)" 
+                            color="white" 
+                            radius="8px"
+                            align="center"
+                        >
+                             I used <code>bg="oklch(0.6 0.18 30)"</code>.
+                        </box>
+                    </layout-stack>
+                </section>
+
+                <!-- ================================================================== -->
+                <!-- 2. LAYOUT PRIMITIVES (<grid>, <flex>) -->
+                <!-- ================================================================== -->
+                <section>
+                    <h2>2. Layout Primitives</h2>
+                    
+                     <h3><code>&lt;flex&gt;</code></h3>
+                    <box bg="var(--surface-subtle)" p="1rem" radius="8px">
+                        <flex justify="space-between" align="center" gap="1rem">
+                            <strong>Logo</strong>
+                            <flex gap="1rem">
+                                <a href="#">Home</a>
+                                <a href="#">About</a>
+                                <a href="#">Contact</a>
+                            </flex>
+                            <button>Sign In</button>
+                        </flex>
+                    </box>
+
+                     <h3><code>&lt;grid&gt;</code> with Named Areas</h3>
+                    <box bg="var(--surface-subtle)" p="1rem" radius="8px">
+                        <grid 
+                            gap="1rem"
+                            columns="200px 1fr"
+                            areas="'header header' 'sidebar main' 'footer footer'"
+                        >
+                            <box area="header" bg="var(--surface-muted)" p="1rem">Header</box>
+                            <box area="sidebar" bg="var(--surface-muted)" p="1rem">Sidebar</box>
+                            <box area="main" bg="var(--surface-default)" p="1rem" style="min-height: 200px;">Main Content</box>
+                            <box area="footer" bg="var(--surface-muted)" p="1rem">Footer</box>
+                        </grid>
+                    </box>
+                </section>
+
+                 <!-- ================================================================== -->
+                <!-- 3. THE EVERY LAYOUT SYSTEM -->
+                <!-- ================================================================== -->
+                <section>
+                    <h2>3. The Layout System</h2>
+                    <p>Composable layout patterns as custom elements.</p>
+
+                    <layout-grid min-item-size="400px" gap="2rem">
+                        
+                        <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3><code>&lt;layout-stack&gt;</code></h3>
+                            <p>Vertical rhythm.</p>
+                            <layout-stack gap="1rem">
+                                <box bg="var(--surface-default)" p="0.5rem">Item 1</box>
+                                <box bg="var(--surface-default)" p="0.5rem">Item 2</box>
+                                <box bg="var(--surface-default)" p="0.5rem">Item 3</box>
+                            </layout-stack>
+                        </box>
+
+                        <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3><code>&lt;layout-cluster&gt;</code></h3>
+                            <p>Wrapping groups of items.</p>
+                            <layout-cluster gap="0.5rem">
+                                <chip>UI Design</chip>
+                                <chip>UX Research</chip>
+                                <chip>CSS</chip>
+                                <chip>HTML</chip>
+                                <chip>Accessibility</chip>
+                                <chip>JavaScript</chip>
+                            </layout-cluster>
+                        </box>
+
+                        <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3><code>&lt;layout-split&gt;</code></h3>
+                            <p>Splits at a breakpoint (resize window to see it stack).</p>
+                            <layout-split fraction="1fr" breakpoint="600px" gap="1rem">
+                                <box bg="var(--surface-default)" p="1rem">Side A</box>
+                                <box bg="var(--surface-default)" p="1rem">Side B</box>
+                            </layout-split>
+                        </box>
+
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3><code>&lt;layout-switcher&gt;</code></h3>
+                            <p>Switches from horizontal to vertical when cramped.</p>
+                            <layout-switcher threshold="30rem" gap="1rem">
+                                <box bg="var(--surface-default)" p="1rem">Option 1</box>
+                                <box bg="var(--surface-default)" p="1rem">Option 2</box>
+                                <box bg="var(--surface-default)" p="1rem">Option 3</box>
+                            </layout-switcher>
+                        </box>
+
+                    </layout-grid>
+                    
+                    <box bg="var(--surface-subtle)" p="1.5rem" radius="8px" m="2rem 0">
+                          <h3><code>&lt;layout-reel&gt;</code></h3>
+                         <p>Horizontal scrolling container.</p>
+                         <layout-reel gap="1rem" style="padding-block-end: 1rem;">
+                             <card style="width: 250px;"><card-body>Reel Item 1</card-body></card>
+                             <card style="width: 250px;"><card-body>Reel Item 2</card-body></card>
+                             <card style="width: 250px;"><card-body>Reel Item 3</card-body></card>
+                             <card style="width: 250px;"><card-body>Reel Item 4</card-body></card>
+                             <card style="width: 250px;"><card-body>Reel Item 5</card-body></card>
+                         </layout-reel>
+                    </box>
+                </section>
+
+                <!-- ================================================================== -->
+                <!-- 4. UI COMPONENTS -->
+                <!-- ================================================================== -->
+                <section>
+                    <h2>4. UI Components</h2>
+                    
+                     <h3><code>&lt;card&gt;</code> (with Container Queries)</h3>
+                    <p>The same card markup adapts to its container width.</p>
+                    <layout-grid min-item-size="300px" gap="2rem">
+                        <!-- Narrow Container -->
+                        <div style="max-width: 350px;">
+                            <card>
+                                <card-media><img src="https://picsum.photos/id/10/600/400" alt=""></card-media>
+                                <card-body>
+                                    <card-header>Narrow Container</card-header>
+                                    <card-content>I am stacked vertically because my container is < 400px.</card-content>
+                                </card-body>
+                            </card>
+                        </div>
+                        <!-- Wide Container -->
+                        <div>
+                            <card>
+                                <card-media><img src="https://picsum.photos/id/11/600/400" alt=""></card-media>
+                                <card-body>
+                                    <card-header>Wide Container</card-header>
+                                    <card-content>I switched to a horizontal layout because I have enough space.</card-content>
+                                </card-body>
+                            </card>
+                        </div>
+                    </layout-grid>
+
+                    <h3>Alerts</h3>
+                    <layout-stack gap="1rem">
+                        <div class="alert" status="success">
+                            <div class="alert__icon">✅</div>
+                            <div class="alert__title">Success</div>
+                            <div class="alert__body">Changes saved successfully.</div>
+                        </div>
+                        <div class="alert" status="warning">
+                            <div class="alert__icon">⚠️</div>
+                            <div class="alert__title">Warning</div>
+                            <div class="alert__body">Your account is about to expire.</div>
+                        </div>
+                        <div class="alert" status="error" density="compact">
+                            <div class="alert__icon">⛔</div>
+                            <div class="alert__title">Error</div>
+                            <div class="alert__body">Could not connect to server. (Compact density)</div>
+                        </div>
+                         <div class="alert" status="info">
+                            <div class="alert__icon">ℹ️</div>
+                             <div>
+                                <div class="alert__title">Update Available</div>
+                                <div class="alert__body">A new version is ready to install.</div>
+                             </div>
+                             <div class="alert__actions">
+                                <button>Update</button>
+                             </div>
+                        </div>
+                    </layout-stack>
+
+                    <h3>Badges & Chips</h3>
+                    <layout-cluster gap="1rem" align="center">
+                        <badge status="success">Success</badge>
+                        <badge status="warning">Warning</badge>
+                        <badge status="error">Error</badge>
+                        <badge role="overt">Overt Role</badge>
+                        <badge role="subtle" size="sm">Small Subtle</badge>
+                        
+                        <chip>Default Chip</chip>
+                        <chip role="overt">Overt Chip</chip>
+                        <chip removable>Removable Chip</chip>
+                    </layout-cluster>
+
+                    <h3>Lists</h3>
+                    <layout-grid min-item-size="250px" gap="2rem">
+                        <list>
+                            <list-item>Standard bullet item</list-item>
+                            <list-item>Another item</list-item>
+                            <list-divider></list-divider>
+                            <list-item>Item after divider</list-item>
+                        </list>
+                        <list>
+                             <list-item type="→">Custom marker</list-item>
+                             <list-item marker-color="var(--success)">Colored marker</list-item>
+                             <!-- Example using a data URI for a custom icon mask -->
+                             <list-item icon="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E" icon-color="var(--success)">
+                                 Custom Icon via Mask
+                             </list-item>
+                        </list>
+                    </layout-grid>
+
+                    <h3>Carousel</h3>
+                    <!-- Requires carousel.js -->
+                    <carousel loop style="max-width: 600px; margin: auto;">
+                         <carousel-trigger direction="prev">←</carousel-trigger>
+                         <div class="carousel-slides">
+                             <carousel-item>
+                                 <img src="https://picsum.photos/id/20/800/400" alt="" style="width: 100%; display: block;">
+                             </carousel-item>
+                             <carousel-item>
+                                 <img src="https://picsum.photos/id/25/800/400" alt="" style="width: 100%; display: block;">
+                             </carousel-item>
+                             <carousel-item>
+                                  <box bg="var(--surface-info)" p="3rem" height="100%" display="grid" align="center" style="place-content: center;">
+                                      <h3>HTML Content Slide</h3>
+                                  </box>
+                             </carousel-item>
+                         </div>
+                         <carousel-trigger direction="next">→</carousel-trigger>
+                    </carousel>
+
+                </section>
+
+                <!-- ================================================================== -->
+                <!-- 5. INTERACTIVITY (Popover, Tooltip, Modal) -->
+                <!-- ================================================================== -->
+                <section>
+                    <h2>5. Interactivity & Overlays</h2>
+
+                    <h3>Native Popover API</h3>
+                    <p>Uses the browser's native top-layer with entry animations.</p>
+                    <button popovertarget="my-popover">Open Popover</button>
+                    
+                    <div id="my-popover" popover>
+                      <h3>Native Popover</h3>
+                      <p>This is rendered in the top layer. Click outside or hit Esc to close.</p>
+                    </div>
+
+                    <h3>Advanced Tooltip</h3>
+                    <p>Uses Anchor Positioning to tether to its button.</p>
+                    <layout-cluster gap="2rem">
+                        <button popovertarget="tip1">
+                          Top Success
+                          <tooltip id="tip1" position="top" variant="success" arrow>
+                            Anchored to the top!
+                          </tooltip>
+                        </button>
+
+                         <button popovertarget="tip2">
+                          Right Error (with delay)
+                          <tooltip id="tip2" position="right" variant="error" delay="0.5s" arrow>
+                            Anchored to the right!
+                          </tooltip>
+                        </button>
+                    </layout-cluster>
+
+                    <h3>Modal</h3>
+                    <button onclick="document.getElementById('demo-modal').style.display = 'grid'">Open Modal</button>
+                    <!-- Simple modal structure. A real app would toggle display via JS framework -->
+                    <div id="demo-modal" class="modal" style="display: none;">
+                        <div class="modal__panel">
+                            <h2>Modal Title</h2>
+                            <p>This is a basic modal implementation.</p>
+                            <layout-stack gap="1rem" align="end" style="margin-top: 2rem;">
+                                <button onclick="document.getElementById('demo-modal').style.display = 'none'">Close</button>
+                            </layout-stack>
+                        </div>
+                    </div>
+
+                </section>
+
+                 <!-- ================================================================== -->
+                <!-- 6. EXPERIMENTAL FEATURES -->
+                <!-- ================================================================== -->
+                <section>
+                    <h2>6. Experimental Features</h2>
+
+                    <h3>Masonry Layout</h3>
+                    <p>⚠️ <strong>Requires browser flag enabled.</strong> (e.g., Chrome/Edge 120+)</p>
+                    <masonry-layout cols="repeat(auto-fill, minmax(150px, 1fr))" gap="1rem">
+                        <box bg="var(--surface-subtle)" p="1rem" style="height: 100px;">Item 1</box>
+                        <box bg="var(--surface-default)" p="1rem" style="height: 200px;">Item 2</box>
+                        <box bg="var(--surface-subtle)" p="1rem" style="height: 150px;">Item 3</box>
+                        <box bg="var(--surface-default)" p="1rem" style="height: 120px;">Item 4</box>
+                        <box bg="var(--surface-subtle)" p="1rem" style="height: 220px;">Item 5</box>
+                         <box bg="var(--surface-default)" p="1rem" style="height: 100px;">Item 6</box>
+                    </masonry-layout>
+
+                    <h3>View Transitions (SPA Demo)</h3>
+                     <p>Click the buttons to see a smooth transition between "pages" without a reload. <strong>Requires <code>view-transition.js</code></strong>.</p>
+                    
+                    <box border="1px solid var(--outline-default)" radius="12px" style="overflow: hidden; min-height: 300px;">
+                        <view-transitions>
+                            
+                            <!-- PAGE 1 -->
+                            <view-page id="page-1" active>
+                                <box bg="var(--surface-subtle)" p="2rem" height="300px">
+                                    <h2>Page 1</h2>
+                                    <p>This is the first page.</p>
+                                    <nav-trigger to="page-2">
+                                        <button>Go to Page 2 ➡️</button>
+                                    </nav-trigger>
+                                </box>
+                            </view-page>
+
+                            <!-- PAGE 2 -->
+                             <view-page id="page-2">
+                                <box bg="var(--surface-default)" p="2rem" height="300px">
+                                    <h2>Page 2</h2>
+                                    <p>This is the second page. Notice the cross-fade and slide.</p>
+                                     <nav-trigger to="page-1">
+                                        <button>⬅️ Back to Page 1</button>
+                                    </nav-trigger>
+                                </box>
+                            </view-page>
+
+                        </view-transitions>
+                    </box>
+                 </section>
+
+                 <!-- ================================================================== -->
+                 <!-- 7. UTILITIES SHOWCASE -->
+                 <!-- ================================================================== -->
+                 <section>
+                     <h2>7. Utilities Showcase</h2>
+                     <p>Demonstrating utility classes for rapid styling without custom CSS.</p>
+
+                     <layout-stack gap="2rem">
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3>Spacing Utilities</h3>
+                             <layout-cluster gap="1rem">
+                                 <div class="p-xs bg-surface-muted">p-xs</div>
+                                 <div class="p-sm bg-surface-muted">p-sm</div>
+                                 <div class="p-md bg-surface-muted">p-md</div>
+                                 <div class="p-lg bg-surface-muted">p-lg</div>
+                                 <div class="p-xl bg-surface-muted">p-xl</div>
+                             </layout-cluster>
+                         </box>
+
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3>Typography Utilities</h3>
+                             <layout-stack gap="0.5rem">
+                                 <div class="text-xs">text-xs</div>
+                                 <div class="text-sm">text-sm</div>
+                                 <div class="text-base">text-base</div>
+                                 <div class="text-lg">text-lg</div>
+                                 <div class="text-xl">text-xl</div>
+                                 <div class="text-2xl">text-2xl</div>
+                             </layout-stack>
+                         </box>
+
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3>Color Role Utilities</h3>
+                             <layout-grid min-item-size="150px" gap="1rem">
+                                 <div class="bg-surface-muted text-muted p-sm">bg-surface-muted text-muted</div>
+                                 <div class="bg-surface-subtle text-subtle p-sm">bg-surface-subtle text-subtle</div>
+                                 <div class="bg-surface-default text-default p-sm">bg-surface-default text-default</div>
+                                 <div class="bg-surface-overt text-overt p-sm">bg-surface-overt text-overt</div>
+                             </layout-grid>
+                         </box>
+
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3>Display and Layout Utilities</h3>
+                             <layout-cluster gap="1rem">
+                                 <div class="d-flex items-center gap-sm p-sm bg-surface-muted">
+                                     <span>d-flex items-center</span>
+                                 </div>
+                                 <div class="d-grid grid-cols-2 gap-sm p-sm bg-surface-muted" style="width: 100px;">
+                                     <div>Grid</div>
+                                     <div>Item</div>
+                                 </div>
+                                 <div class="pos-relative p-sm bg-surface-muted" style="top: 10px;">pos-relative</div>
+                             </layout-cluster>
+                         </box>
+
+                         <box bg="var(--surface-subtle)" p="1.5rem" radius="8px">
+                             <h3>Interactive State Utilities</h3>
+                             <layout-cluster gap="1rem">
+                                 <button class="hover-highlight p-sm">hover-highlight</button>
+                                 <button class="active-press p-sm">active-press</button>
+                                 <button class="focus-ring p-sm">focus-ring</button>
+                             </layout-cluster>
+                         </box>
+                     </layout-stack>
+                 </section>
+
+              </layout-stack>
+         </main>
+    </layout-center>
+
+     <!-- 
+         Required JavaScript files 
+         Assuming these are in the same ../ directory
+     -->
+     <script src="../carousel.js"></script>
+     <script src="../view-transitions.js"></script>
+    
+    <!-- Simple Theme Switcher Script -->
+    <script>
+        function setTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+        }
+    </script>
+</body>
+</html>
