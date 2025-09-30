@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-Context Styling Demo</title>
+  <link rel="stylesheet" href="../index.css">
+  <style>
+    body { margin: 0; padding: 2rem; }
+    .demo-section { margin: 2rem 0; padding: 1rem; border-radius: 8px; }
+    .demo-item { margin: 1rem 0; padding: 1rem; border-radius: 4px; }
+    .demo-text { margin: 0.5rem 0; }
+  </style>
+</head>
+<body class="bg-base">
+  <h1 class="text-overt">Auto-Context Styling Demo</h1>
+  <p class="text">This demo shows how :has() and :where() selectors automatically apply correct text colors and component styles based on surface backgrounds.</p>
+
+  <!-- Base Background -->
+  <section class="demo-section bg-base border">
+    <h2 class="text-overt">Base Background (.bg-base)</h2>
+    <div class="demo-item bg-base">
+      <p class="text">Automatic text color on base background</p>
+      <p class="text-muted">Muted text automatically styled</p>
+      <button class="button">Button on base</button>
+      <button class="button-primary">Primary button</button>
+    </div>
+  </section>
+
+  <!-- Surface Background -->
+  <section class="demo-section bg-surface border">
+    <h2 class="text-overt">Surface Background (.bg-surface)</h2>
+    <div class="demo-item bg-surface">
+      <p class="text">Automatic text color on surface background</p>
+      <p class="text-muted">Muted text automatically styled</p>
+      <button class="button">Button on surface</button>
+      <button class="button-primary">Primary button</button>
+    </div>
+  </section>
+
+  <!-- Surface Muted Background -->
+  <section class="demo-section bg-surface-muted border">
+    <h2 class="text-overt">Surface Muted Background (.bg-surface-muted)</h2>
+    <div class="demo-item bg-surface-muted">
+      <p class="text">Automatic text color on surface-muted background</p>
+      <p class="text-muted">Muted text automatically styled</p>
+      <button class="button">Button on surface-muted</button>
+      <button class="button-primary">Primary button</button>
+    </div>
+  </section>
+
+  <!-- Surface Subtle Background -->
+  <section class="demo-section bg-surface-subtle border">
+    <h2 class="text-overt">Surface Subtle Background (.bg-surface-subtle)</h2>
+    <div class="demo-item bg-surface-subtle">
+      <p class="text">Automatic text color on surface-subtle background</p>
+      <p class="text-muted">Muted text automatically styled</p>
+      <button class="button">Button on surface-subtle</button>
+      <button class="button-primary">Primary button</button>
+    </div>
+  </section>
+
+  <!-- Surface Overt Background -->
+  <section class="demo-section bg-surface-overt border">
+    <h2 class="text-overt">Surface Overt Background (.bg-surface-overt)</h2>
+    <div class="demo-item bg-surface-overt">
+      <p class="text">Automatic text color on surface-overt background</p>
+      <p class="text-muted">Muted text automatically styled</p>
+      <button class="button">Button on surface-overt</button>
+      <button class="button-primary">Primary button</button>
+    </div>
+  </section>
+
+   <!-- Bedrock Background -->
+   <section class="demo-section bg-bedrock">
+     <h2 class="text-on-bedrock">Bedrock Background (.bg-bedrock)</h2>
+     <div class="demo-item bg-bedrock">
+       <p class="text-on-bedrock">Automatic text color on bedrock background</p>
+       <p class="text-on-bedrock">Muted text automatically styled</p>
+       <p class="text-on-bedrock">Subtle text automatically styled</p>
+       <p class="text-on-bedrock">Overt text automatically styled</p>
+       <button class="button">Button on bedrock</button>
+       <button class="button-primary">Primary button</button>
+     </div>
+   </section>
+
+  <!-- Accent Background -->
+  <section class="demo-section bg-accent border">
+    <h2 class="text-overt">Accent Background (.bg-accent)</h2>
+    <div class="demo-item bg-accent">
+      <p class="text-accent">Automatic accent text on accent background</p>
+      <p class="text">Regular text on accent background</p>
+      <button class="button">Button on accent</button>
+      <button class="button-primary">Primary button on accent</button>
+    </div>
+  </section>
+
+  <!-- Nested Example -->
+  <section class="demo-section bg-base border">
+    <h2 class="text-overt">Nested Surfaces Example</h2>
+    <div class="bg-surface demo-item">
+      <h3 class="text-overt">Surface Card</h3>
+      <p class="text">Text automatically styled for surface</p>
+      <div class="bg-surface-overt demo-item">
+        <h4 class="text-overt">Nested Overt Surface</h4>
+        <p class="text">Text automatically styled for overt surface</p>
+        <button class="button">Button in nested surface</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manual Override Example -->
+  <section class="demo-section bg-surface border">
+    <h2 class="text-overt">Manual Override Example</h2>
+    <div class="demo-item bg-surface">
+      <p class="text">Automatic styling applied</p>
+      <p class="text-on-base">Manually overridden to base text color</p>
+      <button class="button" style="background-color: var(--accent); color: var(--accent-on-base);">Manually styled button</button>
+    </div>
+  </section>
+</body>
+</html>
