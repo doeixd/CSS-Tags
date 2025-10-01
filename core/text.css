@@ -12,6 +12,8 @@
  *   to corresponding CSS variables from the theme and token layers.
  * @feature {Auto-Contrast} - The `contrast` attribute calculates the most
  *   readable text color against a parent's background.
+ * @feature {Line-Clamp} - Supports both single-line (`truncate`) and multi-line
+ *   (`lines="..."`) text truncation.
  */
 
 text {
@@ -90,11 +92,30 @@ text[contrast] {
   --_color: var(--auto-contrast-text);
 }
 
-/* --- Truncation Utility --- */
-/* For single-line text overflow with an ellipsis */
-text[truncate] {
+
+/* ======================================================= */
+/* ==               TRUNCATION LOGIC                    == */
+/* ======================================================= */
+
+/* --- Common styles for all line-clamping --- */
+/* The :is() selector groups the shared properties needed for line-clamp to work. */
+:is(text[truncate], text[lines]) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  text-wrap: initial; /* Disable text-wrap: balance for truncation to work correctly */
+  /* text-wrap: balance or pretty breaks line-clamp, so it MUST be disabled. */
+  text-wrap: initial !important; 
 }
+
+/* --- Single-line truncation (shorthand for lines="1") --- */
+text[truncate] {
+  -webkit-line-clamp: 1;
+}
+
+/* --- Multi-line truncation --- */
+/* Sets the line-clamp value for a predefined set of common line counts. */
+text[lines="2"] { -webkit-line-clamp: 2; }
+text[lines="3"] { -webkit-line-clamp: 3; }
+text[lines="4"] { -webkit-line-clamp: 4; }
+text[lines="5"] { -webkit-line-clamp: 5; }
