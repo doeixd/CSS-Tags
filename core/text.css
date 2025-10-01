@@ -1,0 +1,100 @@
+/**
+ * text.css
+ *
+ * A declarative typography component.
+ * ------------------------------------------------------------------------------
+ * This component provides a declarative way to control typography styles like
+ * size, weight, color, and alignment directly from HTML attributes. It is
+ * deeply integrated with the library's design token system.
+ *
+ * @feature {attr()} - Used for direct property control (e.g., text-align).
+ * @feature {Attribute Selectors} - Maps semantic attributes (e.g., size="lg")
+ *   to corresponding CSS variables from the theme and token layers.
+ * @feature {Auto-Contrast} - The `contrast` attribute calculates the most
+ *   readable text color against a parent's background.
+ */
+
+text {
+  /* --- Base Styles & Defaults --- */
+  --_text-align: attr(align type(string), start);
+  --_text-transform: attr(transform type(string), none);
+  --_font-style: attr(style type(string), normal);
+  --_text-wrap: attr(wrap type(string), balance); /* Use balance for better headlines by default */
+  
+  display: block;
+  margin: 0; /* Consistent with the library's reset */
+  
+  /* --- Apply variables to actual CSS properties --- */
+  /* Use local variables with fallbacks to the library's global tokens */
+  font-size: var(--_fs, var(--font-size-base));
+  font-weight: var(--_fw, var(--font-weight-normal));
+  color: var(--_color, var(--text-default));
+  line-height: var(--_lh, var(--line-height-normal));
+  text-align: var(--_text-align);
+  text-transform: var(--_text-transform);
+  font-style: var(--_font-style);
+  text-wrap: var(--_text-wrap);
+}
+
+/* --- Size Variants (Maps to --font-size tokens) --- */
+text[size="xs"]  { --_fs: var(--font-size-xs); }
+text[size="sm"]  { --_fs: var(--font-size-sm); }
+text[size="base"]{ --_fs: var(--font-size-base); }
+text[size="lg"]  { --_fs: var(--font-size-lg); }
+text[size="xl"]  { --_fs: var(--font-size-xl); }
+text[size="2xl"] { --_fs: var(--font-size-2xl); }
+text[size="3xl"] { --_fs: var(--font-size-3xl); }
+text[size="4xl"] { --_fs: var(--font-size-4xl); }
+
+/* --- Weight Variants (Maps to --font-weight tokens) --- */
+text[weight="thin"]     { --_fw: var(--font-weight-thin); }
+text[weight="light"]    { --_fw: var(--font-weight-light); }
+text[weight="normal"]   { --_fw: var(--font-weight-normal); }
+text[weight="medium"]   { --_fw: var(--font-weight-medium); }
+text[weight="semibold"] { --_fw: var(--font-weight-semibold); }
+text[weight="bold"]     { --_fw: var(--font-weight-bold); }
+text[weight="black"]    { --_fw: var(--font-weight-black); }
+
+/* --- Color Variants (Maps to semantic color roles and direct palette colors) --- */
+/* Text Roles */
+text[color="muted"]  { --_color: var(--text-muted); }
+text[color="subtle"] { --_color: var(--text-subtle); }
+text[color="default"]{ --_color: var(--text-default); }
+text[color="overt"]  { --_color: var(--text-overt); }
+text[color="link"]   { --_color: var(--text-link); }
+/* Accent & Brand Colors */
+text[color="accent"]    { --_color: var(--accent); }
+text[color="secondary"] { --_color: var(--secondary); }
+text[color="tertiary"]  { --_color: var(--tertiary); }
+/* Feedback Colors */
+text[color="success"] { --_color: var(--text-success); }
+text[color="warning"] { --_color: var(--text-warning); }
+text[color="error"]   { --_color: var(--text-error); }
+text[color="info"]    { --_color: var(--text-info); }
+
+/* --- Line Height (leading) Variants (Maps to --line-height tokens) --- */
+text[leading="none"]   { --_lh: var(--line-height-none); }
+text[leading="tight"]  { --_lh: var(--line-height-tight); }
+text[leading="snug"]   { --_lh: var(--line-height-snug); }
+text[leading="normal"] { --_lh: var(--line-height-normal); }
+text[leading="relaxed"]{ --_lh: var(--line-height-relaxed); }
+text[leading="loose"]  { --_lh: var(--line-height-loose); }
+
+/* --- Automatic Contrast Calculation --- */
+/* When the `contrast` attribute is present, calculate the most readable text color
+   against the parent's `--bg` custom property. */
+text[contrast] {
+  /* This powerful mixin is defined in mixins.css */
+  @apply --contrast-text-for-bg;
+  /* Override the local --_color to ensure the calculated value takes precedence */
+  --_color: var(--auto-contrast-text);
+}
+
+/* --- Truncation Utility --- */
+/* For single-line text overflow with an ellipsis */
+text[truncate] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-wrap: initial; /* Disable text-wrap: balance for truncation to work correctly */
+}
