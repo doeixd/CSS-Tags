@@ -14,7 +14,7 @@
 @import url("core/defaults.css") layer(defaults);
 @import url('core/base.css') layer(base);
 @import url('core/mixins.css') layer(base);
-
+@import url('core/text.css') layer(components);
 /* THEMES */
 @import url("themes/theme-packs.css") layer(theme);
 @import url("themes/example-brand.css") layer(theme);
