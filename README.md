@@ -1,34 +1,291 @@
-# CSS Tags: Using Modern CSS to Bring Styling back to HTML
+# CSS Tags
 
-A production-ready, educational CSS framework that brings styling back to HTML tags using modern CSS techniques. This framework serves as both a practical toolkit and an educational resource, showcasing advanced CSS features like CSS Anchor Positioning, cascade layers, OKLCH colors, and container queries while demonstrating how to style semantic HTML directly instead of relying on utility classes.
+**Style HTML directly with modern CSS. No classes, no frameworks—just semantic markup that looks great.**
 
-## Table of Contents
+CSS Tags brings styling back to HTML by using modern CSS features to create beautiful, responsive components through semantic markup. Write clean HTML and let CSS handle the styling automatically.
 
-- [🎯 Philosophy & Core Principles](#-philosophy--core-principles)
-- [🚀 Key Features](#-key-features)
-- [🎨 CSS Features Showcase](#-css-features-showcase)
-- [📦 Installation & Setup](#-installation--setup)
-- [🏃 Quick Start](#-quick-start)
-- [🎨 Usage Examples](#-usage-examples)
-- [📚 API Reference](#-api-reference)
-- [🏗️ Architecture Overview](#-architecture-overview)
-- [🎨 Color System Deep Dive](#-color-system-deep-dive)
-- [📱 Responsive Design with Container Queries](#-responsive-design-with-container-queries)
-- [♿ Accessibility Best Practices](#-accessibility-best-practices)
-- [🛠️ Customization & Extension](#-customization--extension)
-- [📚 Learning Resources](#-learning-resources)
-- [🔧 Development & Contributing](#-development--contributing)
-- [🌟 Why Choose This Framework?](#-why-choose-this-framework)
-- [🏆 Showcase](#-showcase)
-- [🔄 Migration Guide](#-migration-guide)
-- [✨ Best Practices](#-best-practices)
-- [🚀 Framework Integration](#-framework-integration)
-- [📊 Performance Considerations](#-performance-considerations)
-- [⚠️ Known Issues & Troubleshooting](#️-known-issues--troubleshooting)
-- [🛣️ Roadmap](#️-roadmap)
-- [❓ FAQ](#-faq)
-- [🔍 Browser Support Matrix](#-browser-support-matrix)
-- [📄 License](#-license)
+```html
+<!-- Clean, semantic HTML -->
+<card>
+  <card-media>
+    <img src="product.jpg" alt="Amazing Product">
+  </card-media>
+  <card-body>
+    <h3>Amazing Product</h3>
+    <p>Built with modern CSS techniques.</p>
+    <button bg="var(--accent)">Buy Now</button>
+  </card-body>
+</card>
+```
+
+## ✨ What Makes CSS Tags Different
+
+**Traditional CSS Frameworks:**
+```html
+<div class="card shadow-lg bg-white rounded-lg p-6 max-w-sm">
+  <img class="w-full h-48 object-cover rounded-t-lg" src="..." alt="...">
+  <div class="p-4">
+    <h3 class="text-xl font-bold text-gray-900">Title</h3>
+    <p class="text-gray-600">Description...</p>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Buy</button>
+  </div>
+</div>
+```
+
+**CSS Tags:**
+```html
+<card>
+  <card-media><img src="..." alt="..."></card-media>
+  <card-body>
+    <h3>Title</h3>
+    <p>Description...</p>
+    <button bg="var(--accent)">Buy</button>
+  </card-body>
+</card>
+```
+
+**The difference:** Clean, semantic HTML that automatically adapts to themes, screen sizes, and user preferences.
+
+## 🚀 Quick Start
+
+Get started in 3 minutes:
+
+### 1. Include the CSS
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="path/to/index.css">
+</head>
+<body>
+  <!-- Your content here -->
+</body>
+</html>
+```
+
+### 2. Write Semantic HTML
+```html
+<layout-center max-width="70ch">
+  <card>
+    <card-body>
+      <h1>Welcome to CSS Tags</h1>
+      <p>This card automatically adapts to light/dark mode, screen size, and more.</p>
+      <layout-cluster gap="var(--space-sm)">
+        <button bg="var(--accent)">Get Started</button>
+        <button>Learn More</button>
+      </layout-cluster>
+    </card-body>
+  </card>
+</layout-center>
+```
+
+### 3. Customize (Optional)
+```css
+:root {
+  --primary-h: 220; /* Blue theme */
+  --font-family-sans: 'Inter', sans-serif;
+}
+```
+
+That's it! You now have a fully responsive, accessible component that works everywhere.
+
+## 🎯 Core Concepts
+
+### Declarative Styling
+Control appearance through HTML attributes using modern CSS `attr()` function:
+
+```html
+<!-- Size, color, and spacing controlled by attributes -->
+<text size="lg" weight="bold" color="accent">Large bold text</text>
+
+<!-- Layout adapts to container size -->
+<layout-grid min-item-size="300px">
+  <card>Item 1</card>
+  <card>Item 2</card>
+  <card>Item 3</card>
+</layout-grid>
+```
+
+### Design Token System
+Everything uses CSS custom properties for consistent theming:
+
+```css
+/* Change one value, update entire theme */
+:root {
+  --primary-h: 280; /* Purple theme */
+  --space-md: 1.25rem; /* Larger spacing */
+}
+```
+
+### Container Queries
+Components respond to their container, not viewport:
+
+```html
+<!-- Card adapts when container is 400px+ wide -->
+<card>
+  <card-media>...</card-media>
+  <card-body>...</card-body>
+</card>
+```
+
+### Auto-Contrast
+Text colors automatically adjust for readability:
+
+```html
+<!-- Text stays readable on any background -->
+<text contrast>Always readable text</text>
+```
+
+## 📚 What You Get
+
+### Layout Components
+- `<layout-center>` - Centered content with max-width
+- `<layout-grid>` - Responsive grid with automatic columns
+- `<layout-stack>` - Vertical stack with consistent spacing
+- `<layout-sidebar>` - Sidebar layout that stacks on mobile
+- `<layout-page>` - Standard page structure
+
+### UI Components
+- `<card>` - Flexible content containers
+- `<button>` - Accessible buttons with states
+- `<alert>` - Semantic notification banners
+- `<badge>` - Status indicators and labels
+- `<modal>` - Overlay dialogs with Popover API
+- `<form>` - Styled form elements
+
+### Typography
+- `<text>` - Declarative text styling
+- Semantic heading styles
+- Automatic responsive typography
+
+### Utilities
+- Color utilities (`bg-*`, `text-*`)
+- Spacing utilities (`p-*`, `m-*`, `gap-*`)
+- Responsive utilities (`sm:*`, `md:*`, `lg:*`)
+
+## 🎨 Advanced Features
+
+### OKLCH Color System
+Perceptually uniform colors that look consistent across devices:
+
+```css
+/* One hue value creates entire palette */
+--primary-h: 220; /* Blue */
+/* Automatically generates: --primary, --primary-muted, --primary-subtle, etc. */
+```
+
+### Automatic Dark Mode
+Colors adapt automatically to user preference:
+
+```css
+@media (prefers-color-scheme: dark) {
+  /* Framework handles this automatically */
+}
+```
+
+### Modern CSS Showcase
+Learn cutting-edge CSS features:
+- CSS Layers (`@layer`) for organized cascade
+- Container Queries for component-level responsive design
+- CSS Anchor Positioning for tooltips and popovers
+- `@property` for typed CSS variables
+- `@scope` for component isolation
+
+## 📖 Documentation
+
+- **[Quick Start Guide](./docs/quick-start.md)** - Step-by-step tutorial
+- **[Component Reference](./API.md)** - Complete API documentation
+- **[Color System](./docs/guides/color-system.md)** - Understanding OKLCH and theming
+- **[Examples](./examples/)** - Interactive demos
+- **[Core Documentation](./docs/core/)** - Base styles and tokens
+
+## 🌟 Why CSS Tags?
+
+### For Developers
+- **Clean HTML**: Write semantic markup without utility classes
+- **Zero Configuration**: Drop in the CSS and start building
+- **Framework Agnostic**: Works with React, Vue, Svelte, or vanilla JS
+- **Educational**: Learn modern CSS patterns and best practices
+
+### For Designers
+- **Design Token System**: Single source of truth for all design values
+- **Automatic Adaptation**: Components work in light/dark mode, different screen sizes
+- **Consistent Theming**: Change one value, update entire design system
+
+### For Teams
+- **Maintainable**: Clear component patterns and design tokens
+- **Scalable**: Component-level responsive design
+- **Accessible**: Built-in WCAG compliance and keyboard navigation
+- **Future-Proof**: Uses evolving web standards, not framework trends
+
+## 🔧 Installation
+
+### CDN (Recommended for quick prototyping)
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+```
+
+### Download
+```bash
+# Clone the repository
+git clone https://github.com/doeixd/CSS-Tags.git
+# Copy index.css to your project
+cp CSS-Tags/index.css ./your-project/
+```
+
+### NPM (Coming Soon)
+```bash
+npm install css-tags
+```
+
+## 🛠️ Customization
+
+### Brand Colors
+```css
+:root {
+  --primary-h: 240;    /* Blue primary */
+  --accent-h: 320;     /* Magenta accent */
+  --success-h: 160;    /* Green success */
+}
+```
+
+### Typography
+```css
+:root {
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-size-base: 1rem;
+  --line-height-base: 1.6;
+}
+```
+
+### Spacing & Borders
+```css
+:root {
+  --space-md: 1rem;    /* Base spacing unit */
+  --radius-md: 0.5rem; /* Border radius */
+  --shadow-md: 0 4px 6px oklch(0% 0% 0% / 0.1);
+}
+```
+
+## 🌐 Browser Support
+
+| Feature | Chrome | Firefox | Safari | Edge |
+|---------|--------|---------|--------|------|
+| Core Framework | 111+ | 113+ | 15.4+ | 111+ |
+| Container Queries | ✅ | ✅ | ✅ | ✅ |
+| OKLCH Colors | ✅ | ✅ | ✅ | ✅ |
+| CSS Layers | ✅ | ✅ | ✅ | ✅ |
+| Popover API | ✅ | ✅ | ✅ | ✅ |
+
+**Progressive Enhancement:** Works in older browsers with graceful degradation.
+
+## 📄 License
+
+MIT License - Free for personal and commercial use.
+
+---
+
+**Ready to build?** Check out the [Quick Start Guide](./docs/quick-start.md) or explore [live examples](./examples/demo.html).
 
 ## 🎯 Philosophy & Core Principles
 
