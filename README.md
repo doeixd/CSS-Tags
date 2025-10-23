@@ -75,6 +75,18 @@ See it for yourself in 60 seconds. Copy the code below into an `index.html` file
 </html>
 ```
 
+## 📖 Docs
+
+*   **[API Reference](./API.md)** - Complete API documentation for layouts and components
+*   **[Color System Guide](./docs/guides/color-system.md)** - Understanding OKLCH and theming
+*   **[Component Documentation](./docs/components/)** - Individual component guides
+*   **[Core System Documentation](./docs/core/)** - Base styles, tokens, and mixins
+*   **[Layout Documentation](./docs/layouts/)** - Layout patterns and utilities
+*   **[Utilities Guide](./docs/utilities/)** - Utility classes reference
+*   **[Examples](./examples/)** - Interactive demos and real-world patterns
+*   **[Theming Guide](./docs/theming.md)** - Advanced theming and customization
+
+
 ## 🏛️ The Foundational Pillars of CSS Tags
 
 This library isn't magic—it's a showcase of powerful, modern CSS features that are now widely supported. Understanding them is key to mastering CSS Tags.
@@ -812,16 +824,6 @@ This framework is built on principles that prioritize developer experience, acce
 </card>
 ```
 
-## 📖 Next Steps
-
-*   **[API Reference](./API.md)** - Complete API documentation for layouts and components
-*   **[Color System Guide](./docs/guides/color-system.md)** - Understanding OKLCH and theming
-*   **[Component Documentation](./docs/components/)** - Individual component guides
-*   **[Core System Documentation](./docs/core/)** - Base styles, tokens, and mixins
-*   **[Layout Documentation](./docs/layouts/)** - Layout patterns and utilities
-*   **[Utilities Guide](./docs/utilities/)** - Utility classes reference
-*   **[Examples](./examples/)** - Interactive demos and real-world patterns
-*   **[Theming Guide](./docs/theming.md)** - Advanced theming and customization
 
 <br />
 
