@@ -1,0 +1,20 @@
+{
+  "name": "website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.8",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.6.1",
+    "astro-expressive-code": "^0.41.3",
+    "astro-pagefind": "^1.8.5",
+    "sharp": "^0.34.2"
+  }
+}

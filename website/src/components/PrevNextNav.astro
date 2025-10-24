@@ -1,0 +1,118 @@
+---
+import '../theme.css';
+import { getCollection } from 'astro:content';
+
+interface Props {
+	currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const allDocs = await getCollection('docs');
+const sortedDocs = allDocs.filter(doc => doc.id !== 'index').sort((a, b) => a.id.localeCompare(b.id));
+
+const currentIndex = sortedDocs.findIndex(doc => doc.id === currentPath);
+const prevDoc = currentIndex > 0 ? sortedDocs[currentIndex - 1] : null;
+const nextDoc = currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null;
+---
+
+{(prevDoc || nextDoc) && (
+	<nav class="prev-next-nav" aria-label="Previous and next page">
+		{prevDoc && (
+			<a href={`${base}/${prevDoc.id}/`} class="prev-next-link prev-link" data-astro-prefetch>
+				<span class="prev-next-label">Previous</span>
+				<span class="prev-next-title">{prevDoc.data.title}</span>
+			</a>
+		)}
+		{nextDoc && (
+			<a href={`${base}/${nextDoc.id}/`} class="prev-next-link next-link" data-astro-prefetch>
+				<span class="prev-next-label">Next</span>
+				<span class="prev-next-title">{nextDoc.data.title}</span>
+			</a>
+		)}
+	</nav>
+)}
+
+<style>
+	.prev-next-nav {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--prev-next-nav-gap, var(--space-lg));
+		margin-top: var(--prev-next-nav-margin-top, 3rem);
+		padding-top: var(--prev-next-nav-padding-top, var(--space-2xl));
+		border-top: 1px solid var(--border-color);
+	}
+
+	.prev-next-link {
+		display: flex;
+		flex-direction: column;
+		gap: var(--prev-next-link-gap, var(--space-xs));
+		padding: var(--prev-next-link-padding, var(--space-lg));
+		border: 1px solid var(--border-color);
+		border-radius: var(--prev-next-link-border-radius, var(--border-radius-lg));
+		text-decoration: none;
+		transition: all var(--transition-fast);
+	}
+
+	.prev-next-link:hover {
+		border-color: var(--accent);
+		background: var(--bg-hover);
+	}
+
+	.prev-link {
+		text-align: left;
+	}
+
+	.next-link {
+		text-align: right;
+		grid-column: 2;
+	}
+
+	.prev-next-label {
+		font-size: var(--prev-next-label-font-size, var(--font-size-xs));
+		font-weight: var(--prev-next-label-font-weight, var(--font-weight-semibold));
+		text-transform: uppercase;
+		letter-spacing: var(--prev-next-label-letter-spacing, var(--letter-spacing-uppercase));
+		color: var(--text-secondary);
+	}
+
+	.prev-next-title {
+		font-size: var(--prev-next-title-font-size, var(--font-size-lg));
+		font-weight: var(--prev-next-title-font-weight, var(--font-weight-medium));
+		color: var(--text-primary);
+	}
+
+	@media (max-width: 640px) {
+		.prev-next-nav {
+			grid-template-columns: 1fr;
+		}
+
+		.next-link {
+			grid-column: 1;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.prev-next-nav {
+			border-top-color: var(--border-color);
+		}
+
+		.prev-next-link {
+			border-color: var(--border-color);
+		}
+
+		.prev-next-link:hover {
+			border-color: var(--accent-light);
+			background: var(--bg-hover);
+		}
+
+		.prev-next-label {
+			color: var(--text-secondary);
+		}
+
+		.prev-next-title {
+			color: var(--text-primary);
+		}
+	}
+</style>

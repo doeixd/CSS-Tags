@@ -1,0 +1,42 @@
+---
+// Scroll progress indicator component
+---
+
+<div class="scroll-progress"></div>
+
+<style>
+	.scroll-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 0%;
+		height: 3px;
+		background: linear-gradient(to right, var(--accent, #0066cc), var(--accent-light, #58a6ff));
+		z-index: 9999;
+		transition: width 0.1s ease-out;
+	}
+</style>
+
+<script>
+	function updateScrollProgress() {
+		const scrollProgress = document.querySelector('.scroll-progress') as HTMLElement;
+		if (!scrollProgress) return;
+
+		const scrollTop = window.scrollY;
+		const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		const scrollPercent = (scrollTop / docHeight) * 100;
+
+		scrollProgress.style.width = `${Math.min(scrollPercent, 100)}%`;
+	}
+
+	function setupScrollProgress() {
+		window.addEventListener('scroll', updateScrollProgress, { passive: true });
+		updateScrollProgress(); // Initial update
+	}
+
+	// Setup on page load
+	document.addEventListener('DOMContentLoaded', setupScrollProgress);
+
+	// Re-setup after view transitions
+	document.addEventListener('astro:after-swap', setupScrollProgress);
+</script>

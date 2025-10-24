@@ -1,0 +1,411 @@
+---
+import '../theme.css';
+import { navigation } from '../navigation';
+import Search from './Search.astro';
+
+const { currentPath } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+function isActive(slug: string | undefined) {
+	if (!slug) return currentPath === '' || currentPath === '/';
+	// Exact match for the current path
+	return currentPath === slug;
+}
+---
+
+<div class="mobile-backdrop"></div>
+
+<button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+		<line x1="3" y1="12" x2="21" y2="12"></line>
+		<line x1="3" y1="6" x2="21" y2="6"></line>
+		<line x1="3" y1="18" x2="21" y2="18"></line>
+	</svg>
+</button>
+
+<nav class="sidebar" role="navigation" aria-label="Main navigation">
+	<div class="nav-header">
+		<a href={`${base}`} class="site-title">CSS Tags</a>
+		<a href="https://github.com/doeixd/CSS-Tags" target="_blank" rel="noopener" class="github-link">
+			GitHub
+		</a>
+	</div>
+
+	<Search />
+
+	<ul class="nav-list">
+		{navigation.map((section, index) => (
+			<li class="nav-section" data-collapsed={section.collapsed ? 'true' : 'false'}>
+				{section.items ? (
+					<>
+						<button class="section-title" data-section-index={index}>
+							<span>{section.label}</span>
+							{section.collapsed !== undefined && (
+								<svg class="section-toggle" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+									<path d="M6 9L2 5h8z"></path>
+								</svg>
+							)}
+						</button>
+						<ul class="section-items">
+							{section.items.filter(item => item.slug !== undefined).map((item) => (
+								<li>
+									<a
+										href={item.slug ? `${base}/${item.slug}/` : `${base}`}
+										class:list={['nav-link', { active: isActive(item.slug) }]}
+										data-astro-prefetch
+									>
+										{item.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</>
+				) : (
+					<a
+						href={section.slug ? `${base}/${section.slug}/` : `${base}`}
+						class:list={['nav-link', 'nav-link-standalone', { active: isActive(section.slug) }]}
+						data-astro-prefetch
+					>
+						{section.label}
+					</a>
+				)}
+			</li>
+		))}
+	</ul>
+</nav>
+
+<style>
+	.mobile-backdrop {
+		display: none;
+		position: fixed;
+		inset: 0;
+		background: var(--nav-mobile-backdrop-bg);
+		z-index: var(--z-index-backdrop);
+		opacity: 0;
+		transition: opacity var(--transition-slow);
+		pointer-events: none;
+	}
+
+	.mobile-backdrop.visible {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.mobile-menu-toggle {
+		display: none;
+		position: fixed;
+		top: var(--nav-mobile-menu-top, var(--space-lg));
+		right: var(--nav-mobile-menu-right, var(--space-lg));
+		z-index: var(--z-index-mobile-menu);
+		padding: var(--nav-mobile-menu-padding, var(--space-md));
+		background: var(--accent);
+		color: white;
+		border: none;
+		border-radius: var(--nav-mobile-menu-border-radius, var(--border-radius-lg));
+		cursor: pointer;
+		box-shadow: var(--nav-mobile-menu-box-shadow, var(--shadow-sm));
+		transition: all var(--transition-normal);
+	}
+
+	.mobile-menu-toggle:hover {
+		transform: var(--transform-scale-hover);
+	}
+
+	.mobile-menu-toggle:focus-visible {
+		outline: var(--outline-width) solid var(--accent);
+		outline-offset: var(--outline-offset);
+	}
+
+	.sidebar {
+		position: sticky;
+		top: 0;
+		min-height: 100vh;
+		overflow-y: auto;
+		padding: var(--nav-sidebar-padding, var(--space-2xl) var(--space-lg));
+		background: var(--bg-secondary);
+		border-right: 1px solid var(--border-color);
+	}
+
+	@media (max-width: 768px) {
+		.mobile-backdrop {
+			display: block;
+		}
+
+		.mobile-menu-toggle {
+			display: block;
+		}
+
+		.sidebar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: var(--sidebar-width);
+			max-width: var(--sidebar-width-max);
+			z-index: var(--z-index-sidebar);
+			transform: translateX(-100%);
+			transition: transform var(--transition-slow-bezier);
+			box-shadow: var(--shadow-md);
+		}
+
+		.sidebar.open {
+			transform: translateX(0);
+		}
+	}
+
+	.nav-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--nav-header-margin-bottom, var(--space-2xl));
+		padding-bottom: var(--nav-header-padding-bottom, var(--space-lg));
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	.site-title {
+		font-size: var(--nav-site-title-font-size, var(--font-size-2xl));
+		font-weight: var(--nav-site-title-font-weight, var(--font-weight-bold));
+		text-decoration: none;
+		color: var(--text-primary);
+	}
+
+	.github-link {
+		padding: var(--nav-github-link-padding, var(--space-sm) var(--space-lg));
+		background: var(--accent);
+		color: white;
+		text-decoration: none;
+		border-radius: var(--nav-github-link-border-radius, var(--border-radius-lg));
+		font-size: var(--nav-github-link-font-size, var(--font-size-sm));
+		font-weight: var(--nav-github-link-font-weight, var(--font-weight-medium));
+	}
+
+	.github-link:hover {
+		opacity: var(--opacity-hover);
+	}
+
+	.nav-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.nav-section {
+		margin-bottom: var(--nav-section-margin-bottom, var(--font-size-2xl));
+	}
+
+	.nav-section[data-collapsed="true"] .section-items {
+		max-height: var(--max-height-collapsed);
+		overflow: hidden;
+		transition: max-height var(--transition-slow);
+	}
+
+	.nav-section:not([data-collapsed="true"]) .section-items {
+		max-height: var(--max-height-expanded);
+		transition: max-height var(--transition-slow);
+	}
+
+	.nav-section[data-collapsed="true"] .section-toggle {
+		transform: var(--transform-rotate-collapsed);
+	}
+
+	.section-title {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		padding: 0;
+		background: none;
+		border: none;
+		font-size: var(--nav-section-title-font-size, var(--font-size-xs));
+		font-weight: var(--nav-section-title-font-weight, var(--font-weight-bold));
+		text-transform: uppercase;
+		letter-spacing: var(--nav-section-title-letter-spacing, var(--letter-spacing-uppercase));
+		color: var(--text-secondary);
+		margin-bottom: var(--nav-section-title-margin-bottom, var(--space-sm));
+		cursor: pointer;
+		text-align: left;
+	}
+
+	.section-title:hover {
+		color: var(--text-primary, #1a1a1a);
+	}
+
+	.section-toggle {
+		transition: transform var(--transition-slow);
+	}
+
+	.section-items {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.section-items li {
+		margin-bottom: var(--nav-section-items-margin-bottom, var(--space-xs));
+	}
+
+	.nav-link {
+		display: block;
+		padding: var(--nav-link-padding, var(--space-sm) var(--space-md));
+		color: var(--text-primary);
+		text-decoration: none;
+		border-radius: var(--nav-link-border-radius, var(--border-radius-md));
+		font-size: var(--nav-link-font-size, var(--font-size-base));
+		transition: background-color var(--transition-fast);
+	}
+
+	.nav-link:hover {
+		background: var(--bg-hover);
+	}
+
+	.nav-link.active {
+		background: var(--accent-light);
+		color: var(--accent);
+		font-weight: var(--font-weight-medium);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.sidebar {
+			background: var(--bg-secondary);
+			border-right-color: var(--border-color);
+		}
+
+		.site-title,
+		.nav-link {
+			color: var(--text-primary);
+		}
+
+		.section-title {
+			color: var(--text-secondary);
+		}
+
+		.nav-link:hover {
+			background: var(--bg-hover);
+		}
+
+		.nav-link.active {
+			background: var(--accent-dark);
+			color: var(--accent-light);
+		}
+	}
+</style>
+
+<script>
+	function updateActiveLink() {
+		const currentPath = window.location.pathname.replace(import.meta.env.BASE_URL, '').replace(/\/$/, '');
+		const links = document.querySelectorAll('.nav-link');
+
+		links.forEach(link => {
+			const href = link.getAttribute('href') || '';
+			const linkPath = href.replace(import.meta.env.BASE_URL, '').replace(/\/$/, '');
+
+			// Exact match only
+			if (linkPath === currentPath) {
+				link.classList.add('active');
+			} else {
+				link.classList.remove('active');
+			}
+		});
+	}
+
+	function setupMobileMenu() {
+		const toggle = document.querySelector('.mobile-menu-toggle');
+		const sidebar = document.querySelector('.sidebar');
+		const backdrop = document.querySelector('.mobile-backdrop');
+
+		if (toggle && sidebar && backdrop) {
+			const openMenu = () => {
+				sidebar.classList.add('open');
+				backdrop.classList.add('visible');
+				document.body.style.overflow = 'hidden';
+			};
+
+			const closeMenu = () => {
+				sidebar.classList.remove('open');
+				backdrop.classList.remove('visible');
+				document.body.style.overflow = '';
+			};
+
+			toggle.addEventListener('click', () => {
+				if (sidebar.classList.contains('open')) {
+					closeMenu();
+				} else {
+					openMenu();
+				}
+			});
+
+			// Close menu when clicking on a link
+			const links = sidebar.querySelectorAll('.nav-link');
+			links.forEach(link => {
+				link.addEventListener('click', closeMenu);
+			});
+
+			// Close menu when clicking backdrop
+			backdrop.addEventListener('click', closeMenu);
+		}
+	}
+
+	function setupCollapsibleSections() {
+		const sectionTitles = document.querySelectorAll('.section-title');
+
+		// Load saved state from localStorage
+		const savedState = localStorage.getItem('nav-collapsed-state');
+		const collapsedSections = savedState ? JSON.parse(savedState) : {};
+
+		sectionTitles.forEach((title) => {
+			const section = title.closest('.nav-section');
+			if (!section) return;
+
+			const sectionIndex = title.getAttribute('data-section-index');
+
+			// Apply saved state if exists
+			if (sectionIndex && collapsedSections[sectionIndex] !== undefined) {
+				section.setAttribute('data-collapsed', collapsedSections[sectionIndex] ? 'true' : 'false');
+			}
+
+			title.addEventListener('click', () => {
+				const isCollapsed = section.getAttribute('data-collapsed') === 'true';
+				const newState = !isCollapsed;
+				section.setAttribute('data-collapsed', newState ? 'true' : 'false');
+
+				// Save state to localStorage
+				if (sectionIndex) {
+					collapsedSections[sectionIndex] = newState;
+					localStorage.setItem('nav-collapsed-state', JSON.stringify(collapsedSections));
+				}
+			});
+		});
+	}
+
+	// Save sidebar scroll position before navigation
+	document.addEventListener('astro:before-swap', () => {
+		const sidebar = document.querySelector('.sidebar');
+		if (sidebar) {
+			sessionStorage.setItem('sidebar-scroll', sidebar.scrollTop.toString());
+		}
+	});
+
+	// Restore sidebar scroll position after navigation
+	function restoreSidebarScroll() {
+		const sidebar = document.querySelector('.sidebar');
+		const savedScroll = sessionStorage.getItem('sidebar-scroll');
+		if (sidebar && savedScroll) {
+			sidebar.scrollTop = parseInt(savedScroll, 10);
+		}
+	}
+
+	// Update on page load
+	document.addEventListener('DOMContentLoaded', () => {
+		updateActiveLink();
+		setupMobileMenu();
+		setupCollapsibleSections();
+		restoreSidebarScroll();
+	});
+
+	// Update after view transitions
+	document.addEventListener('astro:after-swap', () => {
+		updateActiveLink();
+		setupMobileMenu();
+		setupCollapsibleSections();
+		restoreSidebarScroll();
+	});
+</script>

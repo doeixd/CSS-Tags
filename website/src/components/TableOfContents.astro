@@ -1,0 +1,180 @@
+---
+import '../theme.css';
+// Table of Contents component - auto-generates from headings
+interface Props {
+	headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { headings = [] } = Astro.props;
+
+// Filter to only h2 and h3 headings
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+	<nav class="toc" aria-label="Table of contents">
+		<h2 class="toc-title">On this page</h2>
+		<ul class="toc-list">
+			{tocHeadings.map((heading) => (
+				<li class={`toc-item toc-depth-${heading.depth}`}>
+					<a href={`#${heading.slug}`} class="toc-link">
+						{heading.text}
+					</a>
+				</li>
+			))}
+		</ul>
+	</nav>
+)}
+
+<style>
+	.toc {
+		position: sticky;
+		top: var(--space-2xl);
+		max-height: calc(100vh - 8rem);
+		overflow-y: auto;
+		padding: var(--toc-padding, 1.5rem);
+		background: var(--bg-secondary);
+		border: 1px solid var(--border-color);
+		border-radius: var(--toc-border-radius, var(--border-radius-lg));
+		font-size: var(--toc-font-size, var(--font-size-sm));
+		scrollbar-gutter: stable;
+	}
+
+	.toc::-webkit-scrollbar-thumb {
+		background: transparent;
+	}
+
+	.toc:hover::-webkit-scrollbar-thumb {
+		background: var(--border-color);
+	}
+
+	.toc {
+		scrollbar-color: transparent transparent;
+	}
+
+	.toc:hover {
+		scrollbar-color: var(--border-color) transparent;
+	}
+
+	.toc-title {
+		font-size: var(--toc-title-font-size, var(--font-size-sm));
+		font-weight: var(--toc-title-font-weight, var(--font-weight-bold));
+		text-transform: uppercase;
+		letter-spacing: var(--toc-title-letter-spacing, var(--letter-spacing-uppercase));
+		color: var(--text-secondary);
+		margin-bottom: var(--toc-title-margin-bottom, var(--space-lg));
+	}
+
+	.toc-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.toc-item {
+		margin-bottom: var(--toc-item-margin-bottom, var(--space-sm));
+	}
+
+	.toc-depth-3 {
+		margin-left: var(--toc-depth-3-margin-left, var(--space-lg));
+	}
+
+	.toc-link {
+		display: block;
+		color: var(--text-primary);
+		text-decoration: none;
+		padding: var(--toc-link-padding, var(--space-xs) var(--space-sm));
+		border-radius: var(--toc-link-border-radius, var(--border-radius-md));
+		transition: all var(--transition-fast);
+		line-height: 1.4;
+	}
+
+	.toc-link:hover {
+		background: var(--bg-hover);
+		color: var(--accent);
+	}
+
+	.toc-link.active {
+		background: var(--accent-light);
+		color: var(--accent);
+	}
+
+	@media (max-width: 1200px) {
+		.toc {
+			display: none;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.toc {
+			background: var(--bg-secondary);
+			border-color: var(--border-color);
+		}
+
+		.toc-title {
+			color: var(--text-secondary);
+		}
+
+		.toc-link {
+			color: var(--text-primary);
+		}
+
+		.toc-link:hover {
+			background: var(--bg-hover);
+		}
+
+		.toc-link.active {
+			background: var(--accent-dark);
+			color: var(--accent-light);
+		}
+	}
+</style>
+
+<script>
+	function setupTocHighlight() {
+		const tocLinks = document.querySelectorAll('.toc-link');
+		const tocContainer = document.querySelector('.toc');
+		if (!tocLinks.length || !tocContainer) return;
+
+		const headings = Array.from(document.querySelectorAll('h2, h3'))
+			.filter(h => h.id);
+
+		function updateActiveLink() {
+			const scrollPos = window.scrollY + 100;
+
+			let activeHeading = headings[0];
+			for (const heading of headings) {
+				if (heading.offsetTop <= scrollPos) {
+					activeHeading = heading;
+				} else {
+					break;
+				}
+			}
+
+			tocLinks.forEach(link => {
+				link.classList.remove('active');
+				if (activeHeading && link.getAttribute('href') === `#${activeHeading.id}`) {
+					link.classList.add('active');
+
+					// Scroll within TOC container only, don't affect main page scroll
+					const linkTop = link.offsetTop;
+					const containerTop = tocContainer.scrollTop;
+					const containerHeight = tocContainer.clientHeight;
+					const linkHeight = link.clientHeight;
+
+					// Check if link is outside the visible area
+					if (linkTop < containerTop || linkTop + linkHeight > containerTop + containerHeight) {
+						// Scroll the TOC container to center the active link
+						tocContainer.scrollTop = linkTop - (containerHeight / 2) + (linkHeight / 2);
+					}
+				}
+			});
+		}
+
+		window.addEventListener('scroll', updateActiveLink, { passive: true });
+		updateActiveLink();
+	}
+
+	document.addEventListener('DOMContentLoaded', setupTocHighlight);
+	document.addEventListener('astro:after-swap', setupTocHighlight);
+</script>

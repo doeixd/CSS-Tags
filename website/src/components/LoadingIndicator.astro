@@ -1,0 +1,62 @@
+---
+// Loading indicator for view transitions
+---
+
+<div class="loading-indicator"></div>
+
+<style>
+	.loading-indicator {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: var(--accent, #0066cc);
+		transform: scaleX(0);
+		transform-origin: left;
+		z-index: 10000;
+		transition: transform 0.3s ease;
+		opacity: 0;
+	}
+
+	.loading-indicator.loading {
+		opacity: 1;
+		animation: loading 1s ease-in-out infinite;
+	}
+
+	@keyframes loading {
+		0% {
+			transform: scaleX(0);
+			transform-origin: left;
+		}
+		50% {
+			transform: scaleX(0.5);
+			transform-origin: left;
+		}
+		51% {
+			transform: scaleX(0.5);
+			transform-origin: right;
+		}
+		100% {
+			transform: scaleX(0);
+			transform-origin: right;
+		}
+	}
+</style>
+
+<script>
+	function setupLoadingIndicator() {
+		const indicator = document.querySelector('.loading-indicator');
+		if (!indicator) return;
+
+		document.addEventListener('astro:before-preparation', () => {
+			indicator.classList.add('loading');
+		});
+
+		document.addEventListener('astro:after-swap', () => {
+			indicator.classList.remove('loading');
+		});
+	}
+
+	document.addEventListener('DOMContentLoaded', setupLoadingIndicator);
+</script>

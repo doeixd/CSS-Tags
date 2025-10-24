@@ -1,0 +1,422 @@
+---
+import { ViewTransitions, ClientRouter } from 'astro:transitions';
+import Navigation from '../components/Navigation.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
+import LoadingIndicator from '../components/LoadingIndicator.astro';
+import KeyboardShortcuts from '../components/KeyboardShortcuts.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	currentPath: string;
+	headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { title, description, currentPath, headings } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | CSS Tags</title>
+		<meta name="description" content={description || 'Style HTML directly with modern CSS. No classes, no frameworks—just semantic markup that looks great.'} />
+
+		<!-- Open Graph / Social -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={`${title} | CSS Tags`} />
+		<meta property="og:description" content={description || 'Style HTML directly with modern CSS'} />
+		<meta property="og:site_name" content="CSS Tags Documentation" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={`${title} | CSS Tags`} />
+		<meta name="twitter:description" content={description || 'Style HTML directly with modern CSS'} />
+
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+		<link rel="stylesheet" href={`${base}theme.css`} />
+		<ViewTransitions fallback="none" />
+		<style is:global>
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			*:focus-visible {
+				outline: var(--focus-outline, var(--outline-width) solid var(--accent));
+				outline-offset: var(--focus-outline-offset, var(--outline-offset));
+				border-radius: var(--focus-border-radius, var(--border-radius-sm));
+			}
+
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+				color: var(--text-primary);
+				background: var(--bg-primary);
+				line-height: 1.6;
+			}
+
+			/* Minimal scrollbars */
+			* {
+				scrollbar-width: var(--scrollbar-thumb-width);
+				scrollbar-color: var(--border-color) transparent;
+			}
+
+			*::-webkit-scrollbar {
+				width: var(--scrollbar-width);
+				height: var(--scrollbar-width);
+			}
+
+			*::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			*::-webkit-scrollbar-thumb {
+				background: var(--border-color);
+				border-radius: var(--border-radius-md);
+			}
+
+			*::-webkit-scrollbar-thumb:hover {
+				background: var(--text-secondary);
+			}
+
+			@media (prefers-color-scheme: dark) {
+				* {
+					scrollbar-color: var(--border-color, #333) transparent;
+				}
+
+				*::-webkit-scrollbar-thumb {
+					background: var(--border-color, #333);
+				}
+
+				*::-webkit-scrollbar-thumb:hover {
+					background: var(--text-secondary, #8b949e);
+				}
+			}
+
+			/* Reduce motion for users who prefer it */
+			@media (prefers-reduced-motion: reduce) {
+				*,
+				*::before,
+				*::after {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+					scroll-behavior: auto !important;
+				}
+			}
+
+			.skip-to-content {
+				position: var(--skip-link-position, absolute);
+				top: var(--skip-link-top, -100px);
+				left: var(--skip-link-left, var(--space-lg));
+				z-index: var(--z-index-skip-link);
+				padding: var(--skip-link-padding, var(--space-md) calc(var(--space-lg) * 1.5));
+				background: var(--accent);
+				color: white;
+				text-decoration: none;
+				border-radius: var(--skip-link-border-radius, var(--border-radius-md));
+				font-weight: var(--skip-link-font-weight, var(--font-weight-medium));
+				transition: var(--skip-link-transition, top var(--transition-normal));
+			}
+
+			.skip-to-content:focus {
+				top: 1rem;
+			}
+
+			/* View Transition Animations */
+			::view-transition-old(root),
+			::view-transition-new(root) {
+				animation-duration: 50ms;
+				animation-timing-function: ease-out;
+			}
+
+			::view-transition-old(sidebar) {
+				animation: none;
+			}
+
+			::view-transition-new(sidebar) {
+				animation: none;
+			}
+
+			@keyframes blur-in {
+				from {
+					filter: blur(4px);
+					opacity: 0;
+				}
+				to {
+					filter: blur(0);
+					opacity: 1;
+				}
+			}
+
+			::view-transition-old(main) {
+				animation: none;
+			}
+
+			::view-transition-new(main) {
+				animation: 50ms ease-out both blur-in;
+			}
+
+			.docs-container {
+				display: grid;
+				grid-template-columns: var(--sidebar-width) 1fr 250px;
+				min-height: 100vh;
+				gap: var(--layout-docs-container-gap, var(--space-2xl));
+				position: relative;
+			}
+
+			.sidebar-resize-handle {
+				position: absolute;
+				top: 0;
+				left: var(--sidebar-width);
+				width: 4px;
+				height: 100%;
+				cursor: col-resize;
+				background: transparent;
+				z-index: 10;
+				transition: background var(--transition-normal);
+			}
+
+			.sidebar-resize-handle:hover,
+			.sidebar-resize-handle.resizing {
+				background: var(--accent);
+			}
+
+			.sidebar-resize-handle::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -4px;
+				width: 12px;
+				height: 100%;
+			}
+
+			.content-wrapper {
+				max-width: 900px;
+				padding: var(--layout-content-wrapper-padding, 3rem var(--space-2xl));
+				width: 100%;
+			}
+
+			.content {
+				width: 100%;
+			}
+
+			.toc-wrapper {
+				padding: var(--layout-toc-wrapper-padding, 3rem var(--space-lg) 3rem 0);
+			}
+
+			@media (max-width: 1200px) {
+				.docs-container {
+					grid-template-columns: 280px 1fr;
+				}
+
+				.toc-wrapper {
+					display: none;
+				}
+			}
+
+			h1 {
+				font-size: var(--layout-h1-font-size, var(--font-size-4xl));
+				margin-bottom: var(--layout-h1-margin-bottom, var(--space-sm));
+				line-height: 1.2;
+			}
+
+			h2 {
+				font-size: var(--layout-h2-font-size, var(--font-size-3xl));
+				margin-top: var(--layout-h2-margin-top, var(--space-2xl));
+				margin-bottom: var(--layout-h2-margin-bottom, var(--space-lg));
+				padding-top: var(--layout-h2-padding-top, var(--space-lg));
+				border-top: 1px solid var(--border-color);
+			}
+
+			h2:first-of-type {
+				border-top: none;
+				padding-top: 0;
+			}
+
+			h3 {
+				font-size: var(--layout-h3-font-size, var(--font-size-2xl));
+				margin-top: var(--layout-h3-margin-top, var(--font-size-2xl));
+				margin-bottom: var(--layout-h3-margin-bottom, var(--space-md));
+			}
+
+			h4 {
+				font-size: var(--layout-h4-font-size, var(--font-size-xl));
+				margin-top: var(--layout-h4-margin-top, var(--font-size-xl));
+				margin-bottom: var(--layout-h4-margin-bottom, var(--space-sm));
+			}
+
+			p {
+				margin-bottom: var(--layout-p-margin-bottom, var(--space-lg));
+			}
+
+			a {
+				color: var(--accent);
+				text-decoration: none;
+			}
+
+			a:hover {
+				text-decoration: underline;
+			}
+
+			code {
+				background: var(--bg-secondary);
+				padding: var(--layout-code-padding, 0.2em 0.4em);
+				border-radius: var(--layout-code-border-radius, 3px);
+				font-size: 0.9em;
+				font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+			}
+
+			pre {
+				background: var(--bg-secondary);
+				padding: var(--layout-pre-padding, var(--space-lg));
+				border-radius: var(--layout-pre-border-radius, var(--border-radius-lg));
+				overflow-x: auto;
+				margin-bottom: var(--layout-pre-margin-bottom, var(--space-lg));
+			}
+
+			pre code {
+				background: none;
+				padding: 0;
+			}
+
+			ul, ol {
+				margin-bottom: var(--layout-ul-ol-margin-bottom, var(--space-lg));
+				padding-left: var(--layout-ul-ol-padding-left, var(--space-2xl));
+			}
+
+			li {
+				margin-bottom: var(--layout-li-margin-bottom, var(--space-sm));
+			}
+
+			blockquote {
+				border-left: var(--layout-blockquote-border-left, 4px solid var(--accent));
+				padding-left: var(--layout-blockquote-padding-left, var(--space-lg));
+				margin: var(--layout-blockquote-margin, var(--space-lg) 0);
+				color: var(--text-secondary);
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-bottom: var(--layout-table-margin-bottom, var(--space-lg));
+			}
+
+			th, td {
+				padding: var(--layout-th-td-padding, var(--space-md));
+				border: 1px solid var(--border-color);
+				text-align: left;
+			}
+
+			th {
+				background: var(--bg-secondary);
+				font-weight: var(--layout-th-font-weight, var(--font-weight-semibold));
+			}
+
+			.description {
+				font-size: var(--layout-description-font-size, 1.125rem);
+				color: var(--text-secondary);
+				margin-bottom: var(--layout-description-margin-bottom, var(--space-2xl));
+			}
+
+			@media (max-width: 768px) {
+				.docs-container {
+					grid-template-columns: 1fr;
+				}
+
+				.content-wrapper {
+					padding: var(--space-2xl) var(--space-lg);
+				}
+
+				h1 {
+					font-size: var(--font-size-3xl);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<ClientRouter />
+		<a href="#main-content" class="skip-to-content">Skip to content</a>
+		<ScrollProgress />
+		<LoadingIndicator />
+		<KeyboardShortcuts />
+		<ScrollToTop />
+		<div class="docs-container">
+			<div transition:persist="sidebar">
+				<Navigation currentPath={currentPath} />
+			</div>
+			<div class="sidebar-resize-handle"></div>
+			<div class="content-wrapper">
+				<main class="content" id="main-content" data-pagefind-body>
+					{description && <p class="description">{description}</p>}
+					<slot />
+				</main>
+			</div>
+			<div class="toc-wrapper">
+				<TableOfContents headings={headings} />
+			</div>
+		</div>
+
+		<script>
+			function setupSidebarResize() {
+				const handle = document.querySelector('.sidebar-resize-handle');
+				const container = document.querySelector('.docs-container');
+				if (!handle || !container) return;
+
+				let isResizing = false;
+				let startX = 0;
+				let startWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width') || '280');
+
+				// Load saved width from localStorage
+				const savedWidth = localStorage.getItem('sidebar-width');
+				if (savedWidth) {
+					document.documentElement.style.setProperty('--sidebar-width', savedWidth + 'px');
+				}
+
+				handle.addEventListener('mousedown', (e) => {
+					isResizing = true;
+					startX = e.clientX;
+					startWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width') || '280');
+					handle.classList.add('resizing');
+					document.body.style.userSelect = 'none';
+					document.body.style.cursor = 'col-resize';
+				});
+
+				document.addEventListener('mousemove', (e) => {
+					if (!isResizing) return;
+
+					const delta = e.clientX - startX;
+					const newWidth = Math.max(200, Math.min(600, startWidth + delta));
+					document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+				});
+
+				document.addEventListener('mouseup', () => {
+					if (isResizing) {
+						isResizing = false;
+						handle.classList.remove('resizing');
+						document.body.style.userSelect = '';
+						document.body.style.cursor = '';
+
+						// Save width to localStorage
+						const currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+						localStorage.setItem('sidebar-width', parseInt(currentWidth));
+					}
+				});
+			}
+
+			document.addEventListener('DOMContentLoaded', setupSidebarResize);
+			document.addEventListener('astro:after-swap', setupSidebarResize);
+		</script>
+	</body>
+</html>

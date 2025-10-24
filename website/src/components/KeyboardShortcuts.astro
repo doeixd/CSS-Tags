@@ -1,0 +1,63 @@
+---
+// Keyboard shortcuts handler
+---
+
+<script>
+	function setupKeyboardShortcuts() {
+		document.addEventListener('keydown', (e) => {
+			// Ctrl/Cmd + K: Focus search
+			if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+				e.preventDefault();
+				const searchInput = document.querySelector('.pagefind-ui__search-input') as HTMLInputElement;
+				if (searchInput) {
+					searchInput.focus();
+				}
+			}
+
+			// Escape: Close mobile menu and blur search
+			if (e.key === 'Escape') {
+				const sidebar = document.querySelector('.sidebar');
+				const searchInput = document.querySelector('.pagefind-ui__search-input') as HTMLInputElement;
+
+				if (sidebar?.classList.contains('open')) {
+					sidebar.classList.remove('open');
+				}
+
+				if (searchInput && document.activeElement === searchInput) {
+					searchInput.blur();
+				}
+			}
+
+			// Arrow keys for prev/next navigation
+			if (e.altKey) {
+				if (e.key === 'ArrowLeft') {
+					e.preventDefault();
+					const prevLink = document.querySelector('.prev-link') as HTMLAnchorElement;
+					if (prevLink) prevLink.click();
+				}
+
+				if (e.key === 'ArrowRight') {
+					e.preventDefault();
+					const nextLink = document.querySelector('.next-link') as HTMLAnchorElement;
+					if (nextLink) nextLink.click();
+				}
+			}
+
+			// ? key: Show keyboard shortcuts help (future enhancement)
+			if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+				const activeElement = document.activeElement as HTMLElement;
+				if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+					console.log('Keyboard Shortcuts:', {
+						'Ctrl/Cmd + K': 'Focus search',
+						'Escape': 'Close menu / blur search',
+						'Alt + ← / →': 'Previous / Next page',
+						'?': 'Show this help'
+					});
+				}
+			}
+		});
+	}
+
+	document.addEventListener('DOMContentLoaded', setupKeyboardShortcuts);
+	document.addEventListener('astro:after-swap', setupKeyboardShortcuts);
+</script>

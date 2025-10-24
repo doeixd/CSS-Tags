@@ -1,0 +1,208 @@
+---
+// Search component using Pagefind
+const base = import.meta.env.BASE_URL;
+---
+
+<div class="search-container">
+	<div id="search"></div>
+</div>
+
+<script>
+	// @ts-ignore
+	import { PagefindUI } from '@pagefind/default-ui';
+
+	function initSearch() {
+		const searchElement = document.querySelector('#search');
+		if (searchElement) {
+			// Check if search is already initialized (has content)
+			if (searchElement.querySelector('.pagefind-ui')) {
+				// Already initialized, don't reinitialize
+				return;
+			}
+
+			// Initialize new search UI
+			new PagefindUI({
+				element: '#search',
+				showSubResults: true,
+				showImages: false,
+				excerptLength: 15,
+				// @ts-ignore
+				baseUrl: import.meta.env.BASE_URL,
+				bundlePath: import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/',
+				processResult: (result) => {
+					// Strip HTML tags from excerpt
+					if (result.excerpt) {
+						result.excerpt = result.excerpt.replace(/<[^>]*>/g, '');
+					}
+					return result;
+				},
+			});
+		}
+	}
+
+	// Initialize on page load
+	document.addEventListener('DOMContentLoaded', initSearch);
+
+	// Re-initialize after view transitions
+	document.addEventListener('astro:after-swap', initSearch);
+</script>
+
+<style is:global>
+	.search-container {
+		margin-bottom: 1.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--border-color, #e1e4e8);
+	}
+
+	/* Pagefind UI Styling */
+	#search {
+		width: 100%;
+	}
+
+	.pagefind-ui__search-input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		font-size: 0.9375rem;
+		border: 1px solid var(--border-color, #e1e4e8);
+		border-radius: 6px;
+		background: var(--bg-primary, #ffffff);
+		color: var(--text-primary, #1a1a1a);
+		transition: border-color 0.15s ease;
+	}
+
+	.pagefind-ui__search-input:focus {
+		outline: none;
+		border-color: var(--accent, #0066cc);
+		box-shadow: 0 0 0 3px var(--accent-light, #e3f2fd);
+	}
+
+	.pagefind-ui__search-clear {
+		background: transparent;
+		color: var(--text-secondary, #6a737d);
+		padding: 0.5rem;
+	}
+
+	.pagefind-ui__search-clear:hover {
+		color: var(--text-primary, #1a1a1a);
+	}
+
+	.pagefind-ui__results {
+		margin-top: 1rem;
+		margin-left: 0;
+	}
+
+	.pagefind-ui__result {
+		padding: 1rem;
+		margin-bottom: 0.5rem;
+		border: 1px solid var(--border-color, #e1e4e8);
+		border-radius: 6px;
+		background: var(--bg-primary, #ffffff);
+		transition: background-color 0.15s ease;
+		overflow: hidden;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+	}
+
+	.pagefind-ui__result:hover {
+		background: var(--bg-hover, #e8eaed);
+	}
+
+	.pagefind-ui__result-link {
+		color: var(--text-primary, #1a1a1a);
+		text-decoration: none;
+		display: block;
+	}
+
+	.pagefind-ui__result-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--accent, #0066cc);
+		margin-bottom: 0.25rem;
+	}
+
+	.pagefind-ui__result-excerpt {
+		font-size: 0.875rem;
+		color: var(--text-secondary, #6a737d);
+		line-height: 1.5;
+		white-space: normal;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		max-width: 100%;
+	}
+
+	.pagefind-ui__result-excerpt mark {
+		background: var(--accent-light, #e3f2fd);
+		color: var(--accent, #0066cc);
+		font-weight: 500;
+		padding: 0 0.2em;
+	}
+
+	.pagefind-ui__message {
+		padding: 1rem;
+		color: var(--text-secondary, #6a737d);
+		font-size: 0.875rem;
+		text-align: center;
+	}
+
+	.pagefind-ui__button {
+		padding: 0.5rem 1rem;
+		background: var(--accent, #0066cc);
+		color: white;
+		border: none;
+		border-radius: 6px;
+		font-size: 0.875rem;
+		font-weight: 500;
+		cursor: pointer;
+		margin-top: 1rem;
+	}
+
+	.pagefind-ui__button:hover {
+		opacity: 0.9;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.pagefind-ui__search-input {
+			background: var(--bg-secondary, #1a1a1a);
+			color: var(--text-primary, #e1e4e8);
+			border-color: var(--border-color, #333);
+		}
+
+		.pagefind-ui__search-input:focus {
+			box-shadow: 0 0 0 3px var(--accent-dark, #1a3a52);
+		}
+
+		.pagefind-ui__search-clear:hover {
+			color: var(--text-primary, #e1e4e8);
+		}
+
+		.pagefind-ui__result {
+			background: var(--bg-secondary, #1a1a1a);
+			border-color: var(--border-color, #333);
+		}
+
+		.pagefind-ui__result:hover {
+			background: var(--bg-hover, #2d2d2d);
+		}
+
+		.pagefind-ui__result-link {
+			color: var(--text-primary, #e1e4e8);
+		}
+
+		.pagefind-ui__result-title {
+			color: var(--accent-light, #58a6ff);
+		}
+
+		.pagefind-ui__result-excerpt {
+			color: var(--text-secondary, #8b949e);
+		}
+
+		.pagefind-ui__result-excerpt mark {
+			background: var(--accent-dark, #1a3a52);
+			color: var(--accent-light, #58a6ff);
+		}
+
+		.pagefind-ui__message {
+			color: var(--text-secondary, #8b949e);
+		}
+	}
+</style>

@@ -1,0 +1,96 @@
+---
+interface Props {
+	currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const pathParts = currentPath.split('/').filter(Boolean);
+const breadcrumbs = [
+	{ label: 'Home', href: base },
+	...pathParts.map((part, index) => {
+		const href = `${base}${pathParts.slice(0, index + 1).join('/')}/`;
+		const label = part.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+		return { label, href };
+	})
+];
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+	<ol class="breadcrumb-list">
+		{breadcrumbs.map((crumb, index) => (
+			<li class="breadcrumb-item">
+				{index < breadcrumbs.length - 1 ? (
+					<>
+						<a href={crumb.href} class="breadcrumb-link">{crumb.label}</a>
+						<span class="breadcrumb-separator">/</span>
+					</>
+				) : (
+					<span class="breadcrumb-current">{crumb.label}</span>
+				)}
+			</li>
+		))}
+	</ol>
+</nav>
+
+<style>
+	.breadcrumbs {
+		margin-bottom: 1.5rem;
+		font-size: 0.875rem;
+	}
+
+	.breadcrumb-list {
+		display: flex;
+		flex-wrap: wrap;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.breadcrumb-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.breadcrumb-link {
+		color: var(--text-secondary, #6a737d);
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+
+	.breadcrumb-link:hover {
+		color: var(--accent, #0066cc);
+	}
+
+	.breadcrumb-separator {
+		color: var(--text-secondary, #6a737d);
+		user-select: none;
+	}
+
+	.breadcrumb-current {
+		color: var(--text-primary, #1a1a1a);
+		font-weight: 500;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.breadcrumb-link {
+			color: var(--text-secondary, #8b949e);
+		}
+
+		.breadcrumb-link:hover {
+			color: var(--accent-light, #58a6ff);
+		}
+
+		.breadcrumb-separator {
+			color: var(--text-secondary, #8b949e);
+		}
+
+		.breadcrumb-current {
+			color: var(--text-primary, #e1e4e8);
+		}
+	}
+</style>

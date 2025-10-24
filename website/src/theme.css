@@ -1,0 +1,246 @@
+/* Website Theme Variables */
+
+:root {
+  /* Colors */
+  --accent: #0066cc;
+  --accent-light: #e3f2fd;
+  --accent-dark: #1a3a52;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6a737d;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-hover: #e8eaed;
+  --border-color: #e1e4e8;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Border Radius */
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 6px;
+
+  /* Z-Index */
+  --z-index-backdrop: 999;
+  --z-index-mobile-menu: 1001;
+  --z-index-sidebar: 1000;
+  --z-index-skip-link: 10001;
+
+  /* Opacity */
+  --opacity-hover: 0.9;
+  --opacity-backdrop: 0.5;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-md: 2px 0 16px rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  --transition-slow-bezier: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Transforms */
+  --transform-scale-hover: scale(1.05);
+  --transform-rotate-collapsed: rotate(-90deg);
+
+  /* Dimensions */
+  --sidebar-width: 280px;
+  --sidebar-width-max: 85vw;
+  --scrollbar-width: 8px;
+  --scrollbar-thumb-width: thin;
+
+  /* Max Heights */
+  --max-height-collapsed: 0;
+  --max-height-expanded: 1000px;
+
+  /* Outline */
+  --outline-width: 2px;
+  --outline-offset: 2px;
+
+  /* Letter Spacing */
+  --letter-spacing-uppercase: 0.05em;
+
+  /* Line Height */
+  --line-height-body: 1.6;
+
+  /* ===========================================
+     COMPONENT-SPECIFIC VARIABLES
+     =========================================== */
+
+  /* Navigation Component */
+  --nav-sidebar-padding: var(--space-2xl) var(--space-lg);
+  --nav-sidebar-padding-top: var(--nav-sidebar-padding);
+  --nav-sidebar-padding-right: var(--nav-sidebar-padding);
+  --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
+  --nav-sidebar-padding-left: var(--nav-sidebar-padding);
+
+  --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
+  --nav-mobile-menu-top: var(--space-lg);
+  --nav-mobile-menu-right: var(--space-lg);
+  --nav-mobile-menu-padding: var(--space-md);
+  --nav-mobile-menu-border-radius: var(--border-radius-lg);
+  --nav-mobile-menu-box-shadow: var(--shadow-sm);
+
+  --nav-header-margin-bottom: var(--space-2xl);
+  --nav-header-padding-bottom: var(--space-lg);
+
+  --nav-site-title-font-size: var(--font-size-2xl);
+  --nav-site-title-font-weight: var(--font-weight-bold);
+
+  --nav-github-link-padding: var(--space-sm) var(--space-lg);
+  --nav-github-link-font-size: var(--font-size-sm);
+  --nav-github-link-font-weight: var(--font-weight-medium);
+  --nav-github-link-border-radius: var(--border-radius-lg);
+
+  --nav-section-margin-bottom: var(--font-size-2xl);
+
+  --nav-section-title-font-size: var(--font-size-xs);
+  --nav-section-title-font-weight: var(--font-weight-bold);
+  --nav-section-title-letter-spacing: var(--letter-spacing-uppercase);
+  --nav-section-title-margin-bottom: var(--space-sm);
+
+  --nav-section-items-margin-bottom: var(--space-xs);
+
+  --nav-link-padding: var(--space-sm) var(--space-md);
+  --nav-link-border-radius: var(--border-radius-md);
+  --nav-link-font-size: var(--font-size-base);
+
+  /* Layout Component */
+  --layout-content-wrapper-padding: 3rem var(--space-2xl);
+  --layout-content-wrapper-padding-top: var(--layout-content-wrapper-padding);
+  --layout-content-wrapper-padding-right: var(--layout-content-wrapper-padding);
+  --layout-content-wrapper-padding-bottom: var(--layout-content-wrapper-padding);
+  --layout-content-wrapper-padding-left: var(--layout-content-wrapper-padding);
+
+  --layout-toc-wrapper-padding: 3rem var(--space-lg) 3rem 0;
+  --layout-toc-wrapper-padding-top: var(--layout-toc-wrapper-padding);
+  --layout-toc-wrapper-padding-right: var(--layout-toc-wrapper-padding);
+  --layout-toc-wrapper-padding-bottom: var(--layout-toc-wrapper-padding);
+  --layout-toc-wrapper-padding-left: var(--layout-toc-wrapper-padding);
+
+  --layout-docs-container-gap: var(--space-2xl);
+
+  --layout-h1-font-size: var(--font-size-4xl);
+  --layout-h1-margin-bottom: var(--space-sm);
+
+  --layout-h2-font-size: var(--font-size-3xl);
+  --layout-h2-margin-top: var(--space-2xl);
+  --layout-h2-margin-bottom: var(--space-lg);
+  --layout-h2-padding-top: var(--space-lg);
+
+  --layout-h3-font-size: var(--font-size-2xl);
+  --layout-h3-margin-top: var(--font-size-2xl);
+  --layout-h3-margin-bottom: var(--space-md);
+
+  --layout-h4-font-size: var(--font-size-xl);
+  --layout-h4-margin-top: var(--font-size-xl);
+  --layout-h4-margin-bottom: var(--space-sm);
+
+  --layout-p-margin-bottom: var(--space-lg);
+
+  --layout-code-padding: 0.2em 0.4em;
+  --layout-code-border-radius: 3px;
+
+  --layout-pre-padding: var(--space-lg);
+  --layout-pre-border-radius: var(--border-radius-lg);
+  --layout-pre-margin-bottom: var(--space-lg);
+
+  --layout-ul-ol-margin-bottom: var(--space-lg);
+  --layout-ul-ol-padding-left: var(--space-2xl);
+
+  --layout-li-margin-bottom: var(--space-sm);
+
+  --layout-blockquote-border-left: 4px solid var(--accent);
+  --layout-blockquote-padding-left: var(--space-lg);
+  --layout-blockquote-margin: var(--space-lg) 0;
+
+  --layout-table-margin-bottom: var(--space-lg);
+
+  --layout-th-td-padding: var(--space-md);
+
+  --layout-th-font-weight: var(--font-weight-semibold);
+
+  --layout-description-font-size: 1.125rem;
+  --layout-description-margin-bottom: var(--space-2xl);
+
+  /* Table of Contents Component */
+  --toc-padding: 1.5rem;
+  --toc-border-radius: var(--border-radius-lg);
+  --toc-font-size: var(--font-size-sm);
+
+  --toc-title-font-size: var(--font-size-sm);
+  --toc-title-font-weight: var(--font-weight-bold);
+  --toc-title-letter-spacing: var(--letter-spacing-uppercase);
+  --toc-title-margin-bottom: var(--space-lg);
+
+  --toc-item-margin-bottom: var(--space-sm);
+
+  --toc-depth-3-margin-left: var(--space-lg);
+
+  --toc-link-padding: var(--space-xs) var(--space-sm);
+  --toc-link-border-radius: var(--border-radius-md);
+
+  /* Previous/Next Navigation Component */
+  --prev-next-nav-gap: var(--space-lg);
+  --prev-next-nav-margin-top: 3rem;
+  --prev-next-nav-padding-top: var(--space-2xl);
+
+  --prev-next-link-gap: var(--space-xs);
+  --prev-next-link-padding: var(--space-lg);
+  --prev-next-link-border-radius: var(--border-radius-lg);
+
+  --prev-next-label-font-size: var(--font-size-xs);
+  --prev-next-label-font-weight: var(--font-weight-semibold);
+  --prev-next-label-letter-spacing: var(--letter-spacing-uppercase);
+
+  --prev-next-title-font-size: var(--font-size-lg);
+  --prev-next-title-font-weight: var(--font-weight-medium);
+
+  /* Skip Link */
+  --skip-link-position: absolute;
+  --skip-link-top: -100px;
+  --skip-link-left: var(--space-lg);
+  --skip-link-padding: var(--space-md) calc(var(--space-lg) * 1.5);
+  --skip-link-border-radius: var(--border-radius-md);
+  --skip-link-font-weight: var(--font-weight-medium);
+  --skip-link-transition: top var(--transition-normal);
+
+  /* Focus Styles */
+  --focus-outline: var(--outline-width) solid var(--accent);
+  --focus-outline-offset: var(--outline-offset);
+  --focus-border-radius: var(--border-radius-sm);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #e1e4e8;
+    --text-secondary: #8b949e;
+    --bg-primary: #0d1117;
+    --bg-secondary: #1a1a1a;
+    --bg-hover: #2d2d2d;
+    --border-color: #333;
+    --accent-light: #58a6ff;
+  }
+}

@@ -1,0 +1,88 @@
+---
+// Scroll to top button
+---
+
+<button class="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
+	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+		<path d="M10 15 L10 5 M6 9 L10 5 L14 9"></path>
+	</svg>
+</button>
+
+<style>
+	.scroll-to-top {
+		position: fixed;
+		bottom: 2rem;
+		right: 2rem;
+		z-index: 50;
+		padding: 0.75rem;
+		background: var(--accent, #0066cc);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		width: 48px;
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(20px);
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+
+	.scroll-to-top.visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.scroll-to-top:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+	}
+
+	.scroll-to-top:active {
+		transform: translateY(-2px);
+	}
+
+	@media (max-width: 768px) {
+		.scroll-to-top {
+			bottom: 1rem;
+			right: 1rem;
+			width: 44px;
+			height: 44px;
+		}
+	}
+</style>
+
+<script>
+	function setupScrollToTop() {
+		const button = document.querySelector('.scroll-to-top');
+		if (!button) return;
+
+		function toggleVisibility() {
+			if (window.scrollY > 300) {
+				button.classList.add('visible');
+			} else {
+				button.classList.remove('visible');
+			}
+		}
+
+		function scrollToTop() {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		}
+
+		window.addEventListener('scroll', toggleVisibility, { passive: true });
+		button.addEventListener('click', scrollToTop);
+
+		toggleVisibility();
+	}
+
+	document.addEventListener('DOMContentLoaded', setupScrollToTop);
+	document.addEventListener('astro:after-swap', setupScrollToTop);
+</script>
