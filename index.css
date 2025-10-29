@@ -50,6 +50,3 @@
 
 /* Optional Theme Generator */
 /* @import url("theme-generator.css"); */
-
-/* WEBSITE THEME OVERRIDES - Highest Priority */
-@import url("website/src/theme.css") layer(website-theme);

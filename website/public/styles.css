@@ -1,0 +1,4 @@
+/* Import main framework CSS with cascade layers */
+@import url("../../index.css");
+
+/* Website theme is imported in DocsLayout.astro with @layer website-theme */
