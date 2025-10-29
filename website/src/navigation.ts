@@ -15,16 +15,15 @@ export const navigation: NavItem[] = [
 			{ label: 'Philosophy', slug: 'guides/philosophy' },
 		],
 	},
-	{
-		label: 'Guides',
-		items: [
-			{ label: 'Color System', slug: 'guides/color-system' },
-			{ label: 'Theming', slug: 'guides/theming' },
-			{ label: 'Theming Guide', slug: 'theming' },
-			{ label: 'Library Review', slug: 'review' },
-			{ label: 'Issues', slug: 'issues' },
-		],
-	},
+		{
+			label: 'Guides',
+			items: [
+				{ label: 'Color System', slug: 'guides/color-system' },
+				{ label: 'Theming', slug: 'guides/theming' },
+				{ label: 'Library Review', slug: 'review' },
+				{ label: 'Issues', slug: 'issues' },
+			],
+		},
 	{
 		label: 'Components',
 		items: [
@@ -34,7 +33,7 @@ export const navigation: NavItem[] = [
 			{ label: 'Box Extra', slug: 'components/box-extra' },
 			{ label: 'Card', slug: 'components/card' },
 			{ label: 'Carousel', slug: 'components/carousel' },
-			{ label: 'Carousel JS', slug: 'carousel.js' },
+			{ label: 'Carousel JS', slug: 'js/carousel' },
 			{ label: 'Chip', slug: 'components/chip' },
 			{ label: 'Container', slug: 'components/container' },
 			{ label: 'Flex', slug: 'components/flex' },
@@ -50,7 +49,7 @@ export const navigation: NavItem[] = [
 			{ label: 'Tooltip', slug: 'components/tooltip' },
 			{ label: 'Tooltips', slug: 'components/tooltips' },
 			{ label: 'View Transition', slug: 'components/view-transition' },
-			{ label: 'View Transition JS', slug: 'view-transition.js' },
+			{ label: 'View Transition JS', slug: 'js/view-transition' },
 		],
 	},
 	{
@@ -72,7 +71,7 @@ export const navigation: NavItem[] = [
 			{ label: 'Reset', slug: 'core/reset' },
 			{ label: 'Text', slug: 'core/text' },
 			{ label: 'Theme', slug: 'core/theme' },
-			{ label: 'Index CSS', slug: 'index.css' },
+			{ label: 'Index CSS', slug: 'reference/index-css' },
 		],
 	},
 	{
@@ -101,7 +100,7 @@ export const navigation: NavItem[] = [
 		label: 'API Reference',
 		collapsed: true,
 		items: [
-			{ label: 'Overview', slug: 'API' },
+			{ label: 'Overview', slug: 'reference/api' },
 		],
 	},
 ];

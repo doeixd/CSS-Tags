@@ -1,0 +1,60 @@
+---
+title: Index CSS - Main Entry Point
+description: The main entry point CSS file that imports all framework components with proper cascade layers.
+---
+
+/*
+ * Modern CSS Framework - Main Entry Point
+ * Revised import structure for clarity and correctness.
+ *//**
+ * Modern CSS Framework - Main Entry Point
+ * Revised import structure for clarity and correctness.
+ */
+
+@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts, website-theme;
+
+/* CORE SYSTEM */
+@import url("core/reset.css") layer(reset);
+@import url("core/tokens.css") layer(tokens);
+@import url("core/engine.css") layer(engine);
+@import url("core/theme.css") layer(theme); /* The new canonical theme file */
+@import url("core/palette.css") layer(palette);
+@import url("core/defaults.css") layer(defaults);
+@import url('core/base.css') layer(base);
+@import url('core/mixins.css') layer(base);
+@import url('core/text.css') layer(components);
+/* THEMES */
+@import url("themes/theme-packs.css") layer(theme);
+@import url("themes/example-brand.css") layer(theme);
+
+/* LAYOUTS & UTILITIES */
+@import url("utilities/utilities.css") layer(utilities); /* The new canonical utilities file */
+@import url("layouts/layout.css") layer(layouts);
+@import url("layouts/layout-extra.css") layer(layouts);
+@import url("layouts/layout-extras-helpers.css") layer(layouts);
+
+/* COMPONENTS */
+@import url('components/container.css') layer(components);
+@import url('components/grid.css') layer(components);
+@import url('components/flex.css') layer(components);
+@import url('components/card.css') layer(components);
+@import url('components/box.css') layer(components);
+@import url('components/box-extra.css') layer(components);
+@import url('components/badge.css') layer(components);
+@import url('components/chip.css') layer(components);
+@import url('components/alert.css') layer(components);
+@import url('components/modal.css') layer(components);
+@import url('components/tooltip.css') layer(components);
+@import url('components/tooltips.css') layer(components);
+@import url('components/list.css') layer(components);
+@import url('components/carousel.css') layer(components);
+@import url('components/popover.css') layer(components);
+@import url('components/view-transition.css') layer(components); /* Corrected path */
+@import url('components/table.css') layer(components);
+@import url('components/form.css') layer(components);
+@import url('components/navigation.css') layer(components);
+@import url('components/masonry.css') layer(components);
+@import url('components/img-container.css') layer(components);
+
+/* Optional Theme Generator */
+/* @import url("theme-generator.css"); */
