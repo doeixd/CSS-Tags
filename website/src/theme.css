@@ -1,6 +1,7 @@
 /* Website Theme Variables */
 
-:root {
+@layer website-theme {
+    :root {
     /* Colors */
     --accent: #0066cc;
     --accent-light: #e3f2fd;
@@ -109,8 +110,8 @@
     --nav-sidebar-padding-left: var(--nav-sidebar-padding);
 
     --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
-    --nav-mobile-menu-top: var(--space-lg);
-    --nav-mobile-menu-right: var(--space-lg);
+    --nav-mobile-menu-top: 2.1lh;
+    --nav-mobile-menu-right: 2.1lh;
     /*--nav-mobile-menu-padding: var(--space-md);*/
     --nav-mobile-menu-padding: 4px 10px;
     --nav-mobile-menu-border-radius: var(--border-radius-lg);
@@ -133,8 +134,8 @@
     --nav-section-title-font-size: 15px;
     --nav-section-title-font-weight: 600;
     --nav-section-title-text-transform: capitalize;
-    --nav-section-title-letter-spacing: 0.5px;
-    --nav-section-title-color: hsl(0deg 0% 34.51%);
+    --nav-section-title-letter-spacing: -0.1px;
+    --nav-section-title-color: hsl(0deg 1.5% 16.31%);
     --nav-section-title-margin-bottom: var(--space-sm);
 
     --nav-section-items-margin-bottom: var(--space-xs);
@@ -286,11 +287,21 @@
 }
 
 html .expressive-code {
-    margin-bottom: 1lh;
+    margin-bottom: var(--code-margin-bottom, 1lh);
 }
 
 html .expressive-code .copy button {
-    height: 1.9rem !important;
-    width: 1.9rem !important;
-    border-radius: 6px !important;
+    height: var(--code-copy-button-height, 1.9rem);
+    width: var(--code-copy-button-width, 1.9rem);
+    border-radius: var(--code-copy-button-border-radius, 6px);
+}
+
+html .expressive-code .copy button::before {
+    border: var(--code-copy-button-border-width, var(--ec-brdWd)) solid
+        var(
+            --code-copy-button-border-color,
+            var(--border-color, var(--ec-frm-intlBrnBrd))
+        );
+    opacity: var(--code-copy-button-opacity, var(--ec-frm-inlBrnBrdOpa));
+}
 }

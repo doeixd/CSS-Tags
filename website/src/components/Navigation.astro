@@ -1,5 +1,4 @@
 ---
-import "../theme.css";
 import { navigation } from "../navigation";
 import Search from "./Search.astro";
 import { normalizeBase, buildHref } from "../utils/url";
@@ -141,6 +140,7 @@ function isActive(slug: string | undefined) {
         z-index: var(--z-index-backdrop);
         opacity: 0;
         transition: opacity var(--transition-slow);
+        backdrop-filter: blur(3px);
         pointer-events: none;
     }
 

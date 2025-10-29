@@ -3,7 +3,7 @@
  * Revised import structure for clarity and correctness.
  */
 
-@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts;
+@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts, website-theme;
 
 /* CORE SYSTEM */
 @import url("core/reset.css") layer(reset);
@@ -50,3 +50,6 @@
 
 /* Optional Theme Generator */
 /* @import url("theme-generator.css"); */
+
+/* WEBSITE THEME OVERRIDES - Highest Priority */
+@import url("website/src/theme.css") layer(website-theme);
