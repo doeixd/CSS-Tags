@@ -98,6 +98,15 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 z-index: 2;
             }
 
+            /* Disable all CSS transitions during theme changes */
+            html.dark-mode::view-transition-old(*),
+            html.light-mode::view-transition-old(*),
+            html.dark-mode::view-transition-new(*),
+            html.light-mode::view-transition-new(*) {
+                transition: none !important;
+                animation: none !important;
+            }
+
             /* Smooth fade transition for theme changes */
             html.dark-mode::view-transition-old(root),
             html.light-mode::view-transition-old(root) {
