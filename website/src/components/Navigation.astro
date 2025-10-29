@@ -1,6 +1,7 @@
 ---
 import { navigation } from "../navigation";
 import Search from "./Search.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 import { normalizeBase, buildHref } from "../utils/url";
 
 const { currentPath } = Astro.props;
@@ -33,29 +34,32 @@ function isActive(slug: string | undefined) {
 <nav class="sidebar" role="navigation" aria-label="Main navigation">
     <div class="nav-header">
         <a href={buildHref(base)} class="site-title">CSS Tags</a>
-        <a
-            href="https://github.com/doeixd/CSS-Tags"
-            target="_blank"
-            rel="noopener"
-            class="github-link"
-            aria-label="View on GitHub"
-        >
-            <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="github-logo"
+        <div class="nav-actions">
+            <ThemeToggle />
+            <a
+                href="https://github.com/doeixd/CSS-Tags"
+                target="_blank"
+                rel="noopener"
+                class="github-link"
+                aria-label="View on GitHub"
             >
-                <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                ></path>
-            </svg>
-        </a>
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="github-logo"
+                >
+                    <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                    ></path>
+                </svg>
+            </a>
+        </div>
     </div>
 
     <Search />
@@ -140,7 +144,7 @@ function isActive(slug: string | undefined) {
         z-index: var(--z-index-backdrop);
         opacity: 0;
         transition: opacity var(--transition-slow);
-        backdrop-filter: blur(3px);
+        backdrop-filter: blur(var(--backdrop-blur));
         pointer-events: none;
     }
 
@@ -206,7 +210,6 @@ function isActive(slug: string | undefined) {
             z-index: var(--z-index-sidebar);
             transform: translateX(-100%);
             transition: transform var(--transition-slow-bezier);
-            /*box-shadow: var(--shadow-md);*/
         }
 
         .sidebar.open {
@@ -223,6 +226,12 @@ function isActive(slug: string | undefined) {
         border-bottom: 1px solid var(--nav-header-border-color, transparent);
     }
 
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
     .site-title {
         font-size: var(--nav-site-title-font-size, var(--font-size-2xl));
         font-weight: var(--nav-site-title-font-weight, var(--font-weight-bold));
@@ -235,7 +244,8 @@ function isActive(slug: string | undefined) {
             --nav-github-link-padding,
             var(--space-sm) var(--space-lg)
         );
-        background: var(--nav-github-link-background, transparent);
+        background: var(--nav-github-link-bg, var(--bg-secondary));
+        border: var(--nav-github-link-border, 1px solid transparent);
         color: var(--nav-github-link-color, var(--text-primary));
         text-decoration: none;
         border-radius: var(
@@ -251,20 +261,34 @@ function isActive(slug: string | undefined) {
         align-items: center;
         justify-content: center;
         transition: all var(--transition-fast);
+        width: var(--nav-github-link-width, 2.5rem);
+        height: var(--nav-github-link-height, 2.5rem);
     }
 
     .github-logo {
         width: var(--nav-github-logo-size, 20px);
         height: var(--nav-github-logo-size, 20px);
-        color: var(
-            --nav-github-logo-color,
-            var(--nav-github-link-color, var(--text-primary))
-        );
         flex-shrink: 0;
     }
 
+    .github-logo path {
+        stroke: currentColor;
+    }
+
     .github-link:hover {
-        opacity: var(--opacity-hover);
+        background: var(--nav-github-link-hover-bg, var(--bg-hover));
+        border-color: var(--nav-github-link-hover-border-color, var(--accent));
+    }
+
+    .github-link:active {
+        transform: var(--nav-github-link-active-transform, scale(0.98));
+    }
+
+    @media (max-width: 768px) {
+        .github-link {
+            width: var(--nav-github-link-width-mobile, 2.25rem);
+            height: var(--nav-github-link-height-mobile, 2.25rem);
+        }
     }
 
     .nav-list {
@@ -303,7 +327,7 @@ function isActive(slug: string | undefined) {
         font-size: var(--nav-section-title-font-size, 15px);
         font-weight: var(--nav-section-title-font-weight, 600);
         text-transform: var(--nav-section-title-text-transform, capitalize);
-        letter-spacing: var(--nav-section-title-letter-spacing, 0.5px);
+        letter-spacing: var(--nav-section-title-letter-spacing, -0.1px);
         color: var(--nav-section-title-color, hsl(0deg 0% 34.51%));
         margin-bottom: var(--nav-section-title-margin-bottom, var(--space-sm));
         cursor: pointer;
@@ -348,33 +372,62 @@ function isActive(slug: string | undefined) {
         font-weight: var(--font-weight-medium);
     }
 
+    /* Dark mode styles (system preference) */
     @media (prefers-color-scheme: dark) {
-        .sidebar {
+        :root:not(.light-mode) .sidebar {
             background: var(--bg-secondary);
             border-right-color: var(--border-color);
         }
 
-        .site-title,
-        .nav-link {
+        :root:not(.light-mode) .site-title,
+        :root:not(.light-mode) .nav-link {
             color: var(--text-primary);
         }
 
-        .section-title {
+        :root:not(.light-mode) .section-title {
             color: var(--text-secondary);
         }
 
-        .nav-link:hover {
+        :root:not(.light-mode) .nav-link:hover {
             background: var(--bg-hover);
         }
 
-        .nav-link.active {
+        :root:not(.light-mode) .nav-link.active {
             background: var(--accent-dark);
             color: var(--accent-light);
         }
 
-        .github-logo {
-            color: var(--nav-github-logo-color, white);
+        :root:not(.light-mode) .github-logo {
+            color: var(--text-primary) !important;
         }
+    }
+
+    /* Dark mode styles (manual toggle) */
+    :root.dark-mode .sidebar {
+        background: var(--bg-secondary);
+        border-right-color: var(--border-color);
+    }
+
+    :root.dark-mode .site-title,
+    :root.dark-mode .nav-link {
+        color: var(--text-primary);
+    }
+
+    :root.dark-mode .section-title {
+        color: var(--text-secondary);
+    }
+
+    :root.dark-mode .nav-link:hover {
+        background: var(--bg-hover);
+    }
+
+    :root.dark-mode .nav-link.active {
+        background: var(--accent-dark);
+        color: var(--accent-light);
+    }
+
+    :root.dark-mode .github-logo {
+        color: var(--text-primary) !important;
     }
 </style>
 

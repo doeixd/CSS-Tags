@@ -1,0 +1,162 @@
+---
+// Theme toggle button component
+---
+
+<button
+    class="theme-toggle"
+    aria-label="Toggle dark mode"
+    title="Toggle dark mode"
+>
+    <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="4" fill="currentColor" />
+        <path
+            d="M10 1v2m0 14v2M4.22 4.22l1.42 1.42m8.72 8.72l1.42 1.42M1 10h2m14 0h2M4.22 15.78l1.42-1.42m8.72-8.72l1.42-1.42"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+        />
+    </svg>
+    <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path
+            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+        />
+    </svg>
+</button>
+
+<style>
+    .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--theme-toggle-gap, var(--space-sm));
+        padding: var(--theme-toggle-padding, var(--space-sm) var(--space-lg));
+        background: var(--theme-toggle-bg, var(--bg-secondary));
+        border: var(--theme-toggle-border, 1px solid transparent);
+        border-radius: var(--theme-toggle-border-radius, var(--border-radius-lg));
+        color: var(--theme-toggle-color, var(--text-primary));
+        font-size: var(--theme-toggle-font-size, var(--font-size-sm));
+        font-weight: var(--theme-toggle-font-weight, var(--font-weight-medium));
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        white-space: nowrap;
+        position: relative;
+        width: var(--theme-toggle-width, 2.5rem);
+        height: var(--theme-toggle-height, 2.5rem);
+    }
+
+    .theme-toggle:hover {
+        background: var(--theme-toggle-hover-bg, var(--bg-hover));
+        border-color: var(--theme-toggle-hover-border-color, var(--accent));
+    }
+
+    .theme-toggle:active {
+        transform: var(--theme-toggle-active-transform, scale(0.98));
+    }
+
+    .sun-icon,
+    .moon-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all var(--transition-normal);
+        color: var(--theme-toggle-icon-color, currentColor);
+        width: var(--theme-toggle-icon-size, 20px);
+        height: var(--theme-toggle-icon-size, 20px);
+    }
+
+    /* Default: show sun icon (for light mode) */
+    .sun-icon {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg) scale(0.8);
+    }
+
+    .moon-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+
+    /* Dark mode: show moon icon */
+    :global(.dark-mode) .sun-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+
+    :global(.dark-mode) .moon-icon {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-90deg) scale(0.8);
+    }
+
+    @media (max-width: 768px) {
+        .theme-toggle {
+            width: var(--theme-toggle-width-mobile, 2.25rem);
+            height: var(--theme-toggle-height-mobile, 2.25rem);
+        }
+    }
+</style>
+
+<script>
+    function restoreTheme() {
+        const savedTheme = localStorage.getItem("theme");
+        const html = document.documentElement;
+
+        // Remove existing theme classes
+        html.classList.remove("dark-mode", "light-mode");
+
+        if (savedTheme === "dark") {
+            html.classList.add("dark-mode");
+            html.setAttribute("data-theme", "dark");
+        } else {
+            // Default to light mode
+            html.classList.add("light-mode");
+            html.setAttribute("data-theme", "light");
+        }
+    }
+
+    function setupThemeToggle() {
+        const button = document.querySelector(".theme-toggle");
+        if (!button) return;
+
+        button.addEventListener("click", async () => {
+            const html = document.documentElement;
+            const currentTheme = html.classList.contains("dark-mode")
+                ? "dark"
+                : "light";
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+            // Check if browser supports View Transitions API
+            if (document.startViewTransition) {
+                await document.startViewTransition(() => {
+                    updateTheme(newTheme);
+                }).ready;
+            } else {
+                // Fallback for browsers without View Transitions
+                updateTheme(newTheme);
+            }
+        });
+
+        function updateTheme(theme) {
+            const html = document.documentElement;
+
+            // Update DOM - remove both classes first, then add the correct one
+            html.classList.remove("dark-mode", "light-mode");
+            html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+
+            // Update data-theme attribute for Expressive Code
+            html.setAttribute("data-theme", theme);
+
+            // Save to localStorage
+            localStorage.setItem("theme", theme);
+        }
+    }
+
+    // Restore theme on page load and after Astro view transitions
+    document.addEventListener("DOMContentLoaded", () => {
+        restoreTheme();
+        setupThemeToggle();
+    });
+    document.addEventListener("astro:after-swap", () => {
+        restoreTheme();
+        setupThemeToggle();
+    });
+</script>

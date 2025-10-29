@@ -112,26 +112,49 @@ const nextDoc = nextSlug ? docsMap.get(nextSlug) || null : null;
 		}
 	}
 
+	/* Dark mode styles (system preference) */
 	@media (prefers-color-scheme: dark) {
-		.prev-next-nav {
+		:root:not(.light-mode) .prev-next-nav {
 			border-top-color: var(--border-color);
 		}
 
-		.prev-next-link {
+		:root:not(.light-mode) .prev-next-link {
 			border-color: var(--border-color);
 		}
 
-		.prev-next-link:hover {
+		:root:not(.light-mode) .prev-next-link:hover {
 			border-color: var(--accent-light);
 			background: var(--bg-hover);
 		}
 
-		.prev-next-label {
+		:root:not(.light-mode) .prev-next-label {
 			color: var(--text-secondary);
 		}
 
-		.prev-next-title {
+		:root:not(.light-mode) .prev-next-title {
 			color: var(--text-primary);
 		}
+	}
+
+	/* Dark mode styles (manual toggle) */
+	:root.dark-mode .prev-next-nav {
+		border-top-color: var(--border-color);
+	}
+
+	:root.dark-mode .prev-next-link {
+		border-color: var(--border-color);
+	}
+
+	:root.dark-mode .prev-next-link:hover {
+		border-color: var(--accent-light);
+		background: var(--bg-hover);
+	}
+
+	:root.dark-mode .prev-next-label {
+		color: var(--text-secondary);
+	}
+
+	:root.dark-mode .prev-next-title {
+		color: var(--text-primary);
 	}
 </style>

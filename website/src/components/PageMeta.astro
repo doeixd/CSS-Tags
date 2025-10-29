@@ -44,18 +44,33 @@ const githubEditUrl = `https://github.com/doeixd/CSS-Tags/edit/main/website/src/
 		color: var(--accent, #0066cc);
 	}
 
+	/* Dark mode styles (system preference) */
 	@media (prefers-color-scheme: dark) {
-		.page-meta {
-			border-top-color: var(--border-color, #333);
+		:root:not(.light-mode) .page-meta {
+			border-top-color: var(--border-color);
 		}
 
-		.edit-link {
-			color: var(--text-secondary, #8b949e);
+		:root:not(.light-mode) .edit-link {
+			color: var(--text-secondary);
 		}
 
-		.edit-link:hover {
-			background: var(--bg-hover, #2d2d2d);
-			color: var(--accent-light, #58a6ff);
+		:root:not(.light-mode) .edit-link:hover {
+			background: var(--bg-hover);
+			color: var(--accent-light);
 		}
+	}
+
+	/* Dark mode styles (manual toggle) */
+	:root.dark-mode .page-meta {
+		border-top-color: var(--border-color);
+	}
+
+	:root.dark-mode .edit-link {
+		color: var(--text-secondary);
+	}
+
+	:root.dark-mode .edit-link:hover {
+		background: var(--bg-hover);
+		color: var(--accent-light);
 	}
 </style>

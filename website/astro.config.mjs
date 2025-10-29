@@ -12,6 +12,12 @@ export default defineConfig({
 	integrations: [
 		expressiveCode({
 			themes: ['min-light', 'min-dark'],
+			themeCssSelector: (theme) => {
+				// Use data-theme attribute for manual toggle
+				// This will be set by JavaScript when user clicks the theme toggle
+				return `[data-theme="${theme.type}"]`;
+			},
+			useThemedScrollbars: false,
 			styleOverrides: {
 				borderRadius: '6px',
 				borderWidth: '1px',

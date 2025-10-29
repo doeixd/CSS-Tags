@@ -79,21 +79,39 @@ const breadcrumbs = [
 		font-weight: 500;
 	}
 
+	/* Dark mode styles (system preference) */
 	@media (prefers-color-scheme: dark) {
-		.breadcrumb-link {
-			color: var(--text-secondary, #8b949e);
+		:root:not(.light-mode) .breadcrumb-link {
+			color: var(--text-secondary);
 		}
 
-		.breadcrumb-link:hover {
-			color: var(--accent-light, #58a6ff);
+		:root:not(.light-mode) .breadcrumb-link:hover {
+			color: var(--accent-light);
 		}
 
-		.breadcrumb-separator {
-			color: var(--text-secondary, #8b949e);
+		:root:not(.light-mode) .breadcrumb-separator {
+			color: var(--text-secondary);
 		}
 
-		.breadcrumb-current {
-			color: var(--text-primary, #e1e4e8);
+		:root:not(.light-mode) .breadcrumb-current {
+			color: var(--text-primary);
 		}
+	}
+
+	/* Dark mode styles (manual toggle) */
+	:root.dark-mode .breadcrumb-link {
+		color: var(--text-secondary);
+	}
+
+	:root.dark-mode .breadcrumb-link:hover {
+		color: var(--accent-light);
+	}
+
+	:root.dark-mode .breadcrumb-separator {
+		color: var(--text-secondary);
+	}
+
+	:root.dark-mode .breadcrumb-current {
+		color: var(--text-primary);
 	}
 </style>

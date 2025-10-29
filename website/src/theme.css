@@ -1,307 +1,610 @@
-/* Website Theme Variables */
+/* =============================================================================
+   WEBSITE THEME VARIABLES
+   CSS Tags Documentation Website Theme
+   ============================================================================= */
 
 @layer website-theme {
+    /* =========================================================================
+       ROOT VARIABLES
+       Design tokens and theme configuration
+       ========================================================================= */
+
     :root {
-    /* Colors */
-    --accent: #0066cc;
-    --accent-light: #e3f2fd;
-    --accent-dark: #1a3a52;
-    --text-primary: #1a1a1a;
-    --text-secondary: #6a737d;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --bg-secondary: #ffffff;
-    --bg-hover: #e8eaed;
-    --border-color: #e1e4e8;
+        /* ---------------------------------------------------------------------
+           BASE COLORS
+           --------------------------------------------------------------------- */
+        --accent: #0066cc;
+        --accent-light: #e3f2fd;
+        --accent-dark: #1a3a52;
 
-    /* Form component colors */
-    --ec-frm-tooltipSuccessBg: var(--accent-light);
-    --ec-frm-tooltipSuccessFg: var(--accent-dark);
-    --tooltip-bg: var(--bg-secondary);
+        --text-primary: #1a1a1a;
+        --text-secondary: #6a737d;
 
-    /* Accent color and selection */
-    --accent-color: var(--accent);
-    --selection-bg: var(--accent-light);
-    --selection-fg: var(--accent-dark);
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-hover: #e8eaed;
 
-    /* Spacing */
-    --space-xs: 0.25rem;
-    --space-sm: 0.5rem;
-    --space-md: 0.75rem;
-    --space-lg: 1rem;
-    --space-xl: 1.5rem;
-    --space-2xl: 2rem;
+        --border-color: #e1e4e8;
 
-    /* Font Sizes */
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 0.9375rem;
-    --font-size-lg: 1rem;
-    --font-size-xl: 1.25rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-3xl: 2rem;
-    --font-size-4xl: 2.5rem;
-    --font-size-5xl: 3rem;
+        /* ---------------------------------------------------------------------
+           SELECTION & ACCENT
+           --------------------------------------------------------------------- */
+        --accent-color: var(--accent);
+        --selection-bg: var(--accent-light);
+        --selection-fg: var(--accent-dark);
 
-    /* Font Weights */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
+        /* ---------------------------------------------------------------------
+           SPACING SCALE
+           --------------------------------------------------------------------- */
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 0.75rem;
+        --space-lg: 1rem;
+        --space-xl: 1.5rem;
+        --space-2xl: 2rem;
 
-    /* Border Radius */
-    --border-radius-sm: 2px;
-    --border-radius-md: 4px;
-    --border-radius-lg: 6px;
+        /* ---------------------------------------------------------------------
+           TYPOGRAPHY
+           --------------------------------------------------------------------- */
+        /* Font Sizes */
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 0.9375rem;
+        --font-size-lg: 1rem;
+        --font-size-xl: 1.25rem;
+        --font-size-2xl: 1.5rem;
+        --font-size-3xl: 2rem;
+        --font-size-4xl: 2.5rem;
+        --font-size-5xl: 3rem;
 
-    /* Z-Index */
-    --z-index-backdrop: 999;
-    --z-index-mobile-menu: 1001;
-    --z-index-sidebar: 1000;
-    --z-index-skip-link: 10001;
+        /* Font Weights */
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
 
-    /* Opacity */
-    --opacity-hover: 0.9;
-    --opacity-backdrop: 0.5;
+        /* Line Height */
+        --line-height-body: 1.6;
 
-    /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
-    --shadow-md: 2px 0 16px rgba(0, 0, 0, 0.2);
+        /* Letter Spacing */
+        --letter-spacing-uppercase: 0.05em;
 
-    /* Transitions */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.2s ease;
-    --transition-slow: 0.3s ease;
-    --transition-slow-bezier: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* ---------------------------------------------------------------------
+           BORDERS & RADIUS
+           --------------------------------------------------------------------- */
+        --border-radius-sm: 2px;
+        --border-radius-md: 4px;
+        --border-radius-lg: 6px;
 
-    /* Transforms */
-    --transform-scale-hover: scale(1.05);
-    --transform-rotate-collapsed: rotate(-90deg);
+        /* ---------------------------------------------------------------------
+           LAYOUT & DIMENSIONS
+           --------------------------------------------------------------------- */
+        /* Responsive Breakpoints */
+        --breakpoint-sm: 640px;
+        --breakpoint-md: 768px;
+        --breakpoint-lg: 1024px;
+        --breakpoint-xl: 1200px;
 
-    /* Dimensions */
-    --sidebar-width: 280px;
-    --sidebar-width-max: 85vw;
-    --scrollbar-width: 8px;
-    --scrollbar-thumb-width: thin;
+        /* Layout Widths */
+        --sidebar-width: 280px;
+        --sidebar-width-max: 85vw;
+        --toc-width: 250px;
+        --min-mobile-width: 320px;
 
-    /* Max Heights */
-    --max-height-collapsed: 0;
-    --max-height-expanded: 1000px;
+        /* Scrollbar */
+        --scrollbar-width: 8px;
+        --scrollbar-thumb-width: thin;
 
-    /* Outline */
-    --outline-width: 2px;
-    --outline-offset: 2px;
+        /* Resize Handle */
+        --resize-handle-width: 4px;
+        --resize-handle-hit-area: 12px;
 
-    /* Letter Spacing */
-    --letter-spacing-uppercase: 0.05em;
+        /* Max Heights */
+        --max-height-collapsed: 0;
+        --max-height-expanded: 1000px;
 
-    /* Line Height */
-    --line-height-body: 1.6;
+        /* ---------------------------------------------------------------------
+           ELEVATION & DEPTH
+           --------------------------------------------------------------------- */
+        /* Z-Index Scale */
+        --z-index-backdrop: 999;
+        --z-index-sidebar: 1000;
+        --z-index-mobile-menu: 1001;
+        --z-index-skip-link: 10001;
 
-    /* ===========================================
-     COMPONENT-SPECIFIC VARIABLES
-     =========================================== */
+        /* Shadows */
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+        --shadow-md: 2px 0 16px rgba(0, 0, 0, 0.2);
 
-    /* Navigation Component */
-    --nav-sidebar-padding: var(--space-2xl) var(--space-lg);
-    --nav-sidebar-padding-top: var(--nav-sidebar-padding);
-    --nav-sidebar-padding-right: var(--nav-sidebar-padding);
-    --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
-    --nav-sidebar-padding-left: var(--nav-sidebar-padding);
+        /* Opacity */
+        --opacity-hover: 0.9;
+        --opacity-backdrop: 0.5;
 
-    --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
-    --nav-mobile-menu-top: 2.1lh;
-    --nav-mobile-menu-right: 2.1lh;
-    /*--nav-mobile-menu-padding: var(--space-md);*/
-    --nav-mobile-menu-padding: 4px 10px;
-    --nav-mobile-menu-border-radius: var(--border-radius-lg);
-    --nav-mobile-menu-box-shadow: var(--shadow-sm);
+        /* ---------------------------------------------------------------------
+           MOTION & TRANSITIONS
+           --------------------------------------------------------------------- */
+        --transition-fast: 0.15s ease;
+        --transition-normal: 0.2s ease;
+        --transition-slow: 0.3s ease;
+        --transition-slow-bezier: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --nav-header-margin-bottom: var(--space-2xl);
-    --nav-header-padding-bottom: var(--space-lg);
+        /* Transforms */
+        --transform-scale-hover: scale(1.05);
+        --transform-rotate-collapsed: rotate(-90deg);
 
-    --nav-site-title-font-size: var(--font-size-2xl);
-    --nav-site-title-font-weight: var(--font-weight-bold);
+    /* View Transitions */
+    --view-transition-blur: 4px;
 
-    --nav-github-link-padding: var(--space-sm) var(--space-lg);
-    --nav-github-link-font-size: var(--font-size-sm);
-    --nav-github-link-font-weight: var(--font-weight-medium);
-    --nav-github-link-border-radius: var(--border-radius-lg);
-    --nav-github-logo-size: 20px;
-    --nav-github-logo-color: oklch(from var(--text-secondary) l c h / 50%);
-    --nav-section-margin-bottom: var(--font-size-5xl);
+    /* =========================================================================
+        VIEW TRANSITIONS
+        Smooth theme transitions
+        ========================================================================= */
 
-    --nav-section-title-font-size: 15px;
-    --nav-section-title-font-weight: 600;
-    --nav-section-title-text-transform: capitalize;
-    --nav-section-title-letter-spacing: -0.1px;
-    --nav-section-title-color: hsl(0deg 1.5% 16.31%);
-    --nav-section-title-margin-bottom: var(--space-sm);
+    @view-transition {
+        navigation: auto;
+    }
 
-    --nav-section-items-margin-bottom: var(--space-xs);
+    /* Theme transition animations */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: var(--transition-slow-bezier);
+        animation-timing-function: ease-out;
+    }
 
-    --nav-link-padding: var(--space-sm) var(--space-md);
-    --nav-link-border-radius: var(--border-radius-md);
-    --nav-link-font-size: var(--font-size-base);
+    ::view-transition-old(root) {
+        animation-name: theme-out;
+    }
 
-    /* Layout Component */
-    --layout-content-wrapper-padding: 3rem var(--space-2xl);
-    --layout-content-wrapper-padding-top: var(--layout-content-wrapper-padding);
-    --layout-content-wrapper-padding-right: var(
-        --layout-content-wrapper-padding
-    );
-    --layout-content-wrapper-padding-bottom: var(
-        --layout-content-wrapper-padding
-    );
-    --layout-content-wrapper-padding-left: var(
-        --layout-content-wrapper-padding
-    );
+    ::view-transition-new(root) {
+        animation-name: theme-in;
+    }
 
-    --layout-toc-wrapper-padding: 3rem var(--space-lg) 3rem 0;
-    --layout-toc-wrapper-padding-top: var(--layout-toc-wrapper-padding);
-    --layout-toc-wrapper-padding-right: var(--layout-toc-wrapper-padding);
-    --layout-toc-wrapper-padding-bottom: var(--layout-toc-wrapper-padding);
-    --layout-toc-wrapper-padding-left: var(--layout-toc-wrapper-padding);
+    @keyframes theme-out {
+        to {
+            opacity: 0;
+            filter: blur(var(--view-transition-blur));
+        }
+    }
 
-    --layout-docs-container-gap: var(--space-2xl);
+    @keyframes theme-in {
+        from {
+            opacity: 0;
+            filter: blur(var(--view-transition-blur));
+        }
+        to {
+            opacity: 1;
+            filter: blur(0);
+        }
+    }
 
-    --layout-h1-font-size: var(--font-size-4xl);
-    --layout-h1-margin-bottom: var(--space-sm);
+        /* Backdrop Effects */
+        --backdrop-blur: 3px;
 
-    --layout-h2-font-size: var(--font-size-3xl);
-    --layout-h2-margin-top: var(--space-2xl);
-    --layout-h2-margin-bottom: var(--space-lg);
-    --layout-h2-padding-top: var(--space-lg);
+        /* ---------------------------------------------------------------------
+           FOCUS STYLES
+           --------------------------------------------------------------------- */
+        --outline-width: 2px;
+        --outline-offset: 2px;
+        --focus-outline: var(--outline-width) solid var(--accent);
+        --focus-outline-offset: var(--outline-offset);
+        --focus-border-radius: var(--border-radius-sm);
 
-    --layout-h3-font-size: var(--font-size-2xl);
-    --layout-h3-margin-top: var(--font-size-2xl);
-    --layout-h3-margin-bottom: var(--space-md);
+        /* =====================================================================
+           COMPONENT-SPECIFIC VARIABLES
+           ===================================================================== */
 
-    --layout-h4-font-size: var(--font-size-xl);
-    --layout-h4-margin-top: var(--font-size-xl);
-    --layout-h4-margin-bottom: var(--space-sm);
+        /* ---------------------------------------------------------------------
+           NAVIGATION COMPONENT
+           --------------------------------------------------------------------- */
+        --nav-sidebar-padding: var(--space-2xl) var(--space-lg);
+        --nav-sidebar-padding-top: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-right: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-left: var(--nav-sidebar-padding);
 
-    --layout-p-margin-bottom: var(--space-lg);
+        --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
+        --nav-mobile-menu-top: 2.1lh;
+        --nav-mobile-menu-right: 2.1lh;
+        --nav-mobile-menu-padding: 4px 10px;
+        --nav-mobile-menu-border-radius: var(--border-radius-lg);
+        --nav-mobile-menu-box-shadow: var(--shadow-sm);
 
-    --layout-code-padding: 0.2em 0.4em;
-    --layout-code-border-radius: 3px;
+        --nav-header-margin-bottom: var(--space-2xl);
+        --nav-header-padding-bottom: var(--space-lg);
 
-    --layout-pre-padding: var(--space-lg);
-    --layout-pre-border-radius: var(--border-radius-lg);
-    --layout-pre-margin-bottom: var(--space-lg);
+        --nav-site-title-font-size: var(--font-size-2xl);
+        --nav-site-title-font-weight: var(--font-weight-bold);
 
-    --layout-ul-ol-margin-bottom: var(--space-lg);
-    --layout-ul-ol-padding-left: var(--space-2xl);
+        --nav-github-link-padding: var(--space-sm) var(--space-lg);
+        --nav-github-link-font-size: var(--font-size-sm);
+        --nav-github-link-font-weight: var(--font-weight-medium);
+        --nav-github-link-border-radius: var(--border-radius-lg);
+        --nav-github-logo-size: 20px;
+        --nav-github-logo-color: oklch(from var(--text-secondary) l c h / 50%);
 
-    --layout-li-margin-bottom: var(--space-sm);
+        --nav-section-margin-bottom: var(--font-size-5xl);
+        --nav-section-title-font-size: 15px;
+        --nav-section-title-font-weight: 600;
+        --nav-section-title-text-transform: capitalize;
+        --nav-section-title-letter-spacing: -0.1px;
+        --nav-section-title-color: hsl(0deg 1.5% 16.31%);
+        --nav-section-title-margin-bottom: var(--space-sm);
 
-    --layout-blockquote-border-left: 4px solid var(--accent);
-    --layout-blockquote-padding-left: var(--space-lg);
-    --layout-blockquote-margin: var(--space-lg) 0;
+        --nav-section-items-margin-bottom: var(--space-xs);
 
-    --layout-table-margin-bottom: var(--space-lg);
+        --nav-link-padding: var(--space-sm) var(--space-md);
+        --nav-link-border-radius: var(--border-radius-md);
+        --nav-link-font-size: var(--font-size-base);
 
-    --layout-th-td-padding: var(--space-md);
+        /* ---------------------------------------------------------------------
+           LAYOUT COMPONENT
+           --------------------------------------------------------------------- */
+        --layout-content-wrapper-padding: 3rem var(--space-2xl);
+        --layout-content-wrapper-padding-top: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-right: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-bottom: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-left: var(
+            --layout-content-wrapper-padding
+        );
 
-    --layout-th-font-weight: var(--font-weight-semibold);
+        --layout-toc-wrapper-padding: 3rem var(--space-lg) 3rem 0;
+        --layout-toc-wrapper-padding-top: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-right: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-bottom: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-left: var(--layout-toc-wrapper-padding);
 
-    --layout-description-font-size: 1.125rem;
-    --layout-description-margin-bottom: var(--space-2xl);
+        --layout-docs-container-gap: var(--space-2xl);
 
-    /* Table of Contents Component */
-    --toc-padding: 1.5rem;
-    --toc-background: transparent;
-    --toc-border: transparent;
-    --toc-border-radius: var(--border-radius-lg);
-    --toc-font-size: var(--font-size-sm);
+        /* Typography within layout */
+        --layout-h1-font-size: var(--font-size-4xl);
+        --layout-h1-margin-bottom: var(--space-sm);
 
-    --toc-title-font-size: var(--font-size-sm);
-    --toc-title-font-weight: var(--font-weight-bold);
-    --toc-title-letter-spacing: var(--letter-spacing-uppercase);
-    --toc-title-margin-bottom: var(--space-lg);
+        --layout-h2-font-size: var(--font-size-3xl);
+        --layout-h2-margin-top: var(--space-2xl);
+        --layout-h2-margin-bottom: var(--space-lg);
+        --layout-h2-padding-top: var(--space-lg);
 
-    --toc-item-margin-bottom: var(--space-sm);
+        --layout-h3-font-size: var(--font-size-2xl);
+        --layout-h3-margin-top: var(--font-size-2xl);
+        --layout-h3-margin-bottom: var(--space-md);
 
-    --toc-depth-3-margin-left: var(--space-lg);
+        --layout-h4-font-size: var(--font-size-xl);
+        --layout-h4-margin-top: var(--font-size-xl);
+        --layout-h4-margin-bottom: var(--space-sm);
 
-    --toc-link-padding: var(--space-xs) var(--space-sm);
-    --toc-link-border-radius: var(--border-radius-md);
-    --toc-link-opacity-default: 0.55;
-    --toc-link-opacity-hover: 1;
-    --toc-link-color: hsl(0deg 1.5% 45%);
-    --toc-link-hover-bg: hsl(0deg 0% 97%);
+        --layout-p-margin-bottom: var(--space-lg);
 
-    /* Previous/Next Navigation Component */
-    --prev-next-nav-gap: var(--space-lg);
-    --prev-next-nav-margin-top: 3rem;
-    --prev-next-nav-padding-top: var(--space-2xl);
+        /* Code elements within layout */
+        --layout-code-padding: 0.2em 0.4em;
+        --layout-code-border-radius: 3px;
 
-    --prev-next-link-gap: var(--space-xs);
-    --prev-next-link-padding: var(--space-lg);
-    --prev-next-link-border-radius: var(--border-radius-lg);
+        --layout-pre-padding: var(--space-lg);
+        --layout-pre-border-radius: var(--border-radius-lg);
+        --layout-pre-margin-bottom: var(--space-lg);
 
-    --prev-next-label-font-size: var(--font-size-xs);
-    --prev-next-label-font-weight: var(--font-weight-semibold);
-    --prev-next-label-letter-spacing: var(--letter-spacing-uppercase);
+        /* Lists within layout */
+        --layout-ul-ol-margin-bottom: var(--space-lg);
+        --layout-ul-ol-padding-left: var(--space-2xl);
+        --layout-li-margin-bottom: var(--space-sm);
 
-    --prev-next-title-font-size: var(--font-size-lg);
-    --prev-next-title-font-weight: var(--font-weight-medium);
+        /* Blockquotes within layout */
+        --layout-blockquote-border-left: 4px solid var(--accent);
+        --layout-blockquote-padding-left: var(--space-lg);
+        --layout-blockquote-margin: var(--space-lg) 0;
 
-    /* Skip Link */
-    --skip-link-position: absolute;
-    --skip-link-top: -100px;
-    --skip-link-left: var(--space-lg);
-    --skip-link-padding: var(--space-md) calc(var(--space-lg) * 1.5);
-    --skip-link-border-radius: var(--border-radius-md);
-    --skip-link-font-weight: var(--font-weight-medium);
-    --skip-link-transition: top var(--transition-normal);
+        /* Tables within layout */
+        --layout-table-margin-bottom: var(--space-lg);
+        --layout-th-td-padding: var(--space-md);
+        --layout-th-font-weight: var(--font-weight-semibold);
 
-    /* Focus Styles */
-    --focus-outline: var(--outline-width) solid var(--accent);
-    --focus-outline-offset: var(--outline-offset);
-    --focus-border-radius: var(--border-radius-sm);
+        --layout-description-font-size: 1.125rem;
+        --layout-description-margin-bottom: var(--space-2xl);
 
-    /* Code Frame (Expressive Code) */
-    --code-frame-border: 1px solid var(--border-color);
+        /* ---------------------------------------------------------------------
+           TABLE OF CONTENTS COMPONENT
+           --------------------------------------------------------------------- */
+        --toc-padding: 1.5rem;
+        --toc-background: transparent;
+        --toc-border: transparent;
+        --toc-border-radius: var(--border-radius-lg);
+        --toc-font-size: var(--font-size-sm);
 
-    /* Global accent color and selection styling */
-    accent-color: var(--accent-color);
-}
+        --toc-title-font-size: var(--font-size-sm);
+        --toc-title-font-weight: var(--font-weight-bold);
+        --toc-title-letter-spacing: var(--letter-spacing-uppercase);
+        --toc-title-margin-bottom: var(--space-lg);
 
-::selection {
-    background-color: var(--selection-bg);
-    color: var(--selection-fg);
-}
+        --toc-item-margin-bottom: var(--space-sm);
+        --toc-depth-3-margin-left: var(--space-lg);
 
-@media (prefers-color-scheme: dark) {
-    :root {
+        --toc-link-padding: var(--space-xs) var(--space-sm);
+        --toc-link-border-radius: var(--border-radius-md);
+        --toc-link-opacity-default: 0.55;
+        --toc-link-opacity-hover: 1;
+        --toc-link-color: hsl(0deg 1.5% 45%);
+        --toc-link-hover-bg: hsl(0deg 0% 97%);
+
+        /* ---------------------------------------------------------------------
+           PREVIOUS/NEXT NAVIGATION COMPONENT
+           --------------------------------------------------------------------- */
+        --prev-next-nav-gap: var(--space-lg);
+        --prev-next-nav-margin-top: 3rem;
+        --prev-next-nav-padding-top: var(--space-2xl);
+
+        --prev-next-link-gap: var(--space-xs);
+        --prev-next-link-padding: var(--space-lg);
+        --prev-next-link-border-radius: var(--border-radius-lg);
+
+        --prev-next-label-font-size: var(--font-size-xs);
+        --prev-next-label-font-weight: var(--font-weight-semibold);
+        --prev-next-label-letter-spacing: var(--letter-spacing-uppercase);
+
+        --prev-next-title-font-size: var(--font-size-lg);
+        --prev-next-title-font-weight: var(--font-weight-medium);
+
+        /* ---------------------------------------------------------------------
+           SKIP LINK
+           --------------------------------------------------------------------- */
+        --skip-link-position: absolute;
+        --skip-link-top: -100px;
+        --skip-link-left: var(--space-lg);
+        --skip-link-padding: var(--space-md) calc(var(--space-lg) * 1.5);
+        --skip-link-border-radius: var(--border-radius-md);
+        --skip-link-font-weight: var(--font-weight-medium);
+        --skip-link-transition: top var(--transition-normal);
+
+        /* ---------------------------------------------------------------------
+           SCROLL TO TOP BUTTON
+           --------------------------------------------------------------------- */
+        --scroll-button-size: 48px;
+        --scroll-button-size-mobile: 44px;
+        --scroll-button-transform-hidden: translateY(20px);
+        --scroll-button-transform-visible: translateY(-4px);
+        --scroll-button-transform-hover: translateY(-2px);
+        --scroll-button-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        --scroll-button-bg: var(--accent);
+        --scroll-button-fg: white;
+        --scroll-button-transition: all 0.3s ease;
+
+        /* ---------------------------------------------------------------------
+           SEARCH COMPONENT
+           --------------------------------------------------------------------- */
+        --search-border-radius: var(--border-radius-lg);
+        --search-focus-shadow: 0 0 0 3px;
+        --search-clear-button-top: 6px;
+        --search-clear-icon-size: 14px;
+        --search-clear-icon-thickness: 2px;
+        --search-text-indent-hidden: -9999px;
+
+        /* =====================================================================
+           EXPRESSIVE CODE THEMING
+           Overrides for @expressive-code/astro package
+           ===================================================================== */
+
+        /* ---------------------------------------------------------------------
+           CODE BLOCK FRAME
+           --------------------------------------------------------------------- */
+        --code-frame-border: 1px solid var(--border-color);
+        --code-margin-bottom: 1lh;
+
+        /* ---------------------------------------------------------------------
+           CODE COPY BUTTON
+           Comprehensive theming for code block copy button
+           --------------------------------------------------------------------- */
+
+        /* Button dimensions */
+        --code-copy-button-width: 1.9rem;
+        --code-copy-button-height: 1.9rem;
+        --code-copy-button-width-hover: 1.9rem;
+        --code-copy-button-height-hover: 1.9rem;
+
+        /* Button shape */
+        --code-copy-button-border-radius: 6px;
+
+        /* Button border */
+        --code-copy-button-border-width: var(--ec-brdWd);
+        --code-copy-button-border-color: var(--ec-frm-inlBtnBrd);
+        --code-copy-button-border-opacity: var(--ec-frm-inlBtnBrdOpa);
+
+        /* Button background layers */
+        --code-copy-button-bg: var(--code-background);
+        --code-copy-button-bg-inner: var(--ec-frm-inlBtnBg);
+        --code-copy-button-bg-inner-idle-opacity: var(--ec-frm-inlBtnBgIdleOpa);
+        --code-copy-button-bg-inner-hover-opacity: var(
+            --ec-frm-inlBtnBgHoverOrFocusOpa
+        );
+
+        /* Button visibility states */
+        --code-copy-button-opacity: 0.75;
+        --code-copy-button-hover-opacity: 1;
+        --code-copy-button-hidden-opacity: 0;
+
+        /* Button icon */
+        --code-copy-button-icon-color: var(--ec-frm-inlBtnFg);
+        --code-copy-button-icon-margin: 0.475rem;
+
+        /* Button transitions */
+        --code-copy-button-transition-property:
+            opacity, background, border-color;
+        --code-copy-button-transition-duration: 0.2s;
+        --code-copy-button-transition-timing: cubic-bezier(
+            0.25,
+            0.46,
+            0.45,
+            0.94
+        );
+
+        /* ---------------------------------------------------------------------
+           CODE COPY SUCCESS TOOLTIP
+           --------------------------------------------------------------------- */
+        --ec-frm-tooltipSuccessBg: var(--accent-light);
+        --ec-frm-tooltipSuccessFg: var(--accent-dark);
+        --tooltip-bg: var(--bg-secondary);
+
+        --code-copy-tooltip-padding: 0.125rem 0.75rem;
+        --code-copy-tooltip-border-radius: 0.2rem;
+        --code-copy-tooltip-font-size: 0.875rem;
+
+        /* Global accent color assignment */
+        accent-color: var(--accent-color);
+    }
+
+    /* =========================================================================
+       GLOBAL STYLES
+       ========================================================================= */
+
+    /* Text selection styling */
+    ::selection {
+        background-color: var(--selection-bg);
+        color: var(--selection-fg);
+    }
+
+    /* =========================================================================
+       DARK MODE
+       Automatic color scheme adjustments + manual override support
+       ========================================================================= */
+
+    /* System preference dark mode */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) {
+            --text-primary: #e1e4e8;
+            --text-secondary: #8b949e;
+            --bg-primary: #171717;
+            --bg-secondary: #1a1a1a;
+            --bg-hover: #2d2d2d;
+            --border-color: #333;
+            --accent-light: #58a6ff;
+            --accent-dark: #1a3a52;
+        }
+    }
+
+    /* Manual dark mode override */
+    :root.dark-mode {
         --text-primary: #e1e4e8;
         --text-secondary: #8b949e;
-        --bg-primary: #0d1117;
+        --bg-primary: #171717;
         --bg-secondary: #1a1a1a;
         --bg-hover: #2d2d2d;
         --border-color: #333;
         --accent-light: #58a6ff;
         --accent-dark: #1a3a52;
     }
-}
 
-html .expressive-code {
-    margin-bottom: var(--code-margin-bottom, 1lh);
-}
+    /* Manual light mode override (for users with dark system preference) */
+    :root.light-mode {
+        --text-primary: #1a1a1a;
+        --text-secondary: #6a737d;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-hover: #e8eaed;
+        --border-color: #e1e4e8;
+        --accent-light: #e3f2fd;
+        --accent-dark: #1a3a52;
+    }
 
-html .expressive-code .copy button {
-    height: var(--code-copy-button-height, 1.9rem);
-    width: var(--code-copy-button-width, 1.9rem);
-    border-radius: var(--code-copy-button-border-radius, 6px);
-}
+    /* =========================================================================
+       EXPRESSIVE CODE OVERRIDES
+       Apply theme variables to expressive-code components
+       ========================================================================= */
 
-html .expressive-code .copy button::before {
-    border: var(--code-copy-button-border-width, var(--ec-brdWd)) solid
-        var(
-            --code-copy-button-border-color,
-            var(--border-color, var(--ec-frm-intlBrnBrd))
-        );
-    opacity: var(--code-copy-button-opacity, var(--ec-frm-inlBrnBrdOpa));
-}
+    /* Code block spacing */
+    .expressive-code {
+        margin-bottom: var(--code-margin-bottom) !important;
+    }
+
+    /* -------------------------------------------------------------------------
+       CODE COPY BUTTON STYLING
+       ------------------------------------------------------------------------- */
+
+    /* Button base styles */
+    .expressive-code .copy button {
+        width: var(--code-copy-button-width) !important;
+        height: var(--code-copy-button-height) !important;
+        border-radius: var(--code-copy-button-border-radius) !important;
+        background: var(--code-copy-button-bg) !important;
+        opacity: var(--code-copy-button-opacity) !important;
+        transition-property: var(
+            --code-copy-button-transition-property
+        ) !important;
+        transition-duration: var(
+            --code-copy-button-transition-duration
+        ) !important;
+        transition-timing-function: var(
+            --code-copy-button-transition-timing
+        ) !important;
+    }
+
+    /* Button inner background layer */
+    .expressive-code .copy button div {
+        background: var(--code-copy-button-bg-inner) !important;
+        opacity: var(--code-copy-button-bg-inner-idle-opacity) !important;
+        transition-property: inherit !important;
+        transition-duration: inherit !important;
+        transition-timing-function: inherit !important;
+    }
+
+    /* Button border (::before pseudo-element) */
+    .expressive-code .copy button::before {
+        border: var(--code-copy-button-border-width) solid
+            var(--code-copy-button-border-color) !important;
+        opacity: var(--code-copy-button-border-opacity) !important;
+    }
+
+    /* Button icon (::after pseudo-element) */
+    .expressive-code .copy button::after {
+        background-color: var(--code-copy-button-icon-color) !important;
+        margin: var(--code-copy-button-icon-margin) !important;
+    }
+
+    /* Button hover and focus states */
+    .expressive-code .copy button:hover,
+    .expressive-code .copy button:focus:focus-visible {
+        opacity: var(--code-copy-button-hover-opacity) !important;
+    }
+
+    .expressive-code .copy button:hover div,
+    .expressive-code .copy button:focus:focus-visible div {
+        opacity: var(--code-copy-button-bg-inner-hover-opacity) !important;
+    }
+
+    /* Responsive behavior on hover-capable devices */
+    @media (hover: hover) {
+        .expressive-code .copy button {
+            opacity: var(--code-copy-button-hidden-opacity) !important;
+            width: var(--code-copy-button-width-hover) !important;
+            height: var(--code-copy-button-height-hover) !important;
+        }
+
+        .expressive-code .frame:hover .copy button:not(:hover),
+        .expressive-code
+            .frame:focus-within
+            :focus-visible
+            ~ .copy
+            button:not(:hover),
+        .expressive-code .frame .copy .feedback.show ~ button:not(:hover) {
+            opacity: var(--code-copy-button-opacity) !important;
+        }
+    }
+
+    /* -------------------------------------------------------------------------
+       CODE COPY SUCCESS TOOLTIP
+       ------------------------------------------------------------------------- */
+
+    .expressive-code .copy .feedback {
+        background-color: var(--ec-frm-tooltipSuccessBg) !important;
+        color: var(--ec-frm-tooltipSuccessFg) !important;
+        padding: var(--code-copy-tooltip-padding) !important;
+        border-radius: var(--code-copy-tooltip-border-radius) !important;
+        font-size: var(--code-copy-tooltip-font-size) !important;
+    }
+
+    .expressive-code .copy .feedback::before {
+        background: var(--ec-frm-tooltipSuccessBg) !important;
+    }
 }

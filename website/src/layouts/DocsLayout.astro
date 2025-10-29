@@ -55,9 +55,69 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             type="image/svg+xml"
             href={buildAssetPath(base, "favicon.svg")}
         />
-        <link rel="stylesheet" href={buildAssetPath(base, "styles.css")} />
+
+        <!-- FOUC Prevention: Set theme before page renders -->
+        <script is:inline>
+            (function() {
+                const getTheme = () => {
+                    // Check localStorage first
+                    const stored = localStorage.getItem('theme');
+                    if (stored === 'dark' || stored === 'light') {
+                        return stored;
+                    }
+                    // Fall back to system preference
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches
+                        ? 'dark'
+                        : 'light';
+                };
+
+                const theme = getTheme();
+                const html = document.documentElement;
+                html.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
+                html.setAttribute('data-theme', theme);
+            })();
+        </script>
+
         <ViewTransitions fallback="none" />
-        <style is:global>
+        <style is:global data-astro-transition-persist="theme">
+            /* Theme transition animations */
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation: none;
+                mix-blend-mode: normal;
+            }
+
+            ::view-transition-old(root) {
+                z-index: 1;
+            }
+
+            ::view-transition-new(root) {
+                z-index: 2;
+            }
+
+            /* Smooth fade transition for theme changes */
+            html.dark-mode::view-transition-old(root),
+            html.light-mode::view-transition-old(root) {
+                animation: fade-out 0.3s ease-out;
+            }
+
+            html.dark-mode::view-transition-new(root),
+            html.light-mode::view-transition-new(root) {
+                animation: fade-in 0.3s ease-in;
+            }
+
+            @keyframes fade-out {
+                to {
+                    opacity: 0;
+                }
+            }
+
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                }
+            }
+
             * {
                 box-sizing: border-box;
                 margin: 0;
@@ -88,6 +148,8 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 color: var(--text-primary);
                 background: var(--bg-primary);
                 line-height: 1.6;
+                overflow-x: hidden;
+                min-width: var(--min-mobile-width);
             }
 
             /* Minimal scrollbars */
@@ -187,7 +249,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
             @keyframes blur-in {
                 from {
-                    filter: blur(4px);
+                    filter: blur(var(--view-transition-blur));
                     opacity: 0;
                 }
                 to {
@@ -206,7 +268,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
             .docs-container {
                 display: grid;
-                grid-template-columns: var(--sidebar-width) 1fr 250px;
+                grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
@@ -216,7 +278,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 position: absolute;
                 top: 0;
                 left: var(--sidebar-width);
-                width: 4px;
+                width: var(--resize-handle-width);
                 height: 100%;
                 cursor: col-resize;
                 background: transparent;
@@ -233,8 +295,8 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 content: "";
                 position: absolute;
                 top: 0;
-                left: -4px;
-                width: 12px;
+                left: calc(var(--resize-handle-width) * -1);
+                width: var(--resize-handle-hit-area);
                 height: 100%;
             }
 
@@ -259,9 +321,14 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 );
             }
 
+            /* Hide TOC wrapper when empty */
+            .toc-wrapper:empty {
+                display: none;
+            }
+
             @media (max-width: 1200px) {
                 .docs-container {
-                    grid-template-columns: 280px 1fr;
+                    grid-template-columns: var(--sidebar-width) 1fr;
                 }
 
                 .toc-wrapper {
@@ -395,6 +462,25 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                     --layout-description-margin-bottom,
                     var(--space-2xl)
                 );
+            }
+
+            /* Prevent content overflow */
+            img,
+            video,
+            iframe {
+                max-width: 100%;
+                height: auto;
+            }
+
+            pre,
+            code {
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+
+            pre code {
+                overflow-wrap: normal;
+                word-wrap: normal;
             }
 
             @media (max-width: 768px) {

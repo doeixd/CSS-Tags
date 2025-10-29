@@ -18,25 +18,24 @@
 <style>
     .scroll-to-top {
         position: fixed;
-        bottom: 2rem;
-        right: 2rem;
+        bottom: var(--space-2xl);
+        right: var(--space-2xl);
         z-index: 50;
-        padding: 0.75rem;
-        background: var(--accent, #0066cc);
-        color: white;
+        padding: var(--space-md);
+        background: var(--scroll-button-bg);
+        color: var(--scroll-button-fg);
         border: none;
         border-radius: 50%;
-        width: 48px;
-        height: 48px;
+        width: var(--scroll-button-size);
+        height: var(--scroll-button-size);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         opacity: 0;
         visibility: hidden;
-        transform: translateY(20px);
-        transition: all 0.3s ease;
-        /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);*/
+        transform: var(--scroll-button-transform-hidden);
+        transition: var(--scroll-button-transition);
     }
 
     .scroll-to-top.visible {
@@ -46,20 +45,20 @@
     }
 
     .scroll-to-top:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        transform: var(--scroll-button-transform-visible);
+        box-shadow: var(--scroll-button-shadow);
     }
 
     .scroll-to-top:active {
-        transform: translateY(-2px);
+        transform: var(--scroll-button-transform-hover);
     }
 
     @media (max-width: 768px) {
         .scroll-to-top {
-            bottom: 1rem;
-            right: 1rem;
-            width: 44px;
-            height: 44px;
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            width: var(--scroll-button-size-mobile);
+            height: var(--scroll-button-size-mobile);
         }
     }
 </style>
