@@ -8,7 +8,7 @@ import expressiveCode from 'astro-expressive-code';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://doeixd.github.io',
-	base: '/',
+	base: '/CSS-Tags/',
 	integrations: [
 		expressiveCode({
 			themes: ['min-light', 'min-dark'],
