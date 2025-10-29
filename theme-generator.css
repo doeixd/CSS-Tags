@@ -247,6 +247,14 @@
   --button-text-hover: oklch(from var(--button-text) calc(l - 0.05) c h);
   --button-text-active: oklch(from var(--button-text) calc(l - 0.08) c h);
   --button-text-disabled: var(--text-muted);
+
+   /* Accent color variations for theming */
+   --accent-light: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.1) h);
+   --accent-dark: oklch(from var(--accent) calc(l - 0.3) calc(c + 0.05) h);
+
+   /* Form component colors */
+   --ec-frm-tooltipSuccessBg: var(--accent-light);
+   --ec-frm-tooltipSuccessFg: var(--accent-dark);
 }
 
 /* ============================================ */

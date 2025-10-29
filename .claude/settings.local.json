@@ -4,7 +4,13 @@
       "Bash(npm run build:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm install:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(grep:*)",
+      "Read(//c//**)",
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(pkill:*)",
+      "Bash(npm run preview:*)"
     ],
     "deny": [],
     "ask": []

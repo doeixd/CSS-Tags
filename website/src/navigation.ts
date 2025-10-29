@@ -27,7 +27,6 @@ export const navigation: NavItem[] = [
 	},
 	{
 		label: 'Components',
-		collapsed: true,
 		items: [
 			{ label: 'Alert', slug: 'components/alert' },
 			{ label: 'Badge', slug: 'components/badge' },
@@ -56,7 +55,6 @@ export const navigation: NavItem[] = [
 	},
 	{
 		label: 'Layouts',
-		collapsed: true,
 		items: [
 			{ label: 'Layout', slug: 'layouts/layout' },
 			{ label: 'Layout Extra', slug: 'layouts/layout-extra' },
@@ -65,7 +63,6 @@ export const navigation: NavItem[] = [
 	},
 	{
 		label: 'Core System',
-		collapsed: true,
 		items: [
 			{ label: 'Base', slug: 'core/base' },
 			{ label: 'Defaults', slug: 'core/defaults' },

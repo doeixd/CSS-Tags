@@ -1,32 +1,51 @@
 ---
-import '../theme.css';
 import { getCollection } from 'astro:content';
+import { normalizeBase, buildHref } from '../utils/url';
+import { navigation } from '../navigation';
 
 interface Props {
 	currentPath: string;
 }
 
 const { currentPath } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const base = normalizeBase(import.meta.env.BASE_URL);
 
 const allDocs = await getCollection('docs');
-const sortedDocs = allDocs.filter(doc => doc.id !== 'index').sort((a, b) => a.id.localeCompare(b.id));
+const docsMap = new Map(allDocs.map(doc => [doc.id, doc]));
 
-const currentIndex = sortedDocs.findIndex(doc => doc.id === currentPath);
-const prevDoc = currentIndex > 0 ? sortedDocs[currentIndex - 1] : null;
-const nextDoc = currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null;
+// Create a flattened list of navigation items in the order they appear in navigation.ts
+const flattenedNavItems: string[] = [];
+navigation.forEach(section => {
+	if (section.items) {
+		section.items.forEach(item => {
+			if (item.slug) {
+				flattenedNavItems.push(item.slug);
+			}
+		});
+	} else if (section.slug) {
+		flattenedNavItems.push(section.slug);
+	}
+});
+
+// Find current position in the navigation order
+const currentIndex = flattenedNavItems.indexOf(currentPath);
+const prevSlug = currentIndex > 0 ? flattenedNavItems[currentIndex - 1] : null;
+const nextSlug = currentIndex < flattenedNavItems.length - 1 ? flattenedNavItems[currentIndex + 1] : null;
+
+const prevDoc = prevSlug ? docsMap.get(prevSlug) || null : null;
+const nextDoc = nextSlug ? docsMap.get(nextSlug) || null : null;
 ---
 
 {(prevDoc || nextDoc) && (
 	<nav class="prev-next-nav" aria-label="Previous and next page">
 		{prevDoc && (
-			<a href={`${base}/${prevDoc.id}/`} class="prev-next-link prev-link" data-astro-prefetch>
+			<a href={buildHref(base, prevDoc.id)} class="prev-next-link prev-link" data-astro-prefetch>
 				<span class="prev-next-label">Previous</span>
 				<span class="prev-next-title">{prevDoc.data.title}</span>
 			</a>
 		)}
 		{nextDoc && (
-			<a href={`${base}/${nextDoc.id}/`} class="prev-next-link next-link" data-astro-prefetch>
+			<a href={buildHref(base, nextDoc.id)} class="prev-next-link next-link" data-astro-prefetch>
 				<span class="prev-next-label">Next</span>
 				<span class="prev-next-title">{nextDoc.data.title}</span>
 			</a>

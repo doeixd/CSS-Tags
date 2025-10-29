@@ -8,13 +8,17 @@ import expressiveCode from 'astro-expressive-code';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://doeixd.github.io',
-	base: '/CSS-Tags',
+	base: '/',
 	integrations: [
 		expressiveCode({
 			themes: ['min-light', 'min-dark'],
 			styleOverrides: {
 				borderRadius: '6px',
 				borderWidth: '1px',
+				borderColor: 'var(--border-color)',
+				frames: {
+					shadowColor: 'transparent',
+				},
 			},
 			defaultProps: {
 				wrap: true,

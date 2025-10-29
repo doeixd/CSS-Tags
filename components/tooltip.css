@@ -14,8 +14,8 @@ tooltip[content]::after {
   white-space: nowrap;
   pointer-events: none;
   --role: overt;
-  @apply --surface-role(var(--role));
-  background-color: var(--bg);
+   @apply --surface-role(var(--role));
+   background-color: var(--tooltip-bg, var(--bg));
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: var(--l-padding, 0.25em 0.5em);

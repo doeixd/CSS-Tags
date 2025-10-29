@@ -190,10 +190,10 @@
        * based on custom property values. color-mix() generates tints dynamically.
        * Experimental (Chrome 137+); fallback: :where([variant="success"]) selectors.
        */
-      if(style(--_variant: success)) {
-        --_bg: color-mix(in oklch, lime 70% 80%);
-        --_color: color-mix(in oklch, black 100%);
-      }
+       if(style(--_variant: success)) {
+         --_bg: var(--ec-frm-tooltipSuccessBg, color-mix(in oklch, lime 70% 80%));
+         --_color: var(--ec-frm-tooltipSuccessFg, color-mix(in oklch, black 100%));
+       }
       if(style(--_variant: error)) {
         --_bg: color-mix(in oklch, red 70% 80%);
         --_color: white;
@@ -207,11 +207,11 @@
         --_color: white;
       }
 
-      /* FALLBACK FOR if() (use selectors for broader support) */
-      :where([variant="success"]) {
-        --_bg: color-mix(in oklch, lime 70% 80%);
-        --_color: color-mix(in oklch, black 100%);
-      }
+       /* FALLBACK FOR if() (use selectors for broader support) */
+       :where([variant="success"]) {
+         --_bg: var(--ec-frm-tooltipSuccessBg, color-mix(in oklch, lime 70% 80%));
+         --_color: var(--ec-frm-tooltipSuccessFg, color-mix(in oklch, black 100%));
+       }
       :where([variant="error"]) {
         --_bg: color-mix(in oklch, red 70% 80%);
         --_color: white;
@@ -469,7 +469,7 @@
     }
 
     /* PRESETS FOR DX (Quick theming without attrs) */
-    &.tooltip--success { --_bg: color-mix(in oklch, lime 70%); }
+    &.tooltip--success { --_bg: var(--ec-frm-tooltipSuccessBg, color-mix(in oklch, lime 70%)); --_color: var(--ec-frm-tooltipSuccessFg, var(--text-primary)); }
     &.tooltip--error { --_bg: color-mix(in oklch, red 70%); }
     &.tooltip--warning { --_bg: color-mix(in oklch, orange 70%); }
     &.tooltip--info { --_bg: color-mix(in oklch, blue 70%); }

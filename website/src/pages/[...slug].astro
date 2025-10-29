@@ -29,6 +29,7 @@ const currentPath = entry.id;
 >
 	<Breadcrumbs currentPath={currentPath} />
 	<h1>{entry.data.title}</h1>
+	{entry.data.description && <p class="description">{entry.data.description}</p>}
 	<Content />
 	<PageMeta currentPath={currentPath} />
 	<PrevNextNav currentPath={currentPath} />
