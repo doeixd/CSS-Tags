@@ -31,7 +31,7 @@ function isActive(slug: string | undefined) {
     </svg>
 </button>
 
-<nav class="sidebar" role="navigation" aria-label="Main navigation">
+    <nav class="sidebar" role="navigation" aria-label="Main navigation" transition:name="sidebar">
     <div class="nav-header">
         <a href={buildHref(base)} class="site-title">CSS Tags</a>
         <div class="nav-actions">
@@ -143,7 +143,7 @@ function isActive(slug: string | undefined) {
         background: var(--nav-mobile-backdrop-bg);
         z-index: var(--z-index-backdrop);
         opacity: 0;
-        transition: opacity var(--transition-slow);
+        transition: opacity var(--transition-nav);
         backdrop-filter: blur(var(--backdrop-blur));
         pointer-events: none;
     }
@@ -209,7 +209,7 @@ function isActive(slug: string | undefined) {
             max-width: var(--sidebar-width-max);
             z-index: var(--z-index-sidebar);
             transform: translateX(-100%);
-            transition: transform var(--transition-slow-bezier);
+            transition: transform var(--transition-nav);
         }
 
         .sidebar.open {
@@ -304,12 +304,12 @@ function isActive(slug: string | undefined) {
     .nav-section[data-collapsed="true"] .section-items {
         max-height: var(--max-height-collapsed);
         overflow: hidden;
-        transition: max-height var(--transition-slow);
+        transition: max-height var(--transition-nav);
     }
 
     .nav-section:not([data-collapsed="true"]) .section-items {
         max-height: var(--max-height-expanded);
-        transition: max-height var(--transition-slow);
+        transition: max-height var(--transition-nav);
     }
 
     .nav-section[data-collapsed="true"] .section-toggle {
@@ -339,7 +339,7 @@ function isActive(slug: string | undefined) {
     }
 
     .section-toggle {
-        transition: transform var(--transition-slow);
+        transition: transform var(--transition-nav);
     }
 
     .section-items {

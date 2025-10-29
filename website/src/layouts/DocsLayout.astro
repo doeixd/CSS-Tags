@@ -235,7 +235,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             /* View Transition Animations */
             ::view-transition-old(root),
             ::view-transition-new(root) {
-                animation-duration: 50ms;
+                animation-duration: 30ms;
                 animation-timing-function: ease-out;
             }
 
@@ -245,6 +245,13 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
             ::view-transition-new(sidebar) {
                 animation: none;
+            }
+
+            /* Ensure sidebar doesn't move during navigation */
+            ::view-transition-old(sidebar),
+            ::view-transition-new(sidebar) {
+                transform: none !important;
+                opacity: 1 !important;
             }
 
             @keyframes blur-in {
@@ -379,7 +386,6 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             }
 
             code {
-                background: var(--bg-secondary);
                 padding: var(--layout-code-padding, 0.2em 0.4em);
                 border-radius: var(--layout-code-border-radius, 3px);
                 font-size: 0.9em;
