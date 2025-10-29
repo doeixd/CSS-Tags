@@ -481,12 +481,16 @@
         --toc-link-border-radius: var(--border-radius-md);
         --toc-link-opacity-default: 0.55;
         --toc-link-opacity-hover: 1;
-        --toc-link-color: hsl(0deg 1.5% 45%);
-        --toc-link-hover-bg: hsl(0deg 0% 97%);
+         --toc-link-color: hsl(0deg 1.5% 45%);
+         --toc-link-hover-bg: hsl(0deg 0% 97%);
 
-        /* ---------------------------------------------------------------------
-           PREVIOUS/NEXT NAVIGATION COMPONENT
-           --------------------------------------------------------------------- */
+         /* TOC depth transition margins */
+         --toc-depth-transition-margin-2-to-3: var(--space-sm);
+         --toc-depth-transition-margin-3-to-2: 0;
+
+         /* ---------------------------------------------------------------------
+            PREVIOUS/NEXT NAVIGATION COMPONENT
+            --------------------------------------------------------------------- */
         --prev-next-nav-gap: var(--space-lg);
         --prev-next-nav-margin-top: 2rem;
         --prev-next-nav-padding-top: var(--space-2xl);

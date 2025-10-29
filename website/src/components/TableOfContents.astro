@@ -83,6 +83,15 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         margin-left: var(--toc-depth-3-margin-left, var(--space-lg));
     }
 
+    /* Depth transition margins */
+    .toc-depth-2 + .toc-depth-3 {
+        margin-top: var(--toc-depth-transition-margin-2-to-3);
+    }
+
+    .toc-depth-3 + .toc-depth-2 {
+        margin-top: var(--toc-depth-transition-margin-3-to-2);
+    }
+
     .toc-link {
         display: block;
         color: var(--toc-link-color, var(--text-primary));

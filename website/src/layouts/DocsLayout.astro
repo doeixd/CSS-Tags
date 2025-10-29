@@ -58,23 +58,26 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
         <!-- FOUC Prevention: Set theme before page renders -->
         <script is:inline>
-            (function() {
+            (function () {
                 const getTheme = () => {
                     // Check localStorage first
-                    const stored = localStorage.getItem('theme');
-                    if (stored === 'dark' || stored === 'light') {
+                    const stored = localStorage.getItem("theme");
+                    if (stored === "dark" || stored === "light") {
                         return stored;
                     }
                     // Fall back to system preference
-                    return window.matchMedia('(prefers-color-scheme: dark)').matches
-                        ? 'dark'
-                        : 'light';
+                    return window.matchMedia("(prefers-color-scheme: dark)")
+                        .matches
+                        ? "dark"
+                        : "light";
                 };
 
                 const theme = getTheme();
                 const html = document.documentElement;
-                html.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
-                html.setAttribute('data-theme', theme);
+                html.classList.add(
+                    theme === "dark" ? "dark-mode" : "light-mode",
+                );
+                html.setAttribute("data-theme", theme);
             })();
         </script>
 
@@ -235,7 +238,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             /* View Transition Animations */
             ::view-transition-old(root),
             ::view-transition-new(root) {
-                animation-duration: 30ms;
+                animation-duration: 20ms;
                 animation-timing-function: ease-out;
             }
 
@@ -275,7 +278,9 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
             .docs-container {
                 display: grid;
-                grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
+                grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
+                        --toc-width
+                    );
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
