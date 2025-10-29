@@ -33,11 +33,13 @@
         --selection-bg: var(--accent-light);
         --selection-fg: var(--accent-dark);
 
-        /* Content styling */
-        --strong-color-light: var(--text-primary);
-        --strong-color-dark: hsl(214 14% 100% / 1);
-        --italic-color-light: var(--text-secondary);
-        --italic-color-dark: hsl(214 14% 80% / 0.8);
+         /* Content styling */
+         --strong-color-light: var(--text-primary);
+         --strong-color-dark: hsl(214 14% 100% / 1);
+         --italic-color-light: var(--text-secondary);
+         --italic-color-dark: hsl(214 14% 80% / 0.8);
+         --link-color-light: var(--accent);
+         --link-color-dark: var(--accent);
 
         /* Inline code styling */
         --inline-code-bg-light: #f3f5f7;
@@ -241,11 +243,36 @@
             color: var(--italic-color-dark);
         }
 
-        /* Inline code styling */
-        code {
+        /* Inline code styling - Light mode */
+        :root:not(.dark-mode) code:not(pre code):not(.expressive-code code) {
             background: var(--inline-code-bg-light) !important;
             color: var(--inline-code-color-light) !important;
             border: 1px solid var(--inline-code-border-light) !important;
+            padding: var(--inline-code-padding) !important;
+            border-radius: var(--inline-code-border-radius) !important;
+            font-size: var(--inline-code-font-size) !important;
+            font-family:
+                "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
+        }
+
+        /* Dark mode overrides */
+        @media (prefers-color-scheme: dark) {
+            :root:not(.light-mode) code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-dark) !important;
+                color: var(--inline-code-color-dark) !important;
+                border: 1px solid var(--inline-code-border-dark) !important;
+                padding: var(--inline-code-padding) !important;
+                border-radius: var(--inline-code-border-radius) !important;
+                font-size: var(--inline-code-font-size) !important;
+                font-family:
+                    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
+            }
+        }
+
+        :root.dark-mode code:not(pre code):not(.expressive-code code) {
+            background: var(--inline-code-bg-dark) !important;
+            color: var(--inline-code-color-dark) !important;
+            border: 1px solid var(--inline-code-border-dark) !important;
             padding: var(--inline-code-padding) !important;
             border-radius: var(--inline-code-border-radius) !important;
             font-size: var(--inline-code-font-size) !important;
@@ -263,21 +290,6 @@
             border-radius: 0 !important;
             font-size: inherit !important;
             font-family: inherit !important;
-        }
-
-        /* Dark mode overrides */
-        @media (prefers-color-scheme: dark) {
-            :root:not(.light-mode) code {
-                background: var(--inline-code-bg-dark) !important;
-                color: var(--inline-code-color-dark) !important;
-                border-color: var(--inline-code-border-dark) !important;
-            }
-        }
-
-        :root.dark-mode code {
-            background: var(--inline-code-bg-dark) !important;
-            color: var(--inline-code-color-dark) !important;
-            border-color: var(--inline-code-border-dark) !important;
         }
 
         /* Header code styling */

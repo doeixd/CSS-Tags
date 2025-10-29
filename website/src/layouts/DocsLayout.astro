@@ -200,6 +200,15 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 *::-webkit-scrollbar-thumb:hover {
                     background: var(--text-secondary, #8b949e);
                 }
+
+                a {
+                    color: var(--link-color-dark);
+                }
+            }
+
+            /* Manual dark mode toggle */
+            :root.dark-mode a {
+                color: var(--link-color-dark);
             }
 
             /* Reduce motion for users who prefer it */
@@ -391,7 +400,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             }
 
             a {
-                color: var(--accent);
+                color: var(--link-color-light);
                 text-decoration: none;
             }
 
