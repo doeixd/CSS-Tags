@@ -285,6 +285,10 @@
     }
 }
 
+html .expressive-code {
+    margin-bottom: 1lh;
+}
+
 html .expressive-code .copy button {
     height: 1.9rem !important;
     width: 1.9rem !important;
