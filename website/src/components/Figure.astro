@@ -1,0 +1,110 @@
+---
+// Figure.astro - Enhanced figure component with caption support
+interface Props {
+  variant?: 'default' | 'wide' | 'thumbnail';
+  caption?: string;
+  class?: string;
+  children: Astro.Component | string;
+}
+
+const { variant = 'default', caption, class: className, ...rest } = Astro.props;
+---
+
+<figure class={`figure figure--${variant} ${className || ''}`} {...rest}>
+  {children}
+  {caption && <figcaption class="figure-caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure {
+    margin: var(--figure-margin, var(--space-lg) 0);
+    text-align: center;
+  }
+
+  .figure img,
+  .figure video,
+  .figure iframe,
+  .figure svg {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--figure-border-radius, var(--border-radius-md));
+    border: var(--figure-border, 1px solid var(--border-color));
+    display: block;
+    margin: 0 auto;
+  }
+
+  .figure--wide {
+    margin: var(--figure-wide-margin, var(--space-2xl) 0);
+  }
+
+  .figure--wide img {
+    width: 100%;
+    max-width: none;
+  }
+
+  .figure--thumbnail {
+    display: inline-block;
+    margin: var(--space-sm);
+    vertical-align: top;
+  }
+
+  .figure--thumbnail img {
+    width: var(--figure-thumbnail-size, 150px);
+    height: var(--figure-thumbnail-size, 150px);
+    object-fit: cover;
+    border-radius: var(--figure-thumbnail-border-radius, var(--border-radius-md));
+  }
+
+  .figure-caption {
+    margin-top: var(--figure-caption-margin-top, var(--space-sm));
+    font-size: var(--figure-caption-font-size, var(--font-size-sm));
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: var(--line-height-caption, 1.4);
+    max-width: var(--figure-caption-max-width, 600px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .figure img,
+    :root:not(.light-mode) .figure video,
+    :root:not(.light-mode) .figure iframe,
+    :root:not(.light-mode) .figure svg {
+      border-color: var(--border-color);
+    }
+  }
+
+  :root.dark-mode .figure img,
+  :root.dark-mode .figure video,
+  :root.dark-mode .figure iframe,
+  :root.dark-mode .figure svg {
+    border-color: var(--border-color);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .figure {
+      margin: var(--space-md) 0;
+    }
+
+    .figure--wide {
+      margin: var(--space-lg) 0;
+    }
+
+    .figure--thumbnail {
+      margin: var(--space-xs);
+    }
+
+    .figure--thumbnail img {
+      width: var(--figure-thumbnail-mobile-size, 120px);
+      height: var(--figure-thumbnail-mobile-size, 120px);
+    }
+
+    .figure-caption {
+      font-size: var(--font-size-xs);
+      padding: 0 var(--space-sm);
+    }
+  }
+</style>

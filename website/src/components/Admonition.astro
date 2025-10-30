@@ -1,0 +1,268 @@
+---
+// Admonition.astro - Semantic callouts for documentation
+interface Props {
+  type: 'note' | 'tip' | 'warning' | 'danger' | 'info' | 'success';
+  title?: string;
+  collapsible?: boolean;
+  class?: string;
+  children: Astro.Component | string;
+}
+
+const {
+  type,
+  title,
+  collapsible = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const icons = {
+  note: '📝',
+  tip: '💡',
+  warning: '⚠️',
+  danger: '🚨',
+  info: 'ℹ️',
+  success: '✅'
+};
+---
+
+<div
+  class={`admonition admonition--${type} ${collapsible ? 'admonition--collapsible' : ''} ${className || ''}`}
+  role="region"
+  aria-label={`${type} admonition`}
+  {...rest}
+>
+  <div class="admonition-header">
+    <span class="admonition-icon" aria-hidden="true">{icons[type]}</span>
+    {title && <span class="admonition-title">{title}</span>}
+    {collapsible && (
+      <button class="admonition-toggle" aria-expanded="true" aria-label="Toggle admonition">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    )}
+  </div>
+  <div class="admonition-content">
+    {children}
+  </div>
+</div>
+
+<style>
+  .admonition {
+    margin: var(--admonition-margin, var(--space-lg) 0);
+    padding: var(--admonition-padding, var(--space-lg));
+    border: var(--admonition-border, 1px solid);
+    border-radius: var(--admonition-border-radius, var(--border-radius-md));
+    background: var(--admonition-bg, var(--bg-secondary));
+    position: relative;
+    color: var(--text-primary);
+  }
+
+  .admonition-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .admonition-icon {
+    font-size: var(--admonition-icon-size, 1.2em);
+    flex-shrink: 0;
+  }
+
+  .admonition-title {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--admonition-title-font-size, var(--font-size-base));
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  .admonition-content {
+    color: var(--text-primary);
+    line-height: var(--line-height-body);
+  }
+
+  .admonition-content p:first-child {
+    margin-top: 0;
+  }
+
+  .admonition-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .admonition-content ul,
+  .admonition-content ol {
+    margin: var(--space-md) 0;
+    padding-left: var(--space-xl);
+  }
+
+  .admonition-content li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .admonition-content code {
+    background: var(--bg-primary);
+    padding: 0.1em 0.3em;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9em;
+  }
+
+  /* Type-specific styles */
+  .admonition--note {
+    border-color: var(--admonition-note-border, var(--border-color));
+    background: var(--admonition-note-bg, var(--bg-secondary));
+  }
+
+  .admonition--tip {
+    border-color: var(--admonition-tip-border, var(--accent-light));
+    background: var(--admonition-tip-bg, rgba(0, 123, 255, 0.1));
+  }
+
+  .admonition--warning {
+    border-color: var(--admonition-warning-border, #ffc107);
+    background: var(--admonition-warning-bg, rgba(255, 193, 7, 0.1));
+  }
+
+  .admonition--danger {
+    border-color: var(--admonition-danger-border, #dc3545);
+    background: var(--admonition-danger-bg, rgba(220, 53, 69, 0.1));
+  }
+
+  .admonition--info {
+    border-color: var(--admonition-info-border, #17a2b8);
+    background: var(--admonition-info-bg, rgba(23, 162, 184, 0.1));
+  }
+
+  .admonition--success {
+    border-color: var(--admonition-success-border, #28a745);
+    background: var(--admonition-success-bg, rgba(40, 167, 69, 0.1));
+  }
+
+  /* Collapsible functionality */
+  .admonition--collapsible .admonition-toggle {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admonition--collapsible .admonition-toggle:hover {
+    color: var(--text-primary);
+  }
+
+  .admonition--collapsible .admonition-toggle:focus-visible {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  .admonition--collapsible[aria-expanded="false"] .admonition-content {
+    display: none;
+  }
+
+  .admonition--collapsible[aria-expanded="false"] .admonition-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .admonition--tip {
+      border-color: var(--accent-light);
+      background: rgba(0, 123, 255, 0.2);
+    }
+
+    :root:not(.light-mode) .admonition--warning {
+      background: rgba(255, 193, 7, 0.2);
+    }
+
+    :root:not(.light-mode) .admonition--danger {
+      background: rgba(220, 53, 69, 0.2);
+    }
+
+    :root:not(.light-mode) .admonition--info {
+      background: rgba(23, 162, 184, 0.2);
+    }
+
+    :root:not(.light-mode) .admonition--success {
+      background: rgba(40, 167, 69, 0.2);
+    }
+  }
+
+  :root.dark-mode .admonition--tip {
+    border-color: var(--accent-light);
+    background: rgba(0, 123, 255, 0.2);
+  }
+
+  :root.dark-mode .admonition--warning {
+    background: rgba(255, 193, 7, 0.2);
+  }
+
+  :root.dark-mode .admonition--danger {
+    background: rgba(220, 53, 69, 0.2);
+  }
+
+  :root.dark-mode .admonition--info {
+    background: rgba(23, 162, 184, 0.2);
+  }
+
+  :root.dark-mode .admonition--success {
+    background: rgba(40, 167, 69, 0.2);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .admonition {
+      margin: var(--space-md) 0;
+      padding: var(--space-md);
+    }
+
+    .admonition-header {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .admonition-title {
+      font-size: var(--font-size-sm);
+    }
+
+    .admonition-icon {
+      font-size: 1em;
+    }
+  }
+</style>
+
+<script>
+  function setupAdmonitions() {
+    const toggles = document.querySelectorAll('.admonition-toggle');
+
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const admonition = toggle.closest('.admonition');
+        const isExpanded = admonition.getAttribute('aria-expanded') === 'true';
+
+        admonition.setAttribute('aria-expanded', (!isExpanded).toString());
+      });
+    });
+  }
+
+  // Cleanup function for Astro view transitions
+  let admonitionCleanup = () => {};
+
+  function cleanupAdmonitions() {
+    admonitionCleanup();
+  }
+
+  // Setup on page load and after view transitions
+  document.addEventListener('DOMContentLoaded', setupAdmonitions);
+  document.addEventListener('astro:after-swap', setupAdmonitions);
+
+  // Cleanup on navigation
+  document.addEventListener('astro:before-swap', cleanupAdmonitions);
+</script>

@@ -1,0 +1,218 @@
+---
+// Badge.astro - Flexible badge component for tags and status indicators
+interface Props {
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  removable?: boolean;
+  icon?: string;
+  iconPosition?: 'left' | 'right';
+  class?: string;
+  children: Astro.Component | string;
+}
+
+const {
+  variant = 'secondary',
+  size = 'md',
+  removable = false,
+  icon,
+  iconPosition = 'left',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{removable ? (
+  <span
+    class={`badge badge--${variant} badge--${size} badge--removable ${className || ''}`}
+    role="status"
+    {...rest}
+  >
+    {icon && iconPosition === 'left' && (
+      <span class="badge-icon badge-icon--left" aria-hidden="true" set:html={icon}></span>
+    )}
+    <span class="badge-content">{children}</span>
+    {icon && iconPosition === 'right' && (
+      <span class="badge-icon badge-icon--right" aria-hidden="true" set:html={icon}></span>
+    )}
+    <button
+      class="badge-remove"
+      aria-label="Remove badge"
+      type="button"
+    >
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+        <path d="M3 3l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </span>
+) : (
+  <span
+    class={`badge badge--${variant} badge--${size} ${className || ''}`}
+    {...rest}
+  >
+    {icon && iconPosition === 'left' && (
+      <span class="badge-icon badge-icon--left" aria-hidden="true" set:html={icon}></span>
+    )}
+    <span class="badge-content">{children}</span>
+    {icon && iconPosition === 'right' && (
+      <span class="badge-icon badge-icon--right" aria-hidden="true" set:html={icon}></span>
+    )}
+  </span>
+)}
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--badge-gap, var(--space-xs));
+    padding: var(--badge-padding, var(--space-xs) var(--space-sm));
+    border-radius: var(--badge-border-radius, var(--border-radius-full));
+    font-size: var(--badge-font-size, var(--font-size-xs));
+    font-weight: var(--badge-font-weight, var(--font-weight-medium));
+    line-height: 1;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+  }
+
+  .badge-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .badge-icon svg {
+    width: var(--badge-icon-size, 0.75rem);
+    height: var(--badge-icon-size, 0.75rem);
+  }
+
+  /* Size variants */
+  .badge--sm {
+    padding: var(--badge-padding-sm, 0.125rem var(--space-xs));
+    font-size: var(--badge-font-size-sm, var(--font-size-xs));
+  }
+
+  .badge--md {
+    padding: var(--badge-padding-md, var(--space-xs) var(--space-sm));
+    font-size: var(--badge-font-size-md, var(--font-size-xs));
+  }
+
+  .badge--lg {
+    padding: var(--badge-padding-lg, var(--space-xs) var(--space-md));
+    font-size: var(--badge-font-size-lg, var(--font-size-sm));
+  }
+
+  /* Variant styles */
+  .badge--primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .badge--secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .badge--success {
+    background: var(--badge-success-bg, #28a745);
+    color: white;
+  }
+
+  .badge--warning {
+    background: var(--badge-warning-bg, #ffc107);
+    color: var(--text-dark);
+  }
+
+  .badge--danger {
+    background: var(--badge-danger-bg, #dc3545);
+    color: white;
+  }
+
+  .badge--info {
+    background: var(--badge-info-bg, #17a2b8);
+    color: white;
+  }
+
+  .badge--outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  /* Removable badges */
+  .badge--removable {
+    padding-right: var(--space-xs);
+  }
+
+  .badge-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--badge-remove-size, 1rem);
+    height: var(--badge-remove-size, 1rem);
+    margin-left: var(--space-xs);
+    background: none;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    color: currentColor;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+  }
+
+  .badge-remove:hover {
+    opacity: 1;
+  }
+
+  .badge-remove:focus-visible {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .badge--outline {
+      color: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+  }
+
+  :root.dark-mode .badge--outline {
+    color: var(--accent-light);
+    border-color: var(--accent-light);
+  }
+</style>
+
+<script>
+  function setupBadges() {
+    const removeButtons = document.querySelectorAll('.badge-remove');
+
+    removeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const badge = button.closest('.badge');
+        if (badge) {
+          badge.remove();
+        }
+      });
+    });
+  }
+
+  // Cleanup function for Astro view transitions
+  let badgeCleanup = () => {};
+
+  function cleanupBadges() {
+    badgeCleanup();
+  }
+
+  // Setup on page load and after view transitions
+  document.addEventListener('DOMContentLoaded', setupBadges);
+  document.addEventListener('astro:after-swap', setupBadges);
+
+  // Cleanup on navigation
+  document.addEventListener('astro:before-swap', cleanupBadges);
+</script>

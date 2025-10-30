@@ -1,0 +1,182 @@
+---
+// Input.astro - Accessible input component with validation states
+interface Props {
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+  placeholder?: string;
+  value?: string;
+  disabled?: boolean;
+  required?: boolean;
+  readonly?: boolean;
+  error?: boolean;
+  success?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  label?: string;
+  helpText?: string;
+  errorText?: string;
+}
+
+const {
+  type = 'text',
+  placeholder,
+  value,
+  disabled = false,
+  required = false,
+  readonly = false,
+  error = false,
+  success = false,
+  size = 'md',
+  class: className,
+  label,
+  helpText,
+  errorText,
+  ...rest
+} = Astro.props;
+---
+
+<div class={`form-field ${className || ''}`}>
+  {label && (
+    <label class="form-label" for={rest.id}>
+      {label}
+      {required && <span class="form-required" aria-label="required">*</span>}
+    </label>
+  )}
+
+  <input
+    type={type}
+    class={`form-input form-input--${size} ${error ? 'form-input--error' : ''} ${success ? 'form-input--success' : ''}`}
+    placeholder={placeholder}
+    value={value}
+    disabled={disabled}
+    required={required}
+    readonly={readonly}
+    aria-invalid={error}
+    aria-describedby={helpText ? `${rest.id}-help` : errorText ? `${rest.id}-error` : undefined}
+    {...rest}
+  />
+
+  {helpText && (
+    <div class="form-help" id={`${rest.id}-help`}>
+      {helpText}
+    </div>
+  )}
+
+  {errorText && (
+    <div class="form-error" id={`${rest.id}-error`} role="alert">
+      {errorText}
+    </div>
+  )}
+</div>
+
+<style>
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .form-label {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    font-size: var(--form-label-font-size, var(--font-size-sm));
+  }
+
+  .form-required {
+    color: var(--form-required-color, #dc3545);
+    margin-left: var(--space-xs);
+  }
+
+  .form-input {
+    padding: var(--form-input-padding, var(--space-sm) var(--space-md));
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--form-input-font-size, var(--font-size-base));
+    transition: all var(--transition-fast);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  .form-input--error {
+    border-color: var(--form-error-color, #dc3545);
+  }
+
+  .form-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+  }
+
+  .form-input--success {
+    border-color: var(--form-success-color, #28a745);
+  }
+
+  .form-input--success:focus {
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  }
+
+  .form-input:disabled {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
+
+  /* Size variants */
+  .form-input--sm {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .form-input--lg {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+  }
+
+  .form-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .form-error {
+    font-size: var(--font-size-sm);
+    color: var(--form-error-color, #dc3545);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .form-input:focus {
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    }
+
+    :root:not(.light-mode) .form-input--error:focus {
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+    }
+
+    :root:not(.light-mode) .form-input--success:focus {
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+    }
+  }
+
+  :root.dark-mode .form-input:focus {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  }
+
+  :root.dark-mode .form-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+  }
+
+  :root.dark-mode .form-input--success:focus {
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .form-input--lg {
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--font-size-base);
+    }
+  }
+</style>

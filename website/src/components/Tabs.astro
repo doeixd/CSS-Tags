@@ -1,0 +1,304 @@
+---
+// Tabs.astro - Accessible tabbed content component
+interface TabProps {
+  id: string;
+  title: string;
+  icon?: string;
+  disabled?: boolean;
+  children: Astro.Component | string;
+}
+
+interface Props {
+  defaultTab?: string;
+  class?: string;
+  children: Astro.Component[];
+}
+
+const { defaultTab, class: className, children } = Astro.props;
+
+// Extract tab data from children
+const tabs = children.map((child, index) => {
+  const props = child.props as TabProps;
+  return {
+    id: props.id,
+    title: props.title,
+    icon: props.icon,
+    disabled: props.disabled || false,
+    content: child,
+    index
+  };
+});
+
+const activeTab = defaultTab || tabs[0]?.id;
+---
+
+<div class={`tabs ${className || ''}`} data-active-tab={activeTab}>
+  <div class="tabs-header" role="tablist" aria-label="Tabs">
+    {tabs.map((tab) => (
+      <button
+        class={`tab-button ${tab.id === activeTab ? 'tab-button--active' : ''} ${tab.disabled ? 'tab-button--disabled' : ''}`}
+        role="tab"
+        aria-selected={tab.id === activeTab}
+        aria-controls={`tab-panel-${tab.id}`}
+        id={`tab-${tab.id}`}
+        disabled={tab.disabled}
+        data-tab-id={tab.id}
+      >
+        {tab.icon && <span class="tab-icon" aria-hidden="true" set:html={tab.icon}></span>}
+        <span class="tab-title">{tab.title}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="tabs-content">
+    {tabs.map((tab) => (
+      <div
+        class={`tab-panel ${tab.id === activeTab ? 'tab-panel--active' : ''}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${tab.id}`}
+        id={`tab-panel-${tab.id}`}
+        hidden={tab.id !== activeTab}
+      >
+        {tab.content}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .tabs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tabs-header::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--tab-button-padding, var(--space-md) var(--space-lg));
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    font-size: var(--tab-button-font-size, var(--font-size-base));
+    font-weight: var(--tab-button-font-weight, var(--font-weight-medium));
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .tab-button:hover:not(.tab-button--disabled) {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+  }
+
+  .tab-button:focus-visible {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  .tab-button--active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-button--disabled {
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tab-icon svg {
+    width: var(--tab-icon-size, 1rem);
+    height: var(--tab-icon-size, 1rem);
+  }
+
+  .tabs-content {
+    position: relative;
+    min-height: var(--tab-content-min-height, 200px);
+  }
+
+  .tab-panel {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--tab-panel-padding, var(--space-lg) 0);
+  }
+
+  .tab-panel--active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+  }
+
+  .tab-panel[hidden] {
+    display: block !important;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .tab-button--active {
+      color: var(--accent-light);
+      border-bottom-color: var(--accent-light);
+    }
+  }
+
+  :root.dark-mode .tab-button--active {
+    color: var(--accent-light);
+    border-bottom-color: var(--accent-light);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .tabs {
+      flex-direction: column;
+    }
+
+    .tabs-header {
+      flex-direction: column;
+      border-bottom: none;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .tab-button {
+      justify-content: flex-start;
+      border-bottom: none;
+      border-right: 2px solid transparent;
+      padding: var(--space-md);
+    }
+
+    .tab-button--active {
+      border-right-color: var(--accent);
+      border-bottom-color: transparent;
+    }
+
+    .tabs-content {
+      flex: 1;
+    }
+
+    .tab-panel {
+      padding: var(--space-md) 0;
+    }
+  }
+</style>
+
+<script>
+  function setupTabs() {
+    const tabContainers = document.querySelectorAll('.tabs');
+
+    tabContainers.forEach(container => {
+      const tabButtons = container.querySelectorAll('.tab-button');
+      const tabPanels = container.querySelectorAll('.tab-panel');
+
+      tabButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          const tabId = button.getAttribute('data-tab-id');
+          if (!tabId || button.classList.contains('tab-button--disabled')) return;
+
+          // Update active tab
+          container.setAttribute('data-active-tab', tabId);
+
+          // Update button states
+          tabButtons.forEach(btn => {
+            const isActive = btn.getAttribute('data-tab-id') === tabId;
+            btn.classList.toggle('tab-button--active', isActive);
+            btn.setAttribute('aria-selected', isActive.toString());
+          });
+
+          // Update panel states
+          tabPanels.forEach(panel => {
+            const isActive = panel.id === `tab-panel-${tabId}`;
+            panel.classList.toggle('tab-panel--active', isActive);
+            panel.hidden = !isActive;
+          });
+
+          // Update URL hash
+          if (window.history.replaceState) {
+            const url = new URL(window.location);
+            url.hash = tabId;
+            window.history.replaceState(null, '', url);
+          }
+        });
+
+        // Keyboard navigation
+        button.addEventListener('keydown', (e) => {
+          const buttons = Array.from(tabButtons).filter(btn => !btn.classList.contains('tab-button--disabled'));
+          const currentIndex = buttons.indexOf(button);
+
+          switch (e.key) {
+            case 'ArrowLeft':
+              e.preventDefault();
+              const prevButton = buttons[currentIndex - 1] || buttons[buttons.length - 1];
+              prevButton.focus();
+              prevButton.click();
+              break;
+            case 'ArrowRight':
+              e.preventDefault();
+              const nextButton = buttons[currentIndex + 1] || buttons[0];
+              nextButton.focus();
+              nextButton.click();
+              break;
+            case 'Home':
+              e.preventDefault();
+              buttons[0].focus();
+              buttons[0].click();
+              break;
+            case 'End':
+              e.preventDefault();
+              const lastButton = buttons[buttons.length - 1];
+              lastButton.focus();
+              lastButton.click();
+              break;
+          }
+        });
+      });
+
+      // Handle initial URL hash
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const targetButton = container.querySelector(`[data-tab-id="${hash}"]`);
+        if (targetButton) {
+          targetButton.click();
+        }
+      }
+    });
+  }
+
+  // Cleanup function for Astro view transitions
+  let tabsCleanup = () => {};
+
+  function cleanupTabs() {
+    tabsCleanup();
+  }
+
+  // Setup on page load and after view transitions
+  document.addEventListener('DOMContentLoaded', setupTabs);
+  document.addEventListener('astro:after-swap', setupTabs);
+
+  // Cleanup on navigation
+  document.addEventListener('astro:before-swap', cleanupTabs);
+</script>
