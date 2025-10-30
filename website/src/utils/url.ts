@@ -18,7 +18,7 @@ export function normalizeBase(baseUrl: string): string {
  */
 export function buildHref(base: string, slug?: string): string {
 	if (!slug) {
-		return base || '/';
+		return base ? `${base}/` : '/';
 	}
 	// When base is empty (root path), just use /slug/
 	// When base has value, use base/slug/

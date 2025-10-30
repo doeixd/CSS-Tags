@@ -1,10 +1,27 @@
 ---
-// Keyboard shortcuts handler
+/**
+ * KEYBOARD SHORTCUTS
+ *
+ * Global keyboard shortcuts for navigation and accessibility:
+ * - Ctrl/Cmd + K: Focus search input
+ * - Escape: Close mobile menu / blur search
+ * - Alt + Arrow Left: Previous page
+ * - Alt + Arrow Right: Next page
+ * - ? (future): Show keyboard shortcuts help modal
+ */
 ---
 
 <script>
+	let keydownHandler: ((e: KeyboardEvent) => void) | null = null;
+
 	function setupKeyboardShortcuts() {
-		document.addEventListener('keydown', (e) => {
+		// Clean up previous listener to prevent memory leaks
+		if (keydownHandler) {
+			document.removeEventListener('keydown', keydownHandler);
+		}
+
+		// Create new handler
+		keydownHandler = (e: KeyboardEvent) => {
 			// Ctrl/Cmd + K: Focus search
 			if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
 				e.preventDefault();
@@ -43,20 +60,27 @@
 				}
 			}
 
-			// ? key: Show keyboard shortcuts help (future enhancement)
+			// ? key: Show keyboard shortcuts help
+			// TODO: Implement help modal instead of console.log
 			if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
 				const activeElement = document.activeElement as HTMLElement;
 				if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
-					console.log('Keyboard Shortcuts:', {
-						'Ctrl/Cmd + K': 'Focus search',
-						'Escape': 'Close menu / blur search',
-						'Alt + ← / →': 'Previous / Next page',
-						'?': 'Show this help'
-					});
+					// Future enhancement: Show keyboard shortcuts modal
+					// For now, shortcuts are documented in component header comment
 				}
 			}
-		});
+		};
+
+		document.addEventListener('keydown', keydownHandler);
 	}
+
+	// Cleanup on page navigation
+	document.addEventListener('astro:before-swap', () => {
+		if (keydownHandler) {
+			document.removeEventListener('keydown', keydownHandler);
+			keydownHandler = null;
+		}
+	});
 
 	document.addEventListener('DOMContentLoaded', setupKeyboardShortcuts);
 	document.addEventListener('astro:after-swap', setupKeyboardShortcuts);

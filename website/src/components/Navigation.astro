@@ -16,6 +16,24 @@ function isActive(slug: string | undefined) {
 
 <div class="mobile-backdrop"></div>
 
+<!-- MOBILE NAVIGATION OPTION 2: Standalone Floating Menu Button -->
+<!--
+    This is a standalone floating menu button that appears in the top-right on mobile.
+    It provides ONLY the menu button to open the sidebar (no TOC or Search functionality).
+
+    To DISABLE this option: Comment out the <button> element below
+    Note: If you disable this, make sure MobileHeader is enabled in DocsLayout.astro
+
+    CHOOSE ONE:
+    - Option 1 (MobileHeader in DocsLayout.astro): Fixed header bar with TOC + Search + Menu buttons
+    - Option 2 (This button): Standalone floating menu button only
+
+    CUSTOMIZATION:
+    Adjust sidebar padding-top in theme.css via --nav-sidebar-mobile-padding-top:
+    - If using Option 1 (MobileHeader): Keep default var(--mobile-header-height)
+    - If using Option 2 (Standalone button): Set to 0 for no extra padding
+-->
+<!-- COMMENTED OUT - Using MobileHeader instead
 <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
     <svg
         width="24"
@@ -30,11 +48,12 @@ function isActive(slug: string | undefined) {
         <line x1="3" y1="18" x2="21" y2="18"></line>
     </svg>
 </button>
+-->
 
-    <nav class="sidebar" role="navigation" aria-label="Main navigation" transition:name="sidebar">
+<nav class="sidebar" role="navigation" aria-label="Main navigation" transition:name="sidebar">
     <div class="nav-header">
         <a href={buildHref(base)} class="site-title">CSS Tags</a>
-        <div class="nav-actions">
+        <div class="nav-actions" transition:persist="nav-actions">
             <ThemeToggle />
             <a
                 href="https://github.com/doeixd/CSS-Tags"
@@ -210,6 +229,7 @@ function isActive(slug: string | undefined) {
             z-index: var(--z-index-sidebar);
             transform: translateX(-100%);
             transition: transform var(--transition-nav);
+            padding-top: var(--nav-sidebar-mobile-padding-top);
         }
 
         .sidebar.open {
@@ -285,6 +305,11 @@ function isActive(slug: string | undefined) {
     }
 
     @media (max-width: 768px) {
+        .nav-header {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
         .github-link {
             width: var(--nav-github-link-width-mobile, 2.25rem);
             height: var(--nav-github-link-height-mobile, 2.25rem);
@@ -453,10 +478,54 @@ function isActive(slug: string | undefined) {
         });
     }
 
+    // Store mobile menu handlers globally to allow cleanup
+    let mobileMenuHandlers: {
+        toggleHandler?: (e: Event) => void;
+        backdropHandler?: (e: Event) => void;
+        linkHandlers?: Map<Element, (e: Event) => void>;
+        focusinHandler?: (e: FocusEvent) => void;
+        touchStartHandler?: (e: TouchEvent) => void;
+        touchMoveHandler?: (e: TouchEvent) => void;
+        touchEndHandler?: (e: TouchEvent) => void;
+    } = {};
+
+    // Touch gesture state
+    let touchState = {
+        startX: 0,
+        startY: 0,
+        currentX: 0,
+        isDragging: false,
+    };
+
     function setupMobileMenu() {
         const toggle = document.querySelector(".mobile-menu-toggle");
         const sidebar = document.querySelector(".sidebar");
         const backdrop = document.querySelector(".mobile-backdrop");
+
+        // Clean up old event listeners
+        if (mobileMenuHandlers.toggleHandler && toggle) {
+            toggle.removeEventListener("click", mobileMenuHandlers.toggleHandler);
+        }
+        if (mobileMenuHandlers.backdropHandler && backdrop) {
+            backdrop.removeEventListener("click", mobileMenuHandlers.backdropHandler);
+        }
+        if (mobileMenuHandlers.linkHandlers) {
+            mobileMenuHandlers.linkHandlers.forEach((handler, link) => {
+                link.removeEventListener("click", handler);
+            });
+        }
+        if (mobileMenuHandlers.focusinHandler) {
+            document.removeEventListener("focusin", mobileMenuHandlers.focusinHandler);
+        }
+        if (mobileMenuHandlers.touchStartHandler && sidebar) {
+            sidebar.removeEventListener("touchstart", mobileMenuHandlers.touchStartHandler);
+        }
+        if (mobileMenuHandlers.touchMoveHandler) {
+            document.removeEventListener("touchmove", mobileMenuHandlers.touchMoveHandler);
+        }
+        if (mobileMenuHandlers.touchEndHandler) {
+            document.removeEventListener("touchend", mobileMenuHandlers.touchEndHandler);
+        }
 
         if (toggle && sidebar && backdrop) {
             const openMenu = () => {
@@ -469,24 +538,120 @@ function isActive(slug: string | undefined) {
                 sidebar.classList.remove("open");
                 backdrop.classList.remove("visible");
                 document.body.style.overflow = "";
+                // Reset transform after animation
+                setTimeout(() => {
+                    (sidebar as HTMLElement).style.transform = "";
+                }, 300);
             };
 
-            toggle.addEventListener("click", () => {
+            // Store toggle handler
+            mobileMenuHandlers.toggleHandler = () => {
                 if (sidebar.classList.contains("open")) {
                     closeMenu();
                 } else {
                     openMenu();
                 }
-            });
+            };
+            toggle.addEventListener("click", mobileMenuHandlers.toggleHandler);
 
             // Close menu when clicking on a link
             const links = sidebar.querySelectorAll(".nav-link");
+            mobileMenuHandlers.linkHandlers = new Map();
             links.forEach((link) => {
-                link.addEventListener("click", closeMenu);
+                const handler = () => closeMenu();
+                mobileMenuHandlers.linkHandlers!.set(link, handler);
+                link.addEventListener("click", handler);
             });
 
-            // Close menu when clicking backdrop
-            backdrop.addEventListener("click", closeMenu);
+            // Store backdrop handler
+            mobileMenuHandlers.backdropHandler = () => closeMenu();
+            backdrop.addEventListener("click", mobileMenuHandlers.backdropHandler);
+
+            // Close menu when tabbing outside on mobile
+            mobileMenuHandlers.focusinHandler = (e: FocusEvent) => {
+                // Only handle on mobile (when sidebar can be opened)
+                if (window.innerWidth > 768) return;
+
+                // Check if sidebar is open
+                if (!sidebar.classList.contains("open")) return;
+
+                const target = e.target as HTMLElement;
+
+                // Check if focus moved outside sidebar, backdrop, and toggle
+                const isInSidebar = sidebar.contains(target);
+                const isInBackdrop = backdrop.contains(target);
+                const isToggle = toggle.contains(target);
+
+                if (!isInSidebar && !isInBackdrop && !isToggle) {
+                    closeMenu();
+                }
+            };
+            document.addEventListener("focusin", mobileMenuHandlers.focusinHandler);
+
+            // Swipe gesture support to close sidebar
+            mobileMenuHandlers.touchStartHandler = (e: TouchEvent) => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+
+                touchState.startX = e.touches[0].clientX;
+                touchState.startY = e.touches[0].clientY;
+                touchState.currentX = touchState.startX;
+                touchState.isDragging = false;
+            };
+
+            mobileMenuHandlers.touchMoveHandler = (e: TouchEvent) => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+                if (!touchState.startX) return;
+
+                touchState.currentX = e.touches[0].clientX;
+                const deltaX = touchState.currentX - touchState.startX;
+                const deltaY = e.touches[0].clientY - touchState.startY;
+
+                // Only start dragging if horizontal movement is greater than vertical
+                if (!touchState.isDragging && Math.abs(deltaX) > 10) {
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        touchState.isDragging = true;
+                    }
+                }
+
+                // If dragging left (negative deltaX), move sidebar
+                if (touchState.isDragging && deltaX < 0) {
+                    e.preventDefault();
+                    // Apply transform to sidebar for visual feedback
+                    (sidebar as HTMLElement).style.transition = "none";
+                    (sidebar as HTMLElement).style.transform = `translateX(${deltaX}px)`;
+                }
+            };
+
+            mobileMenuHandlers.touchEndHandler = () => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+                if (!touchState.startX) return;
+
+                const deltaX = touchState.currentX - touchState.startX;
+
+                // Re-enable transition
+                (sidebar as HTMLElement).style.transition = "";
+
+                // If swiped left more than 50px, close the menu
+                if (deltaX < -50) {
+                    closeMenu();
+                } else {
+                    // Snap back to original position
+                    (sidebar as HTMLElement).style.transform = "";
+                }
+
+                // Reset touch state
+                touchState.startX = 0;
+                touchState.startY = 0;
+                touchState.currentX = 0;
+                touchState.isDragging = false;
+            };
+
+            sidebar.addEventListener("touchstart", mobileMenuHandlers.touchStartHandler, { passive: true });
+            document.addEventListener("touchmove", mobileMenuHandlers.touchMoveHandler, { passive: false });
+            document.addEventListener("touchend", mobileMenuHandlers.touchEndHandler);
         }
     }
 

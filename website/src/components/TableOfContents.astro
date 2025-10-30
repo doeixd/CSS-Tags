@@ -175,7 +175,14 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 </style>
 
 <script>
+    let tocScrollHandler: (() => void) | null = null;
+
     function setupTocHighlight() {
+        // Clean up previous listener to prevent memory leaks
+        if (tocScrollHandler) {
+            window.removeEventListener("scroll", tocScrollHandler);
+        }
+
         const tocLinks = document.querySelectorAll(".toc-link");
         const tocContainer = document.querySelector(".toc");
         if (!tocLinks.length || !tocContainer) return;
@@ -205,10 +212,10 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
                     link.classList.add("active");
 
                     // Scroll within TOC container only, don't affect main page scroll
-                    const linkTop = link.offsetTop;
-                    const containerTop = tocContainer.scrollTop;
-                    const containerHeight = tocContainer.clientHeight;
-                    const linkHeight = link.clientHeight;
+                    const linkTop = (link as HTMLElement).offsetTop;
+                    const containerTop = (tocContainer as HTMLElement).scrollTop;
+                    const containerHeight = (tocContainer as HTMLElement).clientHeight;
+                    const linkHeight = (link as HTMLElement).clientHeight;
 
                     // Check if link is outside the visible area
                     if (
@@ -216,16 +223,25 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
                         linkTop + linkHeight > containerTop + containerHeight
                     ) {
                         // Scroll the TOC container to center the active link
-                        tocContainer.scrollTop =
+                        (tocContainer as HTMLElement).scrollTop =
                             linkTop - containerHeight / 2 + linkHeight / 2;
                     }
                 }
             });
         }
 
-        window.addEventListener("scroll", updateActiveLink, { passive: true });
+        tocScrollHandler = updateActiveLink;
+        window.addEventListener("scroll", tocScrollHandler, { passive: true });
         updateActiveLink();
     }
+
+    // Cleanup on page navigation
+    document.addEventListener("astro:before-swap", () => {
+        if (tocScrollHandler) {
+            window.removeEventListener("scroll", tocScrollHandler);
+            tocScrollHandler = null;
+        }
+    });
 
     document.addEventListener("DOMContentLoaded", setupTocHighlight);
     document.addEventListener("astro:after-swap", setupTocHighlight);

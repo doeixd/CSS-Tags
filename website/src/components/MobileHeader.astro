@@ -1,0 +1,786 @@
+---
+/**
+ * MOBILE HEADER COMPONENT
+ *
+ * This component provides a fixed header bar at the top of mobile screens (<768px) with:
+ * - Left side: "On This Page" TOC dropdown button
+ * - Center: Search button
+ * - Right side: Menu button to open the sidebar navigation
+ *
+ * USAGE:
+ * Add this component in DocsLayout.astro and pass the headings prop:
+ * <MobileHeader headings={headings} />
+ *
+ * ALTERNATIVE:
+ * If you prefer a simpler standalone floating menu button (no TOC, no header bar),
+ * comment out this component in DocsLayout.astro and enable the standalone button
+ * in Navigation.astro instead.
+ *
+ * CHOOSE ONE:
+ * - Option 1 (This component): Fixed header with TOC + Search + Menu
+ * - Option 2 (Navigation.astro button): Floating menu button only
+ */
+
+import Search from "./Search.astro";
+
+interface Props {
+    headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { headings = [] } = Astro.props;
+
+// Filter to only h2 and h3 headings
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<div class="mobile-header" transition:persist="mobile-header">
+    <!-- TOC Button (Left) -->
+    <button
+        class="mobile-header-button toc-button"
+        aria-label="Table of contents"
+        aria-expanded="false"
+        disabled={tocHeadings.length === 0}
+        title={tocHeadings.length === 0 ? "No headings on this page" : "Table of contents"}
+    >
+        <span class="toc-button-text">On This Page</span>
+        <svg
+            class="chevron-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="M4 6l4 4 4-4"></path>
+        </svg>
+    </button>
+
+    <!-- Search Button (Center) -->
+    <button class="mobile-header-button search-button" aria-label="Search" aria-expanded="false">
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <circle cx="8" cy="8" r="6"></circle>
+            <path d="M12.5 12.5l5 5"></path>
+        </svg>
+    </button>
+
+    <!-- Menu Button (Right) -->
+    <button class="mobile-header-button menu-button" aria-label="Toggle navigation menu">
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<!-- Search Overlay -->
+<div class="mobile-search-overlay">
+    <div class="mobile-search-content">
+        <div class="mobile-search-header">
+            <h2>Search</h2>
+            <button class="mobile-search-close" aria-label="Close search">
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                >
+                    <line x1="4" y1="4" x2="16" y2="16"></line>
+                    <line x1="16" y1="4" x2="4" y2="16"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-search-body">
+            <Search />
+        </div>
+    </div>
+</div>
+
+<!-- TOC Dropdown Overlay -->
+{tocHeadings.length > 0 && (
+    <div class="mobile-toc-overlay">
+        <div class="mobile-toc-content">
+            <div class="mobile-toc-header">
+                <h2>On This Page</h2>
+                <button class="mobile-toc-close" aria-label="Close table of contents">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    >
+                        <line x1="4" y1="4" x2="16" y2="16"></line>
+                        <line x1="16" y1="4" x2="4" y2="16"></line>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-toc-nav">
+                <ul class="mobile-toc-list">
+                    {tocHeadings.map((heading) => (
+                        <li class={`mobile-toc-item depth-${heading.depth}`}>
+                            <a href={`#${heading.slug}`} class="mobile-toc-link">
+                                {heading.text}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        </div>
+    </div>
+)}
+
+<style>
+    .mobile-header {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-header-height);
+        background: var(--mobile-header-bg);
+        border-bottom: 1px solid var(--mobile-header-border-color);
+        padding: var(--mobile-header-padding);
+        z-index: var(--z-index-mobile-header);
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--mobile-header-gap);
+        view-transition-name: mobile-header;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-header {
+            display: flex;
+        }
+    }
+
+    .mobile-header-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-xs);
+        padding: var(--space-sm) var(--space-md);
+        background: var(--mobile-header-button-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        color: var(--mobile-header-button-color);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        min-height: var(--mobile-header-button-size);
+    }
+
+    .mobile-header-button:hover:not(:disabled) {
+        background: var(--mobile-header-button-hover-bg);
+    }
+
+    .mobile-header-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .mobile-header-button:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    .toc-button {
+        flex: 1;
+        justify-content: flex-start;
+    }
+
+    .toc-button-text {
+        flex: 1;
+        text-align: left;
+    }
+
+    .chevron-icon {
+        transition: transform var(--transition-normal);
+    }
+
+    .toc-button[aria-expanded="true"] .chevron-icon {
+        transform: rotate(180deg);
+    }
+
+    .search-button {
+        width: var(--mobile-header-button-size);
+        padding: var(--space-xs);
+    }
+
+    .menu-button {
+        width: var(--mobile-header-button-size);
+        padding: var(--space-xs);
+    }
+
+    /* Search Overlay */
+    .mobile-search-overlay {
+        display: none;
+        position: fixed;
+        top: var(--mobile-header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, var(--opacity-backdrop));
+        backdrop-filter: blur(var(--backdrop-blur));
+        z-index: var(--z-index-mobile-toc);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal);
+    }
+
+    @media (max-width: 768px) {
+        .mobile-search-overlay {
+            display: block;
+        }
+    }
+
+    .mobile-search-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-search-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        max-height: 80vh;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-100%);
+        transition: transform var(--transition-normal);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-search-overlay.visible .mobile-search-content {
+        transform: translateY(0);
+    }
+
+    .mobile-search-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-lg);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .mobile-search-header h2 {
+        margin: 0;
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+    }
+
+    .mobile-search-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-radius: var(--border-radius-md);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .mobile-search-close:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+    }
+
+    .mobile-search-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--space-lg);
+    }
+
+    /* TOC Overlay */
+    .mobile-toc-overlay {
+        display: none;
+        position: fixed;
+        top: var(--mobile-header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, var(--opacity-backdrop));
+        backdrop-filter: blur(var(--backdrop-blur));
+        z-index: var(--z-index-mobile-toc);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal);
+    }
+
+    @media (max-width: 768px) {
+        .mobile-toc-overlay {
+            display: block;
+        }
+    }
+
+    .mobile-toc-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-toc-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        max-height: 70vh;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-100%);
+        transition: transform var(--transition-normal);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-toc-overlay.visible .mobile-toc-content {
+        transform: translateY(0);
+    }
+
+    .mobile-toc-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-lg);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .mobile-toc-header h2 {
+        margin: 0;
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+    }
+
+    .mobile-toc-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-radius: var(--border-radius-md);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .mobile-toc-close:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+    }
+
+    .mobile-toc-nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--space-md) 0;
+    }
+
+    .mobile-toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-toc-item {
+        margin: 0;
+    }
+
+    .mobile-toc-link {
+        display: block;
+        padding: var(--space-sm) var(--space-lg);
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        transition: all var(--transition-fast);
+        border-left: 2px solid transparent;
+    }
+
+    .mobile-toc-item.depth-3 .mobile-toc-link {
+        padding-left: var(--space-2xl);
+        font-size: var(--font-size-xs);
+        color: var(--text-secondary);
+    }
+
+    .mobile-toc-link:hover {
+        background: var(--bg-hover);
+        border-left-color: var(--accent);
+    }
+
+    .mobile-toc-link.active {
+        background: var(--accent-light);
+        border-left-color: var(--accent);
+        color: var(--accent);
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* Dark mode styles */
+    @media (prefers-color-scheme: dark) {
+        /* Override default link color for TOC links */
+        :root:not(.light-mode) .mobile-toc-link {
+            color: var(--text-primary);
+        }
+
+        :root:not(.light-mode) .mobile-toc-item.depth-3 .mobile-toc-link {
+            color: var(--text-secondary);
+        }
+
+        :root:not(.light-mode) .mobile-toc-link.active {
+            background: var(--accent-dark);
+            color: var(--accent-light);
+        }
+    }
+
+    /* Manual dark mode toggle */
+    :root.dark-mode .mobile-toc-link {
+        color: var(--text-primary);
+    }
+
+    :root.dark-mode .mobile-toc-item.depth-3 .mobile-toc-link {
+        color: var(--text-secondary);
+    }
+
+    :root.dark-mode .mobile-toc-link.active {
+        background: var(--accent-dark);
+        color: var(--accent-light);
+    }
+</style>
+
+<script>
+    // Store handler references for cleanup
+    let tocButtonHandler: (() => void) | null = null;
+    let tocCloseHandler: (() => void) | null = null;
+    let tocOverlayHandler: ((e: Event) => void) | null = null;
+    let tocLinkHandlers: Map<Element, () => void> = new Map();
+    let tocKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+    let searchButtonHandler: (() => void) | null = null;
+    let searchCloseHandler: (() => void) | null = null;
+    let searchOverlayHandler: ((e: Event) => void) | null = null;
+    let searchKeyHandler: ((e: KeyboardEvent) => void) | null = null;
+    let menuButtonHandler: (() => void) | null = null;
+    let intersectionObserver: IntersectionObserver | null = null;
+
+    function setupMobileHeader() {
+        // Clean up previous listeners to prevent memory leaks
+        const tocButton = document.querySelector(".toc-button");
+        const tocOverlay = document.querySelector(".mobile-toc-overlay");
+        const tocClose = document.querySelector(".mobile-toc-close");
+        const searchButton = document.querySelector(".search-button");
+        const searchOverlay = document.querySelector(".mobile-search-overlay");
+        const searchClose = document.querySelector(".mobile-search-close");
+        const menuButton = document.querySelector(".menu-button");
+
+        if (tocButtonHandler && tocButton) {
+            tocButton.removeEventListener("click", tocButtonHandler);
+        }
+        if (tocCloseHandler && tocClose) {
+            tocClose.removeEventListener("click", tocCloseHandler);
+        }
+        if (tocOverlayHandler && tocOverlay) {
+            tocOverlay.removeEventListener("click", tocOverlayHandler);
+        }
+        if (tocLinkHandlers.size > 0) {
+            tocLinkHandlers.forEach((handler, link) => {
+                link.removeEventListener("click", handler);
+            });
+            tocLinkHandlers.clear();
+        }
+        if (tocKeyHandler) {
+            document.removeEventListener("keydown", tocKeyHandler);
+        }
+        if (searchButtonHandler && searchButton) {
+            searchButton.removeEventListener("click", searchButtonHandler);
+        }
+        if (searchCloseHandler && searchClose) {
+            searchClose.removeEventListener("click", searchCloseHandler);
+        }
+        if (searchOverlayHandler && searchOverlay) {
+            searchOverlay.removeEventListener("click", searchOverlayHandler);
+        }
+        if (searchKeyHandler) {
+            document.removeEventListener("keydown", searchKeyHandler);
+        }
+        if (menuButtonHandler && menuButton) {
+            menuButton.removeEventListener("click", menuButtonHandler);
+        }
+        if (intersectionObserver) {
+            intersectionObserver.disconnect();
+            intersectionObserver = null;
+        }
+
+        // Get element references (reusing from cleanup section above)
+        const sidebar = document.querySelector(".sidebar");
+        const backdrop = document.querySelector(".mobile-backdrop");
+
+        if (!menuButton) return;
+
+        // TOC functionality
+        if (tocButton && tocOverlay && tocClose) {
+            const openToc = () => {
+                tocOverlay.classList.add("visible");
+                tocButton.setAttribute("aria-expanded", "true");
+                document.body.style.overflow = "hidden";
+
+                // Focus the close button after opening
+                setTimeout(() => {
+                    (tocClose as HTMLElement).focus();
+                }, 100);
+            };
+
+            const closeToc = () => {
+                tocOverlay.classList.remove("visible");
+                tocButton.setAttribute("aria-expanded", "false");
+                document.body.style.overflow = "";
+
+                // Return focus to the trigger button
+                (tocButton as HTMLElement).focus();
+            };
+
+            tocButtonHandler = () => {
+                if (tocOverlay.classList.contains("visible")) {
+                    closeToc();
+                } else {
+                    openToc();
+                }
+            };
+
+            tocCloseHandler = closeToc;
+
+            tocOverlayHandler = (e: Event) => {
+                if (e.target === tocOverlay) {
+                    closeToc();
+                }
+            };
+
+            tocButton.addEventListener("click", tocButtonHandler);
+            tocClose.addEventListener("click", tocCloseHandler);
+            tocOverlay.addEventListener("click", tocOverlayHandler);
+
+            // Escape key support
+            tocKeyHandler = (e: KeyboardEvent) => {
+                if (e.key === "Escape" && tocOverlay.classList.contains("visible")) {
+                    e.preventDefault();
+                    closeToc();
+                }
+            };
+            document.addEventListener("keydown", tocKeyHandler);
+
+            // Close TOC when clicking on a link
+            const tocLinks = tocOverlay.querySelectorAll(".mobile-toc-link");
+            tocLinks.forEach((link) => {
+                const handler = closeToc;
+                tocLinkHandlers.set(link, handler);
+                link.addEventListener("click", handler);
+            });
+
+            // Highlight active section
+            const observerOptions = {
+                rootMargin: "-80px 0px -80% 0px",
+                threshold: 0,
+            };
+
+            intersectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.getAttribute("id");
+                    const link = tocOverlay.querySelector(
+                        `.mobile-toc-link[href="#${id}"]`
+                    );
+
+                    if (entry.isIntersecting && link) {
+                        // Remove active class from all links
+                        tocOverlay
+                            .querySelectorAll(".mobile-toc-link")
+                            .forEach((l) => l.classList.remove("active"));
+                        // Add active class to current link
+                        link.classList.add("active");
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all headings
+            document.querySelectorAll("h2[id], h3[id]").forEach((heading) => {
+                intersectionObserver!.observe(heading);
+            });
+        }
+
+        // Search functionality
+        if (searchButton && searchOverlay && searchClose) {
+            const openSearch = () => {
+                searchOverlay.classList.add("visible");
+                searchButton.setAttribute("aria-expanded", "true");
+                document.body.style.overflow = "hidden";
+
+                // Focus the search input after opening
+                setTimeout(() => {
+                    const searchInput = searchOverlay.querySelector(".pagefind-ui__search-input");
+                    if (searchInput) {
+                        (searchInput as HTMLElement).focus();
+                    }
+                }, 300);
+            };
+
+            const closeSearch = () => {
+                searchOverlay.classList.remove("visible");
+                searchButton.setAttribute("aria-expanded", "false");
+                document.body.style.overflow = "";
+
+                // Return focus to the trigger button
+                (searchButton as HTMLElement).focus();
+            };
+
+            searchButtonHandler = () => {
+                if (searchOverlay.classList.contains("visible")) {
+                    closeSearch();
+                } else {
+                    openSearch();
+                }
+            };
+
+            searchCloseHandler = closeSearch;
+
+            searchOverlayHandler = (e: Event) => {
+                if (e.target === searchOverlay) {
+                    closeSearch();
+                }
+            };
+
+            searchButton.addEventListener("click", searchButtonHandler);
+            searchClose.addEventListener("click", searchCloseHandler);
+            searchOverlay.addEventListener("click", searchOverlayHandler);
+
+            // Escape key support
+            searchKeyHandler = (e: KeyboardEvent) => {
+                if (e.key === "Escape" && searchOverlay.classList.contains("visible")) {
+                    e.preventDefault();
+                    closeSearch();
+                }
+            };
+            document.addEventListener("keydown", searchKeyHandler);
+        }
+
+        // Menu functionality
+        if (menuButton && sidebar && backdrop) {
+            const openMenu = () => {
+                sidebar.classList.add("open");
+                backdrop.classList.add("visible");
+                document.body.style.overflow = "hidden";
+            };
+
+            const closeMenu = () => {
+                sidebar.classList.remove("open");
+                backdrop.classList.remove("visible");
+                document.body.style.overflow = "";
+            };
+
+            menuButtonHandler = () => {
+                if (sidebar.classList.contains("open")) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            };
+
+            menuButton.addEventListener("click", menuButtonHandler);
+        }
+    }
+
+    // Cleanup on page navigation
+    document.addEventListener("astro:before-swap", () => {
+        const tocButton = document.querySelector(".toc-button");
+        const tocOverlay = document.querySelector(".mobile-toc-overlay");
+        const tocClose = document.querySelector(".mobile-toc-close");
+        const searchButton = document.querySelector(".search-button");
+        const searchOverlay = document.querySelector(".mobile-search-overlay");
+        const searchClose = document.querySelector(".mobile-search-close");
+        const menuButton = document.querySelector(".menu-button");
+
+        if (tocButtonHandler && tocButton) {
+            tocButton.removeEventListener("click", tocButtonHandler);
+            tocButtonHandler = null;
+        }
+        if (tocCloseHandler && tocClose) {
+            tocClose.removeEventListener("click", tocCloseHandler);
+            tocCloseHandler = null;
+        }
+        if (tocOverlayHandler && tocOverlay) {
+            tocOverlay.removeEventListener("click", tocOverlayHandler);
+            tocOverlayHandler = null;
+        }
+        if (tocLinkHandlers.size > 0) {
+            tocLinkHandlers.forEach((handler, link) => {
+                link.removeEventListener("click", handler);
+            });
+            tocLinkHandlers.clear();
+        }
+        if (tocKeyHandler) {
+            document.removeEventListener("keydown", tocKeyHandler);
+            tocKeyHandler = null;
+        }
+        if (searchButtonHandler && searchButton) {
+            searchButton.removeEventListener("click", searchButtonHandler);
+            searchButtonHandler = null;
+        }
+        if (searchCloseHandler && searchClose) {
+            searchClose.removeEventListener("click", searchCloseHandler);
+            searchCloseHandler = null;
+        }
+        if (searchOverlayHandler && searchOverlay) {
+            searchOverlay.removeEventListener("click", searchOverlayHandler);
+            searchOverlayHandler = null;
+        }
+        if (searchKeyHandler) {
+            document.removeEventListener("keydown", searchKeyHandler);
+            searchKeyHandler = null;
+        }
+        if (menuButtonHandler && menuButton) {
+            menuButton.removeEventListener("click", menuButtonHandler);
+            menuButtonHandler = null;
+        }
+        if (intersectionObserver) {
+            intersectionObserver.disconnect();
+            intersectionObserver = null;
+        }
+    });
+
+    // Initialize on page load
+    document.addEventListener("DOMContentLoaded", setupMobileHeader);
+
+    // Reinitialize after view transitions
+    document.addEventListener("astro:after-swap", setupMobileHeader);
+</script>

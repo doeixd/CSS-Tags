@@ -6,7 +6,6 @@
     class="theme-toggle"
     aria-label="Toggle dark mode"
     title="Toggle dark mode"
-    transition:name="theme-toggle"
 >
     <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="4" fill="currentColor" />
@@ -17,10 +16,8 @@
             stroke-linecap="round"
         />
     </svg>
-    <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-        <path
-            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-        />
+    <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 10.5A7 7 0 1 1 9.5 3a5.5 5.5 0 0 0 7.5 7.5z" />
     </svg>
 </button>
 
@@ -43,6 +40,7 @@
         position: relative;
         width: var(--theme-toggle-width, 2.5rem);
         height: var(--theme-toggle-height, 2.5rem);
+        view-transition-name: theme-toggle;
     }
 
     .theme-toggle:hover {
@@ -60,10 +58,16 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        transition: all var(--transition-normal);
+        transition: none; /* Disable by default to prevent navigation flicker */
         color: var(--theme-toggle-icon-color, currentColor);
         width: var(--theme-toggle-icon-size, 20px);
         height: var(--theme-toggle-icon-size, 20px);
+    }
+
+    /* Enable transitions only when button is being clicked */
+    .theme-toggle.transitioning .sun-icon,
+    .theme-toggle.transitioning .moon-icon {
+        transition: all var(--transition-normal);
     }
 
     /* Default: show sun icon (for light mode) */
@@ -98,20 +102,27 @@
 
 <script>
     function restoreTheme() {
-        const savedTheme = localStorage.getItem("theme");
+        const getTheme = () => {
+            // Check localStorage first
+            const stored = localStorage.getItem("theme");
+            if (stored === "dark" || stored === "light") {
+                return stored;
+            }
+            // Fall back to system preference
+            return window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+        };
+
+        const theme = getTheme();
         const html = document.documentElement;
 
         // Remove existing theme classes
         html.classList.remove("dark-mode", "light-mode");
 
-        if (savedTheme === "dark") {
-            html.classList.add("dark-mode");
-            html.setAttribute("data-theme", "dark");
-        } else {
-            // Default to light mode
-            html.classList.add("light-mode");
-            html.setAttribute("data-theme", "light");
-        }
+        // Add the correct theme class
+        html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+        html.setAttribute("data-theme", theme);
     }
 
     function setupThemeToggle() {
@@ -125,15 +136,30 @@
                 : "light";
             const newTheme = currentTheme === "dark" ? "light" : "dark";
 
+            // Enable icon transitions for smooth animation on user click
+            button.classList.add("transitioning");
+
+            // Disable all CSS transitions temporarily during theme change
+            html.classList.add("theme-transitioning");
+
             // Check if browser supports View Transitions API
             if (document.startViewTransition) {
-                await document.startViewTransition(() => {
+                const transition = document.startViewTransition(() => {
                     updateTheme(newTheme);
-                }).ready;
+                });
+
+                await transition.ready;
+                await transition.finished;
             } else {
                 // Fallback for browsers without View Transitions
                 updateTheme(newTheme);
             }
+
+            // Remove classes after animation completes
+            setTimeout(() => {
+                button.classList.remove("transitioning");
+                html.classList.remove("theme-transitioning");
+            }, 300); // Match transition duration
         });
 
         function updateTheme(theme) {
@@ -151,12 +177,24 @@
         }
     }
 
+    // Restore theme BEFORE swap to prevent flash
+    document.addEventListener("astro:before-swap", () => {
+        restoreTheme();
+    });
+
     // Restore theme on page load and after Astro view transitions
     document.addEventListener("DOMContentLoaded", () => {
         restoreTheme();
         setupThemeToggle();
     });
+
     document.addEventListener("astro:after-swap", () => {
+        restoreTheme();
+        setupThemeToggle();
+    });
+
+    // Also restore on astro:page-load to ensure theme persists
+    document.addEventListener("astro:page-load", () => {
         restoreTheme();
         setupThemeToggle();
     });

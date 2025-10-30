@@ -27,10 +27,10 @@ const breadcrumbs = [
 				{index < breadcrumbs.length - 1 ? (
 					<>
 						<a href={crumb.href} class="breadcrumb-link">{crumb.label}</a>
-						<span class="breadcrumb-separator">/</span>
+						<span class="breadcrumb-separator" aria-hidden="true">/</span>
 					</>
 				) : (
-					<span class="breadcrumb-current">{crumb.label}</span>
+					<span class="breadcrumb-current" aria-current="page">{crumb.label}</span>
 				)}
 			</li>
 		))}

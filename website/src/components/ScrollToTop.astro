@@ -1,5 +1,26 @@
 ---
-// Scroll to top button
+/**
+ * SCROLL TO TOP BUTTON
+ *
+ * A floating button that appears when scrolling down the page.
+ * Click to smoothly scroll back to the top.
+ *
+ * The button is fixed at the bottom right corner of the viewport.
+ *
+ * CUSTOMIZATION:
+ * All styles are controlled via CSS variables in theme.css:
+ * - Button size: --scroll-button-size / --scroll-button-size-mobile
+ * - Position: --scroll-button-bottom / --scroll-button-right
+ * - Appearance: --scroll-button-bg, --scroll-button-border, --scroll-button-border-radius
+ * - Colors: --scroll-button-fg, --scroll-button-bg-hover
+ * - Opacity: --scroll-button-opacity / --scroll-button-opacity-hover
+ * - Backdrop filter: --scroll-button-backdrop-filter
+ * - Animation: --scroll-button-transform-*
+ *
+ * PRESET STYLES:
+ * - Default: Square button with border (matches mobile header button)
+ * - Alternative: Uncomment circular accent style variables in theme.css
+ */
 ---
 
 <button class="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
@@ -10,28 +31,54 @@
         fill="none"
         stroke="currentColor"
         stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
     >
         <path d="M10 15 L10 5 M6 9 L10 5 L14 9"></path>
     </svg>
 </button>
 
 <style>
+    :global(.scroll-to-top-container) {
+        position: relative;
+    }
+
+    .scroll-to-top-holder {
+        display: contents;
+        /*position: absolute;
+        bottom: var(--scroll-button-bottom);
+        right: var(--scroll-button-right);
+        width: var(--scroll-button-size);
+        height: var(--scroll-button-size);*/
+    }
+
     .scroll-to-top {
+        /* Fixed positioning at bottom right */
         position: fixed;
-        bottom: var(--space-2xl);
-        right: var(--space-2xl);
+        bottom: var(--scroll-button-bottom);
+        right: var(--scroll-button-right);
         z-index: 50;
-        padding: var(--space-md);
-        background: var(--scroll-button-bg);
-        color: var(--scroll-button-fg);
-        border: none;
-        border-radius: 50%;
+
+        /* Size */
         width: var(--scroll-button-size);
         height: var(--scroll-button-size);
+        padding: var(--scroll-button-padding);
+
+        /* Appearance */
+        background: var(--scroll-button-bg);
+        color: var(--scroll-button-fg);
+        border: var(--scroll-button-border);
+        border-radius: var(--scroll-button-border-radius);
+        backdrop-filter: var(--scroll-button-backdrop-filter);
+        -webkit-backdrop-filter: var(--scroll-button-backdrop-filter);
+
+        /* Layout */
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+
+        /* Animation */
         opacity: 0;
         visibility: hidden;
         transform: var(--scroll-button-transform-hidden);
@@ -39,40 +86,110 @@
     }
 
     .scroll-to-top.visible {
-        opacity: 1;
+        opacity: var(--scroll-button-opacity);
         visibility: visible;
-        transform: translateY(0);
+        transform: var(--scroll-button-transform-visible);
+    }
+
+    .scroll-to-top.visible:hover {
+        opacity: var(--scroll-button-opacity-hover);
     }
 
     .scroll-to-top:hover {
-        transform: var(--scroll-button-transform-visible);
-        box-shadow: var(--scroll-button-shadow);
-    }
-
-    .scroll-to-top:active {
+        background: var(--scroll-button-bg-hover);
         transform: var(--scroll-button-transform-hover);
     }
 
+    .scroll-to-top:active {
+        transform: var(--scroll-button-transform-active);
+    }
+
+    .scroll-to-top:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    /* Mobile responsive */
     @media (max-width: 768px) {
         .scroll-to-top {
-            bottom: var(--space-lg);
-            right: var(--space-lg);
+            bottom: var(--scroll-button-bottom-mobile);
+            right: var(--scroll-button-right-mobile);
             width: var(--scroll-button-size-mobile);
             height: var(--scroll-button-size-mobile);
         }
     }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .scroll-to-top {
+            border-color: var(--border-color);
+        }
+    }
+
+    :root.dark-mode .scroll-to-top {
+        border-color: var(--border-color);
+    }
 </style>
 
 <script>
+    let scrollHandler: (() => void) | null = null;
+    let clickHandler: (() => void) | null = null;
+    let currentButton: Element | null = null;
+
     function setupScrollToTop() {
+        // Clean up previous listeners to prevent memory leaks
+        if (scrollHandler) {
+            window.removeEventListener("scroll", scrollHandler);
+        }
+        if (clickHandler && currentButton) {
+            currentButton.removeEventListener("click", clickHandler);
+        }
+
         const button = document.querySelector(".scroll-to-top");
         if (!button) return;
 
+        currentButton = button;
+
         function toggleVisibility() {
+            // Show/hide based on scroll position
             if (window.scrollY > 300) {
                 button.classList.add("visible");
             } else {
                 button.classList.remove("visible");
+            }
+
+            // Stop button before page-meta or prev-next-nav only on mobile
+            if (window.innerWidth <= 768) {
+                const pageMeta = document.querySelector(".page-meta");
+                const prevNextNav = document.querySelector(".prev-next-nav");
+                const stopElement = pageMeta || prevNextNav;
+
+                if (stopElement) {
+                    const stopRect = stopElement.getBoundingClientRect();
+                    const buttonHeight = (button as HTMLElement).offsetHeight || 44;
+                    const bottomOffset =
+                        parseFloat(
+                            getComputedStyle(
+                                document.documentElement,
+                            ).getPropertyValue("--scroll-button-bottom"),
+                        ) || 2;
+                const gap = 10; // Minimum gap between button and stop element
+                // Calculate positions relative to viewport
+                const buttonBottom = window.innerHeight - bottomOffset;
+                const stopTop = stopRect.top + 25; // Offset to account for element padding/margin
+                const overlap = buttonBottom + buttonHeight - stopTop;
+
+                // If the stop element overlaps with the button area, push the button up
+                if (stopTop < buttonBottom + buttonHeight + gap) {
+                    (button as HTMLElement).style.transform = `translateY(-${overlap}px)`;
+                } else {
+                    // Reset to default position when no overlap
+                    (button as HTMLElement).style.transform = "";
+                }
+                }
+            } else {
+                // Reset transform on desktop
+                (button as HTMLElement).style.transform = "";
             }
         }
 
@@ -83,11 +200,27 @@
             });
         }
 
-        window.addEventListener("scroll", toggleVisibility, { passive: true });
-        button.addEventListener("click", scrollToTop);
+        scrollHandler = toggleVisibility;
+        clickHandler = scrollToTop;
+
+        window.addEventListener("scroll", scrollHandler, { passive: true });
+        button.addEventListener("click", clickHandler);
 
         toggleVisibility();
     }
+
+    // Cleanup on page navigation
+    document.addEventListener("astro:before-swap", () => {
+        if (scrollHandler) {
+            window.removeEventListener("scroll", scrollHandler);
+            scrollHandler = null;
+        }
+        if (clickHandler && currentButton) {
+            currentButton.removeEventListener("click", clickHandler);
+            clickHandler = null;
+            currentButton = null;
+        }
+    });
 
     document.addEventListener("DOMContentLoaded", setupScrollToTop);
     document.addEventListener("astro:after-swap", setupScrollToTop);

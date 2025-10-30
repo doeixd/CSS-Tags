@@ -1,5 +1,10 @@
 ---
-// Loading indicator for view transitions
+/**
+ * LOADING INDICATOR
+ *
+ * Visual loading indicator during view transitions.
+ * Displays an animated progress bar at the top of the viewport.
+ */
 ---
 
 <div class="loading-indicator"></div>
@@ -45,18 +50,44 @@
 </style>
 
 <script>
+	let beforePreparationHandler: (() => void) | null = null;
+	let afterSwapHandler: (() => void) | null = null;
+
 	function setupLoadingIndicator() {
+		// Clean up previous listeners to prevent memory leaks
+		if (beforePreparationHandler) {
+			document.removeEventListener('astro:before-preparation', beforePreparationHandler);
+		}
+		if (afterSwapHandler) {
+			document.removeEventListener('astro:after-swap', afterSwapHandler);
+		}
+
 		const indicator = document.querySelector('.loading-indicator');
 		if (!indicator) return;
 
-		document.addEventListener('astro:before-preparation', () => {
+		beforePreparationHandler = () => {
 			indicator.classList.add('loading');
-		});
+		};
 
-		document.addEventListener('astro:after-swap', () => {
+		afterSwapHandler = () => {
 			indicator.classList.remove('loading');
-		});
+		};
+
+		document.addEventListener('astro:before-preparation', beforePreparationHandler);
+		document.addEventListener('astro:after-swap', afterSwapHandler);
 	}
+
+	// Cleanup on page navigation
+	document.addEventListener('astro:before-swap', () => {
+		if (beforePreparationHandler) {
+			document.removeEventListener('astro:before-preparation', beforePreparationHandler);
+			beforePreparationHandler = null;
+		}
+		if (afterSwapHandler) {
+			document.removeEventListener('astro:after-swap', afterSwapHandler);
+			afterSwapHandler = null;
+		}
+	});
 
 	document.addEventListener('DOMContentLoaded', setupLoadingIndicator);
 </script>

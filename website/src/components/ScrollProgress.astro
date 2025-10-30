@@ -1,8 +1,20 @@
 ---
-// Scroll progress indicator component
+/**
+ * SCROLL PROGRESS INDICATOR
+ *
+ * Visual indicator showing reading progress through the page.
+ * Displays as a colored bar at the top of the viewport.
+ */
 ---
 
-<div class="scroll-progress"></div>
+<div
+	class="scroll-progress"
+	role="progressbar"
+	aria-label="Reading progress"
+	aria-valuenow="0"
+	aria-valuemin="0"
+	aria-valuemax="100"
+></div>
 
 <style>
 	.scroll-progress {
@@ -18,21 +30,39 @@
 </style>
 
 <script>
+	let scrollHandler: (() => void) | null = null;
+
 	function updateScrollProgress() {
 		const scrollProgress = document.querySelector('.scroll-progress') as HTMLElement;
 		if (!scrollProgress) return;
 
 		const scrollTop = window.scrollY;
 		const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-		const scrollPercent = (scrollTop / docHeight) * 100;
+		const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+		const clampedPercent = Math.min(Math.max(scrollPercent, 0), 100);
 
-		scrollProgress.style.width = `${Math.min(scrollPercent, 100)}%`;
+		scrollProgress.style.width = `${clampedPercent}%`;
+		scrollProgress.setAttribute('aria-valuenow', clampedPercent.toFixed(0));
 	}
 
 	function setupScrollProgress() {
-		window.addEventListener('scroll', updateScrollProgress, { passive: true });
+		// Clean up previous listener to prevent memory leaks
+		if (scrollHandler) {
+			window.removeEventListener('scroll', scrollHandler);
+		}
+
+		scrollHandler = updateScrollProgress;
+		window.addEventListener('scroll', scrollHandler, { passive: true });
 		updateScrollProgress(); // Initial update
 	}
+
+	// Cleanup on page navigation
+	document.addEventListener('astro:before-swap', () => {
+		if (scrollHandler) {
+			window.removeEventListener('scroll', scrollHandler);
+			scrollHandler = null;
+		}
+	});
 
 	// Setup on page load
 	document.addEventListener('DOMContentLoaded', setupScrollProgress);

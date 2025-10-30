@@ -33,13 +33,13 @@
         --selection-bg: var(--accent-light);
         --selection-fg: var(--accent-dark);
 
-         /* Content styling */
-         --strong-color-light: var(--text-primary);
-         --strong-color-dark: hsl(214 14% 100% / 1);
-         --italic-color-light: var(--text-secondary);
-         --italic-color-dark: hsl(214 14% 80% / 0.8);
-         --link-color-light: var(--accent);
-         --link-color-dark: var(--accent);
+        /* Content styling */
+        --strong-color-light: var(--text-primary);
+        --strong-color-dark: hsl(214 14% 100% / 1);
+        --italic-color-light: var(--text-secondary);
+        --italic-color-dark: hsl(214 14% 80% / 0.8);
+        --link-color-light: var(--accent);
+        --link-color-dark: #77b2ed;
 
         /* Inline code styling */
         --inline-code-bg-light: #f3f5f7;
@@ -140,6 +140,8 @@
         --z-index-backdrop: 999;
         --z-index-sidebar: 1000;
         --z-index-mobile-menu: 1001;
+        --z-index-mobile-toc: 1001;
+        --z-index-mobile-header: 1002;
         --z-index-skip-link: 10001;
 
         /* Shadows */
@@ -257,7 +259,8 @@
 
         /* Dark mode overrides */
         @media (prefers-color-scheme: dark) {
-            :root:not(.light-mode) code:not(pre code):not(.expressive-code code) {
+            :root:not(.light-mode)
+                code:not(pre code):not(.expressive-code code) {
                 background: var(--inline-code-bg-dark) !important;
                 color: var(--inline-code-color-dark) !important;
                 border: 1px solid var(--inline-code-border-dark) !important;
@@ -368,6 +371,11 @@
         --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
         --nav-sidebar-padding-left: var(--nav-sidebar-padding);
 
+        /* Mobile sidebar padding-top to account for mobile header */
+        /* Set to 0 if using standalone menu button (no mobile header) */
+        /* Set to var(--mobile-header-height) if using MobileHeader component */
+        --nav-sidebar-mobile-padding-top: var(--mobile-header-height);
+
         --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
         --nav-mobile-menu-top: 2.1lh;
         --nav-mobile-menu-right: 2.1lh;
@@ -401,6 +409,19 @@
         --nav-link-padding: var(--space-sm) var(--space-md);
         --nav-link-border-radius: var(--border-radius-md);
         --nav-link-font-size: var(--font-size-base);
+
+        /* ---------------------------------------------------------------------
+           MOBILE HEADER COMPONENT
+           --------------------------------------------------------------------- */
+        --mobile-header-height: 3.5rem;
+        --mobile-header-bg: var(--bg-secondary);
+        --mobile-header-border-color: var(--border-color);
+        --mobile-header-padding: var(--space-sm) var(--space-lg);
+        --mobile-header-gap: var(--space-md);
+        --mobile-header-button-size: 2.5rem;
+        --mobile-header-button-bg: transparent;
+        --mobile-header-button-hover-bg: var(--bg-hover);
+        --mobile-header-button-color: var(--text-primary);
 
         /* ---------------------------------------------------------------------
            LAYOUT COMPONENT
@@ -493,14 +514,14 @@
         --toc-link-border-radius: var(--border-radius-md);
         --toc-link-opacity-default: 0.55;
         --toc-link-opacity-hover: 1;
-         --toc-link-color: hsl(0deg 1.5% 45%);
-         --toc-link-hover-bg: hsl(0deg 0% 97%);
+        --toc-link-color: hsl(0deg 1.5% 45%);
+        --toc-link-hover-bg: hsl(0deg 0% 97%);
 
-         /* TOC depth transition margins */
-         --toc-depth-transition-margin-2-to-3: var(--space-sm);
-         --toc-depth-transition-margin-3-to-2: 0;
+        /* TOC depth transition margins */
+        --toc-depth-transition-margin-2-to-3: var(--space-sm);
+        --toc-depth-transition-margin-3-to-2: 0;
 
-         /* ---------------------------------------------------------------------
+        /* ---------------------------------------------------------------------
             PREVIOUS/NEXT NAVIGATION COMPONENT
             --------------------------------------------------------------------- */
         --prev-next-nav-gap: var(--space-lg);
@@ -532,15 +553,43 @@
         /* ---------------------------------------------------------------------
            SCROLL TO TOP BUTTON
            --------------------------------------------------------------------- */
-        --scroll-button-size: 48px;
-        --scroll-button-size-mobile: 44px;
+        /* Button size */
+        --scroll-button-size: 2.75rem;
+        --scroll-button-size-mobile: 2.5rem;
+
+        /* Button positioning */
+        --scroll-button-bottom: var(--space-2xl);
+        --scroll-button-right: var(--space-2xl);
+        --scroll-button-bottom-mobile: var(--space-lg);
+        --scroll-button-right-mobile: var(--space-lg);
+
+        /* Button appearance - Matches mobile header button style by default */
+        --scroll-button-bg: transparent;
+        --scroll-button-bg-hover: var(--bg-hover);
+        --scroll-button-fg: var(--text-primary);
+        --scroll-button-border: 1px solid var(--border-color);
+        --scroll-button-border-radius: var(--border-radius-md);
+        --scroll-button-padding: var(--space-sm);
+        --scroll-button-backdrop-filter: blur(8px);
+
+        /* Button opacity */
+        --scroll-button-opacity: 0.7;
+        --scroll-button-opacity-hover: 1;
+
+        /* Button transforms */
         --scroll-button-transform-hidden: translateY(20px);
-        --scroll-button-transform-visible: translateY(-4px);
+        --scroll-button-transform-visible: translateY(0);
         --scroll-button-transform-hover: translateY(-2px);
-        --scroll-button-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        --scroll-button-bg: var(--accent);
-        --scroll-button-fg: white;
-        --scroll-button-transition: all 0.3s ease;
+        --scroll-button-transform-active: scale(0.95);
+
+        /* Button transition */
+        --scroll-button-transition: background 0.2s ease-out;
+
+        /* Alternative: Circular accent style (uncomment to use) */
+        /* --scroll-button-bg: var(--accent); */
+        /* --scroll-button-fg: white; */
+        /* --scroll-button-border: none; */
+        /* --scroll-button-border-radius: 50%; */
 
         /* ---------------------------------------------------------------------
            SEARCH COMPONENT

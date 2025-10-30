@@ -295,6 +295,17 @@ const base = import.meta.env.BASE_URL;
         cursor: pointer;
     }
 
+    /* Dark mode - Override default link color for search results */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .pagefind-ui__result-link {
+            color: var(--text-primary);
+        }
+    }
+
+    :root.dark-mode .pagefind-ui__result-link {
+        color: var(--text-primary);
+    }
+
     .pagefind-ui__result {
         position: relative;
         cursor: pointer;

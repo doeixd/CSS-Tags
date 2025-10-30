@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions, ClientRouter } from "astro:transitions";
 import Navigation from "../components/Navigation.astro";
+import MobileHeader from "../components/MobileHeader.astro";
 import ScrollProgress from "../components/ScrollProgress.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
@@ -25,6 +26,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark light" />
         <meta name="generator" content={Astro.generator} />
         <title>{title} | CSS Tags</title>
         <meta
@@ -56,6 +58,31 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             href={buildAssetPath(base, "favicon.svg")}
         />
 
+        <!-- Critical CSS: Prevent button flash by defaulting to dark theme -->
+        <style is:inline>
+            /* Default to dark theme for buttons to prevent flash */
+            :root {
+                --bg-secondary: #1a1a1a;
+                --text-primary: #e1e4e8;
+                --border-color: #333;
+                --theme-toggle-bg: #1a1a1a;
+                --theme-toggle-color: #e1e4e8;
+                --nav-github-link-bg: #1a1a1a;
+                --nav-github-link-color: #e1e4e8;
+            }
+
+            /* Override with light theme when light-mode class is present */
+            :root.light-mode {
+                --bg-secondary: #f8f9fa;
+                --text-primary: #1a1a1a;
+                --border-color: #e1e4e8;
+                --theme-toggle-bg: #f8f9fa;
+                --theme-toggle-color: #1a1a1a;
+                --nav-github-link-bg: #f8f9fa;
+                --nav-github-link-color: #1a1a1a;
+            }
+        </style>
+
         <!-- FOUC Prevention: Set theme before page renders -->
         <script is:inline>
             (function () {
@@ -74,6 +101,11 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
                 const theme = getTheme();
                 const html = document.documentElement;
+
+                // Remove existing theme classes first
+                html.classList.remove("dark-mode", "light-mode");
+
+                // Add the correct theme class
                 html.classList.add(
                     theme === "dark" ? "dark-mode" : "light-mode",
                 );
@@ -83,7 +115,14 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
         <ViewTransitions fallback="none" />
         <style is:global data-astro-transition-persist="theme">
-            /* Theme transition animations */
+            /* Disable all CSS transitions during theme changes */
+            html.theme-transitioning *,
+            html.theme-transitioning *::before,
+            html.theme-transitioning *::after {
+                transition: none !important;
+            }
+
+            /* Theme transition: Simple cross-fade for root */
             ::view-transition-old(root),
             ::view-transition-new(root) {
                 animation: none;
@@ -98,33 +137,30 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 z-index: 2;
             }
 
-            /* Disable all CSS transitions during theme changes */
-            html.dark-mode::view-transition-old(*),
-            html.light-mode::view-transition-old(*),
-            html.dark-mode::view-transition-new(*),
-            html.light-mode::view-transition-new(*) {
-                transition: none !important;
-                animation: none !important;
-            }
-
             /* Smooth fade transition for theme changes */
-            html.dark-mode::view-transition-old(root),
-            html.light-mode::view-transition-old(root) {
-                animation: fade-out 0.3s ease-out;
+            html.theme-transitioning::view-transition-old(root) {
+                animation: theme-fade-out 0.15s ease-out;
             }
 
-            html.dark-mode::view-transition-new(root),
-            html.light-mode::view-transition-new(root) {
-                animation: fade-in 0.3s ease-in;
+            html.theme-transitioning::view-transition-new(root) {
+                animation: theme-fade-in 0.15s ease-in;
             }
 
-            @keyframes fade-out {
+            /* Ensure mobile header and theme toggle stay stable (no animation) */
+            ::view-transition-old(mobile-header),
+            ::view-transition-new(mobile-header),
+            ::view-transition-old(theme-toggle),
+            ::view-transition-new(theme-toggle) {
+                animation: none;
+            }
+
+            @keyframes theme-fade-out {
                 to {
                     opacity: 0;
                 }
             }
 
-            @keyframes fade-in {
+            @keyframes theme-fade-in {
                 from {
                     opacity: 0;
                 }
@@ -408,11 +444,74 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 text-decoration: underline;
             }
 
-            code {
-                padding: var(--layout-code-padding, 0.2em 0.4em);
-                border-radius: var(--layout-code-border-radius, 3px);
-                font-size: 0.9em;
-                font-family: "Consolas", "Monaco", "Courier New", monospace;
+            /* Inline code styling - Light mode (outside layer for proper priority) */
+            code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-light);
+                color: var(--inline-code-color-light);
+                border: 1px solid var(--inline-code-border-light);
+                padding: var(--inline-code-padding);
+                border-radius: var(--inline-code-border-radius);
+                font-size: var(--inline-code-font-size);
+                font-family:
+                    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+            }
+
+            /* Dark mode - system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode)
+                    code:not(pre code):not(.expressive-code code) {
+                    background: var(--inline-code-bg-dark);
+                    color: var(--inline-code-color-dark);
+                    border: 1px solid var(--inline-code-border-dark);
+                }
+            }
+
+            /* Dark mode - manual toggle */
+            :root.dark-mode code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-dark);
+                color: var(--inline-code-color-dark);
+                border: 1px solid var(--inline-code-border-dark);
+            }
+
+            /* Header code styling - Light mode */
+            h1 code,
+            h2 code,
+            h3 code,
+            h4 code,
+            h5 code,
+            h6 code {
+                background: var(--header-code-bg-light);
+                color: var(--header-code-color-light);
+                border: 1px solid var(--header-code-border-light);
+                padding: var(--header-code-padding);
+                border-radius: var(--header-code-border-radius);
+                font-size: var(--header-code-font-size);
+            }
+
+            /* Header code - Dark mode system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode) h1 code,
+                :root:not(.light-mode) h2 code,
+                :root:not(.light-mode) h3 code,
+                :root:not(.light-mode) h4 code,
+                :root:not(.light-mode) h5 code,
+                :root:not(.light-mode) h6 code {
+                    background: var(--header-code-bg-dark);
+                    color: var(--header-code-color-dark);
+                    border: 1px solid var(--header-code-border-dark);
+                }
+            }
+
+            /* Header code - Dark mode manual toggle */
+            :root.dark-mode h1 code,
+            :root.dark-mode h2 code,
+            :root.dark-mode h3 code,
+            :root.dark-mode h4 code,
+            :root.dark-mode h5 code,
+            :root.dark-mode h6 code {
+                background: var(--header-code-bg-dark);
+                color: var(--header-code-color-dark);
+                border: 1px solid var(--header-code-border-dark);
             }
 
             pre {
@@ -427,8 +526,10 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             }
 
             pre code {
-                background: none;
-                padding: 0;
+                background: none !important;
+                padding: 0 !important;
+                border: none !important;
+                color: inherit !important;
             }
 
             ul,
@@ -519,7 +620,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
                 .content-wrapper {
                     padding: var(--space-2xl) var(--space-lg);
-                    padding-top: 0;
+                    padding-top: var(--mobile-header-height);
                 }
 
                 h1 {
@@ -530,11 +631,40 @@ const base = normalizeBase(import.meta.env.BASE_URL);
     </head>
     <body>
         <ClientRouter />
+
+        <!-- Warning for users with JavaScript disabled -->
+        <noscript>
+            <div
+                style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #d97706; color: white; padding: 1rem; text-align: center; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"
+            >
+                ⚠️ JavaScript is required for interactive features like search,
+                navigation, and theme switching. Please enable JavaScript for
+                the best experience.
+            </div>
+        </noscript>
+
         <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+        <!-- MOBILE NAVIGATION OPTION 1: Fixed Header with TOC, Search & Menu -->
+        <!--
+            MobileHeader provides a fixed header bar at the top on mobile with:
+            - Left: "On This Page" TOC dropdown button
+            - Center: Search button to open search overlay
+            - Right: Menu button to open sidebar
+
+            To DISABLE this option: Comment out the line below
+            Note: If you disable this, enable the standalone button in Navigation.astro
+
+            CUSTOMIZATION:
+            The sidebar will duck under the mobile header automatically via:
+            --nav-sidebar-mobile-padding-top in theme.css (default: var(--mobile-header-height))
+            Set to 0 if using standalone button instead of this component.
+        -->
+        <MobileHeader headings={headings} />
+
         <ScrollProgress />
         <LoadingIndicator />
         <KeyboardShortcuts />
-        <ScrollToTop />
         <div class="docs-container">
             <div transition:persist="sidebar">
                 <Navigation currentPath={currentPath} />
