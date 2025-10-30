@@ -39,23 +39,31 @@ const base = import.meta.env.BASE_URL;
             const initialQuery = getQueryParam('q') || '';
 
             // Initialize new search UI
-            const pagefindUI = new PagefindUI({
-                element: "#search",
-                showSubResults: true,
-                showImages: false,
-                excerptLength: 15,
-                // @ts-ignore
-                baseUrl: import.meta.env.BASE_URL,
-                bundlePath:
-                    import.meta.env.BASE_URL.replace(/\/$/, "") + "/pagefind/",
-                processResult: (result) => {
-                    // Strip HTML tags from excerpt
-                    if (result.excerpt) {
-                        result.excerpt = result.excerpt.replace(/<[^>]*>/g, "");
-                    }
-                    return result;
-                },
-            });
+            let pagefindUI;
+            try {
+                pagefindUI = new PagefindUI({
+                    element: "#search",
+                    showSubResults: true,
+                    showImages: false,
+                    excerptLength: 15,
+                    // @ts-ignore
+                    baseUrl: import.meta.env.BASE_URL,
+                    bundlePath:
+                        import.meta.env.BASE_URL.replace(/\/$/, "") + "/pagefind/",
+                    processResult: (result) => {
+                        // Strip HTML tags from excerpt
+                        if (result.excerpt) {
+                            result.excerpt = result.excerpt.replace(/<[^>]*>/g, "");
+                        }
+                        return result;
+                    },
+                });
+            } catch (error) {
+                console.error("Failed to initialize Pagefind search:", error);
+                // Fallback: show a message or hide the search
+                searchElement.innerHTML = "<p>Search is currently unavailable.</p>";
+                return;
+            }
 
             // Set initial query if present
             if (initialQuery) {

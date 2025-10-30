@@ -10,84 +10,93 @@
 <div class="loading-indicator"></div>
 
 <style>
-	.loading-indicator {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 2px;
-		background: var(--accent, #0066cc);
-		transform: scaleX(0);
-		transform-origin: left;
-		z-index: 10000;
-		transition: transform 0.3s ease;
-		opacity: 0;
-	}
+    .loading-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent, #0066cc);
+        transform: scaleX(0);
+        transform-origin: left;
+        z-index: 10000;
+        transition: transform 0.3s ease-out;
+        opacity: 0;
+    }
 
-	.loading-indicator.loading {
-		opacity: 1;
-		animation: loading 1s ease-in-out infinite;
-	}
+    .loading-indicator.loading {
+        opacity: 1;
+        animation: loading 1s ease-in-out infinite;
+    }
 
-	@keyframes loading {
-		0% {
-			transform: scaleX(0);
-			transform-origin: left;
-		}
-		50% {
-			transform: scaleX(0.5);
-			transform-origin: left;
-		}
-		51% {
-			transform: scaleX(0.5);
-			transform-origin: right;
-		}
-		100% {
-			transform: scaleX(0);
-			transform-origin: right;
-		}
-	}
+    @keyframes loading {
+        0% {
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        50% {
+            transform: scaleX(0.5);
+            transform-origin: left;
+        }
+        51% {
+            transform: scaleX(0.5);
+            transform-origin: right;
+        }
+        100% {
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+    }
 </style>
 
 <script>
-	let beforePreparationHandler: (() => void) | null = null;
-	let afterSwapHandler: (() => void) | null = null;
+    let beforePreparationHandler: (() => void) | null = null;
+    let afterSwapHandler: (() => void) | null = null;
 
-	function setupLoadingIndicator() {
-		// Clean up previous listeners to prevent memory leaks
-		if (beforePreparationHandler) {
-			document.removeEventListener('astro:before-preparation', beforePreparationHandler);
-		}
-		if (afterSwapHandler) {
-			document.removeEventListener('astro:after-swap', afterSwapHandler);
-		}
+    function setupLoadingIndicator() {
+        // Clean up previous listeners to prevent memory leaks
+        if (beforePreparationHandler) {
+            document.removeEventListener(
+                "astro:before-preparation",
+                beforePreparationHandler,
+            );
+        }
+        if (afterSwapHandler) {
+            document.removeEventListener("astro:after-swap", afterSwapHandler);
+        }
 
-		const indicator = document.querySelector('.loading-indicator');
-		if (!indicator) return;
+        const indicator = document.querySelector(".loading-indicator");
+        if (!indicator) return;
 
-		beforePreparationHandler = () => {
-			indicator.classList.add('loading');
-		};
+        beforePreparationHandler = () => {
+            indicator.classList.add("loading");
+        };
 
-		afterSwapHandler = () => {
-			indicator.classList.remove('loading');
-		};
+        afterSwapHandler = () => {
+            indicator.classList.remove("loading");
+        };
 
-		document.addEventListener('astro:before-preparation', beforePreparationHandler);
-		document.addEventListener('astro:after-swap', afterSwapHandler);
-	}
+        document.addEventListener(
+            "astro:before-preparation",
+            beforePreparationHandler,
+        );
+        document.addEventListener("astro:after-swap", afterSwapHandler);
+    }
 
-	// Cleanup on page navigation
-	document.addEventListener('astro:before-swap', () => {
-		if (beforePreparationHandler) {
-			document.removeEventListener('astro:before-preparation', beforePreparationHandler);
-			beforePreparationHandler = null;
-		}
-		if (afterSwapHandler) {
-			document.removeEventListener('astro:after-swap', afterSwapHandler);
-			afterSwapHandler = null;
-		}
-	});
+    // Cleanup on page navigation
+    document.addEventListener("astro:before-swap", () => {
+        if (beforePreparationHandler) {
+            document.removeEventListener(
+                "astro:before-preparation",
+                beforePreparationHandler,
+            );
+            beforePreparationHandler = null;
+        }
+        if (afterSwapHandler) {
+            document.removeEventListener("astro:after-swap", afterSwapHandler);
+            afterSwapHandler = null;
+        }
+    });
 
-	document.addEventListener('DOMContentLoaded', setupLoadingIndicator);
+    document.addEventListener("DOMContentLoaded", setupLoadingIndicator);
 </script>
