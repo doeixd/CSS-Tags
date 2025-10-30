@@ -19,10 +19,14 @@ interface Props {
 
 const { title, description, currentPath, headings } = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
+
+// Get theme from cookie for server-side rendering
+const themeCookie = Astro.cookies.get('theme');
+const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class={theme === 'dark' ? 'dark-mode' : 'light-mode'} data-theme={theme}>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,7 +62,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             href={buildAssetPath(base, "favicon.svg")}
         />
 
-        <!-- FOUC Prevention: Set theme before page renders -->
+        <!-- Theme FOUC prevention for cached/serverless pages -->
         <script is:inline>
             (function () {
                 const getTheme = () => {
@@ -68,45 +72,20 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                         return stored;
                     }
                     // Fall back to system preference
-                    return window.matchMedia("(prefers-color-scheme: dark)")
-                        .matches
-                        ? "dark"
-                        : "light";
+                    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
                 };
 
                 const theme = getTheme();
                 const html = document.documentElement;
 
-                // Remove existing theme classes first
+                // Set theme class and data-theme immediately
                 html.classList.remove("dark-mode", "light-mode");
-
-                // Add the correct theme class
-                html.classList.add(
-                    theme === "dark" ? "dark-mode" : "light-mode",
-                );
+                html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
                 html.setAttribute("data-theme", theme);
-
-                // Set CSS variables directly to prevent flash on persisted elements
-                const root = document.documentElement.style;
-                if (theme === "light") {
-                    root.setProperty("--bg-secondary", "#f8f9fa");
-                    root.setProperty("--text-primary", "#1a1a1a");
-                    root.setProperty("--border-color", "#e1e4e8");
-                    root.setProperty("--theme-toggle-bg", "#f8f9fa");
-                    root.setProperty("--theme-toggle-color", "#1a1a1a");
-                    root.setProperty("--nav-github-link-bg", "#f8f9fa");
-                    root.setProperty("--nav-github-link-color", "#1a1a1a");
-                } else {
-                    root.setProperty("--bg-secondary", "#1a1a1a");
-                    root.setProperty("--text-primary", "#e1e4e8");
-                    root.setProperty("--border-color", "#333");
-                    root.setProperty("--theme-toggle-bg", "#1a1a1a");
-                    root.setProperty("--theme-toggle-color", "#e1e4e8");
-                    root.setProperty("--nav-github-link-bg", "#1a1a1a");
-                    root.setProperty("--nav-github-link-color", "#e1e4e8");
-                }
             })();
         </script>
+
+
 
         <ViewTransitions fallback="none" />
         <style is:global data-astro-transition-persist="theme">
