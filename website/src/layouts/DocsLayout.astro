@@ -286,19 +286,11 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
             }
 
             ::view-transition-old(sidebar) {
-                animation: none;
+                animation: blur-out 10ms ease-out;
             }
 
             ::view-transition-new(sidebar) {
                 animation: none;
-            }
-
-            /* Ensure sidebar doesn't move during navigation */
-            ::view-transition-old(sidebar),
-            ::view-transition-new(sidebar) {
-                transform: none !important;
-                opacity: 1 !important;
-                transition: none !important;
             }
 
             ::view-transition-old(main) {
