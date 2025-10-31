@@ -403,9 +403,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             /* Only use 3-column layout on desktop where TOC is visible */
             @media (min-width: 1200px) {
                 .docs-container.has-toc {
-                    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
-                            --toc-width
-                        );
+                    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
                 }
             }
 
