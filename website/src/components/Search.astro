@@ -4,7 +4,7 @@ const base = import.meta.env.BASE_URL;
 const searchId = Astro.props.id || "search";
 ---
 
-<div class="search-container">
+<div class="search-container" style="view-transition-name: search;">
     <div id={searchId}></div>
 </div>
 
