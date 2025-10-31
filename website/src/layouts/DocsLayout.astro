@@ -294,6 +294,14 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 top: 0 !important;
             }
 
+            /* Keep search stable during transitions */
+            ::view-transition-old(search),
+            ::view-transition-new(search) {
+                animation: none;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+
             ::view-transition-old(main) {
                 animation: none;
             }
