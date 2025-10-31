@@ -285,12 +285,13 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 animation: none;
             }
 
-            ::view-transition-old(sidebar) {
-                animation: blur-out 10ms ease-out;
-            }
-
+            /* Keep sidebar stable during transitions */
+            ::view-transition-old(sidebar),
             ::view-transition-new(sidebar) {
                 animation: none;
+                transform: none !important;
+                position: sticky !important;
+                top: 0 !important;
             }
 
             ::view-transition-old(main) {
