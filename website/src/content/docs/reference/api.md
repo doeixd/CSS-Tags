@@ -3,11 +3,11 @@ title: API Reference
 description: Comprehensive API documentation for all custom element layout primitives and their properties.
 ---
 
-This document details the custom element layout primitives provided by the library. Each layout is declarative, property-driven, and integrates with the design token system.# API Documentation for Layout Primitives
+# API Documentation for Layout Primitives
 
 This document details the custom element layout primitives provided by the library. Each layout is declarative, property-driven, and integrates with the design token system.
 
-## <layout-grid>
+## `<layout-grid>`
 
 A responsive grid that automatically fits columns based on item size.
 
@@ -27,7 +27,7 @@ A responsive grid that automatically fits columns based on item size.
 </layout-grid>
 ```
 
-## <layout-split>
+## `<layout-split>`
 
 A two-column layout that stacks on small screens and splits at a breakpoint.
 
@@ -51,7 +51,7 @@ A two-column layout that stacks on small screens and splits at a breakpoint.
 </layout-split>
 ```
 
-## <layout-stack>
+## `<layout-stack>`
 
 A vertical stack with consistent spacing.
 
@@ -71,7 +71,7 @@ A vertical stack with consistent spacing.
 </layout-stack>
 ```
 
-## <layout-cluster>
+## `<layout-cluster>`
 
 For grouping items that wrap onto new lines.
 
@@ -93,7 +93,7 @@ For grouping items that wrap onto new lines.
 </layout-cluster>
 ```
 
-## <layout-reel>
+## `<layout-reel>`
 
 A horizontally scrolling container.
 
@@ -114,7 +114,7 @@ A horizontally scrolling container.
 </layout-reel>
 ```
 
-## <layout-switcher>
+## `<layout-switcher>`
 
 Switches from stack to row when items fit.
 
@@ -134,7 +134,7 @@ Switches from stack to row when items fit.
 </layout-switcher>
 ```
 
-## <layout-pad>
+## `<layout-pad>`
 
 Adds consistent padding.
 
@@ -155,7 +155,7 @@ Adds consistent padding.
 </layout-pad>
 ```
 
-## <layout-center>
+## `<layout-center>`
 
 Centers content with max-width.
 
@@ -175,7 +175,7 @@ Centers content with max-width.
 </layout-center>
 ```
 
-## <layout-frame>
+## `<layout-frame>`
 
 Responsive container for media with aspect ratio.
 
@@ -192,7 +192,7 @@ Responsive container for media with aspect ratio.
 </layout-frame>
 ```
 
-## <layout-sidebar>
+## `<layout-sidebar>`
 
 Sidebar layout that stacks on small screens.
 
@@ -217,7 +217,7 @@ Sidebar layout that stacks on small screens.
 </layout-sidebar>
 ```
 
-## <layout-page>
+## `<layout-page>`
 
 Standard page layout with header, main, footer.
 

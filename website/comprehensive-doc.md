@@ -14,6 +14,9 @@ This comprehensive guide covers everything you need to know about this custom-bu
 - [Expressive Code Integration](#expressive-code-integration)
 - [Adding Pages](#adding-pages)
 - [Custom Components](#custom-components)
+  - [Header Component (NEW)](#headerastro)
+  - [Navigation & Layout](#layout-components)
+  - [Interactive Components](#interactive-components)
 - [Navigation & Hierarchy](#navigation--hierarchy)
 - [Search Functionality](#search-functionality)
 - [Table of Contents (TOC)](#table-of-contents-toc)
@@ -39,12 +42,22 @@ The CSS-Tags documentation website is a modern, accessible documentation site bu
 ### Key Technologies
 
 - **Astro**: Static site generator with component islands
-- **Custom Components**: 30+ hand-built Astro components
+- **Custom Components**: 31+ hand-built Astro components (including the new Header)
 - **Custom Layout System**: Fully custom documentation layout
 - **Expressive Code**: Syntax highlighting
 - **Pagefind**: Client-side search
 - **View Transitions API**: Smooth page transitions
 - **OKLCH Color Space**: Perceptually uniform colors
+
+### Recent Updates
+
+**NEW: Header Component** - A flexible, full-width header component with:
+- Logo/site title support
+- Integrated search functionality
+- Social/icon links (GitHub, Discord, Twitter, LinkedIn)
+- Optional version and language dropdowns
+- **Slot system** for custom content (desktop-only, mobile-only, or universal)
+- Disabled by default for template flexibility
 
 ## Architecture & Structure
 
@@ -58,9 +71,12 @@ website/
 ├── src/
 │   ├── assets/            # Images and media
 │   ├── components/        # Astro components
+│   │   ├── Header.astro
 │   │   ├── Navigation.astro
+│   │   ├── MobileHeader.astro
 │   │   ├── Search.astro
 │   │   ├── TableOfContents.astro
+│   │   ├── ThemeToggle.astro
 │   │   └── ... (30+ components)
 │   ├── content/           # Content collections
 │   │   ├── docs/          # Documentation pages
@@ -102,11 +118,13 @@ const docs = defineCollection({
 
 Unlike template-based documentation sites, this implementation features:
 
-- **Hand-built Components**: Every component is custom-coded
+- **Hand-built Components**: Every component is custom-coded (31+ components)
 - **Flexible Layout System**: Custom grid system for desktop/mobile
 - **Advanced Navigation**: Multi-level collapsible navigation with state persistence
 - **Mobile-First Design**: Custom mobile header and overlay system
+- **Optional Header**: Full-width header with slot-based customization system
 - **Theme System**: Sophisticated OKLCH-based theming with auto-contrast
+- **Slot Architecture**: Advanced slot system for responsive component customization
 
 ### Routing
 
@@ -435,7 +453,9 @@ if (!entry) {
 
 ## Custom Components
 
-The website includes 30+ **hand-built Astro components** for documentation features. Every component is custom-coded from scratch, providing full control over functionality and styling.
+The website includes 31+ **hand-built Astro components** for documentation features. Every component is custom-coded from scratch, providing full control over functionality and styling.
+
+**NEW**: The recently added `Header.astro` component introduces an advanced slot-based architecture for responsive customization, setting a pattern for flexible, template-ready components.
 
 ### Layout Components
 
@@ -464,6 +484,235 @@ Custom fixed header for mobile devices:
 - Menu button for sidebar navigation
 - Touch gesture support and swipe-to-close
 - Intersection Observer for active section tracking
+
+#### `Header.astro`
+**NEW**: Flexible full-width header component (optional, disabled by default):
+- Logo image or site title text support
+- Integrated Pagefind search with keyboard shortcuts (Ctrl/Cmd+K)
+- Configurable icon links (GitHub, Discord, Twitter, LinkedIn, custom)
+- Optional version dropdown for multi-version documentation
+- Optional language dropdown for internationalization
+- Theme toggle integration
+- **Slot system** for custom children:
+  - Default slot: Content visible on both desktop and mobile
+  - `desktop` slot: Content visible only on desktop (>768px)
+  - `mobile` slot: Content visible only on mobile (≤768px)
+- View transitions support with `transition:persist`
+- Responsive design with mobile-first approach
+- Fixed positioning with configurable z-index (1003)
+- Seamless integration with existing theme system
+
+##### Header Usage Examples
+
+**Basic usage** (site title only):
+```astro
+<Header currentPath={currentPath} />
+```
+
+**With logo image**:
+```astro
+<Header
+  currentPath={currentPath}
+  logo={{ src: "/logo.svg", alt: "Site Logo" }}
+/>
+```
+
+**With icon links**:
+```astro
+<Header
+  currentPath={currentPath}
+  iconLinks={[
+    { href: "https://github.com/user/repo", icon: "github", label: "GitHub" },
+    { href: "https://discord.gg/invite", icon: "discord", label: "Discord" },
+    { href: "https://twitter.com/user", icon: "twitter", label: "Twitter" }
+  ]}
+/>
+```
+
+**With version dropdown**:
+```astro
+<Header
+  currentPath={currentPath}
+  versionDropdown={{
+    current: "2.0",
+    versions: [
+      { version: "2.0", href: "/v2", label: "2.0 (Latest)" },
+      { version: "1.0", href: "/v1", label: "1.0 (Legacy)" }
+    ]
+  }}
+/>
+```
+
+**With custom children** (default slot - visible everywhere):
+```astro
+<Header currentPath={currentPath}>
+  <button class="cta-button">Get Started</button>
+  <span class="version-badge">Beta</span>
+</Header>
+```
+
+**With desktop-only content**:
+```astro
+<Header currentPath={currentPath}>
+  <Fragment slot="desktop">
+    <a href="/pricing">Pricing</a>
+    <a href="/blog">Blog</a>
+    <a href="/enterprise">Enterprise</a>
+  </Fragment>
+</Header>
+```
+
+**With mobile-only content**:
+```astro
+<Header currentPath={currentPath}>
+  <Fragment slot="mobile">
+    <button aria-label="Open menu">☰</button>
+  </Fragment>
+</Header>
+```
+
+**With both desktop and mobile slots**:
+```astro
+<Header currentPath={currentPath}>
+  {/* Always visible */}
+  <span class="status-badge">Online</span>
+
+  {/* Desktop only - full navigation */}
+  <Fragment slot="desktop">
+    <nav>
+      <a href="/pricing">Pricing</a>
+      <a href="/docs">Docs</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </Fragment>
+
+  {/* Mobile only - compact button */}
+  <Fragment slot="mobile">
+    <button onclick="toggleMenu()">Menu</button>
+  </Fragment>
+</Header>
+```
+
+**Full-featured example**:
+```astro
+<Header
+  currentPath={currentPath}
+  logo={{ src: "/logo.svg", alt: "My Docs" }}
+  siteTitle="Documentation"
+  siteTitleHref="/"
+  showSearch={true}
+  iconLinks={[
+    { href: "https://github.com/user/repo", icon: "github", label: "GitHub" },
+    { href: "https://discord.gg/invite", icon: "discord", label: "Discord" }
+  ]}
+  versionDropdown={{
+    current: "2.0",
+    versions: [
+      { version: "2.0", href: "/v2" },
+      { version: "1.0", href: "/v1" }
+    ]
+  }}
+  languageDropdown={{
+    current: "en",
+    languages: [
+      { code: "en", label: "English", href: "/" },
+      { code: "es", label: "Español", href: "/es/" },
+      { code: "fr", label: "Français", href: "/fr/" }
+    ]
+  }}
+>
+  <Fragment slot="desktop">
+    <a href="/enterprise" class="cta-link">Enterprise</a>
+  </Fragment>
+</Header>
+```
+
+##### Header Configuration
+
+The Header component is **disabled by default** to allow template users to choose whether to use it. To enable:
+
+1. **Uncomment the Header component** in `DocsLayout.astro`:
+   ```astro
+   <Header currentPath={currentPath} />
+   ```
+
+2. **Uncomment CSS adjustments** for fixed header spacing:
+   ```css
+   body {
+     padding-top: var(--header-height);
+   }
+
+   @media (max-width: 768px) {
+     body {
+       padding-top: var(--header-height-mobile);
+     }
+   }
+   ```
+
+3. **Uncomment view transition persistence** (optional):
+   ```css
+   ::view-transition-old(site-header),
+   ::view-transition-new(site-header) {
+     animation: none;
+     transform: none !important;
+   }
+   ```
+
+##### Header Theme Variables
+
+The Header respects existing theme variables and adds its own:
+
+```css
+/* In theme.css */
+--header-height: 4rem;                    /* Desktop height */
+--header-height-mobile: 3.5rem;           /* Mobile height */
+--header-bg: var(--bg-secondary);         /* Background color */
+--header-border: 1px solid var(--border-color);
+--header-padding-x: var(--space-2xl);     /* Horizontal padding */
+--header-max-width: 100%;                 /* Max width */
+--header-z-index: 1003;                   /* Z-index (above MobileHeader) */
+--header-logo-height: 2rem;               /* Logo height */
+```
+
+##### Header Props Interface
+
+```typescript
+interface Props {
+  currentPath?: string;
+  logo?: { src: string; alt: string; href?: string } | null;
+  siteTitle?: string;
+  siteTitleHref?: string;
+  showSearch?: boolean;
+  iconLinks?: IconLink[];
+  versionDropdown?: {
+    current: string;
+    versions: VersionOption[];
+  } | null;
+  languageDropdown?: {
+    current: string;
+    languages: LanguageOption[];
+  } | null;
+}
+
+interface IconLink {
+  href: string;
+  icon: 'github' | 'discord' | 'twitter' | 'linkedin' | 'custom';
+  label: string;
+  customIcon?: string; // SVG path data for custom icons
+}
+
+interface VersionOption {
+  version: string;
+  label?: string;
+  href: string;
+}
+
+interface LanguageOption {
+  code: string;
+  label: string;
+  href: string;
+}
+```
 
 ### Content Components
 
@@ -808,6 +1057,115 @@ Override CSS variables:
 }
 ```
 
+### Header Customization
+
+The Header component provides extensive customization options:
+
+#### Enabling the Header
+
+By default, the Header is disabled. To enable it:
+
+1. Open `src/layouts/DocsLayout.astro`
+2. Find the commented Header component (around line 738)
+3. Uncomment it: `<Header currentPath={currentPath} />`
+4. Uncomment the CSS body padding adjustments (around line 385)
+
+#### Header Visual Customization
+
+Customize header appearance via CSS variables in `theme.css`:
+
+```css
+:root {
+  /* Header dimensions */
+  --header-height: 5rem;              /* Increase height */
+  --header-height-mobile: 4rem;       /* Mobile height */
+
+  /* Header styling */
+  --header-bg: var(--bg-primary);     /* Change background */
+  --header-border: 2px solid var(--accent);  /* Custom border */
+  --header-padding-x: var(--space-xl); /* Adjust padding */
+
+  /* Header positioning */
+  --header-z-index: 2000;             /* Change stacking */
+  --header-max-width: 1400px;         /* Limit width */
+
+  /* Logo sizing */
+  --header-logo-height: 2.5rem;       /* Larger logo */
+}
+```
+
+#### Header Content Customization
+
+Add custom branding, links, or actions:
+
+```astro
+<Header
+  currentPath={currentPath}
+  logo={{ src: "/my-logo.svg", alt: "My Brand" }}
+  siteTitle="My Documentation"
+  iconLinks={[
+    { href: "https://github.com/me/repo", icon: "github", label: "GitHub" },
+    { href: "https://discord.gg/xyz", icon: "discord", label: "Discord" }
+  ]}
+>
+  {/* Add custom buttons or badges */}
+  <a href="/pro" class="upgrade-button">Upgrade to Pro</a>
+  <span class="version-badge">v3.0 Beta</span>
+</Header>
+```
+
+#### Header Slot Customization
+
+Use slots for responsive layouts:
+
+```astro
+<Header currentPath={currentPath}>
+  {/* Always visible */}
+  <span class="status">Live</span>
+
+  {/* Desktop: Full navigation */}
+  <Fragment slot="desktop">
+    <nav class="header-nav">
+      <a href="/pricing">Pricing</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </Fragment>
+
+  {/* Mobile: Compact menu */}
+  <Fragment slot="mobile">
+    <button class="mobile-menu-btn" onclick="toggleMenu()">
+      Menu
+    </button>
+  </Fragment>
+</Header>
+```
+
+#### Disable Header Search
+
+To use only sidebar search:
+
+```astro
+<Header currentPath={currentPath} showSearch={false} />
+```
+
+#### Custom Icon Support
+
+Add custom icons with SVG paths:
+
+```astro
+<Header
+  iconLinks={[
+    {
+      href: "https://example.com",
+      icon: "custom",
+      label: "Custom Link",
+      customIcon: "M12 2L2 7l10 5 10-5-10-5z..."  // Your SVG path
+    }
+  ]}
+/>
+```
+
 ### Component Customization
 
 Modify component props or extend components:
@@ -829,12 +1187,74 @@ Modify content collections and schemas in `content.config.ts`.
 
 ## Advanced Features
 
+### Slot-Based Component Architecture
+
+The Header component introduces a powerful slot system for responsive customization:
+
+#### Default Slot (Universal)
+Content passed to the default slot appears on all screen sizes:
+
+```astro
+<Header>
+  <button>Contact</button>
+  <span>v2.0</span>
+</Header>
+```
+
+#### Named Slots (Responsive)
+Use named slots for screen-size-specific content:
+
+```astro
+<Header>
+  {/* Desktop-only: Full navigation */}
+  <Fragment slot="desktop">
+    <nav>
+      <a href="/pricing">Pricing</a>
+      <a href="/docs">Docs</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </Fragment>
+
+  {/* Mobile-only: Compact UI */}
+  <Fragment slot="mobile">
+    <button>☰</button>
+  </Fragment>
+</Header>
+```
+
+#### Slot Combinations
+Combine all three for maximum flexibility:
+
+```astro
+<Header>
+  {/* Always visible */}
+  <span class="badge">Live</span>
+
+  {/* Desktop: Extended nav */}
+  <Fragment slot="desktop">
+    <a href="/enterprise">Enterprise</a>
+    <a href="/support">Support</a>
+  </Fragment>
+
+  {/* Mobile: Single button */}
+  <Fragment slot="mobile">
+    <button onclick="openMenu()">Menu</button>
+  </Fragment>
+</Header>
+```
+
+#### Breakpoint Behavior
+- Desktop slot: Visible when viewport width > 768px
+- Mobile slot: Visible when viewport width ≤ 768px
+- Default slot: Always visible
+- Empty slots automatically hide (no extra spacing)
+
 ### Keyboard Shortcuts
 
-- `Ctrl+K` / `Cmd+K`: Focus search
+- `Ctrl+K` / `Cmd+K`: Focus search (works in Header and Sidebar)
 - `Tab`: Navigate focusable elements
 - `Enter`: Activate buttons/links
-- `Escape`: Close overlays
+- `Escape`: Close overlays and dropdowns
 
 ### Accessibility Features
 
@@ -881,6 +1301,41 @@ Modify content collections and schemas in `content.config.ts`.
 - Ensure page has H2/H3 headings
 - Check mobile vs desktop display
 - Verify component props
+
+#### Header Not Showing
+- Verify the Header component is uncommented in `DocsLayout.astro`
+- Check that CSS body padding is uncommented
+- Ensure `--header-height` CSS variable is defined in `theme.css`
+- Check z-index conflicts (Header uses z-index: 1003)
+- Verify no CSS `display: none` is overriding header visibility
+
+#### Header Search Not Working
+- Ensure `showSearch={true}` prop is set (default)
+- Check Pagefind is properly built and bundled
+- Verify `#header-search` element exists in DOM
+- Check browser console for Pagefind initialization errors
+- Confirm `PagefindUI` script is loaded
+
+#### Header Dropdowns Not Opening
+- Check JavaScript console for errors
+- Verify dropdown button click handlers are initialized
+- Ensure dropdown menus have content (not empty)
+- Check z-index of dropdown menu (should be 10)
+- Verify `initDropdowns()` function runs on page load and after transitions
+
+#### Header Slots Not Showing
+- Verify slot content is not empty
+- Check responsive breakpoint (768px for mobile/desktop switch)
+- Ensure `<Fragment slot="name">` syntax is correct
+- Check CSS display rules for `.header-children-*` classes
+- Verify no parent component is hiding the slot content
+
+#### Header Layout Issues
+- Check `--header-padding-x` and spacing variables
+- Verify flexbox gap values are appropriate
+- Ensure `--header-max-width` is not too restrictive
+- Check for conflicting CSS from other stylesheets
+- Verify viewport meta tag is set correctly for mobile
 
 ### Development Tips
 

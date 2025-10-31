@@ -2,12 +2,13 @@
 import { ViewTransitions, ClientRouter } from "astro:transitions";
 import Navigation from "../components/Navigation.astro";
 import MobileHeader from "../components/MobileHeader.astro";
+import Header from "../components/Header.astro";
 import ScrollProgress from "../components/ScrollProgress.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
 import LoadingIndicator from "../components/LoadingIndicator.astro";
 import KeyboardShortcuts from "../components/KeyboardShortcuts.astro";
-import { normalizeBase, buildAssetPath } from "../utils/url";
+import { normalizeBase, buildAssetPath, buildHref } from "../utils/url";
 import "../theme.css";
 
 interface Props {
@@ -17,8 +18,14 @@ interface Props {
     headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description, currentPath, headings } = Astro.props;
+const { title, description, currentPath, headings = [] } = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
+
+// Filter to only h2 and h3 headings for TOC (and exclude empty headings)
+const tocHeadings = headings.filter(
+    (h) => h.depth >= 2 && h.depth <= 3 && h.text && h.text.trim().length > 0
+);
+const hasToc = tocHeadings.length > 0;
 
 // Get theme from cookie for server-side rendering
 const themeCookie = Astro.cookies.get("theme");
@@ -69,28 +76,73 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <!-- Theme FOUC prevention for cached/serverless pages -->
         <script is:inline>
             (function () {
-                const getTheme = () => {
-                    // Check localStorage first
-                    const stored = localStorage.getItem("theme");
-                    if (stored === "dark" || stored === "light") {
+                // Validation
+                function isValidTheme(value) {
+                    return value === "dark" || value === "light";
+                }
+
+                function isValidAnimationPreference(value) {
+                    return value === "none" || value === "blur-in";
+                }
+
+                // Storage read with graceful degradation
+                function getStorageValue(key) {
+                    // Try localStorage first
+                    try {
+                        var value = localStorage.getItem(key);
+                        if (value !== null) return value;
+                    } catch (e) {}
+
+                    // Fall back to reading cookie
+                    try {
+                        var cookieMatch = document.cookie.match(new RegExp("(?:^|; )" + key + "=([^;]*)"));
+                        if (cookieMatch) return cookieMatch[1];
+                    } catch (e) {}
+
+                    // Fall back to sessionStorage
+                    try {
+                        var value = sessionStorage.getItem(key);
+                        if (value !== null) return value;
+                    } catch (e) {}
+
+                    return null;
+                }
+
+                // Get theme with validation
+                function getTheme() {
+                    var stored = getStorageValue("theme");
+                    if (isValidTheme(stored)) {
                         return stored;
                     }
+
                     // Fall back to system preference
-                    return window.matchMedia("(prefers-color-scheme: dark)")
-                        .matches
-                        ? "dark"
-                        : "light";
-                };
+                    try {
+                        return window.matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    } catch (e) {
+                        return "light"; // Ultimate fallback
+                    }
+                }
 
-                const theme = getTheme();
-                const html = document.documentElement;
+                // Get animation preference
+                function getAnimationPreference() {
+                    var stored = getStorageValue("animation-preference");
+                    if (isValidAnimationPreference(stored)) {
+                        return stored;
+                    }
+                    return "none"; // Default to no animations
+                }
 
-                // Set theme class and data-theme immediately
+                // Apply theme immediately
+                var theme = getTheme();
+                var animationPref = getAnimationPreference();
+                var html = document.documentElement;
+
                 html.classList.remove("dark-mode", "light-mode");
-                html.classList.add(
-                    theme === "dark" ? "dark-mode" : "light-mode",
-                );
+                html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
                 html.setAttribute("data-theme", theme);
+                html.setAttribute("data-animation-preference", animationPref);
             })();
         </script>
 
@@ -144,17 +196,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             @keyframes theme-fade-in {
                 from {
                     opacity: 0;
-                }
-            }
-
-            @keyframes blur-out {
-                from {
-                    filter: blur(0px);
-                    opacity: 1;
-                }
-                to {
-                    filter: blur(2px);
-                    opacity: 0.8;
                 }
             }
 
@@ -281,14 +322,30 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 top: 1rem;
             }
 
-            /* View Transition Animations - 10ms blur effect */
+            /* View Transition Animations */
+            /* Default: No animations */
             ::view-transition-old(root) {
-                /*animation: blur-out 100ms ease-out;*/
                 animation: none;
             }
 
             ::view-transition-new(root) {
                 animation: none;
+            }
+
+            /* Optional: 40ms blur-in animation */
+            html[data-animation-preference="blur-in"] ::view-transition-new(root) {
+                animation: blur-in 40ms ease-in;
+            }
+
+            @keyframes blur-in {
+                from {
+                    filter: blur(2px);
+                    opacity: 0;
+                }
+                to {
+                    filter: blur(0px);
+                    opacity: 1;
+                }
             }
 
             /* Keep sidebar stable during transitions */
@@ -316,14 +373,44 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: none;
             }
 
+            /* Keep header stable during transitions */
+            ::view-transition-old(site-header),
+            ::view-transition-new(site-header) {
+                animation: none;
+                transform: none !important;
+            }
+
+            /* Header spacing */
+            /* Header is fixed on desktop, so page needs top padding to account for header height */
+            /* On mobile, Header is hidden and MobileHeader provides navigation (no extra body padding needed) */
+            body {
+                padding-top: var(--header-height);
+            }
+
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 0;
+                }
+            }
+
             .docs-container {
                 display: grid;
-                grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
-                        --toc-width
-                    );
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
+            }
+
+            /* Only use 3-column layout on desktop where TOC is visible */
+            @media (min-width: 1200px) {
+                .docs-container.has-toc {
+                    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
+                            --toc-width
+                        );
+                }
+            }
+
+            .docs-container.no-toc {
+                grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
             }
 
             .sidebar-resize-handle {
@@ -373,10 +460,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 );
             }
 
-            /* Hide TOC wrapper when empty */
-            .toc-wrapper:empty {
-                display: none;
-            }
+
 
             @media (max-width: 1200px) {
                 .docs-container {
@@ -631,6 +715,95 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
         <a href="#main-content" class="skip-to-content">Skip to content</a>
 
+        <!-- SITE HEADER (OPTIONAL): Full-width header with logo, search, and actions -->
+        <!--
+            Header provides a full-width header bar across all screen sizes with:
+            - Left: Logo image or site title text
+            - Center: Search bar with keyboard shortcut (Ctrl/Cmd+K)
+            - Right: Icon links (GitHub, Discord, Social), Version/Language dropdowns, Theme toggle
+
+            To ENABLE this option: Uncomment the line below
+
+            EXAMPLE USAGE:
+            Basic (just site title):
+            <Header currentPath={currentPath} />
+
+            With logo:
+            <Header
+                currentPath={currentPath}
+                logo={{ src: "/logo.svg", alt: "Site Logo" }}
+            />
+
+            With icon links:
+            <Header
+                currentPath={currentPath}
+                iconLinks={[
+                    { href: "https://github.com/your-repo", icon: "github", label: "GitHub" },
+                    { href: "https://discord.gg/your-invite", icon: "discord", label: "Discord" }
+                ]}
+            />
+
+            With version dropdown:
+            <Header
+                currentPath={currentPath}
+                versionDropdown={{
+                    current: "2.0",
+                    versions: [
+                        { version: "2.0", href: "/v2" },
+                        { version: "1.0", href: "/v1" }
+                    ]
+                }}
+            />
+
+            With custom children (slots):
+            <Header currentPath={currentPath}>
+                {/* Default slot - visible on both desktop and mobile */}
+                <button>Custom Button</button>
+            </Header>
+
+            With desktop-only children:
+            <Header currentPath={currentPath}>
+                <Fragment slot="desktop">
+                    <a href="/pro">Upgrade to Pro</a>
+                </Fragment>
+            </Header>
+
+            With mobile-only children:
+            <Header currentPath={currentPath}>
+                <Fragment slot="mobile">
+                    <button aria-label="Menu">☰</button>
+                </Fragment>
+            </Header>
+
+            With both desktop and mobile children:
+            <Header currentPath={currentPath}>
+                {/* Shown on both */}
+                <span>v2.0</span>
+
+                {/* Desktop only */}
+                <Fragment slot="desktop">
+                    <a href="/enterprise">Enterprise</a>
+                </Fragment>
+
+                {/* Mobile only */}
+                <Fragment slot="mobile">
+                    <button>Menu</button>
+                </Fragment>
+            </Header>
+
+            IMPORTANT: When enabled, uncomment the CSS section below (search for "Header spacing")
+            to adjust page layout for the fixed header height.
+        -->
+        <Header
+            currentPath={currentPath}
+            siteTitle="CSS Tags"
+            siteTitleHref={buildHref(base)}
+            showSearch={true}
+            iconLinks={[
+                { href: "https://github.com/doeixd/CSS-Tags", icon: "github", label: "View on GitHub" }
+            ]}
+        />
+
         <!-- MOBILE NAVIGATION OPTION 1: Fixed Header with TOC, Search & Menu -->
         <!--
             MobileHeader provides a fixed header bar at the top on mobile with:
@@ -651,7 +824,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <ScrollProgress />
         <LoadingIndicator />
         <KeyboardShortcuts />
-        <div class="docs-container">
+        <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
             <div transition:persist="sidebar">
                 <Navigation currentPath={currentPath} />
             </div>
@@ -661,9 +834,11 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     <slot />
                 </main>
             </div>
-            <div class="toc-wrapper">
-                <TableOfContents headings={headings} />
-            </div>
+            {hasToc && (
+                <div class="toc-wrapper">
+                    <TableOfContents headings={headings} />
+                </div>
+            )}
         </div>
 
         <script>

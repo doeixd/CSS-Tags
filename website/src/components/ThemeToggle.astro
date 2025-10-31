@@ -101,39 +101,151 @@
 </style>
 
 <script>
-    function restoreTheme() {
-        const getTheme = () => {
-            // Check localStorage first
-            const stored = localStorage.getItem("theme");
-            if (stored === "dark" || stored === "light") {
-                return stored;
-            }
-            // Fall back to system preference
-            return window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-        };
+    // Type validation
+    type Theme = "dark" | "light";
+    type AnimationPreference = "none" | "blur-in";
 
-        const theme = getTheme();
+    function isValidTheme(value: unknown): value is Theme {
+        return value === "dark" || value === "light";
+    }
+
+    function isValidAnimationPreference(value: unknown): value is AnimationPreference {
+        return value === "none" || value === "blur-in";
+    }
+
+    // Storage abstraction with graceful degradation
+    const storage = {
+        get(key: string): string | null {
+            // Try localStorage first
+            try {
+                const value = localStorage.getItem(key);
+                if (value !== null) return value;
+            } catch (e) {
+                console.warn(`localStorage.getItem failed for ${key}:`, e);
+            }
+
+            // Fall back to reading cookie
+            try {
+                const cookieMatch = document.cookie.match(new RegExp(`(?:^|; )${key}=([^;]*)`));
+                if (cookieMatch) return cookieMatch[1];
+            } catch (e) {
+                console.warn(`Cookie read failed for ${key}:`, e);
+            }
+
+            // Fall back to sessionStorage
+            try {
+                const value = sessionStorage.getItem(key);
+                if (value !== null) return value;
+            } catch (e) {
+                console.warn(`sessionStorage.getItem failed for ${key}:`, e);
+            }
+
+            return null;
+        },
+
+        set(key: string, value: string): void {
+            // Try localStorage (primary)
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.warn(`localStorage.setItem failed for ${key}:`, e);
+            }
+
+            // Always sync to cookie for SSR
+            try {
+                const isProduction = window.location.protocol === 'https:';
+                const secure = isProduction ? '; Secure' : '';
+                document.cookie = `${key}=${value}; path=/; max-age=31536000; SameSite=Lax${secure}`;
+            } catch (e) {
+                console.warn(`Cookie write failed for ${key}:`, e);
+            }
+
+            // Also save to sessionStorage as last resort backup
+            try {
+                sessionStorage.setItem(key, value);
+            } catch (e) {
+                console.warn(`sessionStorage.setItem failed for ${key}:`, e);
+            }
+        }
+    };
+
+    // Get theme with validation and fallback to system preference
+    function getTheme(): Theme {
+        const stored = storage.get("theme");
+        if (isValidTheme(stored)) {
+            return stored;
+        }
+
+        // Fall back to system preference
+        try {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        } catch (e) {
+            console.warn("matchMedia failed, defaulting to light theme:", e);
+            return "light";
+        }
+    }
+
+    // Get animation preference with validation
+    function getAnimationPreference(): AnimationPreference {
+        const stored = storage.get("animation-preference");
+        if (isValidAnimationPreference(stored)) {
+            return stored;
+        }
+        return "none"; // Default to no animations
+    }
+
+    // Apply theme to DOM
+    function applyTheme(theme: Theme, suppressTransitions = false): void {
         const html = document.documentElement;
 
-        // Disable transitions temporarily to prevent flash
-        html.classList.add("theme-transitioning");
+        if (suppressTransitions) {
+            html.classList.add("theme-transitioning");
+        }
 
-        // Remove existing theme classes
         html.classList.remove("dark-mode", "light-mode");
-
-        // Add the correct theme class
         html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
         html.setAttribute("data-theme", theme);
 
-        // Re-enable transitions after minimal delay
-        setTimeout(() => {
-            html.classList.remove("theme-transitioning");
-        }, 10);
+        if (suppressTransitions) {
+            // Use requestAnimationFrame for proper timing
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    html.classList.remove("theme-transitioning");
+                });
+            });
+        }
     }
 
-    function setupThemeToggle() {
+    // Apply animation preference to DOM
+    function applyAnimationPreference(preference: AnimationPreference): void {
+        const html = document.documentElement;
+        html.setAttribute("data-animation-preference", preference);
+    }
+
+    // Restore theme from storage (no transitions)
+    function restoreTheme(): void {
+        const theme = getTheme();
+        const animationPreference = getAnimationPreference();
+        applyTheme(theme, true);
+        applyAnimationPreference(animationPreference);
+    }
+
+    // Update theme and persist to storage
+    function updateTheme(theme: Theme): void {
+        if (!isValidTheme(theme)) {
+            console.error("Invalid theme value:", theme);
+            return;
+        }
+
+        applyTheme(theme, false);
+        storage.set("theme", theme);
+
+        // Dispatch custom event for other components
+        window.dispatchEvent(new CustomEvent("theme-changed", { detail: { theme } }));
+    }
+
+    // Setup theme toggle button
+    function setupThemeToggle(): void {
         const button = document.querySelector(".theme-toggle");
         if (!button) {
             console.warn("Theme toggle button not found");
@@ -141,69 +253,98 @@
         }
 
         // Remove any existing event listeners to prevent duplicates
-        const newButton = button.cloneNode(true);
+        const newButton = button.cloneNode(true) as HTMLElement;
         button.parentNode?.replaceChild(newButton, button);
 
         newButton.addEventListener("click", (e) => {
             e.preventDefault();
             const html = document.documentElement;
-            const currentTheme = html.classList.contains("dark-mode")
-                ? "dark"
-                : "light";
-            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            const currentTheme = html.classList.contains("dark-mode") ? "dark" : "light";
+            const newTheme: Theme = currentTheme === "dark" ? "light" : "dark";
 
             // Enable icon transitions for smooth animation on user click
             newButton.classList.add("transitioning");
 
-            // Disable all CSS transitions temporarily during theme change
+            // Disable CSS transitions temporarily during theme change
             html.classList.add("theme-transitioning");
 
-            // For instant theme switching, skip view transitions
             updateTheme(newTheme);
 
-            // Remove transition classes after minimal delay
-            setTimeout(() => {
-                newButton.classList.remove("transitioning");
-                html.classList.remove("theme-transitioning");
-            }, 10);
+            // Remove transition classes after animation completes
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    newButton.classList.remove("transitioning");
+                    html.classList.remove("theme-transitioning");
+                });
+            });
         });
     }
 
-    function updateTheme(theme) {
-        const html = document.documentElement;
-
-        // Update DOM - remove both classes first, then add the correct one
-        html.classList.remove("dark-mode", "light-mode");
-        html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
-
-        // Update data-theme attribute for Expressive Code
-        html.setAttribute("data-theme", theme);
-
-        // Save to localStorage
-        localStorage.setItem("theme", theme);
-
-        // Save to cookie for server-side rendering
-        document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+    // Setup multi-tab synchronization
+    function setupStorageListener(): void {
+        window.addEventListener("storage", (e) => {
+            if (e.key === "theme" && isValidTheme(e.newValue)) {
+                applyTheme(e.newValue, true);
+            } else if (e.key === "animation-preference" && isValidAnimationPreference(e.newValue)) {
+                applyAnimationPreference(e.newValue);
+            }
+        });
     }
 
-    // Restore theme BEFORE swap to prevent flash
+    // Setup system theme change listener
+    function setupMediaQueryListener(): void {
+        try {
+            const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+            const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+                // Only update if user hasn't manually set a preference
+                const hasManualPreference = storage.get("theme") !== null;
+                if (!hasManualPreference) {
+                    const systemTheme: Theme = e.matches ? "dark" : "light";
+                    applyTheme(systemTheme, true);
+                }
+            };
+
+            // Modern browsers
+            if (mediaQuery.addEventListener) {
+                mediaQuery.addEventListener("change", handleChange);
+            } else {
+                // Fallback for older browsers
+                mediaQuery.addListener(handleChange);
+            }
+        } catch (e) {
+            console.warn("Failed to setup media query listener:", e);
+        }
+    }
+
+    // Initialize theme system (called once per page load)
+    let initialized = false;
+
+    function initThemeSystem(): void {
+        if (initialized) return;
+        initialized = true;
+
+        restoreTheme();
+        setupThemeToggle();
+        setupStorageListener();
+        setupMediaQueryListener();
+    }
+
+    // Restore theme before DOM swap (prevent FOUC during navigation)
     document.addEventListener("astro:before-swap", () => {
         restoreTheme();
     });
 
-    // Setup theme toggle when DOM is ready
-    function initThemeSystem() {
-        restoreTheme();
-        setupThemeToggle();
-    }
+    // Re-initialize after Astro view transitions
+    document.addEventListener("astro:after-swap", () => {
+        initialized = false;
+        initThemeSystem();
+    });
 
-    if (document.readyState === 'loading') {
+    // Initial setup
+    if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initThemeSystem);
     } else {
         initThemeSystem();
     }
-
-    // Re-setup after Astro view transitions
-    document.addEventListener("astro:after-swap", initThemeSystem);
-    document.addEventListener("astro:page-load", initThemeSystem);
 </script>

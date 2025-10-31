@@ -6,16 +6,48 @@ interface Props {
 
 const { headings = [] } = Astro.props;
 
-// Filter to only h2 and h3 headings
-const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+// Filter to only h2 and h3 headings with non-empty text
+const tocHeadings = headings.filter(
+    (h) => h.depth >= 2 && h.depth <= 3 && h.text && h.text.trim().length > 0
+);
+
+// Check if there are any h3 headings
+const hasH3Headings = tocHeadings.some(h => h.depth === 3);
+
+const filteredHeadings = [];
+if (hasH3Headings) {
+    // If there are h3 headings, use the original logic: only show h2 headings that have h3 subsections
+    for (let i = 0; i < tocHeadings.length; i++) {
+        const heading = tocHeadings[i];
+        if (heading.depth === 2) {
+            // Check if there's an h3 before the next h2
+            let hasDeeper = false;
+            for (let j = i + 1; j < tocHeadings.length; j++) {
+                if (tocHeadings[j].depth === 2) break;
+                if (tocHeadings[j].depth === 3) {
+                    hasDeeper = true;
+                    break;
+                }
+            }
+            if (hasDeeper) {
+                filteredHeadings.push(heading);
+            }
+        } else if (heading.depth === 3) {
+            filteredHeadings.push(heading);
+        }
+    }
+} else {
+    // If no h3 headings, show all h2 headings (for flat API reference style pages)
+    filteredHeadings.push(...tocHeadings.filter(h => h.depth === 2));
+}
 ---
 
 {
-    tocHeadings.length > 0 && (
+    filteredHeadings.length > 0 && (
         <nav class="toc" aria-label="Table of contents">
             <h2 class="toc-title">On this page</h2>
             <ul class="toc-list">
-                {tocHeadings.map((heading) => (
+                {filteredHeadings.map((heading) => (
                     <li class={`toc-item toc-depth-${heading.depth}`}>
                         <a href={`#${heading.slug}`} class="toc-link">
                             {heading.text}

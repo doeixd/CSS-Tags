@@ -420,6 +420,19 @@
         --mobile-header-button-color: var(--text-primary);
 
         /* ---------------------------------------------------------------------
+           HEADER COMPONENT
+           --------------------------------------------------------------------- */
+        --header-height: 4rem;
+        --header-height-mobile: 3.5rem;
+        --header-bg: var(--bg-secondary);
+        --header-border: 1px solid var(--border-color);
+        --header-padding-x: var(--space-2xl);
+        --header-max-width: 100%;
+        --header-z-index: 1003;
+        --header-logo-height: 2rem;
+        --header-search-offset: 0.5px;
+
+        /* ---------------------------------------------------------------------
            LAYOUT COMPONENT
            --------------------------------------------------------------------- */
         --layout-content-wrapper-padding: 3rem var(--space-2xl);
@@ -588,14 +601,43 @@
         /* --scroll-button-border-radius: 50%; */
 
         /* ---------------------------------------------------------------------
-           SEARCH COMPONENT
-           --------------------------------------------------------------------- */
+            SEARCH COMPONENT
+            --------------------------------------------------------------------- */
         --search-border-radius: var(--border-radius-lg);
         --search-focus-shadow: 0 0 0 3px;
         --search-clear-button-top: 6px;
         --search-clear-icon-size: 14px;
         --search-clear-icon-thickness: 2px;
         --search-text-indent-hidden: -9999px;
+        --pagefind-message-margin: 0 0 0 2px;
+
+        /* ---------------------------------------------------------------------
+           SELECT/DROPDOWN COMPONENT
+           --------------------------------------------------------------------- */
+        /* Field spacing */
+        --select-field-gap: var(--space-xs);
+
+        /* Label styling */
+        --select-label-font-size: var(--font-size-sm);
+        --select-label-font-weight: var(--font-weight-medium);
+        --select-required-color: var(--accent);
+
+        /* Select box dimensions */
+        --select-padding-y: var(--space-sm);
+        --select-padding-x: var(--space-md);
+        --select-border-width: 1px;
+        --select-border-radius: var(--border-radius-md);
+
+        /* Select box colors */
+        --select-bg: var(--bg-primary);
+        --select-font-size: var(--font-size-base);
+
+        /* Focus state */
+        --select-focus-shadow: 0 0 0 3px;
+
+        /* State colors */
+        --select-error-color: #dc2626;
+        --select-success-color: #16a34a;
 
         /* =====================================================================
            EXPRESSIVE CODE THEMING

@@ -1,13 +1,59 @@
 ---
-// Select.astro - Custom styled select dropdown
+/**
+ * Select Component
+ *
+ * A themed select dropdown component that integrates with the docs site theming system.
+ * Supports both native select and custom styled dropdowns.
+ *
+ * Features:
+ * - Native and custom UI modes
+ * - Optgroup support
+ * - Keyboard navigation
+ * - Dark/light mode support
+ * - Responsive sizing
+ * - Error/success states
+ * - Full accessibility
+ *
+ * @example
+ * Basic usage:
+ * <Select
+ *   options={[
+ *     { value: "1", label: "Option 1" },
+ *     { value: "2", label: "Option 2" }
+ *   ]}
+ * />
+ *
+ * With optgroups:
+ * <Select
+ *   optgroups={[
+ *     {
+ *       label: "Group 1",
+ *       options: [{ value: "1", label: "Option 1" }]
+ *     }
+ *   ]}
+ * />
+ *
+ * Custom styled:
+ * <Select
+ *   mode="custom"
+ *   options={[...]}
+ * />
+ */
+
 interface SelectOption {
   value: string;
   label: string;
   disabled?: boolean;
 }
 
-interface Props {
+interface SelectOptgroup {
+  label: string;
   options: SelectOption[];
+}
+
+interface Props {
+  options?: SelectOption[];
+  optgroups?: SelectOptgroup[];
   value?: string;
   placeholder?: string;
   disabled?: boolean;
@@ -15,14 +61,19 @@ interface Props {
   error?: boolean;
   success?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  mode?: 'native' | 'custom';
   class?: string;
   label?: string;
   helpText?: string;
   errorText?: string;
+  name?: string;
+  id?: string;
+  'aria-label'?: string;
 }
 
 const {
-  options,
+  options = [],
+  optgroups = [],
   value,
   placeholder = 'Select an option',
   disabled = false,
@@ -30,149 +81,271 @@ const {
   error = false,
   success = false,
   size = 'md',
+  mode = 'native',
   class: className,
   label,
   helpText,
   errorText,
+  name,
+  id,
+  'aria-label': ariaLabel,
   ...rest
 } = Astro.props;
+
+const hasOptgroups = optgroups.length > 0;
+const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
+
+
 ---
 
-<div class={`form-field ${className || ''}`}>
+<div class={`select-field ${className || ''}`}>
   {label && (
-    <label class="form-label" for={rest.id}>
+    <label class="select-label" for={selectId}>
       {label}
-      {required && <span class="form-required" aria-label="required">*</span>}
+      {required && <span class="select-required" aria-label="required">*</span>}
     </label>
   )}
 
-  <div class="select-wrapper">
-    <select
-      class={`form-select form-select--${size} ${error ? 'form-select--error' : ''} ${success ? 'form-select--success' : ''}`}
-      value={value}
-      disabled={disabled}
-      required={required}
-      aria-invalid={error}
-      aria-describedby={helpText ? `${rest.id}-help` : errorText ? `${rest.id}-error` : undefined}
-      {...rest}
-    >
-      {placeholder && (
-        <option value="" disabled selected={!value}>
-          {placeholder}
-        </option>
-      )}
-      {options.map((option) => (
-        <option
-          value={option.value}
-          disabled={option.disabled}
-          selected={value === option.value}
+  <div class="select-wrapper" data-mode={mode}>
+    {mode === 'native' ? (
+      <>
+        <select
+          id={selectId}
+          name={name}
+          class={`select-native select-native--${size} ${error ? 'select-native--error' : ''} ${success ? 'select-native--success' : ''} ${disabled ? 'select-native--disabled' : ''}`}
+          value={value}
+          disabled={disabled}
+          required={required}
+          aria-invalid={error}
+          aria-label={ariaLabel}
+          aria-describedby={helpText ? `${selectId}-help` : errorText ? `${selectId}-error` : undefined}
+          {...rest}
         >
-          {option.label}
-        </option>
-      ))}
-    </select>
+          {placeholder && (
+            <option value="" disabled selected={!value}>
+              {placeholder}
+            </option>
+          )}
 
-    <div class="select-arrow" aria-hidden="true">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+          {hasOptgroups ? (
+            optgroups.map((group) => (
+              <optgroup label={group.label}>
+                {group.options.map((option) => (
+                  <option
+                    value={option.value}
+                    disabled={option.disabled}
+                    selected={value === option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))
+          ) : (
+            options.map((option) => (
+              <option
+                value={option.value}
+                disabled={option.disabled}
+                selected={value === option.value}
+              >
+                {option.label}
+              </option>
+            ))
+          )}
+        </select>
+
+        <div class="select-arrow" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </>
+    ) : (
+      <div class={`select-custom select-custom--${size} ${error ? 'select-custom--error' : ''} ${success ? 'select-custom--success' : ''}`} data-select-id={selectId}>
+        <button
+          type="button"
+          class="select-custom-button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label={ariaLabel || label || placeholder}
+          disabled={disabled}
+          data-select-button
+        >
+          <span class="select-custom-value">{placeholder}</span>
+          <svg class="select-custom-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="select-custom-menu" role="listbox" data-select-menu>
+          {hasOptgroups ? (
+            optgroups.map((group) => (
+              <div class="select-custom-group">
+                <div class="select-custom-group-label">{group.label}</div>
+                {group.options.map((option) => (
+                  <button
+                    type="button"
+                    class="select-custom-option"
+                    role="option"
+                    data-value={option.value}
+                    aria-selected={value === option.value}
+                    aria-disabled={option.disabled}
+                    disabled={option.disabled}
+                    data-select-option
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            ))
+          ) : (
+            options.map((option) => (
+              <button
+                type="button"
+                class="select-custom-option"
+                role="option"
+                data-value={option.value}
+                aria-selected={value === option.value}
+                aria-disabled={option.disabled}
+                disabled={option.disabled}
+                data-select-option
+              >
+                {option.label}
+              </button>
+            ))
+          )}
+        </div>
+
+        <!-- Hidden input for form submission -->
+        <input
+          type="hidden"
+          id={selectId}
+          name={name}
+          value={value}
+          required={required}
+        />
+      </div>
+    )}
   </div>
 
   {helpText && (
-    <div class="form-help" id={`${rest.id}-help`}>
+    <div class="select-help" id={`${selectId}-help`}>
       {helpText}
     </div>
   )}
 
   {errorText && (
-    <div class="form-error" id={`${rest.id}-error`} role="alert">
+    <div class="select-error" id={`${selectId}-error`} role="alert">
       {errorText}
     </div>
   )}
 </div>
 
 <style>
-  .form-field {
+  /* Field Container */
+  .select-field {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--select-field-gap, var(--space-xs));
   }
 
-  .form-label {
-    font-weight: var(--font-weight-medium);
+  /* Label */
+  .select-label {
+    font-weight: var(--select-label-font-weight, var(--font-weight-medium));
     color: var(--text-primary);
-    font-size: var(--form-label-font-size, var(--font-size-sm));
+    font-size: var(--select-label-font-size, var(--font-size-sm));
+    transition: color var(--transition-fast);
   }
 
-  .form-required {
-    color: var(--form-required-color, #dc3545);
+  .select-required {
+    color: var(--select-required-color, var(--accent));
     margin-left: var(--space-xs);
   }
 
+  /* Wrapper */
   .select-wrapper {
     position: relative;
   }
 
-  .form-select {
+  /* ============================================
+     NATIVE SELECT
+     ============================================ */
+
+  .select-native {
     appearance: none;
     width: 100%;
-    padding: var(--form-select-padding, var(--space-sm) calc(var(--space-md) + 24px) var(--space-sm) var(--space-md));
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    background: var(--bg-primary);
+    padding: var(--select-padding-y, var(--space-sm)) calc(var(--select-padding-x, var(--space-md)) + 24px) var(--select-padding-y, var(--space-sm)) var(--select-padding-x, var(--space-md));
+    border: var(--select-border-width, 1px) solid var(--border-color);
+    border-radius: var(--select-border-radius, var(--border-radius-md));
+    background: var(--select-bg, var(--bg-primary));
     color: var(--text-primary);
-    font-size: var(--form-select-font-size, var(--font-size-base));
+    font-size: var(--select-font-size, var(--font-size-base));
     font-family: inherit;
+    line-height: 1.5;
     cursor: pointer;
     transition: all var(--transition-fast);
   }
 
-  .form-select:focus {
+  .select-native:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--text-secondary);
+  }
+
+  .select-native:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) var(--accent-light);
   }
 
-  .form-select--error {
-    border-color: var(--form-error-color, #dc3545);
-  }
-
-  .form-select--error:focus {
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
-  }
-
-  .form-select--success {
-    border-color: var(--form-success-color, #28a745);
-  }
-
-  .form-select--success:focus {
-    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
-  }
-
-  .form-select:disabled {
+  .select-native:disabled {
     background: var(--bg-secondary);
     color: var(--text-secondary);
     cursor: not-allowed;
+    opacity: 0.6;
   }
 
-  .form-select option {
+  /* Error state */
+  .select-native--error {
+    border-color: var(--select-error-color, #dc2626);
+  }
+
+  .select-native--error:focus {
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) rgba(220, 38, 38, 0.1);
+  }
+
+  /* Success state */
+  .select-native--success {
+    border-color: var(--select-success-color, #16a34a);
+  }
+
+  .select-native--success:focus {
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) rgba(22, 163, 74, 0.1);
+  }
+
+  /* Size variants */
+  .select-native--sm {
+    padding: var(--space-xs) calc(var(--space-sm) + 24px) var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .select-native--lg {
+    padding: var(--space-md) calc(var(--space-lg) + 24px) var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Options */
+  .select-native option {
     background: var(--bg-primary);
     color: var(--text-primary);
     padding: var(--space-sm);
   }
 
-  /* Size variants */
-  .form-select--sm {
-    padding: var(--space-xs) calc(var(--space-sm) + 24px) var(--space-xs) var(--space-sm);
-    font-size: var(--font-size-sm);
+  .select-native optgroup {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
   }
 
-  .form-select--lg {
-    padding: var(--space-md) calc(var(--space-lg) + 24px) var(--space-md) var(--space-lg);
-    font-size: var(--font-size-lg);
-  }
-
+  /* Arrow icon */
   .select-arrow {
     position: absolute;
     right: var(--space-md);
@@ -180,65 +353,348 @@ const {
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--text-secondary);
-    transition: transform var(--transition-fast);
+    transition: color var(--transition-fast);
   }
 
-  .form-select:focus + .select-arrow {
+  .select-native:focus + .select-arrow {
     color: var(--accent);
   }
 
-  .form-help {
+  .select-native:disabled + .select-arrow {
+    opacity: 0.5;
+  }
+
+  /* ============================================
+     CUSTOM SELECT
+     ============================================ */
+
+  .select-custom {
+    position: relative;
+  }
+
+  .select-custom-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--select-padding-y, var(--space-sm)) var(--select-padding-x, var(--space-md));
+    border: var(--select-border-width, 1px) solid var(--border-color);
+    border-radius: var(--select-border-radius, var(--border-radius-md));
+    background: var(--select-bg, var(--bg-primary));
+    color: var(--text-primary);
+    font-size: var(--select-font-size, var(--font-size-base));
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .select-custom-button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent);
+  }
+
+  .select-custom-button:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) var(--accent-light);
+  }
+
+  .select-custom-button:disabled {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .select-custom-button[aria-expanded="true"] .select-custom-icon {
+    transform: rotate(180deg);
+  }
+
+  .select-custom-value {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .select-custom-icon {
+    flex-shrink: 0;
+    margin-left: var(--space-sm);
+    color: var(--text-secondary);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .select-custom-button:hover .select-custom-icon {
+    color: var(--accent);
+  }
+
+  /* Custom dropdown menu */
+  .select-custom-menu {
+    position: absolute;
+    top: calc(100% + var(--space-xs));
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border: var(--select-border-width, 1px) solid var(--border-color);
+    border-radius: var(--select-border-radius, var(--border-radius-md));
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all var(--transition-fast);
+    z-index: 1000;
+  }
+
+  .select-custom-button[aria-expanded="true"] + .select-custom-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Custom options */
+  .select-custom-option {
+    display: block;
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .select-custom-option:hover:not(:disabled) {
+    background: var(--bg-hover);
+  }
+
+  .select-custom-option:focus {
+    outline: none;
+    background: var(--bg-hover);
+  }
+
+  .select-custom-option[aria-selected="true"] {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .select-custom-option:disabled {
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Option groups */
+  .select-custom-group {
+    padding: var(--space-xs) 0;
+  }
+
+  .select-custom-group:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .select-custom-group-label {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-uppercase, 0.05em);
+  }
+
+  /* Size variants */
+  .select-custom--sm .select-custom-button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .select-custom--lg .select-custom-button {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+  }
+
+  /* Error state */
+  .select-custom--error .select-custom-button {
+    border-color: var(--select-error-color, #dc2626);
+  }
+
+  .select-custom--error .select-custom-button:focus {
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) rgba(220, 38, 38, 0.1);
+  }
+
+  /* Success state */
+  .select-custom--success .select-custom-button {
+    border-color: var(--select-success-color, #16a34a);
+  }
+
+  .select-custom--success .select-custom-button:focus {
+    box-shadow: var(--select-focus-shadow, 0 0 0 3px) rgba(22, 163, 74, 0.1);
+  }
+
+  /* ============================================
+     HELP & ERROR TEXT
+     ============================================ */
+
+  .select-help {
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
   }
 
-  .form-error {
+  .select-error {
     font-size: var(--font-size-sm);
-    color: var(--form-error-color, #dc3545);
+    color: var(--select-error-color, #dc2626);
+    font-weight: var(--font-weight-medium);
   }
 
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light-mode) .form-select:focus {
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-    }
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
 
-    :root:not(.light-mode) .form-select--error:focus {
-      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-    }
-
-    :root:not(.light-mode) .form-select--success:focus {
-      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
-    }
-
-    :root:not(.light-mode) .form-select option {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-    }
-  }
-
-  :root.dark-mode .form-select:focus {
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-  }
-
-  :root.dark-mode .form-select--error:focus {
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-  }
-
-  :root.dark-mode .form-select--success:focus {
-    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
-  }
-
-  :root.dark-mode .form-select option {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-  }
-
-  /* Mobile responsive */
   @media (max-width: 768px) {
-    .form-select--lg {
-      padding: var(--space-sm) calc(var(--space-md) + 24px) var(--space-sm) var(--space-md);
+    .select-native--lg,
+    .select-custom--lg .select-custom-button {
+      padding: var(--space-sm) var(--space-md);
       font-size: var(--font-size-base);
     }
   }
 </style>
+
+<script>
+  /**
+   * Custom Select Functionality
+   * Handles interaction for custom styled dropdowns
+   */
+
+  function initCustomSelects() {
+    const customSelects = document.querySelectorAll('[data-select-id]');
+
+    customSelects.forEach((selectContainer) => {
+      const button = selectContainer.querySelector('[data-select-button]') as HTMLButtonElement;
+      const menu = selectContainer.querySelector('[data-select-menu]') as HTMLElement;
+      const options = selectContainer.querySelectorAll('[data-select-option]') as NodeListOf<HTMLButtonElement>;
+      const hiddenInput = selectContainer.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const valueDisplay = button?.querySelector('.select-custom-value') as HTMLElement;
+
+      if (!button || !menu || !hiddenInput) return;
+
+      // Toggle dropdown
+      function toggleDropdown() {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!isExpanded));
+
+        if (!isExpanded) {
+          // Focus first option when opening
+          const firstOption = menu.querySelector('[data-select-option]:not([disabled])') as HTMLButtonElement;
+          firstOption?.focus();
+        }
+      }
+
+      // Select an option
+      function selectOption(optionButton: HTMLButtonElement) {
+        const value = optionButton.dataset.value || '';
+        const label = optionButton.textContent?.trim() || '';
+
+        // Update hidden input
+        hiddenInput.value = value;
+
+        // Update display
+        if (valueDisplay) {
+          valueDisplay.textContent = label;
+        }
+
+        // Update aria-selected
+        options.forEach((opt) => {
+          opt.setAttribute('aria-selected', 'false');
+        });
+        optionButton.setAttribute('aria-selected', 'true');
+
+        // Close dropdown
+        button.setAttribute('aria-expanded', 'false');
+        button.focus();
+
+        // Trigger change event
+        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      // Button click handler
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleDropdown();
+      });
+
+      // Option click handlers
+      options.forEach((option) => {
+        option.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (!option.disabled) {
+            selectOption(option);
+          }
+        });
+      });
+
+      // Keyboard navigation
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (button.getAttribute('aria-expanded') !== 'true') {
+            toggleDropdown();
+          }
+        } else if (e.key === 'Escape') {
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Menu keyboard navigation
+      menu.addEventListener('keydown', (e) => {
+        const currentOption = document.activeElement as HTMLButtonElement;
+        const currentIndex = Array.from(options).indexOf(currentOption);
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const nextIndex = currentIndex + 1;
+          if (nextIndex < options.length) {
+            (options[nextIndex] as HTMLButtonElement).focus();
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (currentIndex > 0) {
+            (options[currentIndex - 1] as HTMLButtonElement).focus();
+          } else {
+            button.focus();
+          }
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (currentOption.dataset.selectOption !== undefined && !currentOption.disabled) {
+            selectOption(currentOption);
+          }
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          button.setAttribute('aria-expanded', 'false');
+          button.focus();
+        } else if (e.key === 'Tab') {
+          // Close on tab
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!selectContainer.contains(e.target as Node)) {
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+
+  // Initialize on load
+  initCustomSelects();
+
+  // Reinitialize after view transitions
+  document.addEventListener('astro:after-swap', initCustomSelects);
+</script>

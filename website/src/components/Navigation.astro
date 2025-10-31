@@ -81,7 +81,7 @@ function isActive(slug: string | undefined) {
         </div>
     </div>
 
-    <Search id="sidebar-search" transition:persist="sidebar-search" />
+    <Search id="sidebar-search" variant="default" transition:persist="sidebar-search" />
 
     <ul class="nav-list">
         {
@@ -221,6 +221,7 @@ function isActive(slug: string | undefined) {
         }
 
         .sidebar {
+            display: none; /* Completely hide sidebar on mobile by default */
             position: fixed;
             top: 0;
             left: 0;
@@ -233,6 +234,7 @@ function isActive(slug: string | undefined) {
         }
 
         .sidebar.open {
+            display: block; /* Show when opened */
             transform: translateX(0);
         }
     }
