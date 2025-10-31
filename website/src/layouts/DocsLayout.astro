@@ -128,12 +128,7 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 animation: none;
             }
 
-            /* Make ALL view transitions instant to prevent FOUC */
-            ::view-transition-old(*),
-            ::view-transition-new(*) {
-                animation-duration: 0ms !important;
-                animation-timing-function: step-end !important;
-            }
+
 
             @keyframes theme-fade-out {
                 to {
@@ -144,6 +139,17 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
             @keyframes theme-fade-in {
                 from {
                     opacity: 0;
+                }
+            }
+
+            @keyframes blur-out {
+                from {
+                    filter: blur(0px);
+                    opacity: 1;
+                }
+                to {
+                    filter: blur(2px);
+                    opacity: 0.8;
                 }
             }
 
@@ -270,11 +276,13 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 top: 1rem;
             }
 
-            /* View Transition Animations - Instant to prevent FOUC */
-            ::view-transition-old(root),
+            /* View Transition Animations - 10ms blur effect */
+            ::view-transition-old(root) {
+                animation: blur-out 10ms ease-out;
+            }
+
             ::view-transition-new(root) {
-                animation-duration: 0ms;
-                animation-timing-function: step-end;
+                animation: none;
             }
 
             ::view-transition-old(sidebar) {
