@@ -348,19 +348,20 @@ function isActive(slug: string | undefined) {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: 0;
+        padding: var(--space-lg) 0 var(--space-sm) 0;
         background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
         border: none;
         font-size: var(--nav-section-title-font-size, 15px);
         font-weight: var(--nav-section-title-font-weight, 600);
         text-transform: var(--nav-section-title-text-transform, capitalize);
         letter-spacing: var(--nav-section-title-letter-spacing, -0.1px);
         color: var(--nav-section-title-color, hsl(0deg 0% 34.51%));
-        margin-bottom: var(--nav-section-title-margin-bottom, var(--space-sm));
+        margin: calc(var(--space-2xl) * -1) 0 var(--space-sm) 0;
         cursor: pointer;
         text-align: left;
         position: sticky;
-        top: 0;
+        top: calc(var(--space-2xl) * -1);
         z-index: 10;
     }
 
