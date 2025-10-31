@@ -277,20 +277,24 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                 // Add click outside handler for header search
                 if (searchElement.dataset.searchVariant === "header") {
                     const handleClickOutside = (e) => {
-                        const drawer = searchElement.querySelector(
-                            ".pagefind-ui__drawer",
-                        );
-                        const searchContainer =
-                            searchElement.closest(".header-search");
+                        // Small delay to prevent immediate hiding after showing drawer
+                        setTimeout(() => {
+                            const drawer = searchElement.querySelector(
+                                ".pagefind-ui__drawer",
+                            );
+                            const searchContainer =
+                                searchElement.closest(".header-search");
 
-                        if (
-                            drawer &&
-                            searchContainer &&
-                            !searchContainer.contains(e.target)
-                        ) {
-                            // Clicked outside the header search container, hide the drawer
-                            drawer.style.display = "none";
-                        }
+                            if (
+                                drawer &&
+                                searchContainer &&
+                                !searchContainer.contains(e.target) &&
+                                drawer.style.display === "block"
+                            ) {
+                                // Clicked outside the header search container, hide the drawer
+                                drawer.style.display = "none";
+                            }
+                        }, 150);
                     };
 
                     // Add the click outside listener to document
