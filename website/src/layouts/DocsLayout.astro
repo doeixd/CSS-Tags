@@ -21,12 +21,16 @@ const { title, description, currentPath, headings } = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
 
 // Get theme from cookie for server-side rendering
-const themeCookie = Astro.cookies.get('theme');
-const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
+const themeCookie = Astro.cookies.get("theme");
+const theme = themeCookie?.value === "dark" ? "dark" : "light";
 ---
 
 <!doctype html>
-<html lang="en" class={theme === 'dark' ? 'dark-mode' : 'light-mode'} data-theme={theme}>
+<html
+    lang="en"
+    class={theme === "dark" ? "dark-mode" : "light-mode"}
+    data-theme={theme}
+>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -72,7 +76,10 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                         return stored;
                     }
                     // Fall back to system preference
-                    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                    return window.matchMedia("(prefers-color-scheme: dark)")
+                        .matches
+                        ? "dark"
+                        : "light";
                 };
 
                 const theme = getTheme();
@@ -80,12 +87,12 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
 
                 // Set theme class and data-theme immediately
                 html.classList.remove("dark-mode", "light-mode");
-                html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+                html.classList.add(
+                    theme === "dark" ? "dark-mode" : "light-mode",
+                );
                 html.setAttribute("data-theme", theme);
             })();
         </script>
-
-
 
         <ViewTransitions fallback="none" />
         <style is:global data-astro-transition-persist="theme">
@@ -127,8 +134,6 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
             ::view-transition-new(theme-toggle) {
                 animation: none;
             }
-
-
 
             @keyframes theme-fade-out {
                 to {
@@ -278,7 +283,7 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
 
             /* View Transition Animations - 10ms blur effect */
             ::view-transition-old(root) {
-                animation: blur-out 10ms ease-out;
+                animation: blur-out 100ms ease-out;
             }
 
             ::view-transition-new(root) {

@@ -11,7 +11,7 @@
 @import url("core/engine.css") layer(engine);
 @import url("core/theme.css") layer(theme); /* The new canonical theme file */
 @import url("core/palette.css") layer(palette);
-@import url("core/defaults.css") layer(defaults);
+/* @import url("core/defaults.css") layer(defaults); */ /* Excluded from website build */
 @import url('core/base.css') layer(base);
 @import url('core/mixins.css') layer(base);
 @import url('core/text.css') layer(components);

@@ -138,7 +138,6 @@
     width: 100%;
     /* color/border/background: handled in @components */
   }
-  }
   fieldset {
     padding: var(--space-fieldset-y, 1.5em) var(--space-fieldset-x, 1.2em);
     border-color: var(--outline-default); /* UPDATED */

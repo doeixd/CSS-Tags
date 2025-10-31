@@ -262,9 +262,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-   /* Dark mode adjustments */
-   :root {
-     /* Dark mode adjustments */
+    /* Dark mode adjustments */
      --accent-l: 70%;
      --accent-c: 0.18;
      --surface-saturation: 0.02;

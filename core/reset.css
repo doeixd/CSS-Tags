@@ -270,4 +270,3 @@
      transition: ease-out 100ms;
      transition-property: color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius;
    }
-}
