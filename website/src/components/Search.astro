@@ -199,18 +199,15 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                                 setQueryParam("q", query);
                             });
 
-                            // For header search: handle focus to show results and click outside to close
+                            // For header search: handle focus and input to show results
                             if (
                                 searchElement.dataset.searchVariant === "header"
                             ) {
-                                input.addEventListener("focus", () => {
-                                    // When focusing header search, ensure results are visible
-                                    // Pagefind handles this automatically, but we can ensure the drawer shows
+                                const showDrawerIfResults = () => {
                                     const drawer = searchElement.querySelector(
                                         ".pagefind-ui__drawer",
                                     );
-                                    if (drawer && input.value.trim()) {
-                                        // If there's a query, make sure results are visible
+                                    if (drawer) {
                                         setTimeout(() => {
                                             const results =
                                                 searchElement.querySelector(
@@ -224,6 +221,18 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                                             }
                                         }, 100);
                                     }
+                                };
+
+                                input.addEventListener("focus", () => {
+                                    // Show drawer when focusing if there's already content
+                                    if (input.value.trim()) {
+                                        showDrawerIfResults();
+                                    }
+                                });
+
+                                input.addEventListener("input", () => {
+                                    // Show drawer when typing starts and there are results
+                                    showDrawerIfResults();
                                 });
                             }
                         }

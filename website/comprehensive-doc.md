@@ -4,7 +4,25 @@ This comprehensive guide covers everything you need to know about this custom-bu
 
 ## Important Clarification
 
-**This is NOT a Starlight site.** Despite the README mentioning Starlight, this website was built entirely from scratch with custom Astro components. The README appears to contain outdated information from when the project was initially created with a Starlight template, but the entire codebase has been rebuilt as a custom implementation.
+**This is NOT a Starlight site.** Despite the README mentioning Starlight, this website was built entirely from scratch with custom Astro components. The README appears to contain outdated information from when the project was initially created with a Starlight template, but the entire codebase has been rebuilt as a custom Astro implementation.
+
+## Recent Updates & Fixes (Latest)
+
+**Latest Updates (December 2024):**
+
+- ✅ **Sticky Section Titles**: Sidebar section titles now stick to the top when scrolling
+- ✅ **Improved Sidebar Positioning**: Sidebar properly positions below fixed header
+- ✅ **Enhanced Mobile Experience**: Sidebar completely collapses on mobile devices
+- ✅ **Search Result Navigation**: Fixed clickable search results with proper navigation
+- ✅ **TOC Improvements**: API reference pages now show table of contents
+- ✅ **Grid Layout Fixes**: 3-column layout only applies on desktop where TOC is visible
+- ✅ **Theme Toggle Fixes**: Both header and sidebar theme toggles now work properly
+- ✅ **View Transition Optimization**: Fixed duplicate view-transition-name warnings
+
+**Performance & UX Enhancements:**
+- Dynamic viewport height (`dvh`) for better mobile handling
+- Improved accessibility and keyboard navigation
+- Enhanced responsive design and touch gestures
 
 ## Table of Contents
 
@@ -42,21 +60,30 @@ The CSS-Tags documentation website is a modern, accessible documentation site bu
 ### Key Technologies
 
 - **Astro**: Static site generator with component islands
-- **Custom Components**: 31+ hand-built Astro components (including the new Header)
-- **Custom Layout System**: Fully custom documentation layout
-- **Expressive Code**: Syntax highlighting
-- **Pagefind**: Client-side search
-- **View Transitions API**: Smooth page transitions
-- **OKLCH Color Space**: Perceptually uniform colors
+- **Custom Components**: 32+ hand-built Astro components (including Header, Navigation, Search, TOC, and more)
+- **Custom Layout System**: Advanced responsive grid with sidebar, content, and TOC positioning
+- **Expressive Code**: Syntax highlighting with theme integration
+- **Pagefind**: Client-side search with result navigation
+- **View Transitions API**: Smooth page transitions with named elements
+- **OKLCH Color Space**: Perceptually uniform colors with generative theming
+- **Advanced Mobile UX**: Touch gestures, overlays, and responsive interactions
 
 ### Recent Updates
 
-**NEW: Header Component** - A flexible, full-width header component with:
-- Logo/site title support
-- Integrated search functionality
-- Social/icon links (GitHub, Discord, Twitter, LinkedIn)
+**Latest Enhancements (December 2024):**
+- **Sticky Navigation**: Section titles in sidebar stick to top during scrolling
+- **Enhanced Mobile UX**: Complete sidebar collapse on mobile with touch gestures
+- **Search Improvements**: Full navigation support for search results
+- **Layout Optimization**: Smart 3-column grid that only activates when TOC is present
+- **Performance**: Dynamic viewport height (`dvh`) for better mobile handling
+
+**Header Component**: Flexible full-width header with advanced customization:
+- Logo/site title support with responsive scaling
+- Integrated Pagefind search with keyboard shortcuts (Ctrl/Cmd+K)
+- Configurable icon links (GitHub, Discord, Twitter, LinkedIn, custom SVGs)
 - Optional version and language dropdowns
-- **Slot system** for custom content (desktop-only, mobile-only, or universal)
+- **Advanced Slot System**: Separate slots for desktop-only, mobile-only, and universal content
+- Theme toggle integration with smooth transitions
 - Disabled by default for template flexibility
 
 ## Architecture & Structure
@@ -118,13 +145,14 @@ const docs = defineCollection({
 
 Unlike template-based documentation sites, this implementation features:
 
-- **Hand-built Components**: Every component is custom-coded (31+ components)
-- **Flexible Layout System**: Custom grid system for desktop/mobile
-- **Advanced Navigation**: Multi-level collapsible navigation with state persistence
-- **Mobile-First Design**: Custom mobile header and overlay system
-- **Optional Header**: Full-width header with slot-based customization system
-- **Theme System**: Sophisticated OKLCH-based theming with auto-contrast
-- **Slot Architecture**: Advanced slot system for responsive component customization
+- **Hand-built Components**: Every component is custom-coded (32+ components)
+- **Advanced Layout System**: Smart responsive grid (2-column or 3-column based on content)
+- **Enhanced Navigation**: Multi-level collapsible navigation with sticky section titles and state persistence
+- **Mobile-Optimized UX**: Complete sidebar collapse, touch gestures, and overlay system
+- **Flexible Header**: Full-width header with advanced slot-based customization system
+- **Generative Theme System**: Sophisticated OKLCH-based theming with automatic contrast calculation
+- **Modern Interactions**: View transitions, dynamic viewport handling, and accessibility features
+- **Performance Optimized**: Lazy loading, code splitting, and minimal JavaScript bundles
 
 ### Routing
 
@@ -469,13 +497,15 @@ Custom main layout wrapper providing:
 - Resizeable sidebar functionality
 
 #### `Navigation.astro`
-Custom collapsible sidebar navigation:
-- Hierarchical menu structure with nested items
-- Active link highlighting and auto-expansion
-- Mobile overlay with backdrop and touch gestures
-- Keyboard navigation and accessibility
-- Local storage persistence for collapsed sections
-- Swipe-to-close on mobile
+Advanced collapsible sidebar navigation:
+- Hierarchical menu structure with nested items and sticky section titles
+- Active link highlighting and auto-expansion with smooth scrolling
+- **Sticky Section Headers**: Section titles stick to top during scrolling for better navigation
+- Mobile overlay with backdrop, touch gestures, and swipe-to-close
+- Keyboard navigation and full accessibility support
+- Local storage persistence for collapsed sections state
+- Dynamic viewport height (`dvh`) for proper mobile positioning
+- Enhanced positioning below fixed header elements
 
 #### `MobileHeader.astro`
 Custom fixed header for mobile devices:
@@ -799,6 +829,16 @@ Documentation-specific components:
 - `Accordion.astro`: Collapsible sections
 
 ## Navigation & Hierarchy
+
+### Sticky Section Titles
+
+The sidebar navigation features **sticky section titles** that provide better navigation context:
+
+- **Sticky Positioning**: Section titles stick to the top of the scrollable sidebar area
+- **Visual Enhancement**: Background, border, and subtle shadow for visibility
+- **Proper Spacing**: Negative margins compensate for sidebar padding
+- **Z-Index Management**: Ensures titles appear above content without overlap
+- **Mobile Compatible**: Works seamlessly with mobile sidebar collapse
 
 ### Navigation Structure
 
