@@ -774,13 +774,20 @@ function isActive(slug: string | undefined) {
         }
     });
 
-    // Restore sidebar scroll position after navigation
-    function restoreSidebarScroll() {
+    // Restore sidebar scroll immediately after DOM swap
+    document.addEventListener("astro:after-swap", () => {
         const sidebar = document.querySelector(".sidebar");
         const savedScroll = sessionStorage.getItem("sidebar-scroll");
+
         if (sidebar && savedScroll) {
-            sidebar.scrollTop = parseInt(savedScroll, 10);
+            // Use requestAnimationFrame to ensure DOM is fully updated
+            requestAnimationFrame(() => {
+                sidebar.scrollTop = parseInt(savedScroll, 10);
+            });
         }
+    });
+
+
     }
 
     // Update on page load
@@ -800,7 +807,6 @@ function isActive(slug: string | undefined) {
             setupMobileMenu();
             setupCollapsibleSections();
             autoExpandActiveSection();
-            restoreSidebarScroll();
         }, 0);
     });
 </script>
