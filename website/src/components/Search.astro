@@ -7,7 +7,7 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 
 <div
     class={`search-container search-container--${variant}`}
-    style="view-transition-name: search;"
+    style={`view-transition-name: ${variant === 'header' ? 'search' : 'sidebar-search'};`}
 >
     <div id={searchId} data-search-variant={variant}></div>
 </div>

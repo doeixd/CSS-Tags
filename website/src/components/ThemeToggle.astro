@@ -246,36 +246,38 @@
 
     // Setup theme toggle button
     function setupThemeToggle(): void {
-        const button = document.querySelector(".theme-toggle");
-        if (!button) {
-            console.warn("Theme toggle button not found");
-            return;
-        }
+    const buttons = document.querySelectorAll(".theme-toggle");
+    if (!buttons.length) {
+    console.warn("No theme toggle buttons found");
+    return;
+    }
 
+    buttons.forEach((button) => {
         // Remove any existing event listeners to prevent duplicates
         const newButton = button.cloneNode(true) as HTMLElement;
-        button.parentNode?.replaceChild(newButton, button);
+            button.parentNode?.replaceChild(newButton, button);
 
-        newButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            const html = document.documentElement;
-            const currentTheme = html.classList.contains("dark-mode") ? "dark" : "light";
-            const newTheme: Theme = currentTheme === "dark" ? "light" : "dark";
+    newButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const html = document.documentElement;
+        const currentTheme = html.classList.contains("dark-mode") ? "dark" : "light";
+                const newTheme: Theme = currentTheme === "dark" ? "light" : "dark";
 
-            // Enable icon transitions for smooth animation on user click
-            newButton.classList.add("transitioning");
+        // Enable icon transitions for smooth animation on user click
+                newButton.classList.add("transitioning");
 
-            // Disable CSS transitions temporarily during theme change
-            html.classList.add("theme-transitioning");
+        // Disable CSS transitions temporarily during theme change
+                html.classList.add("theme-transitioning");
 
-            updateTheme(newTheme);
+                updateTheme(newTheme);
 
-            // Remove transition classes after animation completes
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    newButton.classList.remove("transitioning");
-                    html.classList.remove("theme-transitioning");
-                });
+        // Remove transition classes after animation completes
+    requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+        newButton.classList.remove("transitioning");
+            html.classList.remove("theme-transitioning");
+            });
+            });
             });
         });
     }
