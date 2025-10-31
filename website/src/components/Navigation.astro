@@ -655,8 +655,17 @@ function isActive(slug: string | undefined) {
         }
     }
 
+    // Store section click handlers globally to allow cleanup
+    let sectionClickHandlers: Map<Element, () => void> = new Map();
+
     function setupCollapsibleSections() {
         const sectionTitles = document.querySelectorAll(".section-title");
+
+        // Clean up old event listeners
+        sectionClickHandlers.forEach((handler, title) => {
+            title.removeEventListener("click", handler);
+        });
+        sectionClickHandlers.clear();
 
         // Load saved state from localStorage
         const savedState = localStorage.getItem("nav-collapsed-state");
@@ -676,7 +685,8 @@ function isActive(slug: string | undefined) {
                 );
             }
 
-            title.addEventListener("click", () => {
+            // Create click handler
+            const clickHandler = () => {
                 const isCollapsed =
                     section.getAttribute("data-collapsed") === "true";
                 const newState = !isCollapsed;
@@ -693,7 +703,13 @@ function isActive(slug: string | undefined) {
                         JSON.stringify(collapsedSections),
                     );
                 }
-            });
+            };
+
+            // Store handler reference for cleanup
+            sectionClickHandlers.set(title, clickHandler);
+
+            // Add event listener
+            title.addEventListener("click", clickHandler);
         });
     }
 
@@ -742,6 +758,12 @@ function isActive(slug: string | undefined) {
                 sidebar.scrollTop.toString(),
             );
         }
+
+        // Clean up section click handlers
+        sectionClickHandlers.forEach((handler, title) => {
+            title.removeEventListener("click", handler);
+        });
+        sectionClickHandlers.clear();
     });
 
     // Restore sidebar scroll position after navigation
