@@ -202,9 +202,9 @@ function isActive(slug: string | undefined) {
 
     .sidebar {
         position: sticky;
-        top: 0;
-        height: 100vh;
-        max-height: 100vh;
+        top: var(--header-height);
+        height: calc(100dvh - var(--header-height));
+        max-height: calc(100dvh - var(--header-height));
         overflow-y: auto;
         padding: var(--nav-sidebar-padding, var(--space-2xl) var(--space-lg));
         background: var(--bg-secondary);
