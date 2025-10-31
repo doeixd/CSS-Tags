@@ -655,62 +655,67 @@ function isActive(slug: string | undefined) {
         }
     }
 
-    // Store section click handlers globally to allow cleanup
-    let sectionClickHandlers: Map<Element, () => void> = new Map();
+    // Store sidebar click handler for cleanup
+    let sidebarClickHandler: ((e: Event) => void) | null = null;
 
     function setupCollapsibleSections() {
-        const sectionTitles = document.querySelectorAll(".section-title");
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return;
 
-        // Clean up old event listeners
-        sectionClickHandlers.forEach((handler, title) => {
-            title.removeEventListener("click", handler);
-        });
-        sectionClickHandlers.clear();
+        // Clean up old event listener
+        if (sidebarClickHandler) {
+            sidebar.removeEventListener("click", sidebarClickHandler);
+        }
 
         // Load saved state from localStorage
         const savedState = localStorage.getItem("nav-collapsed-state");
         const collapsedSections = savedState ? JSON.parse(savedState) : {};
 
+        // Apply saved state to existing sections
+        const sectionTitles = sidebar.querySelectorAll(".section-title");
         sectionTitles.forEach((title) => {
             const section = title.closest(".nav-section");
             if (!section) return;
 
             const sectionIndex = title.getAttribute("data-section-index");
-
-            // Apply saved state if exists
             if (sectionIndex && collapsedSections[sectionIndex] !== undefined) {
                 section.setAttribute(
                     "data-collapsed",
                     collapsedSections[sectionIndex] ? "true" : "false",
                 );
             }
-
-            // Create click handler
-            const clickHandler = () => {
-                const isCollapsed =
-                    section.getAttribute("data-collapsed") === "true";
-                const newState = !isCollapsed;
-                section.setAttribute(
-                    "data-collapsed",
-                    newState ? "true" : "false",
-                );
-
-                // Save state to localStorage
-                if (sectionIndex) {
-                    collapsedSections[sectionIndex] = newState;
-                    localStorage.setItem(
-                        "nav-collapsed-state",
-                        JSON.stringify(collapsedSections),
-                    );
-                }
-            };
-
-            // Store handler reference for cleanup
-            sectionClickHandlers.set(title, clickHandler);
-
-            // Add event listener
-            title.addEventListener("click", clickHandler);
         });
+
+        // Use event delegation on sidebar
+        sidebarClickHandler = (e: Event) => {
+            const target = e.target as Element;
+            const sectionTitle = target.closest(".section-title") as Element;
+
+            if (!sectionTitle) return;
+
+            const section = sectionTitle.closest(".nav-section");
+            if (!section) return;
+
+            const sectionIndex = sectionTitle.getAttribute("data-section-index");
+            const isCollapsed = section.getAttribute("data-collapsed") === "true";
+            const newState = !isCollapsed;
+
+            section.setAttribute(
+                "data-collapsed",
+                newState ? "true" : "false",
+            );
+
+            // Save state to localStorage
+            if (sectionIndex) {
+                collapsedSections[sectionIndex] = newState;
+                localStorage.setItem(
+                    "nav-collapsed-state",
+                    JSON.stringify(collapsedSections),
+                );
+            }
+        };
+
+        sidebar.addEventListener("click", sidebarClickHandler);
     }
 
     function autoExpandActiveSection() {
@@ -759,11 +764,14 @@ function isActive(slug: string | undefined) {
             );
         }
 
-        // Clean up section click handlers
-        sectionClickHandlers.forEach((handler, title) => {
-            title.removeEventListener("click", handler);
-        });
-        sectionClickHandlers.clear();
+        // Clean up sidebar click handler
+        if (sidebarClickHandler) {
+            const sidebar = document.querySelector(".sidebar");
+            if (sidebar) {
+                sidebar.removeEventListener("click", sidebarClickHandler);
+            }
+            sidebarClickHandler = null;
+        }
     });
 
     // Restore sidebar scroll position after navigation
@@ -786,10 +794,13 @@ function isActive(slug: string | undefined) {
 
     // Update after view transitions
     document.addEventListener("astro:after-swap", () => {
-        updateActiveLink();
-        setupMobileMenu();
-        setupCollapsibleSections();
-        autoExpandActiveSection();
-        restoreSidebarScroll();
+        // Small delay to ensure DOM is fully updated
+        setTimeout(() => {
+            updateActiveLink();
+            setupMobileMenu();
+            setupCollapsibleSections();
+            autoExpandActiveSection();
+            restoreSidebarScroll();
+        }, 0);
     });
 </script>
