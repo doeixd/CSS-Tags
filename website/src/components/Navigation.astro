@@ -349,7 +349,7 @@ function isActive(slug: string | undefined) {
         align-items: center;
         width: 100%;
         padding: 0;
-        background: none;
+        background: var(--bg-secondary);
         border: none;
         font-size: var(--nav-section-title-font-size, 15px);
         font-weight: var(--nav-section-title-font-weight, 600);
@@ -359,6 +359,9 @@ function isActive(slug: string | undefined) {
         margin-bottom: var(--nav-section-title-margin-bottom, var(--space-sm));
         cursor: pointer;
         text-align: left;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .section-title:hover {
