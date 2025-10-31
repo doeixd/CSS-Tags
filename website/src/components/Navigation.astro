@@ -787,16 +787,12 @@ function isActive(slug: string | undefined) {
         }
     });
 
-
-    }
-
     // Update on page load
     document.addEventListener("DOMContentLoaded", () => {
         updateActiveLink();
         setupMobileMenu();
         setupCollapsibleSections();
         autoExpandActiveSection();
-        restoreSidebarScroll();
     });
 
     // Update after view transitions
