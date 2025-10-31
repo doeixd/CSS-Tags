@@ -35,7 +35,5 @@ export default defineConfig({
 		sitemap(),
 		pagefind(),
 	],
-	experimental: {
-		clientPrerender: true,
-	},
+
 });

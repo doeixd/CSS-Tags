@@ -39,7 +39,9 @@ const currentPath = entry.id;
         }
         <Content />
     </div>
-    <div style="z-index: 100; position: relative; background-color: white;">
+    <div
+        style="z-index: 100; position: relative; background-color: var(--bg-primary);"
+    >
         <PageMeta currentPath={currentPath} />
         <PrevNextNav currentPath={currentPath} />
     </div>

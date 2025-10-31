@@ -81,7 +81,7 @@ function isActive(slug: string | undefined) {
         </div>
     </div>
 
-    <Search />
+    <Search id="sidebar-search" transition:persist="sidebar-search" />
 
     <ul class="nav-list">
         {
@@ -114,21 +114,21 @@ function isActive(slug: string | undefined) {
                                     .filter((item) => item.slug !== undefined)
                                     .map((item) => (
                                         <li>
-                                            <a
-                                                href={buildHref(
-                                                    base,
-                                                    item.slug,
-                                                )}
-                                                class:list={[
-                                                    "nav-link",
-                                                    {
-                                                        active: isActive(
-                                                            item.slug,
-                                                        ),
-                                                    },
-                                                ]}
-                                                data-astro-prefetch
-                                            >
+                                             <a
+                                                 href={buildHref(
+                                                     base,
+                                                     item.slug,
+                                                 )}
+                                                 class:list={[
+                                                     "nav-link",
+                                                     {
+                                                         active: isActive(
+                                                             item.slug,
+                                                         ),
+                                                     },
+                                                 ]}
+
+                                             >
                                                 {item.label}
                                             </a>
                                         </li>
@@ -143,7 +143,7 @@ function isActive(slug: string | undefined) {
                                 "nav-link-standalone",
                                 { active: isActive(section.slug) },
                             ]}
-                            data-astro-prefetch
+                            data-astro-prefetch="hover"
                         >
                             {section.label}
                         </a>

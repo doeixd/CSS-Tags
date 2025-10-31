@@ -117,19 +117,35 @@
         const theme = getTheme();
         const html = document.documentElement;
 
+        // Disable transitions temporarily to prevent flash
+        html.classList.add("theme-transitioning");
+
         // Remove existing theme classes
         html.classList.remove("dark-mode", "light-mode");
 
         // Add the correct theme class
         html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
         html.setAttribute("data-theme", theme);
+
+        // Re-enable transitions after minimal delay
+        setTimeout(() => {
+            html.classList.remove("theme-transitioning");
+        }, 10);
     }
 
     function setupThemeToggle() {
         const button = document.querySelector(".theme-toggle");
-        if (!button) return;
+        if (!button) {
+            console.warn("Theme toggle button not found");
+            return;
+        }
 
-        button.addEventListener("click", async () => {
+        // Remove any existing event listeners to prevent duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+
+        newButton.addEventListener("click", (e) => {
+            e.preventDefault();
             const html = document.documentElement;
             const currentTheme = html.classList.contains("dark-mode")
                 ? "dark"
@@ -137,47 +153,37 @@
             const newTheme = currentTheme === "dark" ? "light" : "dark";
 
             // Enable icon transitions for smooth animation on user click
-            button.classList.add("transitioning");
+            newButton.classList.add("transitioning");
 
             // Disable all CSS transitions temporarily during theme change
             html.classList.add("theme-transitioning");
 
-            // Check if browser supports View Transitions API
-            if (document.startViewTransition) {
-                const transition = document.startViewTransition(() => {
-                    updateTheme(newTheme);
-                });
+            // For instant theme switching, skip view transitions
+            updateTheme(newTheme);
 
-                await transition.ready;
-                await transition.finished;
-            } else {
-                // Fallback for browsers without View Transitions
-                updateTheme(newTheme);
-            }
-
-            // Remove classes after animation completes
+            // Remove transition classes after minimal delay
             setTimeout(() => {
-                button.classList.remove("transitioning");
+                newButton.classList.remove("transitioning");
                 html.classList.remove("theme-transitioning");
-            }, 300); // Match transition duration
+            }, 10);
         });
+    }
 
-        function updateTheme(theme) {
-            const html = document.documentElement;
+    function updateTheme(theme) {
+        const html = document.documentElement;
 
-            // Update DOM - remove both classes first, then add the correct one
-            html.classList.remove("dark-mode", "light-mode");
-            html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+        // Update DOM - remove both classes first, then add the correct one
+        html.classList.remove("dark-mode", "light-mode");
+        html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
 
-            // Update data-theme attribute for Expressive Code
-            html.setAttribute("data-theme", theme);
+        // Update data-theme attribute for Expressive Code
+        html.setAttribute("data-theme", theme);
 
-            // Save to localStorage
-            localStorage.setItem("theme", theme);
+        // Save to localStorage
+        localStorage.setItem("theme", theme);
 
-            // Save to cookie for server-side rendering
-            document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
-        }
+        // Save to cookie for server-side rendering
+        document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
     }
 
     // Restore theme BEFORE swap to prevent flash
@@ -185,20 +191,19 @@
         restoreTheme();
     });
 
-    // Restore theme on page load and after Astro view transitions
-    document.addEventListener("DOMContentLoaded", () => {
+    // Setup theme toggle when DOM is ready
+    function initThemeSystem() {
         restoreTheme();
         setupThemeToggle();
-    });
+    }
 
-    document.addEventListener("astro:after-swap", () => {
-        restoreTheme();
-        setupThemeToggle();
-    });
+    if (document.readyState === 'loading') {
+        document.addEventListener("DOMContentLoaded", initThemeSystem);
+    } else {
+        initThemeSystem();
+    }
 
-    // Also restore on astro:page-load to ensure theme persists
-    document.addEventListener("astro:page-load", () => {
-        restoreTheme();
-        setupThemeToggle();
-    });
+    // Re-setup after Astro view transitions
+    document.addEventListener("astro:after-swap", initThemeSystem);
+    document.addEventListener("astro:page-load", initThemeSystem);
 </script>

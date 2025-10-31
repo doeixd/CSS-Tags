@@ -96,7 +96,7 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 transition: none !important;
             }
 
-            /* Theme transition: Simple cross-fade for root */
+            /* Theme transition: Instant switch for speed */
             ::view-transition-old(root),
             ::view-transition-new(root) {
                 animation: none;
@@ -111,13 +111,13 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 z-index: 2;
             }
 
-            /* Smooth fade transition for theme changes */
+            /* Fast fade transition for theme changes */
             html.theme-transitioning::view-transition-old(root) {
-                animation: theme-fade-out 0.15s ease-out;
+                animation: theme-fade-out 0.05s ease-out;
             }
 
             html.theme-transitioning::view-transition-new(root) {
-                animation: theme-fade-in 0.15s ease-in;
+                animation: theme-fade-in 0.05s ease-in;
             }
 
             /* Ensure mobile header and theme toggle stay stable (no animation) */
@@ -263,10 +263,10 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 top: 1rem;
             }
 
-            /* View Transition Animations */
+            /* View Transition Animations - Optimized for speed */
             ::view-transition-old(root),
             ::view-transition-new(root) {
-                animation-duration: 20ms;
+                animation-duration: 10ms;
                 animation-timing-function: ease-out;
             }
 
@@ -286,23 +286,12 @@ const theme = themeCookie?.value === 'dark' ? 'dark' : 'light';
                 transition: none !important;
             }
 
-            @keyframes blur-in {
-                from {
-                    filter: blur(var(--view-transition-blur));
-                    opacity: 0;
-                }
-                to {
-                    filter: blur(0);
-                    opacity: 1;
-                }
-            }
-
             ::view-transition-old(main) {
                 animation: none;
             }
 
             ::view-transition-new(main) {
-                animation: 50ms ease-out both blur-in;
+                animation: none;
             }
 
             .docs-container {

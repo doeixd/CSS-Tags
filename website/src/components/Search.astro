@@ -1,10 +1,11 @@
 ---
 // Search component using Pagefind
 const base = import.meta.env.BASE_URL;
+const searchId = Astro.props.id || "search";
 ---
 
 <div class="search-container">
-    <div id="search"></div>
+    <div id={searchId}></div>
 </div>
 
 <script>
@@ -26,23 +27,31 @@ const base = import.meta.env.BASE_URL;
         window.history.replaceState({}, '', url);
     }
 
-    function initSearch() {
-        const searchElement = document.querySelector("#search");
-        if (searchElement) {
-            // Check if search is already initialized (has content)
-            if (searchElement.querySelector(".pagefind-ui")) {
-                // Already initialized, don't reinitialize
-                return;
-            }
+    async function initSearch() {
+        // Initialize all search elements that exist
+        const searchElements = document.querySelectorAll('[id$="-search"]');
+        for (const searchElement of searchElements) {
+            const elementId = searchElement.id;
+            if (!elementId) continue;
 
-            // Get initial query from URL
-            const initialQuery = getQueryParam('q') || '';
+            // Skip if already initialized
+            if (searchElement.hasAttribute('data-pagefind-initialized')) continue;
 
-            // Initialize new search UI
-            let pagefindUI;
+            // Clear any existing content
+            searchElement.innerHTML = '';
+
+            searchElement.setAttribute('data-pagefind-initialized', 'true');
+
             try {
-                pagefindUI = new PagefindUI({
-                    element: "#search",
+                // @ts-ignore
+                const { PagefindUI } = await import("@pagefind/default-ui");
+
+                // Get initial query from URL
+                const initialQuery = getQueryParam('q') || '';
+
+                // Initialize new search UI
+                const pagefindUI = new PagefindUI({
+                    element: "#" + elementId,
                     showSubResults: true,
                     showImages: false,
                     excerptLength: 15,
@@ -58,12 +67,6 @@ const base = import.meta.env.BASE_URL;
                         return result;
                     },
                 });
-            } catch (error) {
-                console.error("Failed to initialize Pagefind search:", error);
-                // Fallback: show a message or hide the search
-                searchElement.innerHTML = "<p>Search is currently unavailable.</p>";
-                return;
-            }
 
             // Set initial query if present
             if (initialQuery) {
@@ -114,6 +117,11 @@ const base = import.meta.env.BASE_URL;
                     clearButton.style.position = "absolute";
                 }
             }, 100);
+            } catch (error) {
+                console.error("Failed to initialize Pagefind search:", error);
+                // Fallback: show a message or hide the search
+                searchElement.innerHTML = "<p>Search is currently unavailable.</p>";
+            }
         }
     }
 
