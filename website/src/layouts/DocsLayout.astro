@@ -283,7 +283,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             /* View Transition Animations - 10ms blur effect */
             ::view-transition-old(root) {
-                animation: blur-out 100ms ease-out;
+                /*animation: blur-out 100ms ease-out;*/
+                animation: none;
             }
 
             ::view-transition-new(root) {
