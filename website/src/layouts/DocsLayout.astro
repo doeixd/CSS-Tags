@@ -73,6 +73,67 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             href={buildAssetPath(base, "favicon.svg")}
         />
 
+        <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
+        <style is:inline>
+            /* Critical color variables - Light mode defaults */
+            :root {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent: #0066cc;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Dark mode system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode) {
+                    --text-primary: #e1e4e8;
+                    --text-secondary: #8b949e;
+                    --bg-primary: #171717;
+                    --bg-secondary: #1a1a1a;
+                    --bg-hover: #2d2d2d;
+                    --border-color: #333;
+                    --accent-light: #58a6ff;
+                    --accent-dark: #1a3a52;
+                }
+            }
+
+            /* Manual dark mode override */
+            :root.dark-mode {
+                --text-primary: #e1e4e8;
+                --text-secondary: #8b949e;
+                --bg-primary: #171717;
+                --bg-secondary: #1a1a1a;
+                --bg-hover: #2d2d2d;
+                --border-color: #333;
+                --accent-light: #58a6ff;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Manual light mode override */
+            :root.light-mode {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Critical body styles */
+            body {
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                margin: 0;
+            }
+        </style>
+
         <!-- Theme FOUC prevention for cached/serverless pages -->
         <script is:inline>
             (function () {
@@ -353,8 +414,15 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             ::view-transition-new(sidebar) {
                 animation: none;
                 transform: none !important;
-                position: sticky !important;
-                top: 0 !important;
+            }
+
+            /* Desktop only: keep sidebar sticky during transitions */
+            @media (min-width: 769px) {
+                ::view-transition-old(sidebar),
+                ::view-transition-new(sidebar) {
+                    position: sticky !important;
+                    top: 0 !important;
+                }
             }
 
             /* Keep search stable during transitions */

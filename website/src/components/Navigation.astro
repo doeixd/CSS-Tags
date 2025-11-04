@@ -159,6 +159,8 @@ function isActive(slug: string | undefined) {
         display: none;
         position: fixed;
         inset: 0;
+        height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height for mobile browsers */
         background: var(--nav-mobile-backdrop-bg);
         z-index: var(--z-index-backdrop);
         opacity: 0;
@@ -168,6 +170,7 @@ function isActive(slug: string | undefined) {
     }
 
     .mobile-backdrop.visible {
+        display: block;
         opacity: 1;
         pointer-events: auto;
     }
@@ -225,6 +228,10 @@ function isActive(slug: string | undefined) {
             position: fixed;
             top: 0;
             left: 0;
+            bottom: 0;
+            height: 100vh;
+            height: 100dvh; /* Full viewport height */
+            max-height: none; /* Override desktop max-height constraint */
             width: var(--sidebar-width);
             max-width: var(--sidebar-width-max);
             z-index: var(--z-index-sidebar);
@@ -533,7 +540,7 @@ function isActive(slug: string | undefined) {
             document.removeEventListener("touchend", mobileMenuHandlers.touchEndHandler);
         }
 
-        if (toggle && sidebar && backdrop) {
+        if (sidebar && backdrop) {
             const openMenu = () => {
                 sidebar.classList.add("open");
                 backdrop.classList.add("visible");
@@ -550,49 +557,9 @@ function isActive(slug: string | undefined) {
                 }, 300);
             };
 
-            // Store toggle handler
-            mobileMenuHandlers.toggleHandler = () => {
-                if (sidebar.classList.contains("open")) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            };
-            toggle.addEventListener("click", mobileMenuHandlers.toggleHandler);
-
-            // Close menu when clicking on a link
-            const links = sidebar.querySelectorAll(".nav-link");
-            mobileMenuHandlers.linkHandlers = new Map();
-            links.forEach((link) => {
-                const handler = () => closeMenu();
-                mobileMenuHandlers.linkHandlers!.set(link, handler);
-                link.addEventListener("click", handler);
-            });
-
             // Store backdrop handler
             mobileMenuHandlers.backdropHandler = () => closeMenu();
             backdrop.addEventListener("click", mobileMenuHandlers.backdropHandler);
-
-            // Close menu when tabbing outside on mobile
-            mobileMenuHandlers.focusinHandler = (e: FocusEvent) => {
-                // Only handle on mobile (when sidebar can be opened)
-                if (window.innerWidth > 768) return;
-
-                // Check if sidebar is open
-                if (!sidebar.classList.contains("open")) return;
-
-                const target = e.target as HTMLElement;
-
-                // Check if focus moved outside sidebar, backdrop, and toggle
-                const isInSidebar = sidebar.contains(target);
-                const isInBackdrop = backdrop.contains(target);
-                const isToggle = toggle.contains(target);
-
-                if (!isInSidebar && !isInBackdrop && !isToggle) {
-                    closeMenu();
-                }
-            };
-            document.addEventListener("focusin", mobileMenuHandlers.focusinHandler);
 
             // Swipe gesture support to close sidebar
             mobileMenuHandlers.touchStartHandler = (e: TouchEvent) => {
@@ -658,6 +625,48 @@ function isActive(slug: string | undefined) {
             sidebar.addEventListener("touchstart", mobileMenuHandlers.touchStartHandler, { passive: true });
             document.addEventListener("touchmove", mobileMenuHandlers.touchMoveHandler, { passive: false });
             document.addEventListener("touchend", mobileMenuHandlers.touchEndHandler);
+
+            // Close menu when clicking on a link
+            const links = sidebar.querySelectorAll(".nav-link");
+            mobileMenuHandlers.linkHandlers = new Map();
+            links.forEach((link) => {
+                const handler = () => closeMenu();
+                mobileMenuHandlers.linkHandlers!.set(link, handler);
+                link.addEventListener("click", handler);
+            });
+
+            // Close menu when tabbing outside on mobile
+            mobileMenuHandlers.focusinHandler = (e: FocusEvent) => {
+                // Only handle on mobile (when sidebar can be opened)
+                if (window.innerWidth > 768) return;
+
+                // Check if sidebar is open
+                if (!sidebar.classList.contains("open")) return;
+
+                const target = e.target as HTMLElement;
+
+                // Check if focus moved outside sidebar, backdrop, and toggle
+                const isInSidebar = sidebar.contains(target);
+                const isInBackdrop = backdrop.contains(target);
+                const isToggle = toggle?.contains(target);
+
+                if (!isInSidebar && !isInBackdrop && !isToggle) {
+                    closeMenu();
+                }
+            };
+            document.addEventListener("focusin", mobileMenuHandlers.focusinHandler);
+
+            // Store toggle handler (only if standalone toggle exists)
+            if (toggle) {
+                mobileMenuHandlers.toggleHandler = () => {
+                    if (sidebar.classList.contains("open")) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                };
+                toggle.addEventListener("click", mobileMenuHandlers.toggleHandler);
+            }
         }
     }
 

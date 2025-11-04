@@ -4,11 +4,17 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import pagefind from 'astro-pagefind';
 import expressiveCode from 'astro-expressive-code';
+import { remarkBasePath } from './src/plugins/remark-base-path.mjs';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://doeixd.github.io',
-	base: '/CSS-Tags/',
+	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
+	markdown: {
+		remarkPlugins: [
+			[remarkBasePath, process.env.NODE_ENV === 'production' ? '/CSS-Tags' : ''],
+		],
+	},
 	integrations: [
 		expressiveCode({
 			themes: ['min-light', 'min-dark'],
