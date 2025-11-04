@@ -42,7 +42,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         disabled={tocHeadings.length === 0}
         title={tocHeadings.length === 0 ? "No headings on this page" : "Table of contents"}
     >
-        <span class="toc-button-text">On This Page</span>
+        <span class="toc-button-text">
+            <span class="toc-prefix">On This Page</span>
+            <span class="toc-separator" aria-hidden="true"> › </span>
+            <span class="toc-current"></span>
+        </span>
         <svg
             class="chevron-icon"
             width="16"
@@ -216,6 +220,47 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     .toc-button-text {
         flex: 1;
         text-align: left;
+        display: flex;
+        align-items: center;
+        gap: var(--toc-button-gap, var(--space-sm));
+        min-width: 0; /* Allow flex children to shrink */
+    }
+
+    .toc-prefix {
+        flex-shrink: 0;
+        color: var(--text-primary);
+        transition: color var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .toc-button-text.has-active .toc-prefix {
+        color: var(--text-secondary);
+        opacity: 0.6;
+    }
+
+    .toc-separator {
+        flex-shrink: 0;
+        color: var(--text-secondary);
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+    }
+
+    .toc-button-text.has-active .toc-separator {
+        opacity: 1;
+    }
+
+    .toc-current {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--text-primary);
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+    }
+
+    .toc-button-text.has-active .toc-current {
+        opacity: 1;
     }
 
     .chevron-icon {
@@ -629,6 +674,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                             .forEach((l) => l.classList.remove("active"));
                         // Add active class to current link
                         link.classList.add("active");
+
+                        // Update button text with current heading
+                        const buttonText = tocButton.querySelector(".toc-button-text");
+                        const currentHeading = tocButton.querySelector(".toc-current");
+
+                        if (buttonText && currentHeading) {
+                            const headingText = link.textContent?.trim() || "";
+                            currentHeading.textContent = headingText;
+                            buttonText.classList.add("has-active");
+                        }
                     }
                 });
             }, observerOptions);
@@ -637,6 +692,27 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             document.querySelectorAll("h2[id], h3[id]").forEach((heading) => {
                 intersectionObserver!.observe(heading);
             });
+
+            // Reset button text when no heading is active
+            const resetButtonText = () => {
+                const buttonText = tocButton.querySelector(".toc-button-text");
+                const currentHeading = tocButton.querySelector(".toc-current");
+
+                if (buttonText && currentHeading) {
+                    const activeLink = tocOverlay.querySelector(".mobile-toc-link.active");
+                    if (!activeLink) {
+                        currentHeading.textContent = "";
+                        buttonText.classList.remove("has-active");
+                    }
+                }
+            };
+
+            // Check for reset on scroll
+            let resetTimeout: number;
+            window.addEventListener("scroll", () => {
+                clearTimeout(resetTimeout);
+                resetTimeout = window.setTimeout(resetButtonText, 100);
+            }, { passive: true });
         }
 
         // Search functionality
