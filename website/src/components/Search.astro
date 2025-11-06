@@ -309,15 +309,20 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                         );
 
                         if (form && clearButton) {
-                            // Move clear button to be a sibling of the form instead of inside it
-                            form.parentNode?.insertBefore(
-                                clearButton,
-                                form.nextSibling,
-                            );
+                        // Move clear button to be a sibling of the form instead of inside it
+                        form.parentNode?.insertBefore(
+                        clearButton,
+                        form.nextSibling,
+                        );
 
-                            // Keep it visually positioned inside the input
-                            clearButton.style.position = "absolute";
-                        }
+                        // Keep it visually positioned inside the input
+                        clearButton.style.position = "absolute";
+
+                             // Ensure clear button clears query params
+                             clearButton.addEventListener("click", () => {
+                                 setQueryParam("q", "");
+                             });
+                         }
                     }, 100);
                 }
 
