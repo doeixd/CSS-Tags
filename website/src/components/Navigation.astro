@@ -851,6 +851,22 @@ function isActive(slug: string | undefined) {
         sidebar.addEventListener("click", sidebarClickHandler);
     }
 
+    function isElementInViewport(element) {
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return false;
+
+        const sidebarRect = sidebar.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        // Check if element is within sidebar's visible area
+        return (
+            elementRect.top >= sidebarRect.top &&
+            elementRect.bottom <= sidebarRect.bottom &&
+    elementRect.left >= sidebarRect.left &&
+        elementRect.right <= sidebarRect.right
+    );
+    }
+
     function autoExpandActiveSection() {
         const activeLink = document.querySelector(".nav-link.active");
         if (!activeLink) return;
@@ -861,10 +877,19 @@ function isActive(slug: string | undefined) {
 
         // Check if section is collapsed
         const isCollapsed = section.getAttribute("data-collapsed") === "true";
-        if (!isCollapsed) return;
+        if (!isCollapsed) {
+            // Section is already expanded, check if active link is visible
+            if (!isElementInViewport(activeLink)) {
+            // Scroll active link into view only if not visible
+            setTimeout(() => {
+            activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 100);
+        }
+            return;
+        }
 
         // Expand the section
-        section.setAttribute("data-collapsed", "false");
+    section.setAttribute("data-collapsed", "false");
 
         // Update localStorage
         const savedState = localStorage.getItem("nav-collapsed-state");
