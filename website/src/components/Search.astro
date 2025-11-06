@@ -282,44 +282,20 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 
                 // Add click outside handler for header search on desktop
                 if (searchElement.dataset.searchVariant === "header") {
-                const handleClickOutside = (e) => {
-                // Only hide on desktop (screen width > 768px)
-                if (window.innerWidth <= 768) return;
-
-                // Small delay to prevent immediate hiding after showing drawer
-                setTimeout(() => {
-                const drawer = searchElement.querySelector(".pagefind-ui__drawer");
-                        const searchContainer = searchElement.closest(".header-search");
-
-                // Check multiple ways the drawer might be visible (not just display:block)
-                const isDrawerVisible = drawer && (
-                    drawer.style.display === "block" ||
-                    drawer.offsetWidth > 0 ||
-                            drawer.offsetHeight > 0 ||
-                    drawer.getBoundingClientRect().width > 0
-                );
-
-                    // Ensure we have valid elements and the drawer is visible
-                        if (!drawer || !searchContainer || !isDrawerVisible) {
-                return;
-                }
-
-                // Check if the click target is outside both the search container and drawer
-                const isInSearchContainer = searchContainer.contains(e.target);
-                const isInDrawer = drawer.contains(e.target);
-                const clickedOutside = !isInSearchContainer && !isInDrawer;
-
-                if (clickedOutside) {
-                // Clicked outside the header search container and drawer, hide the drawer
-                drawer.style.display = "none";
-                }
-                }, 150); // Slightly increased delay for better reliability
-                };
-
-                    // Add the click outside listener to document
+                    const handleClickOutside = function(e) {
+                        if (window.innerWidth <= 768) return;
+                        setTimeout(function() {
+                            var drawer = searchElement.querySelector(".pagefind-ui__drawer");
+                            var searchContainer = searchElement.closest(".header-search");
+                            if (!drawer || !searchContainer || drawer.offsetWidth === 0) return;
+                        var isInSearchContainer = searchContainer.contains(e.target);
+                            var isInDrawer = drawer.contains(e.target);
+                            if (!isInSearchContainer && !isInDrawer) {
+                                drawer.style.display = "none";
+                            }
+                        }, 150);
+                    };
                 document.addEventListener("click", handleClickOutside);
-
-                // Store the handler for cleanup
                 searchElement._clickOutsideHandler = handleClickOutside;
                 }
 
