@@ -101,43 +101,49 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 
                 // Ensure result links are clickable - watch for new results
                 const ensureLinksClickable = () => {
-                    const resultLinks = searchElement.querySelectorAll(".pagefind-ui__result-link");
-                    resultLinks.forEach((link) => {
-                        if (!link.hasAttribute("data-click-handler")) {
-                            link.setAttribute("data-click-handler", "true");
-                            link.addEventListener("click", (e) => {
-                                // Ensure the link navigates properly
-                                const href = link.getAttribute("href");
-                                if (href) {
-                                    const a = document.createElement('a');
-                                    a.href = href;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                }
-                            });
-                        }
-                    });
+                const resultLinks = searchElement.querySelectorAll(".pagefind-ui__result-link");
+                resultLinks.forEach((link) => {
+                if (!link.hasAttribute("data-click-handler")) {
+                link.setAttribute("data-click-handler", "true");
+                link.addEventListener("click", (e) => {
+                // Mark that we're navigating from a search result
+                searchElement._navigatingFromResult = true;
 
-                    // Make entire result li clickable (but not when clicking on anchors)
-                    const resultLis = searchElement.querySelectorAll(".pagefind-ui__result");
-                    resultLis.forEach((li) => {
-                        if (!li.hasAttribute("data-li-click-handler")) {
-                            li.setAttribute("data-li-click-handler", "true");
-                            li.addEventListener("click", (e) => {
-                                // Check if the click target is an anchor or inside an anchor
-                                if (e.target.closest("a")) {
-                                    return; // Let the anchor handle the click
-                                }
-                                // Find the first result link and navigate to it
-                                const firstLink = li.querySelector(".pagefind-ui__result-link");
-                                if (firstLink) {
-                                    const href = firstLink.getAttribute("href");
-                                    if (href) {
-                                        const a = document.createElement('a');
-                                        a.href = href;
-                                        document.body.appendChild(a);
-                                        a.click();
+                // Ensure the link navigates properly
+                const href = link.getAttribute("href");
+                if (href) {
+                const a = document.createElement('a');
+                a.href = href;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+                            });
+                    }
+                });
+
+                // Make entire result li clickable (but not when clicking on anchors)
+                const resultLis = searchElement.querySelectorAll(".pagefind-ui__result");
+                resultLis.forEach((li) => {
+                if (!li.hasAttribute("data-li-click-handler")) {
+                li.setAttribute("data-li-click-handler", "true");
+                li.addEventListener("click", (e) => {
+                // Check if the click target is an anchor or inside an anchor
+                if (e.target.closest("a")) {
+                    return; // Let the anchor handle the click
+                }
+                // Mark that we're navigating from a search result
+                searchElement._navigatingFromResult = true;
+
+                // Find the first result link and navigate to it
+                const firstLink = li.querySelector(".pagefind-ui__result-link");
+                if (firstLink) {
+                const href = firstLink.getAttribute("href");
+                if (href) {
+                        const a = document.createElement('a');
+                            a.href = href;
+                                document.body.appendChild(a);
+                                    a.click();
                                         document.body.removeChild(a);
                                     }
                                 }
@@ -201,27 +207,27 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 
                             // For header search: handle focus and input to show results
                             if (
-                                searchElement.dataset.searchVariant === "header"
+                            searchElement.dataset.searchVariant === "header"
                             ) {
-                                const showDrawerIfResults = () => {
-                                    const drawer = searchElement.querySelector(
-                                        ".pagefind-ui__drawer",
-                                    );
-                                    if (drawer) {
-                                        setTimeout(() => {
-                                            const results =
-                                                searchElement.querySelector(
-                                                    ".pagefind-ui__results",
-                                                );
-                                            if (
-                                                results &&
-                                                results.children.length > 0
-                                            ) {
-                                                drawer.style.display = "block";
-                                            }
-                                        }, 100);
-                                    }
-                                };
+                            const showDrawerIfResults = () => {
+                                const drawer = searchElement.querySelector(
+                                ".pagefind-ui__drawer",
+                                );
+                                if (drawer) {
+                                setTimeout(() => {
+                                const results =
+                                searchElement.querySelector(
+                                ".pagefind-ui__results",
+                                );
+                                if (
+                                        results &&
+                                            results.children.length > 0
+                                        ) {
+                                                    drawer.style.display = "block";
+                                                 }
+                                     }, 100);
+                             }
+                            };
 
                                 input.addEventListener("focus", () => {
                                     // Show drawer when focusing if there's already content
@@ -274,34 +280,47 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                     }
                 }, 100);
 
-                // Add click outside handler for header search
+                // Add click outside handler for header search on desktop
                 if (searchElement.dataset.searchVariant === "header") {
-                    const handleClickOutside = (e) => {
-                        // Small delay to prevent immediate hiding after showing drawer
-                        setTimeout(() => {
-                            const drawer = searchElement.querySelector(
-                                ".pagefind-ui__drawer",
-                            );
-                            const searchContainer =
-                                searchElement.closest(".header-search");
+                const handleClickOutside = (e) => {
+                // Only hide on desktop (screen width > 768px)
+                if (window.innerWidth <= 768) return;
 
-                            if (
-                                drawer &&
-                                searchContainer &&
-                                !searchContainer.contains(e.target) &&
-                                drawer.style.display === "block"
-                            ) {
-                                // Clicked outside the header search container, hide the drawer
-                                drawer.style.display = "none";
-                            }
-                        }, 150);
-                    };
+                // Small delay to prevent immediate hiding after showing drawer
+                setTimeout(() => {
+                const drawer = searchElement.querySelector(".pagefind-ui__drawer");
+                        const searchContainer = searchElement.closest(".header-search");
+
+                // Check multiple ways the drawer might be visible (not just display:block)
+                const isDrawerVisible = drawer && (
+                    drawer.style.display === "block" ||
+                    drawer.offsetWidth > 0 ||
+                            drawer.offsetHeight > 0 ||
+                    drawer.getBoundingClientRect().width > 0
+                );
+
+                    // Ensure we have valid elements and the drawer is visible
+                        if (!drawer || !searchContainer || !isDrawerVisible) {
+                return;
+                }
+
+                // Check if the click target is outside both the search container and drawer
+                const isInSearchContainer = searchContainer.contains(e.target);
+                const isInDrawer = drawer.contains(e.target);
+                const clickedOutside = !isInSearchContainer && !isInDrawer;
+
+                if (clickedOutside) {
+                // Clicked outside the header search container and drawer, hide the drawer
+                drawer.style.display = "none";
+                }
+                }, 150); // Slightly increased delay for better reliability
+                };
 
                     // Add the click outside listener to document
-                    document.addEventListener("click", handleClickOutside);
+                document.addEventListener("click", handleClickOutside);
 
-                    // Store the handler for cleanup
-                    searchElement._clickOutsideHandler = handleClickOutside;
+                // Store the handler for cleanup
+                searchElement._clickOutsideHandler = handleClickOutside;
                 }
 
                 // Wait for Pagefind to render, then move clear button outside form (only for header search)
@@ -360,25 +379,100 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
         }
     }
 
+    // Track if global event listeners have been added to prevent duplicates
+    let globalListenersAdded = false;
+
+    function setupGlobalEventListeners() {
+        if (globalListenersAdded) return;
+        globalListenersAdded = true;
+
+        // Listen for browser navigation (back/forward buttons) - sync with primary search
+        window.addEventListener("popstate", () => {
+            const primarySearch = getPrimarySearchElement();
+            if (primarySearch) {
+                const input = primarySearch.querySelector(
+                    ".pagefind-ui__search-input",
+                );
+                const newQuery = getQueryParam("q") || "";
+                if (input && input.value !== newQuery) {
+                    input.value = newQuery;
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+            }
+        });
+
+        // Keyboard shortcut: Ctrl+K to focus primary search (header first, then mobile, then sidebar)
+        document.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+                e.preventDefault();
+                const primarySearch = getPrimarySearchElement();
+                if (primarySearch) {
+                    const input = primarySearch.querySelector(
+                        ".pagefind-ui__search-input",
+                    );
+                    if (input) {
+                        // Scroll search into view
+                        primarySearch.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                        // Focus the input after a short delay to ensure scroll completes
+                        setTimeout(() => {
+                            input.focus();
+                        }, 300);
+                    }
+                }
+            }
+        });
+    }
+
     // Initialize on page load
-    document.addEventListener("DOMContentLoaded", initSearch);
+    document.addEventListener("DOMContentLoaded", () => {
+        setupGlobalEventListeners();
+        initSearch();
+    });
 
     // Re-initialize after view transitions
-    document.addEventListener("astro:after-swap", initSearch);
-
-    // Listen for browser navigation (back/forward buttons) - sync with primary search
-    window.addEventListener("popstate", () => {
-        const primarySearch = getPrimarySearchElement();
-        if (primarySearch) {
-            const input = primarySearch.querySelector(
-                ".pagefind-ui__search-input",
-            );
-            const newQuery = getQueryParam("q") || "";
-            if (input && input.value !== newQuery) {
-                input.value = newQuery;
-                input.dispatchEvent(new Event("input", { bubbles: true }));
-            }
+    document.addEventListener("astro:after-swap", () => {
+        // Close search results drawer if we navigated from a search result
+        const searchElements = document.querySelectorAll('[id$="-search"]');
+        searchElements.forEach((searchElement) => {
+            if (searchElement._navigatingFromResult) {
+                const drawer = searchElement.querySelector(".pagefind-ui__drawer");
+                if (drawer) {
+                    drawer.style.display = "none";
+                }
+                // Clear the flag
+                delete searchElement._navigatingFromResult;
         }
+    });
+
+        initSearch();
+
+        // After initialization, sync URL query with primary search
+        setTimeout(() => {
+            const primarySearch = getPrimarySearchElement();
+            if (primarySearch) {
+                const input = primarySearch.querySelector(".pagefind-ui__search-input") as HTMLInputElement;
+                const urlQuery = getQueryParam("q") || "";
+                if (input && input.value !== urlQuery) {
+                    input.value = urlQuery;
+                    if (urlQuery) {
+                        input.dispatchEvent(new Event("input", { bubbles: true }));
+
+                        // Re-show drawer for header search if there's a query
+                        if (primarySearch.dataset.searchVariant === "header") {
+                            setTimeout(() => {
+                                const drawer = primarySearch.querySelector(".pagefind-ui__drawer") as HTMLElement;
+                                if (drawer) {
+                                    drawer.style.display = "block";
+                                }
+                            }, 300);
+                        }
+                    }
+        }
+        }
+        }, 200);
     });
 
     // Cleanup click outside handlers and observers on page navigation
@@ -401,30 +495,6 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                 delete searchElement._resultsObserver;
             }
         });
-    });
-
-    // Keyboard shortcut: Ctrl+K to focus primary search (header first, then mobile, then sidebar)
-    document.addEventListener("keydown", (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-            e.preventDefault();
-            const primarySearch = getPrimarySearchElement();
-            if (primarySearch) {
-                const input = primarySearch.querySelector(
-                    ".pagefind-ui__search-input",
-                );
-                if (input) {
-                    // Scroll search into view
-                    primarySearch.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    });
-                    // Focus the input after a short delay to ensure scroll completes
-                    setTimeout(() => {
-                        input.focus();
-                    }, 300);
-                }
-            }
-        }
     });
 </script>
 

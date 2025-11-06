@@ -1,11 +1,17 @@
 ---
 // Theme toggle button component
+interface Props {
+  transitionName?: string;
+}
+
+const { transitionName = 'theme-toggle' } = Astro.props;
 ---
 
 <button
-    class="theme-toggle"
-    aria-label="Toggle dark mode"
-    title="Toggle dark mode"
+class="theme-toggle"
+aria-label="Toggle dark mode"
+title="Toggle dark mode"
+    style={`view-transition-name: ${transitionName};`}
 >
     <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="4" fill="currentColor" />
@@ -40,7 +46,7 @@
         position: relative;
         width: var(--theme-toggle-width, 2.5rem);
         height: var(--theme-toggle-height, 2.5rem);
-        view-transition-name: theme-toggle;
+
     }
 
     .theme-toggle:hover {

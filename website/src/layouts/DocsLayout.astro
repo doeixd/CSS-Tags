@@ -243,8 +243,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             /* Ensure mobile header and theme toggle stay stable (no animation) */
             ::view-transition-old(mobile-header),
             ::view-transition-new(mobile-header),
-            ::view-transition-old(theme-toggle),
-            ::view-transition-new(theme-toggle) {
+            ::view-transition-old(header-theme-toggle),
+::view-transition-new(header-theme-toggle),
+::view-transition-old(sidebar-theme-toggle),
+::view-transition-new(sidebar-theme-toggle),
+::view-transition-old(sidebar-footer-theme-toggle),
+::view-transition-new(sidebar-footer-theme-toggle) {
                 animation: none;
             }
 
@@ -549,6 +553,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 margin-top: var(--layout-h2-margin-top, var(--space-2xl));
                 margin-bottom: var(--layout-h2-margin-bottom, var(--space-lg));
                 padding-top: var(--layout-h2-padding-top, var(--space-lg));
+                scroll-margin-top: calc(var(--header-height) + var(--space-lg));
             }
 
             h2:first-of-type {
@@ -559,12 +564,77 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 font-size: var(--layout-h3-font-size, var(--font-size-2xl));
                 margin-top: var(--layout-h3-margin-top, var(--font-size-2xl));
                 margin-bottom: var(--layout-h3-margin-bottom, var(--space-md));
+                scroll-margin-top: calc(var(--header-height) + var(--space-lg));
             }
 
             h4 {
                 font-size: var(--layout-h4-font-size, var(--font-size-xl));
                 margin-top: var(--layout-h4-margin-top, var(--font-size-xl));
                 margin-bottom: var(--layout-h4-margin-bottom, var(--space-sm));
+                scroll-margin-top: calc(var(--header-height) + var(--space-lg));
+            }
+
+            h5, h6 {
+                scroll-margin-top: calc(var(--header-height) + var(--space-lg));
+            }
+
+            /* Heading anchor links (from rehype-autolink-headings) */
+            h2, h3, h4, h5, h6 {
+                position: relative;
+            }
+
+            h2 .heading-anchor__link,
+            h3 .heading-anchor__link,
+            h4 .heading-anchor__link,
+            h5 .heading-anchor__link,
+            h6 .heading-anchor__link {
+                display: inline-flex;
+                align-items: center;
+                margin-left: var(--space-sm);
+                color: var(--text-secondary);
+                text-decoration: none;
+                opacity: 0;
+                transition: opacity var(--transition-fast), color var(--transition-fast);
+                vertical-align: middle;
+            }
+
+            h2:hover .heading-anchor__link,
+            h3:hover .heading-anchor__link,
+            h4:hover .heading-anchor__link,
+            h5:hover .heading-anchor__link,
+            h6:hover .heading-anchor__link,
+            .heading-anchor__link:focus {
+                opacity: 1;
+            }
+
+            .heading-anchor__link:hover {
+                color: var(--accent);
+            }
+
+            .heading-anchor__link:focus {
+                outline: var(--outline-width) solid var(--accent);
+                outline-offset: var(--outline-offset);
+                border-radius: var(--border-radius-sm);
+            }
+
+            /* Always show on touch devices */
+            @media (hover: none) {
+                h2 .heading-anchor__link,
+                h3 .heading-anchor__link,
+                h4 .heading-anchor__link,
+                h5 .heading-anchor__link,
+                h6 .heading-anchor__link {
+                    opacity: 0.6;
+                }
+
+                h2:hover .heading-anchor__link,
+                h3:hover .heading-anchor__link,
+                h4:hover .heading-anchor__link,
+                h5:hover .heading-anchor__link,
+                h6:hover .heading-anchor__link,
+                .heading-anchor__link:active {
+                    opacity: 1;
+                }
             }
 
             p {
@@ -892,7 +962,13 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <KeyboardShortcuts />
         <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
             <div transition:persist="sidebar">
-                <Navigation currentPath={currentPath} />
+                <Navigation
+                    currentPath={currentPath}
+                    showSidebarFooter={true}
+                    footerShowHideButton={true}
+                    footerSticky={true}
+                    footerHotEdgeReveal={false}
+                />
             </div>
             <div class="sidebar-resize-handle"></div>
             <div class="content-wrapper">

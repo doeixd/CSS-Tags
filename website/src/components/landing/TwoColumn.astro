@@ -1,0 +1,95 @@
+---
+interface Props {
+    reverse?: boolean;
+    gap?: 'sm' | 'md' | 'lg' | 'xl';
+    align?: 'start' | 'center' | 'end';
+    class?: string;
+}
+
+const {
+    reverse = false,
+    gap = 'lg',
+    align = 'center',
+    class: className,
+    ...rest
+} = Astro.props;
+
+const gapValues = {
+    sm: 'var(--space-lg)',
+    md: 'var(--space-xl)',
+    lg: 'var(--space-2xl)',
+    xl: 'calc(var(--space-2xl) * 2)',
+};
+---
+
+<div
+    class={`two-column two-column--${align} ${reverse ? 'two-column--reverse' : ''} ${className || ''}`}
+    style={`--two-column-gap: ${gapValues[gap]}`}
+    {...rest}
+>
+    <div class="two-column__left">
+        <slot name="left" />
+    </div>
+    <div class="two-column__right">
+        <slot name="right" />
+    </div>
+</div>
+
+<style>
+    .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--two-column-gap, var(--space-2xl));
+        align-items: var(--two-column-align, center);
+        width: 100%;
+    }
+
+    .two-column--start {
+        --two-column-align: start;
+    }
+
+    .two-column--center {
+        --two-column-align: center;
+    }
+
+    .two-column--end {
+        --two-column-align: end;
+    }
+
+    .two-column__left,
+    .two-column__right {
+        width: 100%;
+    }
+
+    /* Reverse column order on desktop */
+    .two-column--reverse {
+        direction: rtl;
+    }
+
+    .two-column--reverse .two-column__left,
+    .two-column--reverse .two-column__right {
+        direction: ltr;
+    }
+
+    /* Mobile: stack vertically */
+    @media (max-width: 768px) {
+        .two-column {
+            grid-template-columns: 1fr;
+            gap: var(--two-column-gap-mobile, var(--space-xl));
+        }
+
+        /* Reset direction on mobile */
+        .two-column--reverse {
+            direction: ltr;
+        }
+
+        /* Reverse order on mobile by grid placement */
+        .two-column--reverse .two-column__left {
+            order: 2;
+        }
+
+        .two-column--reverse .two-column__right {
+            order: 1;
+        }
+    }
+</style>

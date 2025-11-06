@@ -1,0 +1,414 @@
+---
+interface Column {
+    key: string;
+    label: string;
+    align?: 'left' | 'center' | 'right';
+    width?: string;
+    sortable?: boolean;
+}
+
+interface SimpleRow extends Array<string | number> {}
+
+interface DataRow {
+    [key: string]: any;
+}
+
+interface Props {
+    // Simple mode: just headers and rows
+    headers?: string[];
+    rows?: SimpleRow[];
+
+    // Advanced mode: column definitions and data objects
+    columns?: Column[];
+    data?: DataRow[];
+
+    // Table options
+    variant?: 'default' | 'striped' | 'bordered' | 'compact';
+    caption?: string;
+    stickyHeader?: boolean;
+    responsive?: boolean;
+    class?: string;
+}
+
+const {
+    headers,
+    rows,
+    columns,
+    data,
+    variant = 'default',
+    caption,
+    stickyHeader = false,
+    responsive = true,
+    class: className,
+    ...rest
+} = Astro.props;
+
+// Validate that we have either simple mode or advanced mode data
+const isSimpleMode = headers && rows;
+const isAdvancedMode = columns && data;
+
+if (!isSimpleMode && !isAdvancedMode) {
+    throw new Error('Table component requires either (headers + rows) or (columns + data)');
+}
+
+// Build column definitions for rendering
+const tableColumns: Column[] = isSimpleMode
+    ? headers!.map((header) => ({ key: header, label: header, align: 'left' }))
+    : columns!;
+
+// Build rows for rendering
+const tableRows = isSimpleMode
+    ? rows!.map((row) => {
+          const rowObj: DataRow = {};
+          headers!.forEach((header, index) => {
+              rowObj[header] = row[index];
+          });
+          return rowObj;
+      })
+    : data!;
+---
+
+<div class={`table-container ${responsive ? 'table-container--responsive' : ''} ${className || ''}`} {...rest}>
+    {caption && <div class="table-caption">{caption}</div>}
+    <div class="table-wrapper">
+        <table class={`table table--${variant} ${stickyHeader ? 'table--sticky-header' : ''}`}>
+            <thead class="table__head">
+                <tr class="table__row">
+                    {tableColumns.map((column) => (
+                        <th
+                            class={`table__header table__header--${column.align || 'left'}`}
+                            style={column.width ? `width: ${column.width}` : ''}
+                            data-sortable={column.sortable ? 'true' : 'false'}
+                        >
+                            <div class="table__header-content">
+                                <span>{column.label}</span>
+                                {column.sortable && (
+                                    <button
+                                        type="button"
+                                        class="table__sort-btn"
+                                        data-column={column.key}
+                                        aria-label={`Sort by ${column.label}`}
+                                    >
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path d="M6 2L9 5H3L6 2Z" fill="currentColor" opacity="0.4"/>
+                                            <path d="M6 10L3 7H9L6 10Z" fill="currentColor" opacity="0.4"/>
+                                        </svg>
+                                    </button>
+                                )}
+                            </div>
+                        </th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody class="table__body">
+                {tableRows.map((row) => (
+                    <tr class="table__row">
+                        {tableColumns.map((column) => (
+                            <td
+                                class={`table__cell table__cell--${column.align || 'left'}`}
+                                data-label={column.label}
+                            >
+                                <Fragment set:html={row[column.key]} />
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .table-container {
+        width: 100%;
+        margin-bottom: var(--table-container-margin-bottom, var(--space-lg));
+    }
+
+    .table-caption {
+        font-size: var(--table-caption-font-size, var(--font-size-lg));
+        font-weight: var(--table-caption-font-weight, var(--font-weight-semibold));
+        color: var(--text-primary);
+        margin-bottom: var(--table-caption-margin-bottom, var(--space-md));
+    }
+
+    .table-wrapper {
+        width: 100%;
+        border-radius: var(--table-border-radius, var(--border-radius-lg));
+        border: var(--table-wrapper-border, 1px solid var(--border-color));
+        overflow: hidden;
+    }
+
+    .table-container--responsive .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        background: var(--table-bg, var(--bg-primary));
+        font-size: var(--table-font-size, var(--font-size-base));
+    }
+
+    /* Header */
+    .table__head {
+        background: var(--table-header-bg, var(--bg-secondary));
+        border-bottom: var(--table-header-border, 2px solid var(--border-color));
+    }
+
+    .table--sticky-header .table__head {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .table__header {
+        padding: var(--table-header-padding, var(--space-md) var(--space-lg));
+        font-weight: var(--table-header-font-weight, var(--font-weight-semibold));
+        color: var(--text-primary);
+        font-size: var(--table-header-font-size, var(--font-size-sm));
+        text-transform: var(--table-header-text-transform, uppercase);
+        letter-spacing: var(--table-header-letter-spacing, 0.05em);
+        white-space: nowrap;
+    }
+
+    .table__header-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .table__header--left {
+        text-align: left;
+    }
+
+    .table__header--center {
+        text-align: center;
+    }
+
+    .table__header--center .table__header-content {
+        justify-content: center;
+    }
+
+    .table__header--right {
+        text-align: right;
+    }
+
+    .table__header--right .table__header-content {
+        justify-content: flex-end;
+    }
+
+    .table__sort-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-xs);
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: var(--border-radius-sm);
+        transition: var(--transition-fast);
+        transition-property: color, background-color;
+    }
+
+    .table__sort-btn:hover {
+        color: var(--text-primary);
+        background: var(--bg-hover);
+    }
+
+    .table__sort-btn:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    .table__sort-btn[data-direction="asc"] svg path:first-child {
+        opacity: 1;
+    }
+
+    .table__sort-btn[data-direction="desc"] svg path:last-child {
+        opacity: 1;
+    }
+
+    /* Body */
+    .table__body .table__row {
+        border-bottom: var(--table-row-border, 1px solid var(--border-color));
+    }
+
+    .table__body .table__row:last-child {
+        border-bottom: none;
+    }
+
+    .table__body .table__row:hover {
+        background: var(--table-row-hover-bg, var(--bg-hover));
+    }
+
+    .table__cell {
+        padding: var(--table-cell-padding, var(--space-md) var(--space-lg));
+        color: var(--text-primary);
+        line-height: var(--table-cell-line-height, 1.6);
+    }
+
+    .table__cell--left {
+        text-align: left;
+    }
+
+    .table__cell--center {
+        text-align: center;
+    }
+
+    .table__cell--right {
+        text-align: right;
+    }
+
+    /* Inline code in cells */
+    .table__cell :global(code) {
+        font-size: var(--font-size-sm);
+    }
+
+    /* Variants */
+    .table--striped .table__body .table__row:nth-child(even) {
+        background: var(--table-striped-bg, var(--bg-secondary));
+    }
+
+    .table--striped .table__body .table__row:nth-child(even):hover {
+        background: var(--bg-hover);
+    }
+
+    .table--bordered .table__cell,
+    .table--bordered .table__header {
+        border-right: var(--table-cell-border, 1px solid var(--border-color));
+    }
+
+    .table--bordered .table__cell:last-child,
+    .table--bordered .table__header:last-child {
+        border-right: none;
+    }
+
+    .table--compact .table__header {
+        padding: var(--table-compact-header-padding, var(--space-sm) var(--space-md));
+    }
+
+    .table--compact .table__cell {
+        padding: var(--table-compact-cell-padding, var(--space-sm) var(--space-md));
+        font-size: var(--table-compact-font-size, var(--font-size-sm));
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .table-container--responsive .table-wrapper {
+            /* Show scrollbar hint */
+            box-shadow: inset -1px 0 0 var(--border-color);
+        }
+
+        .table__header {
+            padding: var(--table-header-padding-mobile, var(--space-sm) var(--space-md));
+            font-size: var(--table-header-font-size-mobile, var(--font-size-xs));
+        }
+
+        .table__cell {
+            padding: var(--table-cell-padding-mobile, var(--space-sm) var(--space-md));
+            font-size: var(--table-font-size-mobile, var(--font-size-sm));
+        }
+
+        /* Optional: Card-style mobile view */
+        .table-container--responsive.table-container--cards .table,
+        .table-container--responsive.table-container--cards .table__head,
+        .table-container--responsive.table-container--cards .table__body,
+        .table-container--responsive.table-container--cards .table__row {
+            display: block;
+        }
+
+        .table-container--responsive.table-container--cards .table__head {
+            display: none;
+        }
+
+        .table-container--responsive.table-container--cards .table__row {
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-md);
+        }
+
+        .table-container--responsive.table-container--cards .table__cell {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-sm) 0;
+            border: none;
+            text-align: right;
+        }
+
+        .table-container--responsive.table-container--cards .table__cell::before {
+            content: attr(data-label);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-secondary);
+            text-align: left;
+        }
+    }
+</style>
+
+<script>
+    function setupTables() {
+        const tables = document.querySelectorAll('.table');
+
+        tables.forEach((table) => {
+            const sortButtons = table.querySelectorAll('.table__sort-btn');
+
+            sortButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const columnKey = button.getAttribute('data-column');
+                    const currentDirection = button.getAttribute('data-direction');
+                    const tbody = table.querySelector('.table__body');
+
+                    if (!columnKey || !tbody) return;
+
+                    // Clear other sort indicators
+                    sortButtons.forEach((btn) => {
+                        if (btn !== button) {
+                            btn.removeAttribute('data-direction');
+                        }
+                    });
+
+                    // Toggle sort direction
+                    const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+                    button.setAttribute('data-direction', newDirection);
+
+                    // Get all rows
+                    const rows = Array.from(tbody.querySelectorAll('.table__row'));
+
+                    // Sort rows
+                    rows.sort((a, b) => {
+                        const aCell = a.querySelector(`[data-label]`);
+                        const bCell = b.querySelector(`[data-label]`);
+
+                        if (!aCell || !bCell) return 0;
+
+                        const aText = aCell.textContent?.trim() || '';
+                        const bText = bCell.textContent?.trim() || '';
+
+                        // Try numeric sort first
+                        const aNum = parseFloat(aText);
+                        const bNum = parseFloat(bText);
+
+                        if (!isNaN(aNum) && !isNaN(bNum)) {
+                            return newDirection === 'asc' ? aNum - bNum : bNum - aNum;
+                        }
+
+                        // Fallback to string sort
+                        return newDirection === 'asc'
+                            ? aText.localeCompare(bText)
+                            : bText.localeCompare(aText);
+                    });
+
+                    // Re-append sorted rows
+                    rows.forEach((row) => tbody.appendChild(row));
+                });
+            });
+        });
+    }
+
+    // Setup on page load and after view transitions
+    document.addEventListener('DOMContentLoaded', setupTables);
+    document.addEventListener('astro:after-swap', setupTables);
+</script>

@@ -1,5 +1,6 @@
 ---
 import { normalizeBase, buildHref } from "../utils/url";
+import { getCollection } from "astro:content";
 
 interface Props {
     currentPath: string;
@@ -8,17 +9,23 @@ interface Props {
 const { currentPath } = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
 
+// Get all docs to check which pages exist
+const allDocs = await getCollection("docs");
+const existingSlugs = new Set(allDocs.map(doc => doc.id));
+
 const pathParts = currentPath.split("/").filter(Boolean);
 const breadcrumbs = [
-    { label: "Home", href: buildHref(base) },
-    ...pathParts.map((part, index) => {
-        const slug = pathParts.slice(0, index + 1).join("/");
-        const href = buildHref(base, slug);
-        const label = part
+{ label: "Home", href: buildHref(base), exists: true },
+...pathParts.map((part, index) => {
+const slug = pathParts.slice(0, index + 1).join("/");
+const href = buildHref(base, slug);
+    const label = part
             .split("-")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
-        return { label, href };
+        // Check if this page exists in the docs collection
+        const exists = existingSlugs.has(slug);
+        return { label, href, exists };
     }),
 ];
 ---
@@ -29,15 +36,21 @@ const breadcrumbs = [
             breadcrumbs.map((crumb, index) => (
                 <li class="breadcrumb-item">
                     {index < breadcrumbs.length - 1 ? (
-                        <>
-                            <a href={crumb.href} class="breadcrumb-link">
-                                {crumb.label}
-                            </a>
-                            <span
+                    <>
+                    {crumb.exists ? (
+                    <a href={crumb.href} class="breadcrumb-link">
+                            {crumb.label}
+                        </a>
+                    ) : (
+                    <span class="breadcrumb-link breadcrumb-link--disabled">
+                            {crumb.label}
+                    </span>
+                    )}
+                        <span
                                 class="breadcrumb-separator"
-                                aria-hidden="true"
-                            >
-                                /
+                            aria-hidden="true"
+                    >
+                            /
                             </span>
                         </>
                     ) : (

@@ -475,6 +475,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         font-size: var(--font-size-sm);
         transition: all var(--transition-fast);
         border-left: 2px solid transparent;
+        scroll-margin-top: var(--toc-scroll-margin, 80px);
     }
 
     .mobile-toc-item.depth-3 .mobile-toc-link {
@@ -598,6 +599,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         // TOC functionality
         if (tocButton && tocOverlay && tocClose) {
             const openToc = () => {
+                // Scroll to active link BEFORE showing overlay (so user doesn't see the scroll)
+                const activeLink = tocOverlay.querySelector(".mobile-toc-link.active");
+                if (activeLink) {
+                    activeLink.scrollIntoView({
+                        behavior: "auto", // Instant scroll, no animation
+                        block: "center"
+                    });
+                }
+
+                // Now show the overlay
                 tocOverlay.classList.add("visible");
                 tocButton.setAttribute("aria-expanded", "true");
                 document.body.style.overflow = "hidden";

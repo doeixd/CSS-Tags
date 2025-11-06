@@ -1,8 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
-import DocsLayout from '../layouts/DocsLayout.astro';
-import PageMeta from '../components/PageMeta.astro';
-import PrevNextNav from '../components/PrevNextNav.astro';
+import LandingLayout from '../layouts/LandingLayout.astro';
 
 const entry = await getEntry('docs', 'index');
 
@@ -10,17 +8,14 @@ if (!entry) {
 	return Astro.redirect('/guides/introduction/');
 }
 
-const { Content, headings } = await render(entry);
+const { Content } = await render(entry);
 ---
 
-<DocsLayout
+<LandingLayout
 	title={entry.data.title}
 	description={entry.data.description}
-	currentPath=""
-	headings={headings}
+	currentPath="/"
 >
 	<h1>{entry.data.title}</h1>
 	<Content />
-	<PageMeta currentPath="" />
-	<PrevNextNav currentPath="" />
-</DocsLayout>
+</LandingLayout>

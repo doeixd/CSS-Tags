@@ -211,7 +211,7 @@ const icons = {
         <slot />
       </div>
 
-      <ThemeToggle />
+      <ThemeToggle transitionName="header-theme-toggle" />
     </div>
   </div>
 </header>
@@ -245,6 +245,7 @@ const icons = {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    min-width: var(--header-left-min-width, 170px);
   }
 
   .header-logo-link {

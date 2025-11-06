@@ -1,0 +1,325 @@
+---
+interface Props {
+    packageName: string;
+    defaultTab?: 'npm' | 'pnpm' | 'yarn' | 'bun';
+    class?: string;
+}
+
+const {
+    packageName,
+    defaultTab = 'npm',
+    class: className,
+    ...rest
+} = Astro.props;
+
+const managers = [
+    { id: 'npm', label: 'npm', command: `npm install ${packageName}` },
+    { id: 'pnpm', label: 'pnpm', command: `pnpm add ${packageName}` },
+    { id: 'yarn', label: 'Yarn', command: `yarn add ${packageName}` },
+    { id: 'bun', label: 'Bun', command: `bun add ${packageName}` },
+];
+---
+
+<div class={`install-tabs ${className || ''}`} {...rest}>
+    <div class="install-tabs__header" role="tablist" aria-label="Package manager options">
+        {managers.map((manager) => (
+            <button
+                type="button"
+                role="tab"
+                id={`tab-${manager.id}`}
+                aria-controls={`panel-${manager.id}`}
+                aria-selected={manager.id === defaultTab ? 'true' : 'false'}
+                tabindex={manager.id === defaultTab ? 0 : -1}
+                class="install-tabs__tab"
+                data-tab={manager.id}
+            >
+                {manager.label}
+            </button>
+        ))}
+    </div>
+    <div class="install-tabs__panels">
+        {managers.map((manager) => (
+            <div
+                role="tabpanel"
+                id={`panel-${manager.id}`}
+                aria-labelledby={`tab-${manager.id}`}
+                hidden={manager.id !== defaultTab}
+                class="install-tabs__panel"
+                data-panel={manager.id}
+            >
+                <div class="install-tabs__code-wrapper">
+                    <pre class="install-tabs__code"><code>{manager.command}</code></pre>
+                    <button
+                        type="button"
+                        class="install-tabs__copy"
+                        data-code={manager.command}
+                        aria-label="Copy command"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M5.5 2.5h7a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <path d="M3.5 5.5h-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <span class="install-tabs__copy-tooltip">Copied!</span>
+                    </button>
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
+
+<style>
+    .install-tabs {
+        width: 100%;
+        border: var(--install-tabs-border, 1px solid var(--border-color));
+        border-radius: var(--install-tabs-border-radius, var(--border-radius-lg));
+        overflow: hidden;
+        background: var(--bg-secondary);
+    }
+
+    .install-tabs__header {
+        display: flex;
+        gap: 0;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .install-tabs__tab {
+        flex: 1;
+        padding: var(--install-tabs-tab-padding, var(--space-md) var(--space-lg));
+        background: transparent;
+        border: none;
+        border-right: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        transition: var(--transition-normal);
+        transition-property: color, background-color;
+    }
+
+    .install-tabs__tab:last-child {
+        border-right: none;
+    }
+
+    .install-tabs__tab:hover {
+        color: var(--text-primary);
+        background: var(--bg-hover);
+    }
+
+    .install-tabs__tab[aria-selected="true"] {
+        color: var(--accent);
+        background: var(--bg-secondary);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .install-tabs__tab:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: calc(var(--outline-offset) * -1);
+        z-index: 1;
+    }
+
+    .install-tabs__panels {
+        position: relative;
+    }
+
+    .install-tabs__panel {
+        padding: 0;
+    }
+
+    .install-tabs__panel[hidden] {
+        display: none;
+    }
+
+    .install-tabs__code-wrapper {
+        position: relative;
+        padding: var(--install-tabs-code-padding, var(--space-lg));
+    }
+
+    .install-tabs__code {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+        font-size: var(--font-size-sm);
+        color: var(--text-primary);
+        overflow-x: auto;
+    }
+
+    .install-tabs__code code {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: inherit !important;
+    }
+
+    .install-tabs__copy {
+        position: absolute;
+        top: var(--space-md);
+        right: var(--space-md);
+        padding: var(--space-sm);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        color: var(--text-secondary);
+        cursor: pointer;
+        opacity: 0.7;
+        transition: var(--transition-normal);
+        transition-property: opacity, background-color;
+    }
+
+    .install-tabs__copy:hover {
+        opacity: 1;
+        background: var(--bg-hover);
+    }
+
+    .install-tabs__copy:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    .install-tabs__copy svg {
+        display: block;
+    }
+
+    .install-tabs__copy-tooltip {
+        position: absolute;
+        bottom: calc(100% + var(--space-sm));
+        right: 0;
+        padding: var(--space-xs) var(--space-md);
+        background: var(--accent-light);
+        color: var(--accent-dark);
+        border-radius: var(--border-radius-md);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-fast);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .install-tabs__copy-tooltip {
+            background: var(--accent-light);
+            color: var(--accent-dark);
+        }
+    }
+
+    :root.dark-mode .install-tabs__copy-tooltip {
+        background: var(--accent-light);
+        color: var(--accent-dark);
+    }
+
+    .install-tabs__copy.copied .install-tabs__copy-tooltip {
+        opacity: 1;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .install-tabs__header {
+            flex-wrap: wrap;
+        }
+
+        .install-tabs__tab {
+            flex: 1 1 50%;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .install-tabs__tab:nth-child(2) {
+            border-right: none;
+        }
+
+        .install-tabs__code-wrapper {
+            padding: var(--space-md);
+        }
+
+        .install-tabs__code {
+            font-size: var(--font-size-xs);
+        }
+    }
+</style>
+
+<script>
+    function setupInstallTabs() {
+        const containers = document.querySelectorAll('.install-tabs');
+
+        containers.forEach((container) => {
+            const tabs = container.querySelectorAll('[role="tab"]');
+            const panels = container.querySelectorAll('[role="tabpanel"]');
+            const copyButtons = container.querySelectorAll('.install-tabs__copy');
+
+            // Tab switching
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.getAttribute('aria-controls');
+
+                    // Update tabs
+                    tabs.forEach((t) => {
+                        t.setAttribute('aria-selected', 'false');
+                        t.setAttribute('tabindex', '-1');
+                    });
+                    tab.setAttribute('aria-selected', 'true');
+                    tab.setAttribute('tabindex', '0');
+
+                    // Update panels
+                    panels.forEach((p) => {
+                        p.setAttribute('hidden', '');
+                    });
+                    const targetPanel = container.querySelector(`#${targetId}`);
+                    if (targetPanel) {
+                        targetPanel.removeAttribute('hidden');
+                    }
+                });
+            });
+
+            // Keyboard navigation
+            container.querySelector('[role="tablist"]')?.addEventListener('keydown', (e) => {
+                const target = e.target as HTMLElement;
+                if (target.getAttribute('role') !== 'tab') return;
+
+                const currentIndex = Array.from(tabs).indexOf(target);
+                let newIndex = currentIndex;
+
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    newIndex = (currentIndex + 1) % tabs.length;
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    newIndex = 0;
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    newIndex = tabs.length - 1;
+                }
+
+                if (newIndex !== currentIndex) {
+                    (tabs[newIndex] as HTMLElement).click();
+                    (tabs[newIndex] as HTMLElement).focus();
+                }
+            });
+
+            // Copy functionality
+            copyButtons.forEach((button) => {
+                button.addEventListener('click', async () => {
+                    const code = button.getAttribute('data-code');
+                    if (!code) return;
+
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+            });
+        });
+    }
+
+    // Setup on page load and after view transitions
+    document.addEventListener('DOMContentLoaded', setupInstallTabs);
+    document.addEventListener('astro:after-swap', setupInstallTabs);
+</script>

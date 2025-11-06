@@ -1,0 +1,156 @@
+---
+interface Props {
+    title: string;
+    subtitle?: string;
+    align?: 'left' | 'center';
+    gradient?: boolean;
+    variant?: 'default' | 'accent-bg';
+    class?: string;
+}
+
+const {
+    title,
+    subtitle,
+    align = 'center',
+    gradient = false,
+    variant = 'default',
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<section
+    class={`hero hero--${align} hero--${variant} ${className || ''}`}
+    {...rest}
+>
+    <div class="hero__content">
+        <h1 class={`hero__title ${gradient ? 'hero__title--gradient' : ''}`}>
+            {title}
+        </h1>
+        {subtitle && (
+            <p class="hero__subtitle">
+                {subtitle}
+            </p>
+        )}
+        <div class="hero__actions">
+            <slot />
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero {
+        width: 100%;
+        padding: var(--hero-padding-y, var(--space-2xl)) var(--hero-padding-x, var(--space-2xl));
+        min-height: var(--hero-min-height, 60vh);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero--accent-bg {
+        background: var(--hero-accent-bg, linear-gradient(135deg, var(--accent-light) 0%, var(--bg-secondary) 100%));
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .hero--accent-bg {
+            background: var(--hero-accent-bg-dark, linear-gradient(135deg, var(--accent-dark) 0%, var(--bg-secondary) 100%));
+        }
+    }
+
+    :root.dark-mode .hero--accent-bg {
+        background: var(--hero-accent-bg-dark, linear-gradient(135deg, var(--accent-dark) 0%, var(--bg-secondary) 100%));
+    }
+
+    .hero__content {
+        max-width: var(--hero-content-max-width, 900px);
+        width: 100%;
+    }
+
+    .hero--center .hero__content {
+        text-align: center;
+    }
+
+    .hero--left .hero__content {
+        text-align: left;
+    }
+
+    .hero__title {
+        font-size: var(--hero-title-font-size, var(--font-size-5xl));
+        font-weight: var(--hero-title-font-weight, var(--font-weight-bold));
+        line-height: var(--hero-title-line-height, 1.1);
+        margin-bottom: var(--hero-title-margin-bottom, var(--space-xl));
+        color: var(--text-primary);
+    }
+
+    .hero__title--gradient {
+        background: var(--hero-gradient, linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .hero__title--gradient {
+            background: var(--hero-gradient-dark, linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    :root.dark-mode .hero__title--gradient {
+        background: var(--hero-gradient-dark, linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero__subtitle {
+        font-size: var(--hero-subtitle-font-size, var(--font-size-xl));
+        color: var(--text-secondary);
+        margin-bottom: var(--hero-subtitle-margin-bottom, var(--space-2xl));
+        line-height: var(--hero-subtitle-line-height, 1.5);
+    }
+
+    .hero__actions {
+        display: flex;
+        gap: var(--hero-actions-gap, var(--space-lg));
+        flex-wrap: wrap;
+    }
+
+    .hero--center .hero__actions {
+        justify-content: center;
+    }
+
+    .hero--left .hero__actions {
+        justify-content: flex-start;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .hero {
+            min-height: var(--hero-min-height-mobile, auto);
+            padding: var(--hero-padding-y-mobile, var(--space-xl)) var(--hero-padding-x-mobile, var(--space-lg));
+        }
+
+        .hero__title {
+            font-size: var(--hero-title-font-size-mobile, var(--font-size-3xl));
+        }
+
+        .hero__subtitle {
+            font-size: var(--hero-subtitle-font-size-mobile, var(--font-size-lg));
+        }
+
+        .hero__actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .hero__actions :global(a),
+        .hero__actions :global(button) {
+            width: 100%;
+        }
+    }
+</style>

@@ -1,0 +1,157 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    href?: string;
+    variant?: 'default' | 'elevated' | 'minimal';
+    class?: string;
+}
+
+const {
+    title,
+    description,
+    href,
+    variant = 'default',
+    class: className,
+    ...rest
+} = Astro.props;
+
+const Component = href ? 'a' : 'div';
+---
+
+<Component
+    href={href}
+    class={`feature-card feature-card--${variant} ${href ? 'feature-card--link' : ''} ${className || ''}`}
+    {...rest}
+>
+    {Astro.slots.has('icon') && (
+        <div class="feature-card__icon">
+            <slot name="icon" />
+        </div>
+    )}
+    <div class="feature-card__content">
+        <h3 class="feature-card__title">{title}</h3>
+        <p class="feature-card__description">{description}</p>
+        {Astro.slots.has('default') && (
+            <div class="feature-card__extra">
+                <slot />
+            </div>
+        )}
+    </div>
+</Component>
+
+<style>
+    .feature-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--feature-card-gap, var(--space-lg));
+        padding: var(--feature-card-padding, var(--space-xl));
+        border-radius: var(--feature-card-border-radius, var(--border-radius-lg));
+        transition: var(--feature-card-transition, transform var(--transition-normal), box-shadow var(--transition-normal));
+    }
+
+    .feature-card--default {
+        background: var(--feature-card-bg, var(--bg-secondary));
+        border: var(--feature-card-border, 1px solid var(--border-color));
+    }
+
+    .feature-card--elevated {
+        background: var(--feature-card-bg, var(--bg-secondary));
+        box-shadow: var(--feature-card-shadow, var(--shadow-sm));
+    }
+
+    .feature-card--minimal {
+        background: transparent;
+        border: none;
+        padding: var(--feature-card-minimal-padding, var(--space-lg));
+    }
+
+    .feature-card--link {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .feature-card--link:hover {
+        transform: var(--feature-card-hover-transform, translateY(-2px));
+    }
+
+    .feature-card--default.feature-card--link:hover,
+    .feature-card--elevated.feature-card--link:hover {
+        box-shadow: var(--feature-card-hover-shadow, var(--shadow-md));
+    }
+
+    .feature-card--link:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    .feature-card__icon {
+        width: var(--feature-card-icon-size, 3rem);
+        height: var(--feature-card-icon-size, 3rem);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--feature-card-icon-color, var(--accent));
+        flex-shrink: 0;
+    }
+
+    .feature-card__icon :global(svg) {
+        width: 100%;
+        height: 100%;
+    }
+
+    .feature-card__content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--feature-card-content-gap, var(--space-sm));
+    }
+
+    .feature-card__title {
+        font-size: var(--feature-card-title-size, var(--font-size-xl));
+        font-weight: var(--feature-card-title-weight, var(--font-weight-semibold));
+        color: var(--text-primary);
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .feature-card--link:hover .feature-card__title {
+        color: var(--accent);
+    }
+
+    .feature-card__description {
+        font-size: var(--feature-card-description-size, var(--font-size-base));
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .feature-card__extra {
+        margin-top: var(--feature-card-extra-margin-top, var(--space-sm));
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .feature-card {
+            padding: var(--feature-card-padding-mobile, var(--space-lg));
+            gap: var(--feature-card-gap-mobile, var(--space-md));
+        }
+
+        .feature-card--minimal {
+            padding: var(--feature-card-minimal-padding-mobile, var(--space-md));
+        }
+
+        .feature-card__icon {
+            width: var(--feature-card-icon-size-mobile, 2.5rem);
+            height: var(--feature-card-icon-size-mobile, 2.5rem);
+        }
+
+        .feature-card__title {
+            font-size: var(--feature-card-title-size-mobile, var(--font-size-lg));
+        }
+
+        .feature-card__description {
+            font-size: var(--feature-card-description-size-mobile, var(--font-size-sm));
+        }
+    }
+</style>

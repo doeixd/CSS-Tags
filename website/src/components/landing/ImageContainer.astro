@@ -1,0 +1,112 @@
+---
+interface Props {
+    src: string;
+    alt: string;
+    caption?: string;
+    variant?: 'default' | 'elevated' | 'bordered' | 'rounded';
+    aspectRatio?: '16/9' | '4/3' | '1/1' | 'auto';
+    loading?: 'lazy' | 'eager';
+    class?: string;
+}
+
+const {
+    src,
+    alt,
+    caption,
+    variant = 'default',
+    aspectRatio = 'auto',
+    loading = 'lazy',
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<figure class={`image-container image-container--${variant} ${className || ''}`} {...rest}>
+    <div
+        class="image-container__wrapper"
+        style={aspectRatio !== 'auto' ? `aspect-ratio: ${aspectRatio}` : ''}
+    >
+        <img
+            src={src}
+            alt={alt}
+            loading={loading}
+            class="image-container__img"
+        />
+    </div>
+    {caption && (
+        <figcaption class="image-container__caption">
+            {caption}
+        </figcaption>
+    )}
+</figure>
+
+<style>
+    .image-container {
+        margin: 0;
+        width: 100%;
+    }
+
+    .image-container__wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background: var(--bg-secondary);
+    }
+
+    .image-container--default .image-container__wrapper {
+        border-radius: var(--image-container-border-radius, var(--border-radius-md));
+    }
+
+    .image-container--bordered .image-container__wrapper {
+        border: var(--image-container-border, 1px solid var(--border-color));
+        border-radius: var(--image-container-border-radius, var(--border-radius-md));
+    }
+
+    .image-container--elevated .image-container__wrapper {
+        border-radius: var(--image-container-border-radius, var(--border-radius-lg));
+        box-shadow: var(--image-container-shadow, var(--shadow-md));
+        transition: var(--image-container-transition, box-shadow var(--transition-normal), transform var(--transition-normal));
+    }
+
+    .image-container--elevated:hover .image-container__wrapper {
+        box-shadow: var(--image-container-hover-shadow, 4px 4px 24px rgba(0, 0, 0, 0.25));
+        transform: var(--image-container-hover-transform, translateY(-2px));
+    }
+
+    .image-container--rounded .image-container__wrapper {
+        border-radius: var(--image-container-rounded-radius, 50%);
+        overflow: hidden;
+    }
+
+    .image-container__img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    /* Auto aspect ratio uses natural dimensions */
+    .image-container__wrapper:not([style*="aspect-ratio"]) {
+        height: auto;
+    }
+
+    .image-container__wrapper:not([style*="aspect-ratio"]) .image-container__img {
+        height: auto;
+    }
+
+    .image-container__caption {
+        margin-top: var(--image-container-caption-margin-top, var(--space-md));
+        font-size: var(--image-container-caption-font-size, var(--font-size-sm));
+        color: var(--text-secondary);
+        text-align: center;
+        font-style: italic;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .image-container__caption {
+            font-size: var(--image-container-caption-font-size-mobile, var(--font-size-xs));
+        }
+    }
+</style>

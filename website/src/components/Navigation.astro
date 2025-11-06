@@ -2,9 +2,16 @@
 import { navigation } from "../navigation";
 import Search from "./Search.astro";
 import ThemeToggle from "./ThemeToggle.astro";
+import SidebarFooter from "./SidebarFooter.astro";
 import { normalizeBase, buildHref } from "../utils/url";
 
-const { currentPath } = Astro.props;
+const {
+  currentPath = '',
+  showSidebarFooter = true,
+  footerShowHideButton = false,
+  footerSticky = true,
+  footerHotEdgeReveal = false
+} = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
 
 function isActive(slug: string | undefined) {
@@ -54,7 +61,7 @@ function isActive(slug: string | undefined) {
     <div class="nav-header">
         <a href={buildHref(base)} class="site-title">CSS Tags</a>
         <div class="nav-actions" transition:persist="nav-actions">
-            <ThemeToggle />
+            <ThemeToggle transitionName="sidebar-theme-toggle" />
             <a
                 href="https://github.com/doeixd/CSS-Tags"
                 target="_blank"
@@ -151,8 +158,37 @@ function isActive(slug: string | undefined) {
                 </li>
             ))
         }
-    </ul>
+            </ul>
+    </div>
+
+        {showSidebarFooter && (
+        <SidebarFooter
+        showHideButton={footerShowHideButton}
+        sticky={footerSticky}
+        hotEdgeReveal={footerHotEdgeReveal}
+        class:list={[
+        footerHotEdgeReveal && 'hot-edge-enabled',
+            footerSticky ? 'sticky' : 'fixed'
+            ]}
+            />
+    )}
 </nav>
+
+<!-- Floating sidebar toggle button (shown when sidebar is hidden) -->
+<button class="floating-sidebar-toggle" aria-label="Show sidebar">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+<path d="M9 15l6-6-6-6"></path>
+</svg>
+</button>
 
 <style>
     .mobile-backdrop {
@@ -212,6 +248,8 @@ function isActive(slug: string | undefined) {
         padding: var(--nav-sidebar-padding, var(--space-2xl) var(--space-lg));
         background: var(--bg-secondary);
         border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
     }
 
     @media (max-width: 768px) {
@@ -243,6 +281,86 @@ function isActive(slug: string | undefined) {
         .sidebar.open {
             display: block; /* Show when opened */
             transform: translateX(0);
+        }
+    }
+
+    /* Sidebar hidden state for footer toggle functionality */
+    .sidebar.sidebar-hidden {
+        transform: translateX(-100%);
+        transition: transform var(--transition-nav);
+    }
+
+    /* Hide resize handle when sidebar is hidden */
+    .sidebar.sidebar-hidden ~ .sidebar-resize-handle {
+        display: none;
+    }
+
+    .sidebar.sidebar-revealed {
+        transform: translateX(0);
+        transition: transform var(--transition-fast);
+    }
+
+    /* Floating sidebar toggle button - matches scroll-to-top button style */
+    .floating-sidebar-toggle {
+        /* Fixed positioning at bottom left - aligned vertically with scroll-to-top button */
+        position: fixed;
+        left: var(--space-2xl);
+        bottom: var(--scroll-button-bottom);
+        z-index: var(--z-index-sidebar);
+
+        /* Size - matches scroll button */
+        width: var(--scroll-button-size);
+        height: var(--scroll-button-size);
+        padding: var(--scroll-button-padding);
+
+        /* Appearance - matches scroll button */
+        background: var(--scroll-button-bg);
+        color: var(--scroll-button-fg);
+        border: var(--scroll-button-border);
+        border-radius: var(--scroll-button-border-radius);
+        backdrop-filter: var(--scroll-button-backdrop-filter);
+        -webkit-backdrop-filter: var(--scroll-button-backdrop-filter);
+
+        /* Layout */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        /* Animation - matches scroll button */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: var(--scroll-button-transition);
+    }
+
+    /* Show floating button when sidebar is hidden */
+    .sidebar.sidebar-hidden ~ .floating-sidebar-toggle {
+        opacity: var(--scroll-button-opacity);
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .floating-sidebar-toggle:hover {
+        background: var(--scroll-button-bg-hover);
+        opacity: var(--scroll-button-opacity-hover);
+        transform: var(--scroll-button-transform-hover);
+    }
+
+    .floating-sidebar-toggle:active {
+        transform: var(--scroll-button-transform-active);
+    }
+
+    .floating-sidebar-toggle:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .floating-sidebar-toggle {
+            width: var(--scroll-button-size-mobile);
+            height: var(--scroll-button-size-mobile);
         }
     }
 

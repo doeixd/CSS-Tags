@@ -601,6 +601,43 @@
         /* --scroll-button-border-radius: 50%; */
 
         /* ---------------------------------------------------------------------
+        SIDEBAR FOOTER COMPONENT
+        --------------------------------------------------------------------- */
+         --sidebar-footer-position: sticky;
+         --sidebar-footer-padding: var(--space-lg);
+         --sidebar-footer-bg: var(--bg-secondary);
+         --sidebar-footer-border: 1px solid var(--border-color);
+         --sidebar-footer-z-index: 10;
+         --sidebar-footer-gap: var(--space-sm);
+
+         /* Footer actions */
+         --sidebar-footer-github-padding: var(--space-sm) var(--space-lg);
+         --sidebar-footer-github-bg: var(--bg-secondary);
+         --sidebar-footer-github-border: 1px solid transparent;
+         --sidebar-footer-github-color: var(--text-primary);
+         --sidebar-footer-github-border-radius: var(--border-radius-lg);
+         --sidebar-footer-github-font-size: var(--font-size-sm);
+         --sidebar-footer-github-font-weight: var(--font-weight-medium);
+         --sidebar-footer-github-width: 2.5rem;
+         --sidebar-footer-github-height: 2.5rem;
+         --sidebar-footer-github-logo-size: 20px;
+         --sidebar-footer-github-hover-bg: var(--bg-hover);
+         --sidebar-footer-github-hover-border-color: var(--accent);
+         --sidebar-footer-github-active-transform: scale(0.98);
+
+         /* Toggle button */
+         --sidebar-footer-toggle-padding: var(--space-sm);
+         --sidebar-footer-toggle-bg: transparent;
+         --sidebar-footer-toggle-border: 1px solid var(--border-color);
+         --sidebar-footer-toggle-color: var(--text-primary);
+         --sidebar-footer-toggle-border-radius: var(--border-radius-md);
+         --sidebar-footer-toggle-width: 2rem;
+         --sidebar-footer-toggle-height: 2rem;
+         --sidebar-footer-toggle-hover-bg: var(--bg-hover);
+         --sidebar-footer-toggle-hover-border-color: var(--accent);
+         --sidebar-footer-toggle-active-transform: scale(0.95);
+
+         /* ---------------------------------------------------------------------
             SEARCH COMPONENT
             --------------------------------------------------------------------- */
         --search-border-radius: var(--border-radius-lg);

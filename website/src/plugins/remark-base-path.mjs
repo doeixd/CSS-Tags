@@ -2,10 +2,12 @@ import { visit } from 'unist-util-visit';
 
 /**
  * Remark plugin to prepend base path to internal links and images in markdown
- * @param {string} base - The base path to prepend (e.g., '/CSS-Tags')
+ * @param {object} options - Options object
+ * @param {string} options.base - The base path to prepend (e.g., '/CSS-Tags')
  * @returns {Function} Transformer function for remark
  */
-export function remarkBasePath(base) {
+export function remarkBasePath(options = {}) {
+  const base = options.base || '';
   // Normalize base to ensure no trailing slash
   const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
 
