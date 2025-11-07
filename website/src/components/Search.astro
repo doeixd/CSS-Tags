@@ -238,44 +238,40 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                             if (searchElement.id === getPrimarySearchElement()?.id) {
                                 setQueryParam("q", query);
                             }
-                            });
+                        });
 
-                            // For header search: handle focus and input to show results
-                            if (
-                            searchElement.dataset.searchVariant === "header"
-                            ) {
+                        // For header search: handle focus and input to show results
+                        if (searchElement.dataset.searchVariant === "header") {
                             const showDrawerIfResults = () => {
                                 const drawer = searchElement.querySelector(
-                                ".pagefind-ui__drawer",
+                                    ".pagefind-ui__drawer",
                                 );
                                 if (drawer) {
-                                setTimeout(() => {
-                                const results =
-                                searchElement.querySelector(
-                                ".pagefind-ui__results",
-                                );
-                                if (
-                                        results &&
+                                    setTimeout(() => {
+                                        const results = searchElement.querySelector(
+                                            ".pagefind-ui__results",
+                                        );
+                                        if (
+                                            results &&
                                             results.children.length > 0
                                         ) {
-                                                    drawer.style.display = "block";
-                                                 }
-                                     }, 100);
-                             }
+                                            drawer.style.display = "block";
+                                        }
+                                    }, 100);
+                                }
                             };
 
-                                input.addEventListener("focus", () => {
-                                    // Show drawer when focusing if there's already content
-                                    if (input.value.trim()) {
-                                        showDrawerIfResults();
-                                    }
-                                });
-
-                                input.addEventListener("input", () => {
-                                    // Show drawer when typing starts and there are results
+                            input.addEventListener("focus", () => {
+                                // Show drawer when focusing if there's already content
+                                if (input.value.trim()) {
                                     showDrawerIfResults();
-                                });
-                            }
+                                }
+                            });
+
+                            input.addEventListener("input", () => {
+                                // Show drawer when typing starts and there are results
+                                showDrawerIfResults();
+                            });
                         }
 
                         // Keyboard navigation for results
