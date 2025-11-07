@@ -207,8 +207,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             })();
         </script>
 
-        <ViewTransitions fallback="none" />
-        <!-- <style is:global data-astro-transition-persist="theme">
+
+        <style is:global data-astro-transition-persist="theme">
             /* Critical theme variables to prevent FOUC during navigation */
             :root {
                 /* Base colors */
@@ -1013,7 +1013,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     font-size: var(--font-size-3xl);
                 }
             }
-        </style> -->
+        </style>
     </head>
     <body>
         <ClientRouter />
