@@ -979,21 +979,30 @@ function isActive(slug: string | undefined) {
         }
     });
 
-    // Prefetch on mousedown for instant navigation (100-200ms faster than waiting for click)
+    // Navigate on mousedown for instant navigation (100-200ms faster than waiting for click)
     function setupInstantNavigation() {
+        const navigate = (window as any).astroNavigate;
+        if (!navigate) return;
+
         document.addEventListener('mousedown', (e) => {
+            // Only trigger on left click (button 0)
+            if (e.button !== 0) return;
+
             const link = (e.target as Element).closest('a[href]');
             if (!link) return;
 
             const href = link.getAttribute('href');
             if (!href || href.startsWith('#') || href.startsWith('http')) return;
 
-            // Prefetch immediately on mousedown
-            const prefetchLink = document.createElement('link');
-            prefetchLink.rel = 'prefetch';
-            prefetchLink.href = href;
-            document.head.appendChild(prefetchLink);
-        }, { passive: true });
+            // Check if it's a nav-link (only navigate on mousedown for sidebar links)
+            if (!link.classList.contains('nav-link')) return;
+
+            // Prevent the default click from also firing
+            e.preventDefault();
+
+            // Navigate immediately on mousedown
+            navigate(href);
+        });
     }
 
     // Update on page load
