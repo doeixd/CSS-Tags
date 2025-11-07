@@ -33,7 +33,7 @@ const { headings = [] } = Astro.props;
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<div class="mobile-header" transition:persist="mobile-header">
+<div class="mobile-header" transition:name="mobile-header" transition:persist>
     <!-- TOC Button (Left) -->
     <button
         class="mobile-header-button toc-button"
@@ -97,7 +97,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 </div>
 
 <!-- Search Overlay -->
-<div class="mobile-search-overlay">
+<div class="mobile-search-overlay" transition:name="mobile-search-overlay" transition:persist>
     <div class="mobile-search-content">
         <div class="mobile-search-header">
             <h2>Search</h2>
@@ -124,7 +124,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <!-- TOC Dropdown Overlay -->
 {tocHeadings.length > 0 && (
-    <div class="mobile-toc-overlay">
+    <div class="mobile-toc-overlay" transition:name="mobile-toc-overlay" transition:persist>
         <div class="mobile-toc-content">
             <div class="mobile-toc-header">
                 <h2>On This Page</h2>
@@ -528,6 +528,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 </style>
 
 <script>
+    // Check if already initialized (for persisted elements)
+    const MOBILE_HEADER_INITIALIZED = '__mobile_header_initialized__';
+
     // Store handler references for cleanup
     let tocButtonHandler: (() => void) | null = null;
     let tocCloseHandler: (() => void) | null = null;
@@ -542,6 +545,48 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     let intersectionObserver: IntersectionObserver | null = null;
 
     function setupMobileHeader() {
+        const mobileHeader = document.querySelector('.mobile-header');
+
+        // Always ensure menu button works, even for persisted elements
+        const menuButton = document.querySelector(".menu-button");
+        const sidebar = document.querySelector(".sidebar");
+        const backdrop = document.querySelector(".mobile-backdrop");
+
+        if (menuButton && sidebar && backdrop) {
+            // Remove old listener if it exists
+            if (menuButtonHandler) {
+                menuButton.removeEventListener("click", menuButtonHandler);
+            }
+
+            // Recreate handler with fresh references
+            const openMenu = () => {
+                sidebar.classList.add("open");
+                backdrop.classList.add("visible");
+                document.body.style.overflow = "hidden";
+            };
+
+            const closeMenu = () => {
+                sidebar.classList.remove("open");
+                backdrop.classList.remove("visible");
+                document.body.style.overflow = "";
+            };
+
+            menuButtonHandler = () => {
+                if (sidebar.classList.contains("open")) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            };
+
+            menuButton.addEventListener("click", menuButtonHandler);
+        }
+
+        // Skip if already initialized (persisted elements keep their other listeners)
+        if (mobileHeader && (mobileHeader as any)[MOBILE_HEADER_INITIALIZED]) {
+            return;
+        }
+
         // Clean up previous listeners to prevent memory leaks
         const tocButton = document.querySelector(".toc-button");
         const tocOverlay = document.querySelector(".mobile-toc-overlay");
@@ -549,7 +594,6 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         const searchButton = document.querySelector(".search-button");
         const searchOverlay = document.querySelector(".mobile-search-overlay");
         const searchClose = document.querySelector(".mobile-search-close");
-        const menuButton = document.querySelector(".menu-button");
 
         if (tocButtonHandler && tocButton) {
             tocButton.removeEventListener("click", tocButtonHandler);
@@ -589,10 +633,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             intersectionObserver = null;
         }
 
-        // Get element references (reusing from cleanup section above)
-        const sidebar = document.querySelector(".sidebar");
-        const backdrop = document.querySelector(".mobile-backdrop");
-
+        // menuButton, sidebar, and backdrop already declared above
         if (!menuButton) return;
 
         // TOC functionality
@@ -780,34 +821,23 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             document.addEventListener("keydown", searchKeyHandler);
         }
 
-        // Menu functionality
-        if (menuButton && sidebar && backdrop) {
-            const openMenu = () => {
-                sidebar.classList.add("open");
-                backdrop.classList.add("visible");
-                document.body.style.overflow = "hidden";
-            };
+        // Menu functionality is already set up at the top of this function
 
-            const closeMenu = () => {
-                sidebar.classList.remove("open");
-                backdrop.classList.remove("visible");
-                document.body.style.overflow = "";
-            };
-
-            menuButtonHandler = () => {
-                if (sidebar.classList.contains("open")) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            };
-
-            menuButton.addEventListener("click", menuButtonHandler);
+        // Mark as initialized to prevent re-initialization on persisted elements
+        if (mobileHeader) {
+            (mobileHeader as any)[MOBILE_HEADER_INITIALIZED] = true;
         }
     }
 
-    // Cleanup on page navigation
+    // Cleanup on page navigation (only if elements are NOT persisted)
     document.addEventListener("astro:before-swap", () => {
+        const mobileHeader = document.querySelector('.mobile-header');
+
+        // Skip cleanup if elements are persisted (they'll keep their listeners)
+        if (mobileHeader && (mobileHeader as any)[MOBILE_HEADER_INITIALIZED]) {
+            return;
+        }
+
         const tocButton = document.querySelector(".toc-button");
         const tocOverlay = document.querySelector(".mobile-toc-overlay");
         const tocClose = document.querySelector(".mobile-toc-close");

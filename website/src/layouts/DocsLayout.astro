@@ -38,7 +38,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     class={theme === "dark" ? "dark-mode" : "light-mode"}
     data-theme={theme}
 >
-        <head transition:persist>
+        <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
@@ -142,10 +142,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     return value === "dark" || value === "light";
                 }
 
-                function isValidAnimationPreference(value) {
-                    return value === "none" || value === "blur-in";
-                }
-
                 // Storage read with graceful degradation
                 function getStorageValue(key) {
                     // Try localStorage first
@@ -186,24 +182,16 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     }
                 }
 
-                // Get animation preference
-                function getAnimationPreference() {
-                    var stored = getStorageValue("animation-preference");
-                    if (isValidAnimationPreference(stored)) {
-                        return stored;
-                    }
-                    return "none"; // Default to no animations
-                }
-
                 // Apply theme immediately
                 var theme = getTheme();
-                var animationPref = getAnimationPreference();
                 var html = document.documentElement;
 
                 html.classList.remove("dark-mode", "light-mode");
                 html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
                 html.setAttribute("data-theme", theme);
-                html.setAttribute("data-animation-preference", animationPref);
+
+                // Disable animations by default for instant navigation
+                html.setAttribute("data-animation-preference", "none");
             })();
         </script>
 
@@ -329,7 +317,21 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: theme-fade-in 0.05s ease-in;
             }
 
-            /* Ensure mobile header, desktop header, and theme toggle stay stable (no animation) */
+            /* Ensure mobile header, desktop header, sidebar, and theme toggle stay stable (no animation) */
+            ::view-transition-group(mobile-header),
+            ::view-transition-group(site-header),
+            ::view-transition-group(header-theme-toggle),
+            ::view-transition-group(sidebar-theme-toggle),
+            ::view-transition-group(sidebar-footer-theme-toggle),
+            ::view-transition-group(sidebar),
+            ::view-transition-group(mobile-backdrop),
+            ::view-transition-group(mobile-search-overlay),
+            ::view-transition-group(mobile-toc-overlay),
+            ::view-transition-group(nav-actions),
+            ::view-transition-group(utility-components) {
+                animation-duration: 0s !important;
+            }
+
             ::view-transition-old(mobile-header),
             ::view-transition-new(mobile-header),
             ::view-transition-old(site-header),
@@ -339,8 +341,22 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             ::view-transition-old(sidebar-theme-toggle),
             ::view-transition-new(sidebar-theme-toggle),
             ::view-transition-old(sidebar-footer-theme-toggle),
-            ::view-transition-new(sidebar-footer-theme-toggle) {
-                animation: none;
+            ::view-transition-new(sidebar-footer-theme-toggle),
+            ::view-transition-old(sidebar),
+            ::view-transition-new(sidebar),
+            ::view-transition-old(mobile-backdrop),
+            ::view-transition-new(mobile-backdrop),
+            ::view-transition-old(mobile-search-overlay),
+            ::view-transition-new(mobile-search-overlay),
+            ::view-transition-old(mobile-toc-overlay),
+            ::view-transition-new(mobile-toc-overlay),
+            ::view-transition-old(nav-actions),
+            ::view-transition-new(nav-actions),
+            ::view-transition-old(utility-components),
+            ::view-transition-new(utility-components) {
+                animation: none !important;
+                animation-duration: 0s !important;
+                mix-blend-mode: normal !important;
             }
 
             @keyframes theme-fade-out {
@@ -479,18 +495,24 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             /* View Transition Animations */
-            /* Default: No animations */
-            ::view-transition-old(root) {
-                animation: none;
+            /* Default: No animations - completely disable for navigation */
+            ::view-transition-group(root) {
+                animation-duration: 0s !important;
             }
 
+            ::view-transition-old(root),
             ::view-transition-new(root) {
-                animation: none;
+                animation: none !important;
+                animation-duration: 0s !important;
             }
 
-            /* Optional: 10ms blur-in animation */
-            html[data-animation-preference="blur-in"] ::view-transition-new(root) {
-                animation: blur-in 10ms ease-in;
+            /* Optional: 10ms blur-in animation - ONLY when explicitly set */
+            html[data-animation-preference="blur-in"]:not(.theme-transitioning) ::view-transition-group(root) {
+                animation-duration: 10ms !important;
+            }
+
+            html[data-animation-preference="blur-in"]:not(.theme-transitioning) ::view-transition-new(root) {
+                animation: blur-in 10ms ease-in !important;
             }
 
             @keyframes blur-in {
@@ -501,22 +523,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 to {
                     filter: blur(0px);
                     opacity: 1;
-                }
-            }
-
-            /* Keep sidebar stable during transitions */
-            ::view-transition-old(sidebar),
-            ::view-transition-new(sidebar) {
-                animation: none;
-                transform: none !important;
-            }
-
-            /* Desktop only: keep sidebar sticky during transitions */
-            @media (min-width: 769px) {
-                ::view-transition-old(sidebar),
-                ::view-transition-new(sidebar) {
-                    position: sticky !important;
-                    top: 0 !important;
                 }
             }
 
@@ -1020,66 +1026,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     <body>
         <ClientRouter />
         <script>
-            import {
-                supportsViewTransitions,
-                transitionEnabledOnThisPage
-            } from 'astro:transitions/client';
-
-            // Debug view transitions
-            console.log('View Transitions supported:', supportsViewTransitions);
-            console.log('Transitions enabled on this page:', transitionEnabledOnThisPage);
-
-            // Monitor navigation performance
-            document.addEventListener('astro:before-preparation', (e) => {
-                console.log('Navigation starting:', e.to.pathname);
-                performance.mark('nav-start');
-            });
-
-            document.addEventListener('astro:after-swap', (e) => {
-                performance.mark('nav-end');
-                const measure = performance.measure('navigation-duration', 'nav-start', 'nav-end');
-                console.log('Navigation completed in:', measure.duration, 'ms');
-            });
-
-            // Log any transition errors
-            document.addEventListener('error', (e) => {
-                if (e.message.includes('view-transition')) {
-                    console.error('View transition error:', e);
-                }
-            });
+            import { navigate } from 'astro:transitions/client';
 
             // Expose navigation function globally for debugging
-            import { navigate } from 'astro:transitions/client';
-            window.astroNavigate = navigate;
+            (window as any).astroNavigate = navigate;
 
-            // Add keyboard shortcuts for navigation testing
-            document.addEventListener('keydown', (e) => {
-                // Ctrl/Cmd + Shift + N for performance test navigation
-                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'N') {
-                    e.preventDefault();
-                    const currentPath = window.location.pathname;
-                    const testPaths = ['/docs/getting-started', '/docs/components', '/docs/layouts'];
-
-                    // Navigate to next test path
-                    const currentIndex = testPaths.findIndex(path => currentPath.includes(path));
-                    const nextIndex = (currentIndex + 1) % testPaths.length;
-                    const nextPath = testPaths[nextIndex];
-
-                    console.log('Performance test navigation to:', nextPath);
-                    navigate(nextPath, { info: 'performance-test' });
-                }
-            });
-
-            // Ensure scripts re-run properly after navigation
-            document.addEventListener('astro:page-load', () => {
-                console.log('Page loaded, re-initializing components');
-
-                // Re-run theme application
-                const theme = localStorage.getItem('theme') || 'light';
-                document.documentElement.classList.remove('light-mode', 'dark-mode');
-                document.documentElement.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
-                document.documentElement.setAttribute('data-theme', theme);
-            });
+            // Theme is already applied by inline script in <head>, no need to reapply on every navigation
         </script>
 
         <!-- Warning for users with JavaScript disabled -->
@@ -1201,11 +1153,13 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         -->
         <MobileHeader headings={headings} />
 
-        <ScrollProgress />
-        <LoadingIndicator />
-        <KeyboardShortcuts />
+        <div transition:name="utility-components" transition:persist>
+            <ScrollProgress />
+            <LoadingIndicator />
+            <KeyboardShortcuts />
+        </div>
         <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
-            <div transition:persist="sidebar">
+            <div transition:name="sidebar" transition:persist>
                 <Navigation
                     currentPath={currentPath}
                     showSidebarFooter={true}
@@ -1228,7 +1182,15 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         </div>
 
         <script>
+            // Store initialization state globally (survives navigation)
+            let sidebarResizeInitialized = false;
+
             function setupSidebarResize() {
+                // Skip if already initialized
+                if (sidebarResizeInitialized) {
+                    return;
+                }
+
                 const handle = document.querySelector(".sidebar-resize-handle");
                 const container = document.querySelector(".docs-container");
                 if (!handle || !container) return;
@@ -1294,6 +1256,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                         );
                     }
                 });
+
+                // Mark as initialized
+                sidebarResizeInitialized = true;
             }
 
             document.addEventListener("DOMContentLoaded", setupSidebarResize);

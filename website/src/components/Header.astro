@@ -114,7 +114,7 @@ const icons = {
 };
 ---
 
-<header class="site-header" transition:persist="site-header">
+<header class="site-header" transition:name="site-header" transition:persist>
   <div class="header-container">
     <!-- Left: Logo / Site Title -->
     <div class="header-left">
@@ -227,8 +227,12 @@ const icons = {
     background: var(--bg-secondary);
     /* backdrop-filter: blur(10px); */ /* Disabled - causing flicker */
     border-bottom: 1px solid var(--border-color);
-    contain: layout style; /* Isolate from document repaints */
+    contain: layout style paint; /* Isolate from document repaints */
+    content-visibility: auto; /* Performance optimization */
     will-change: auto; /* Optimize for no animations */
+    /* Force layer promotion to prevent repaints */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .header-container {
@@ -479,8 +483,17 @@ const icons = {
 </style>
 
 <script>
+  // Check if already initialized (for persisted elements)
+  const HEADER_INITIALIZED = '__header_initialized__';
+
   // Dropdown toggle functionality
   function initDropdowns() {
+    const header = document.querySelector('.site-header');
+
+    // Skip if already initialized (persisted elements keep their listeners)
+    if (header && (header as any)[HEADER_INITIALIZED]) {
+      return;
+    }
     const dropdowns = document.querySelectorAll('.header-dropdown');
 
     dropdowns.forEach((dropdown) => {
@@ -528,22 +541,36 @@ const icons = {
   initDropdowns();
   initHeaderSearchClose();
 
-  // Debug header persistence
-  console.log('Header initialized on page:', window.location.pathname);
-  console.log('Header element:', document.querySelector('.site-header'));
+  // Mark as initialized
+  const header = document.querySelector('.site-header');
+  if (header) {
+    (header as any)[HEADER_INITIALIZED] = true;
+  }
 
-  // Reinitialize after view transitions
+  // Reinitialize after view transitions (only if not already initialized)
   document.addEventListener('astro:after-swap', () => {
-    console.log('Header after swap on page:', window.location.pathname);
-    console.log('Header still exists:', !!document.querySelector('.site-header'));
-    initDropdowns();
-    initHeaderSearchClose();
+    const header = document.querySelector('.site-header');
+
+    // Only reinitialize if not already initialized (persisted)
+    if (!header || !(header as any)[HEADER_INITIALIZED]) {
+      initDropdowns();
+      initHeaderSearchClose();
+      if (header) {
+        (header as any)[HEADER_INITIALIZED] = true;
+      }
+    }
   });
 
-  // Also reinitialize on page load in case of direct navigation
+  // Also reinitialize on page load in case of direct navigation (only if not already initialized)
   document.addEventListener('astro:page-load', () => {
-    console.log('Header on page load:', window.location.pathname);
-    initDropdowns();
-    initHeaderSearchClose();
+    const header = document.querySelector('.site-header');
+
+    if (!header || !(header as any)[HEADER_INITIALIZED]) {
+      initDropdowns();
+      initHeaderSearchClose();
+      if (header) {
+        (header as any)[HEADER_INITIALIZED] = true;
+      }
+    }
   });
 </script>

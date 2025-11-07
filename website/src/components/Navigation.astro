@@ -21,7 +21,7 @@ function isActive(slug: string | undefined) {
 }
 ---
 
-<div class="mobile-backdrop"></div>
+<div class="mobile-backdrop" transition:name="mobile-backdrop" transition:persist></div>
 
 <!-- MOBILE NAVIGATION OPTION 2: Standalone Floating Menu Button -->
 <!--
@@ -57,10 +57,10 @@ function isActive(slug: string | undefined) {
 </button>
 -->
 
-<nav class="sidebar" role="navigation" aria-label="Main navigation" style="view-transition-name: sidebar;">
+<nav class="sidebar" role="navigation" aria-label="Main navigation">
     <div class="nav-header">
         <a href={buildHref(base)} class="site-title">CSS Tags</a>
-        <div class="nav-actions" transition:persist="nav-actions">
+        <div class="nav-actions" transition:name="nav-actions" transition:persist>
             <ThemeToggle transitionName="sidebar-theme-toggle" />
             <a
                 href="https://github.com/doeixd/CSS-Tags"
@@ -515,7 +515,9 @@ function isActive(slug: string | undefined) {
         text-decoration: none;
         border-radius: var(--nav-link-border-radius, var(--border-radius-md));
         font-size: var(--nav-link-font-size, var(--font-size-base));
-        transition: background-color var(--transition-fast);
+        transition: background-color var(--transition-fast),
+                    color var(--transition-fast),
+                    font-weight var(--transition-fast);
     }
 
     .nav-link:hover {
@@ -588,23 +590,45 @@ function isActive(slug: string | undefined) {
 </style>
 
 <script>
+    // Check if sidebar is initialized (for persisted elements)
+    const SIDEBAR_INITIALIZED = '__sidebar_initialized__';
+
+    // Cache nav links and their paths for fast lookup (avoids repeated DOM queries)
+    let cachedLinks: Array<{ element: Element; path: string }> = [];
+    let linksCached = false;
+
+    function cacheNavLinks() {
+        if (linksCached) return;
+
+        const links = document.querySelectorAll(".nav-link");
+        const baseUrl = import.meta.env.BASE_URL;
+
+        cachedLinks = Array.from(links).map(link => ({
+            element: link,
+            path: (link.getAttribute("href") || "")
+                .replace(baseUrl, "")
+                .replace(/\/$/, "")
+        }));
+
+        linksCached = true;
+    }
+
     function updateActiveLink() {
+        // Use cached links if available, otherwise cache them now
+        if (!linksCached) {
+            cacheNavLinks();
+        }
+
         const currentPath = window.location.pathname
             .replace(import.meta.env.BASE_URL, "")
             .replace(/\/$/, "");
-        const links = document.querySelectorAll(".nav-link");
 
-        links.forEach((link) => {
-            const href = link.getAttribute("href") || "";
-            const linkPath = href
-                .replace(import.meta.env.BASE_URL, "")
-                .replace(/\/$/, "");
-
-            // Exact match only
-            if (linkPath === currentPath) {
-                link.classList.add("active");
+        // Iterate cached links (no DOM query needed)
+        cachedLinks.forEach(({ element, path }) => {
+            if (path === currentPath) {
+                element.classList.add("active");
             } else {
-                link.classList.remove("active");
+                element.classList.remove("active");
             }
         });
     }
@@ -632,6 +656,11 @@ function isActive(slug: string | undefined) {
         const toggle = document.querySelector(".mobile-menu-toggle");
         const sidebar = document.querySelector(".sidebar");
         const backdrop = document.querySelector(".mobile-backdrop");
+
+        // Skip if sidebar already initialized (persisted)
+        if (sidebar && (sidebar as any)[SIDEBAR_INITIALIZED]) {
+            return;
+        }
 
         // Clean up old event listeners
         if (mobileMenuHandlers.toggleHandler && toggle) {
@@ -795,6 +824,11 @@ function isActive(slug: string | undefined) {
         const sidebar = document.querySelector(".sidebar");
         if (!sidebar) return;
 
+        // Skip if sidebar already initialized (persisted)
+        if ((sidebar as any)[SIDEBAR_INITIALIZED]) {
+            return;
+        }
+
         // Clean up old event listener
         if (sidebarClickHandler) {
             sidebar.removeEventListener("click", sidebarClickHandler);
@@ -945,22 +979,50 @@ function isActive(slug: string | undefined) {
         }
     });
 
+    // Prefetch on mousedown for instant navigation (100-200ms faster than waiting for click)
+    function setupInstantNavigation() {
+        document.addEventListener('mousedown', (e) => {
+            const link = (e.target as Element).closest('a[href]');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http')) return;
+
+            // Prefetch immediately on mousedown
+            const prefetchLink = document.createElement('link');
+            prefetchLink.rel = 'prefetch';
+            prefetchLink.href = href;
+            document.head.appendChild(prefetchLink);
+        }, { passive: true });
+    }
+
     // Update on page load
     document.addEventListener("DOMContentLoaded", () => {
         updateActiveLink();
         setupMobileMenu();
         setupCollapsibleSections();
         autoExpandActiveSection();
+        setupInstantNavigation();
+
+        // Mark sidebar as initialized
+        const sidebar = document.querySelector(".sidebar");
+        if (sidebar) {
+            (sidebar as any)[SIDEBAR_INITIALIZED] = true;
+        }
     });
 
     // Update after view transitions
     document.addEventListener("astro:after-swap", () => {
-        // Small delay to ensure DOM is fully updated
-        setTimeout(() => {
-            updateActiveLink();
+        // Only update active link on navigation (sidebar is persisted)
+        updateActiveLink();
+
+        // Only setup if not already initialized (for non-persisted cases)
+        const sidebar = document.querySelector(".sidebar");
+        if (sidebar && !(sidebar as any)[SIDEBAR_INITIALIZED]) {
             setupMobileMenu();
             setupCollapsibleSections();
             autoExpandActiveSection();
-        }, 0);
+            (sidebar as any)[SIDEBAR_INITIALIZED] = true;
+        }
     });
 </script>
