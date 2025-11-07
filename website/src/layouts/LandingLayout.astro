@@ -752,6 +752,46 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     </head>
     <body>
         <ClientRouter />
+        <script>
+            import {
+                supportsViewTransitions,
+                transitionEnabledOnThisPage
+            } from 'astro:transitions/client';
+
+            // Debug view transitions
+            console.log('View Transitions supported:', supportsViewTransitions);
+            console.log('Transitions enabled on this page:', transitionEnabledOnThisPage);
+
+            // Monitor navigation performance
+            document.addEventListener('astro:before-preparation', (e) => {
+                console.log('Navigation starting:', e.to.pathname);
+                performance.mark('nav-start');
+            });
+
+            document.addEventListener('astro:after-swap', (e) => {
+                performance.mark('nav-end');
+                const measure = performance.measure('navigation-duration', 'nav-start', 'nav-end');
+                console.log('Navigation completed in:', measure.duration, 'ms');
+            });
+
+            // Log any transition errors
+            document.addEventListener('error', (e) => {
+                if (e.message.includes('view-transition')) {
+                    console.error('View transition error:', e);
+                }
+            });
+
+            // Ensure scripts re-run properly after navigation
+            document.addEventListener('astro:page-load', () => {
+                console.log('Page loaded, re-initializing components');
+
+                // Re-run theme application
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.classList.remove('light-mode', 'dark-mode');
+                document.documentElement.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
+                document.documentElement.setAttribute('data-theme', theme);
+            });
+        </script>
 
         <!-- Warning for users with JavaScript disabled -->
         <noscript>

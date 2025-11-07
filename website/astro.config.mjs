@@ -14,11 +14,11 @@ export default defineConfig({
 	site: 'https://doeixd.github.io',
 	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
 	build: {
-		inlineStylesheets: 'always'
+	inlineStylesheets: 'always'
 	},
 	prefetch: {
-		prefetchAll: true,
-		defaultStrategy: 'viewport',
+	prefetchAll: true,
+	defaultStrategy: 'viewport',
 	},
 	experimental: {
 		clientPrerender: true,

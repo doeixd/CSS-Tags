@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions, ClientRouter } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import Navigation from "../components/Navigation.astro";
 import MobileHeader from "../components/MobileHeader.astro";
 import Header from "../components/Header.astro";
@@ -38,7 +38,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     class={theme === "dark" ? "dark-mode" : "light-mode"}
     data-theme={theme}
 >
-    <head>
+        <head transition:persist>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
@@ -329,15 +329,17 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: theme-fade-in 0.05s ease-in;
             }
 
-            /* Ensure mobile header and theme toggle stay stable (no animation) */
+            /* Ensure mobile header, desktop header, and theme toggle stay stable (no animation) */
             ::view-transition-old(mobile-header),
             ::view-transition-new(mobile-header),
+            ::view-transition-old(site-header),
+            ::view-transition-new(site-header),
             ::view-transition-old(header-theme-toggle),
-::view-transition-new(header-theme-toggle),
-::view-transition-old(sidebar-theme-toggle),
-::view-transition-new(sidebar-theme-toggle),
-::view-transition-old(sidebar-footer-theme-toggle),
-::view-transition-new(sidebar-footer-theme-toggle) {
+            ::view-transition-new(header-theme-toggle),
+            ::view-transition-old(sidebar-theme-toggle),
+            ::view-transition-new(sidebar-theme-toggle),
+            ::view-transition-old(sidebar-footer-theme-toggle),
+            ::view-transition-new(sidebar-footer-theme-toggle) {
                 animation: none;
             }
 
@@ -486,9 +488,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: none;
             }
 
-            /* Optional: 40ms blur-in animation */
+            /* Optional: 10ms blur-in animation */
             html[data-animation-preference="blur-in"] ::view-transition-new(root) {
-                animation: blur-in 40ms ease-in;
+                animation: blur-in 10ms ease-in;
             }
 
             @keyframes blur-in {
@@ -543,15 +545,15 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             /* Header styles for persistence during navigation */
             .site-header {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                height: var(--header-height) !important;
-                background: var(--bg-secondary) !important;
-                border-bottom: 1px solid var(--border-color) !important;
-                z-index: 1003 !important;
-                transition: none !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--header-height);
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border-color);
+                z-index: 1003;
+                transition: none;
             }
 
             .header-container {
@@ -1017,6 +1019,68 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     </head>
     <body>
         <ClientRouter />
+        <script>
+            import {
+                supportsViewTransitions,
+                transitionEnabledOnThisPage
+            } from 'astro:transitions/client';
+
+            // Debug view transitions
+            console.log('View Transitions supported:', supportsViewTransitions);
+            console.log('Transitions enabled on this page:', transitionEnabledOnThisPage);
+
+            // Monitor navigation performance
+            document.addEventListener('astro:before-preparation', (e) => {
+                console.log('Navigation starting:', e.to.pathname);
+                performance.mark('nav-start');
+            });
+
+            document.addEventListener('astro:after-swap', (e) => {
+                performance.mark('nav-end');
+                const measure = performance.measure('navigation-duration', 'nav-start', 'nav-end');
+                console.log('Navigation completed in:', measure.duration, 'ms');
+            });
+
+            // Log any transition errors
+            document.addEventListener('error', (e) => {
+                if (e.message.includes('view-transition')) {
+                    console.error('View transition error:', e);
+                }
+            });
+
+            // Expose navigation function globally for debugging
+            import { navigate } from 'astro:transitions/client';
+            window.astroNavigate = navigate;
+
+            // Add keyboard shortcuts for navigation testing
+            document.addEventListener('keydown', (e) => {
+                // Ctrl/Cmd + Shift + N for performance test navigation
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'N') {
+                    e.preventDefault();
+                    const currentPath = window.location.pathname;
+                    const testPaths = ['/docs/getting-started', '/docs/components', '/docs/layouts'];
+
+                    // Navigate to next test path
+                    const currentIndex = testPaths.findIndex(path => currentPath.includes(path));
+                    const nextIndex = (currentIndex + 1) % testPaths.length;
+                    const nextPath = testPaths[nextIndex];
+
+                    console.log('Performance test navigation to:', nextPath);
+                    navigate(nextPath, { info: 'performance-test' });
+                }
+            });
+
+            // Ensure scripts re-run properly after navigation
+            document.addEventListener('astro:page-load', () => {
+                console.log('Page loaded, re-initializing components');
+
+                // Re-run theme application
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.classList.remove('light-mode', 'dark-mode');
+                document.documentElement.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
+                document.documentElement.setAttribute('data-theme', theme);
+            });
+        </script>
 
         <!-- Warning for users with JavaScript disabled -->
         <noscript>
@@ -1152,7 +1216,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             </div>
             <div class="sidebar-resize-handle"></div>
             <div class="content-wrapper">
-                <main class="content" id="main-content" data-pagefind-body>
+                <main class="content" id="main-content" data-pagefind-body >
                     <slot />
                 </main>
             </div>

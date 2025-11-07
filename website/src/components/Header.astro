@@ -216,17 +216,19 @@ const icons = {
   </div>
 </header>
 
-<style>
+<style is:inline>
   .site-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: var(--header-height);
-    background: var(--header-bg);
-    border-bottom: var(--header-border);
-    z-index: var(--header-z-index);
-    transition: background var(--transition-normal), border-color var(--transition-normal);
+    z-index: 1003;
+    background: var(--bg-secondary);
+    /* backdrop-filter: blur(10px); */ /* Disabled - causing flicker */
+    border-bottom: 1px solid var(--border-color);
+    contain: layout style; /* Isolate from document repaints */
+    will-change: auto; /* Optimize for no animations */
   }
 
   .header-container {
@@ -526,8 +528,21 @@ const icons = {
   initDropdowns();
   initHeaderSearchClose();
 
+  // Debug header persistence
+  console.log('Header initialized on page:', window.location.pathname);
+  console.log('Header element:', document.querySelector('.site-header'));
+
   // Reinitialize after view transitions
   document.addEventListener('astro:after-swap', () => {
+    console.log('Header after swap on page:', window.location.pathname);
+    console.log('Header still exists:', !!document.querySelector('.site-header'));
+    initDropdowns();
+    initHeaderSearchClose();
+  });
+
+  // Also reinitialize on page load in case of direct navigation
+  document.addEventListener('astro:page-load', () => {
+    console.log('Header on page load:', window.location.pathname);
     initDropdowns();
     initHeaderSearchClose();
   });
