@@ -197,6 +197,92 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
         <ViewTransitions fallback="none" />
         <style is:global data-astro-transition-persist="theme">
+            /* Critical theme variables to prevent FOUC during navigation */
+            :root {
+                /* Base colors */
+                --accent: #0066cc;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+
+                /* Selection & accent */
+                --accent-color: var(--accent);
+                --selection-bg: var(--accent-light);
+                --selection-fg: var(--accent-dark);
+
+                /* Content styling */
+                --strong-color-light: var(--text-primary);
+                --strong-color-dark: hsl(214 14% 100% / 1);
+                --italic-color-light: var(--text-secondary);
+                --italic-color-dark: hsl(214 14% 80% / 0.8);
+                --link-color-light: var(--accent);
+                --link-color-dark: #77b2ed;
+
+                /* Inline code styling */
+                --inline-code-bg-light: #f3f5f7;
+                --inline-code-bg-dark: #2d2b2b;
+                --inline-code-color-light: hsl(0 0% 30%);
+                --inline-code-color-dark: hsl(214 14% 85%);
+                --inline-code-border-light: hsl(0 0% 90%);
+                --inline-code-border-dark: hsl(217 19% 25%);
+                --inline-code-padding: 0.1em 0.4em;
+                --inline-code-border-radius: 3px;
+                --inline-code-font-size: 0.9em;
+
+                /* Focus styles */
+                --outline-width: 2px;
+                --outline-offset: 2px;
+                --focus-outline: var(--outline-width) solid var(--accent);
+                --focus-outline-offset: var(--outline-offset);
+                --focus-border-radius: 2px;
+
+                /* Layout */
+                --min-mobile-width: 320px;
+            }
+
+            /* Dark mode system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode) {
+                    --text-primary: #e1e4e8;
+                    --text-secondary: #8b949e;
+                    --bg-primary: #171717;
+                    --bg-secondary: #1a1a1a;
+                    --bg-hover: #2d2d2d;
+                    --border-color: #333;
+                    --accent-light: #58a6ff;
+                    --accent-dark: #1a3a52;
+                }
+            }
+
+            /* Manual dark mode override */
+            :root.dark-mode {
+                --text-primary: #e1e4e8;
+                --text-secondary: #8b949e;
+                --bg-primary: #171717;
+                --bg-secondary: #1a1a1a;
+                --bg-hover: #2d2d2d;
+                --border-color: #333;
+                --accent-light: #58a6ff;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Manual light mode override */
+            :root.light-mode {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
             /* Disable all CSS transitions during theme changes */
             html.theme-transitioning *,
             html.theme-transitioning *::before,
