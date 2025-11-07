@@ -208,33 +208,49 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 
                         // For header search: handle focus and input to show results
                         if (searchElement.dataset.searchVariant === "header") {
-                            const showDrawerIfResults = () => {
-                                const drawer = searchElement.querySelector(
-                                    ".pagefind-ui__drawer",
-                                );
-                                if (drawer) {
-                                    setTimeout(() => {
-                                        const results = searchElement.querySelector(
-                                            ".pagefind-ui__results",
-                                        );
-                                        if (
-                                            results &&
-                                            results.children.length > 0
-                                        ) {
-                                            drawer.style.display = "block";
-                                        }
-                                    }, 100);
-                                }
-                            };
+                        console.log('Setting up header search drawer logic for:', elementId);
 
-                            input.addEventListener("focus", () => {
-                                // Show drawer when focusing if there's already content
-                                if (input.value.trim()) {
-                                    showDrawerIfResults();
-                                }
+                        const showDrawerIfResults = () => {
+                        const drawer = searchElement.querySelector(
+                        ".pagefind-ui__drawer",
+                        );
+                        console.log('Checking drawer:', drawer, 'for element:', elementId);
+                        if (drawer) {
+                        setTimeout(() => {
+                        const results = searchElement.querySelector(
+                        ".pagefind-ui__results",
+                        );
+                        console.log('Results element:', results, 'for element:', elementId);
+                        console.log('Results children:', results ? Array.from(results.children) : [], 'for element:', elementId);
+                        console.log('Results children length:', results ? results.children.length : 0, 'for element:', elementId);
+
+                        // Also check for any result elements that might be hidden
+                        const allResults = searchElement.querySelectorAll('.pagefind-ui__result');
+                        console.log('All result elements found:', allResults.length, 'for element:', elementId);
+
+                        if (
+                            results &&
+                                results.children.length > 0
+                                ) {
+                                        console.log('Showing drawer for:', elementId);
+                                            drawer.style.display = "block";
+                                    } else {
+                                        console.log('No results to show drawer for:', elementId);
+                                    }
+                            }, 100);
+                        }
+                        };
+
+                        input.addEventListener("focus", () => {
+                                console.log('Header search focused, value:', input.value, 'for element:', elementId);
+                            // Show drawer when focusing if there's already content
+                        if (input.value.trim()) {
+                            showDrawerIfResults();
+                            }
                             });
 
-                            input.addEventListener("input", () => {
+                            input.addEventListener("input", (e) => {
+                                console.log('Header search input:', e.target.value, 'for element:', elementId);
                                 // Show drawer when typing starts and there are results
                                 showDrawerIfResults();
                             });
@@ -410,70 +426,48 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
         initSearch();
     });
 
-    // Re-initialize after view transitions
+    // Handle navigation events
     document.addEventListener("astro:after-swap", () => {
-        // Close search results drawer if we navigated from a search result
-        const searchElements = document.querySelectorAll('[id$="-search"]');
-        searchElements.forEach((searchElement) => {
-            if (searchElement._navigatingFromResult) {
-                const drawer = searchElement.querySelector(".pagefind-ui__drawer");
-                if (drawer) {
-                    drawer.style.display = "none";
-                }
-                // Clear the flag
-                delete searchElement._navigatingFromResult;
-        }
+    // Close search results drawer if we navigated from a search result
+    const searchElements = document.querySelectorAll('[id$="-search"]');
+    searchElements.forEach((searchElement) => {
+    if (searchElement._navigatingFromResult) {
+    const drawer = searchElement.querySelector(".pagefind-ui__drawer");
+    if (drawer) {
+    drawer.style.display = "none";
+    }
+    // Clear the flag
+    delete searchElement._navigatingFromResult;
+    }
+        });
     });
-
-        initSearch();
 
         // After initialization, sync URL query with primary search
         setTimeout(() => {
-            const primarySearch = getPrimarySearchElement();
-            if (primarySearch) {
-                const input = primarySearch.querySelector(".pagefind-ui__search-input") as HTMLInputElement;
-                const urlQuery = getQueryParam("q") || "";
-                if (input && input.value !== urlQuery) {
-                    input.value = urlQuery;
-                    if (urlQuery) {
-                        input.dispatchEvent(new Event("input", { bubbles: true }));
+        const primarySearch = getPrimarySearchElement();
+        if (primarySearch) {
+            const input = primarySearch.querySelector(".pagefind-ui__search-input") as HTMLInputElement;
+            const urlQuery = getQueryParam("q") || "";
+            if (input && input.value !== urlQuery) {
+                input.value = urlQuery;
+                if (urlQuery) {
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
 
-                        // Re-show drawer for header search if there's a query
-                        if (primarySearch.dataset.searchVariant === "header") {
-                            setTimeout(() => {
-                                const drawer = primarySearch.querySelector(".pagefind-ui__drawer") as HTMLElement;
-                                if (drawer) {
-                                    drawer.style.display = "block";
-                                }
-                            }, 300);
-                        }
+                    // Re-show drawer for header search if there's a query
+                    if (primarySearch.dataset.searchVariant === "header") {
+                        setTimeout(() => {
+                            const drawer = primarySearch.querySelector(".pagefind-ui__drawer") as HTMLElement;
+                            if (drawer) {
+                                drawer.style.display = "block";
+                            }
+                        }, 300);
                     }
+                }
         }
         }
         }, 200);
-    });
 
-    // Cleanup click outside handlers and observers on page navigation
-    document.addEventListener("astro:before-swap", () => {
-        const searchElements = document.querySelectorAll('[id$="-search"]');
-        searchElements.forEach((searchElement) => {
-            if (searchElement._clickOutsideHandler) {
-                document.removeEventListener(
-                    "click",
-                    searchElement._clickOutsideHandler,
-                );
-                delete searchElement._clickOutsideHandler;
-            }
-            if (searchElement._drawerObserver) {
-                searchElement._drawerObserver.disconnect();
-                delete searchElement._drawerObserver;
-            }
-            if (searchElement._resultsObserver) {
-                searchElement._resultsObserver.disconnect();
-                delete searchElement._resultsObserver;
-            }
-        });
-    });
+    // No cleanup needed since we're not reinitializing
 </script>
 
 <style is:global>

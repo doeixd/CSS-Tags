@@ -227,9 +227,9 @@ const icons = {
     background: var(--bg-secondary);
     /* backdrop-filter: blur(10px); */ /* Disabled - causing flicker */
     border-bottom: 1px solid var(--border-color);
-    contain: layout style paint; /* Isolate from document repaints */
-    content-visibility: auto; /* Performance optimization */
-    will-change: auto; /* Optimize for no animations */
+    /* contain: layout style paint; Isolate from document repaints */
+    /* content-visibility: auto; Performance optimization */
+    /* will-change: auto; Optimize for no animations */
     /* Force layer promotion to prevent repaints */
     transform: translateZ(0);
     backface-visibility: hidden;
