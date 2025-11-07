@@ -13,9 +13,9 @@ import { h } from 'hastscript';
 export default defineConfig({
 	site: 'https://doeixd.github.io',
 	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
-  // build: {
-	// 	// inlineStylesheets: 'never',
-	// },
+  build: {
+    inlineStylesheets: 'auto',
+  },
 	prefetch: {
 		prefetchAll: true,
 		defaultStrategy: 'viewport',
