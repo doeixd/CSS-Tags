@@ -74,7 +74,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         />
 
         <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
-        <style is:inline>
+        <!-- <style is:inline>
             /* Critical color variables - Light mode defaults */
             :root {
                 --text-primary: #1a1a1a;
@@ -132,7 +132,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 color: var(--text-primary);
                 margin: 0;
             }
-        </style>
+        </style> -->
 
         <!-- Theme FOUC prevention for cached/serverless pages -->
         <script is:inline>
@@ -208,7 +208,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         </script>
 
         <ViewTransitions fallback="none" />
-        <style is:global data-astro-transition-persist="theme">
+        <!-- <style is:global data-astro-transition-persist="theme">
             /* Critical theme variables to prevent FOUC during navigation */
             :root {
                 /* Base colors */
@@ -1013,7 +1013,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     font-size: var(--font-size-3xl);
                 }
             }
-        </style>
+        </style> -->
     </head>
     <body>
         <ClientRouter />
