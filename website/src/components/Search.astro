@@ -8,7 +8,6 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
 <div
     class={`search-container search-container--${variant}`}
     style={variant === 'header' ? `view-transition-name: search;` : ''}
-    transition:persist={`search-${variant}`}
 >
     <div id={searchId} data-search-variant={variant}></div>
 </div>
@@ -39,24 +38,6 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
             document.querySelector("#mobile-search") ||
             document.querySelector("#sidebar-search")
         );
-    }
-
-    // Save search input value to sessionStorage
-    function saveSearchValue(searchElement, value) {
-        try {
-            sessionStorage.setItem(`search-${searchElement.id}`, value);
-        } catch (e) {
-            // Ignore storage errors
-        }
-    }
-
-    // Restore search input value from sessionStorage
-    function restoreSearchValue(searchElement) {
-        try {
-            return sessionStorage.getItem(`search-${searchElement.id}`) || "";
-        } catch (e) {
-            return "";
-        }
     }
 
     async function initSearch() {
@@ -192,28 +173,18 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                         ".pagefind-ui__search-input",
                     );
                     if (input) {
-                        // Restore saved search value first
-                        const savedValue = restoreSearchValue(searchElement);
-                        if (savedValue) {
-                            input.value = savedValue;
-                            // Trigger search to show results
-                            setTimeout(() => {
-                                input.dispatchEvent(new Event("input", { bubbles: true }));
-                            }, 50);
-                        }
-
                         // Only sync URL for the primary search element
                         if (
                             searchElement.id === getPrimarySearchElement()?.id
                         ) {
-                            // Get initial query from URL (takes precedence over saved value)
+                            // Get initial query from URL
                             const initialQuery = getQueryParam("q") || "";
 
                             // Set initial query if present
                             if (initialQuery) {
-                                input.value = initialQuery;
-                                // Trigger search
                                 setTimeout(() => {
+                                    input.value = initialQuery;
+                                    // Trigger search
                                     input.dispatchEvent(
                                         new Event("input", { bubbles: true }),
                                     );
@@ -227,18 +198,13 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
                                     }, 200);
                                 }, 100);
                             }
-                        }
 
-                        // Save search value and update URL on input changes
-                        input.addEventListener("input", (e) => {
-                            const query = e.target.value.trim();
-                            saveSearchValue(searchElement, query);
-
-                            // Only sync URL for the primary search element
-                            if (searchElement.id === getPrimarySearchElement()?.id) {
+                            // Input handler - update URL
+                            input.addEventListener("input", (e) => {
+                                const query = e.target.value.trim();
                                 setQueryParam("q", query);
-                            }
-                        });
+                            });
+                        }
 
                         // For header search: handle focus and input to show results
                         if (searchElement.dataset.searchVariant === "header") {

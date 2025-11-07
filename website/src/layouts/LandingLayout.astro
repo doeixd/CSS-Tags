@@ -544,15 +544,15 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             /* Header styles for persistence during navigation */
             .site-header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: var(--header-height);
-                background: var(--header-bg, var(--bg-secondary));
-                border-bottom: var(--header-border, 1px solid var(--border-color));
-                z-index: var(--header-z-index, 1003);
-                transition: background var(--transition-normal), border-color var(--transition-normal);
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                height: var(--header-height) !important;
+                background: var(--bg-secondary) !important;
+                border-bottom: 1px solid var(--border-color) !important;
+                z-index: 1003 !important;
+                transition: none !important;
             }
 
             .header-container {
