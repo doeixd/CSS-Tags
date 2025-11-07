@@ -119,6 +119,46 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 background: var(--bg-primary);
                 color: var(--text-primary);
                 margin: 0;
+                /* Header spacing - critical for layout */
+                padding-top: var(--header-height, 4rem);
+                font-family: "Aptos Display", system-ui, sans-serif;
+                line-height: 1.6;
+                overflow-x: hidden;
+                min-width: 320px;
+            }
+
+            /* Header critical styles */
+            .site-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--header-height, 4rem);
+                background: var(--bg-secondary, #f8f9fa);
+                border-bottom: 1px solid var(--border-color, #e1e4e8);
+                z-index: 1003;
+            }
+
+            .header-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 100%;
+                padding: 0 var(--space-2xl, 2rem);
+                max-width: 100%;
+                margin: 0 auto;
+                gap: var(--space-lg, 1rem);
+            }
+
+            /* Mobile adjustments */
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 0;
+                }
+
+                .site-header {
+                    display: none;
+                }
             }
         </style>
 
@@ -540,6 +580,97 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             ::view-transition-new(site-header) {
                 animation: none;
                 transform: none !important;
+            }
+
+            /* Header styles for persistence during navigation */
+            .site-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--header-height);
+                background: var(--header-bg, var(--bg-secondary));
+                border-bottom: var(--header-border, 1px solid var(--border-color));
+                z-index: var(--header-z-index, 1003);
+                transition: background var(--transition-normal), border-color var(--transition-normal);
+            }
+
+            .header-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 100%;
+                padding: 0 var(--header-padding-x, var(--space-2xl));
+                max-width: var(--header-max-width, 100%);
+                margin: 0 auto;
+                gap: var(--space-lg);
+            }
+
+            .header-left {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                min-width: 170px;
+            }
+
+            .header-site-title {
+                font-size: var(--font-size-xl);
+                font-weight: var(--font-weight-semibold);
+                color: var(--text-primary);
+                text-decoration: none;
+                transition: color var(--transition-fast);
+            }
+
+            .header-site-title:hover {
+                color: var(--accent);
+            }
+
+            .header-center {
+                flex: 1;
+                max-width: 400px;
+                margin: 0 var(--space-lg);
+            }
+
+            .header-search {
+                position: relative;
+                width: 100%;
+            }
+
+            .header-right {
+                display: flex;
+                align-items: center;
+                gap: var(--space-sm);
+                flex-shrink: 0;
+            }
+
+            .header-icon-links {
+                display: flex;
+                align-items: center;
+                gap: var(--space-xs);
+            }
+
+            .header-icon-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                color: var(--text-secondary);
+                text-decoration: none;
+                border-radius: var(--border-radius-md);
+                transition: all var(--transition-fast);
+            }
+
+            .header-icon-link:hover {
+                color: var(--text-primary);
+                background: var(--bg-hover);
+            }
+
+            /* Hide header on mobile */
+            @media (max-width: 768px) {
+                .site-header {
+                    display: none;
+                }
             }
 
             /* Header spacing */
