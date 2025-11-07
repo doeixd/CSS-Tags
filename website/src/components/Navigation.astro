@@ -994,8 +994,12 @@ function isActive(slug: string | undefined) {
             const href = link.getAttribute('href');
             if (!href || href.startsWith('#') || href.startsWith('http')) return;
 
-            // Check if it's a nav-link (only navigate on mousedown for sidebar links)
-            if (!link.classList.contains('nav-link')) return;
+            // Check if it's a nav-link, prev-link, or next-link
+            const isNavLink = link.classList.contains('nav-link') ||
+                            link.classList.contains('prev-link') ||
+                            link.classList.contains('next-link');
+
+            if (!isNavLink) return;
 
             // Prevent the default click from also firing
             e.preventDefault();
