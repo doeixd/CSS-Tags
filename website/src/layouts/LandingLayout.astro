@@ -119,46 +119,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 background: var(--bg-primary);
                 color: var(--text-primary);
                 margin: 0;
-                /* Header spacing - critical for layout */
-                padding-top: var(--header-height, 4rem);
-                font-family: "Aptos Display", system-ui, sans-serif;
-                line-height: 1.6;
-                overflow-x: hidden;
-                min-width: 320px;
-            }
-
-            /* Header critical styles */
-            .site-header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: var(--header-height, 4rem);
-                background: var(--bg-secondary, #f8f9fa);
-                border-bottom: 1px solid var(--border-color, #e1e4e8);
-                z-index: 1003;
-            }
-
-            .header-container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 100%;
-                padding: 0 var(--space-2xl, 2rem);
-                max-width: 100%;
-                margin: 0 auto;
-                gap: var(--space-lg, 1rem);
-            }
-
-            /* Mobile adjustments */
-            @media (max-width: 768px) {
-                body {
-                    padding-top: 0;
-                }
-
-                .site-header {
-                    display: none;
-                }
             }
         </style>
 
