@@ -290,14 +290,24 @@ function isActive(slug: string | undefined) {
         transition: transform var(--transition-nav);
     }
 
-    /* Hide resize handle when sidebar is hidden */
-    .sidebar.sidebar-hidden ~ .sidebar-resize-handle {
-        display: none;
-    }
-
     .sidebar.sidebar-revealed {
         transform: translateX(0);
         transition: transform var(--transition-fast);
+    }
+
+    /* Hide/show resize handle based on sidebar state - using :has() selector */
+    .docs-container:has(.sidebar-hidden) .sidebar-resize-handle,
+    .docs-container:has(.sidebar.sidebar-hidden) .sidebar-resize-handle {
+        display: none !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .docs-container:not(:has(.sidebar-hidden)) .sidebar-resize-handle,
+    .docs-container:has(.sidebar:not(.sidebar-hidden)) .sidebar-resize-handle {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     /* Floating sidebar toggle button - matches scroll-to-top button style */

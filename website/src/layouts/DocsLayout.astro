@@ -287,7 +287,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             /* Disable all CSS transitions during theme changes */
-            html.theme-transitioning *,
+            html.theme-transitioning *
             html.theme-transitioning *::before,
             html.theme-transitioning *::after {
                 transition: none !important;
@@ -296,7 +296,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             /* Theme transition: Instant switch for speed */
             html.theme-transitioning ::view-transition-old(root),
             html.theme-transitioning ::view-transition-new(root) {
-                animation: none;
+                animation: none !important;
                 mix-blend-mode: normal;
             }
 
@@ -532,6 +532,22 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: none;
                 transform: none !important;
                 opacity: 1 !important;
+            }
+
+            /* Ensure nav links can transition even during view transitions */
+            .nav-link {
+                transition: background-color var(--transition-fast),
+                            color var(--transition-fast),
+                            font-weight var(--transition-fast) !important;
+            }
+
+            /* Prevent view transition from interfering with nav link transitions */
+            @view-transition {
+                .nav-link {
+                    transition: background-color var(--transition-fast),
+                                color var(--transition-fast),
+                                font-weight var(--transition-fast) !important;
+                }
             }
 
             ::view-transition-old(main) {

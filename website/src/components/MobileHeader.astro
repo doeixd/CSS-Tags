@@ -553,12 +553,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         const backdrop = document.querySelector(".mobile-backdrop");
 
         if (menuButton && sidebar && backdrop) {
-            // Remove old listener if it exists
-            if (menuButtonHandler) {
-                menuButton.removeEventListener("click", menuButtonHandler);
-            }
+            // Remove ALL click listeners by cloning the button
+            const newMenuButton = menuButton.cloneNode(true) as HTMLElement;
+            menuButton.parentNode?.replaceChild(newMenuButton, menuButton);
 
-            // Recreate handler with fresh references
+            // Create handler with fresh references
             const openMenu = () => {
                 sidebar.classList.add("open");
                 backdrop.classList.add("visible");
@@ -579,7 +578,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 }
             };
 
-            menuButton.addEventListener("click", menuButtonHandler);
+            newMenuButton.addEventListener("click", menuButtonHandler);
         }
 
         // Skip if already initialized (persisted elements keep their other listeners)
@@ -898,5 +897,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     document.addEventListener("DOMContentLoaded", setupMobileHeader);
 
     // Reinitialize after view transitions
-    document.addEventListener("astro:after-swap", setupMobileHeader);
+    // Use setTimeout to ensure sidebar and backdrop are available
+    document.addEventListener("astro:after-swap", () => {
+        setTimeout(setupMobileHeader, 0);
+    });
 </script>
