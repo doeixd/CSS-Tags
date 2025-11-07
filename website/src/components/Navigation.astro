@@ -369,8 +369,7 @@ function isActive(slug: string | undefined) {
     /* Mobile responsive */
     @media (max-width: 768px) {
         .floating-sidebar-toggle {
-            width: var(--scroll-button-size-mobile);
-            height: var(--scroll-button-size-mobile);
+            display: none; /* Hide floating toggle on mobile */
         }
     }
 

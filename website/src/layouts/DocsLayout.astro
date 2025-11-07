@@ -1199,13 +1199,10 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         </div>
 
         <script>
-            // Store initialization state globally (survives navigation)
-            let sidebarResizeInitialized = false;
-
             function setupSidebarResize() {
-                // Skip if already initialized
-                if (sidebarResizeInitialized) {
-                    return;
+                // Always clean up any existing listeners first
+                if ((window as any).sidebarResizeCleanup) {
+                    (window as any).sidebarResizeCleanup();
                 }
 
                 const handle = document.querySelector(".sidebar-resize-handle");
@@ -1229,53 +1226,63 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     );
                 }
 
-                handle.addEventListener("mousedown", (e) => {
-                    isResizing = true;
-                    startX = e.clientX;
-                    startWidth = parseInt(
-                        getComputedStyle(
-                            document.documentElement,
-                        ).getPropertyValue("--sidebar-width") || "280",
-                    );
-                    handle.classList.add("resizing");
-                    document.body.style.userSelect = "none";
+                // Store cleanup function to remove listeners later
+                const handleMouseDown = (e) => {
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = parseInt(
+                getComputedStyle(
+                    document.documentElement,
+                    ).getPropertyValue("--sidebar-width") || "280",
+                );
+                handle.classList.add("resizing");
+                document.body.style.userSelect = "none";
                     document.body.style.cursor = "col-resize";
-                });
+                };
 
-                document.addEventListener("mousemove", (e) => {
+                const handleMouseMove = (e) => {
                     if (!isResizing) return;
 
-                    const delta = e.clientX - startX;
-                    const newWidth = Math.max(
-                        200,
-                        Math.min(600, startWidth + delta),
+                const delta = e.clientX - startX;
+                const newWidth = Math.max(
+                200,
+                    Math.min(600, startWidth + delta),
+                );
+                document.documentElement.style.setProperty(
+                "--sidebar-width",
+                    newWidth + "px",
                     );
-                    document.documentElement.style.setProperty(
-                        "--sidebar-width",
-                        newWidth + "px",
-                    );
-                });
+                };
 
-                document.addEventListener("mouseup", () => {
-                    if (isResizing) {
-                        isResizing = false;
-                        handle.classList.remove("resizing");
-                        document.body.style.userSelect = "";
+                const handleMouseUp = () => {
+                if (isResizing) {
+                isResizing = false;
+                handle.classList.remove("resizing");
+                document.body.style.userSelect = "";
                         document.body.style.cursor = "";
 
-                        // Save width to localStorage
-                        const currentWidth = getComputedStyle(
-                            document.documentElement,
-                        ).getPropertyValue("--sidebar-width");
-                        localStorage.setItem(
-                            "sidebar-width",
-                            parseInt(currentWidth),
-                        );
+                // Save width to localStorage
+                const currentWidth = getComputedStyle(
+                    document.documentElement,
+                ).getPropertyValue("--sidebar-width");
+                localStorage.setItem(
+                "sidebar-width",
+                    parseInt(currentWidth),
+                    );
                     }
-                });
+                };
 
-                // Mark as initialized
-                sidebarResizeInitialized = true;
+                // Add event listeners
+                handle.addEventListener("mousedown", handleMouseDown);
+                document.addEventListener("mousemove", handleMouseMove);
+                document.addEventListener("mouseup", handleMouseUp);
+
+                // Store cleanup function globally
+                (window as any).sidebarResizeCleanup = () => {
+                    handle.removeEventListener("mousedown", handleMouseDown);
+                    document.removeEventListener("mousemove", handleMouseMove);
+                    document.removeEventListener("mouseup", handleMouseUp);
+                };
             }
 
             document.addEventListener("DOMContentLoaded", setupSidebarResize);
