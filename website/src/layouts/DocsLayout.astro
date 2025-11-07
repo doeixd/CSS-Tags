@@ -287,10 +287,11 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             /* Disable all CSS transitions during theme changes */
-            html.theme-transitioning *
+            html.theme-transitioning *,
             html.theme-transitioning *::before,
             html.theme-transitioning *::after {
                 transition: none !important;
+                animation: none !important;
             }
 
             /* Theme transition: Instant switch for speed */
