@@ -196,7 +196,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         </script>
 
         <ViewTransitions fallback="none" />
-        <style is:global data-astro-transition-persist="theme">
+        <style is:global>
             /* Critical theme variables to prevent FOUC during navigation */
             :root {
                 /* Base colors */
@@ -396,7 +396,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             body {
-                font-family: "Aptos Display", system-ui, sans-serif;
+                font-family: system-ui, sans-serif;
                 color: var(--text-primary);
                 background: var(--bg-primary);
                 line-height: 1.6;
