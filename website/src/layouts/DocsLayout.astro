@@ -425,7 +425,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 overflow-x: hidden;
                 min-width: var(--min-mobile-width);
                 /* Force GPU acceleration for smoother rendering */
-                transform: translateZ(0);
+                /* transform: translateZ(0); */
             }
 
             /* Minimal scrollbars */
@@ -569,7 +569,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             /* Ensure active state changes repaint immediately */
             .nav-link.active {
                 /* Trigger immediate repaint for active state */
-                transform: translateZ(0);
+                /* transform: translateZ(0); */
             }
 
             /* Prevent view transition from interfering with nav link transitions */
