@@ -344,7 +344,7 @@ function isActive(slug: string | undefined) {
         transition: var(--scroll-button-transition);
 
         /* Performance optimizations for fixed positioning */
-        will-change: transform, opacity, visibility;
+        will-change: opacity, visibility;
         /* Create own stacking context to prevent containment issues */
         isolation: isolate;
     }
