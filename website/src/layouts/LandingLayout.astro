@@ -31,6 +31,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
         <meta name="generator" content={Astro.generator} />
+
+        <!-- Performance hints -->
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
         <title>{title} | CSS Tags</title>
         <meta
             name="description"
@@ -60,6 +63,10 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             type="image/svg+xml"
             href={buildAssetPath(base, "favicon.svg")}
         />
+
+        <!-- Resource hints for performance -->
+        <link rel="preconnect" href="https://github.com" crossorigin />
+        <link rel="dns-prefetch" href="https://github.com" />
 
         <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
         <style is:inline>
@@ -402,6 +409,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 line-height: 1.6;
                 overflow-x: hidden;
                 min-width: var(--min-mobile-width);
+                /* Force GPU acceleration for smoother rendering */
+                transform: translateZ(0);
             }
 
             /* Minimal scrollbars */
@@ -553,6 +562,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 border-bottom: 1px solid var(--border-color) !important;
                 z-index: 1003 !important;
                 transition: none !important;
+                /* Optimize fixed positioning */
+                will-change: transform;
+                contain: layout style paint;
             }
 
             .header-container {
@@ -650,6 +662,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             .landing-container {
                 min-height: 100vh;
                 width: 100%;
+                /* Improve layout stability */
+                contain: layout style paint;
             }
 
             .landing-content {
@@ -657,6 +671,11 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 margin: 0 auto;
                 padding: var(--landing-padding, var(--space-2xl));
                 width: 100%;
+                /* Prevent layout shift */
+                min-height: 100vh;
+                /* Improve rendering performance */
+                content-visibility: auto;
+                contain-intrinsic-size: auto 1000px;
             }
 
             /* Typography for landing pages */

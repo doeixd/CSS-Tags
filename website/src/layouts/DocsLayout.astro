@@ -43,6 +43,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
         <meta name="generator" content={Astro.generator} />
+
+        <!-- Performance hints -->
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
         <title>{title} | CSS Tags</title>
         <meta
             name="description"
@@ -73,8 +76,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             href={buildAssetPath(base, "favicon.svg")}
         />
 
+        <!-- Resource hints for performance -->
+        <link rel="preconnect" href="https://github.com" crossorigin />
+        <link rel="dns-prefetch" href="https://github.com" />
+
         <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
-        <!-- <style is:inline>
+        <style is:inline>
             /* Critical color variables - Light mode defaults */
             :root {
                 --text-primary: #1a1a1a;
@@ -86,6 +93,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 --accent: #0066cc;
                 --accent-light: #e3f2fd;
                 --accent-dark: #1a3a52;
+
+                /* Critical layout dimensions */
+                --header-height: 4rem;
+                --mobile-header-height: 3.5rem;
+                --sidebar-width: 280px;
+                --space-2xl: 2rem;
             }
 
             /* Dark mode system preference */
@@ -126,13 +139,21 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 --accent-dark: #1a3a52;
             }
 
-            /* Critical body styles */
+            /* Critical body styles to prevent layout shift */
             body {
                 background: var(--bg-primary);
                 color: var(--text-primary);
                 margin: 0;
+                padding-top: var(--header-height);
             }
-        </style> -->
+
+            /* Mobile body adjustments */
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 0;
+                }
+            }
+        </style>
 
         <!-- Theme FOUC prevention for cached/serverless pages -->
         <script is:inline>
@@ -403,6 +424,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 line-height: 1.6;
                 overflow-x: hidden;
                 min-width: var(--min-mobile-width);
+                /* Force GPU acceleration for smoother rendering */
+                transform: translateZ(0);
             }
 
             /* Minimal scrollbars */
@@ -576,6 +599,9 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 border-bottom: 1px solid var(--border-color);
                 z-index: 1003;
                 transition: none;
+                /* Optimize fixed positioning */
+                will-change: transform;
+                contain: layout style paint;
             }
 
             .header-container {
@@ -674,6 +700,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
+                /* Improve layout stability */
+                contain: layout style paint;
             }
 
             /* Only use 3-column layout on desktop where TOC is visible */
@@ -721,6 +749,11 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                     3rem var(--space-2xl)
                 );
                 width: 100%;
+                /* Prevent layout shift by reserving space */
+                min-height: 100vh;
+                /* Improve rendering performance */
+                content-visibility: auto;
+                contain-intrinsic-size: auto 1000px;
             }
 
             .content {

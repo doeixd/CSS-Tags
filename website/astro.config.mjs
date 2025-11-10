@@ -14,7 +14,23 @@ export default defineConfig({
 	site: 'https://doeixd.github.io',
 	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
 	build: {
-	inlineStylesheets: 'always'
+		inlineStylesheets: 'always',
+		assets: '_astro'
+	},
+	vite: {
+		build: {
+			cssCodeSplit: true,
+			rollupOptions: {
+				output: {
+					manualChunks: {
+						'vendor': ['astro'],
+					},
+					assetFileNames: '_astro/[name].[hash][extname]',
+					chunkFileNames: '_astro/[name].[hash].js',
+					entryFileNames: '_astro/[name].[hash].js',
+				}
+			}
+		}
 	},
 	prefetch: {
 	prefetchAll: true,
