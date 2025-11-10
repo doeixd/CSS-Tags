@@ -173,6 +173,10 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         align-items: center;
         justify-content: space-between;
         gap: var(--mobile-header-gap);
+        /* Performance optimizations for fixed positioning */
+        will-change: transform;
+        contain: layout style paint;
+        isolation: isolate;
     }
 
     @media (max-width: 768px) {
@@ -294,6 +298,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         opacity: 0;
         pointer-events: none;
         transition: opacity var(--transition-normal);
+        /* Performance optimizations for dynamic visibility */
+        will-change: opacity;
+        isolation: isolate;
     }
 
     @media (max-width: 768px) {
@@ -382,6 +389,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         opacity: 0;
         pointer-events: none;
         transition: opacity var(--transition-normal);
+        /* Performance optimizations for dynamic visibility */
+        will-change: opacity;
+        isolation: isolate;
     }
 
     @media (max-width: 768px) {
@@ -493,6 +503,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         border-left-color: var(--accent);
         color: var(--accent);
         font-weight: var(--font-weight-medium);
+        /* Force GPU acceleration for active state */
+        transform: translateZ(0);
     }
 
     /* Dark mode styles */

@@ -662,8 +662,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             .landing-container {
                 min-height: 100vh;
                 width: 100%;
-                /* Improve layout stability */
-                contain: layout style paint;
+                /* Improve layout stability - avoid paint containment for dynamic content */
+                contain: layout style;
             }
 
             .landing-content {

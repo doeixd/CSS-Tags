@@ -342,6 +342,11 @@ function isActive(slug: string | undefined) {
         visibility: hidden;
         transform: translateY(20px);
         transition: var(--scroll-button-transition);
+
+        /* Performance optimizations for fixed positioning */
+        will-change: transform, opacity, visibility;
+        /* Create own stacking context to prevent containment issues */
+        isolation: isolate;
     }
 
     /* Show floating button when sidebar is hidden */

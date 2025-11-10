@@ -83,6 +83,11 @@
         visibility: hidden;
         transform: var(--scroll-button-transform-hidden);
         transition: var(--scroll-button-transition);
+
+        /* Performance optimizations for fixed positioning */
+        will-change: transform, opacity, visibility;
+        /* Create own stacking context to prevent containment issues */
+        isolation: isolate;
     }
 
     .scroll-to-top.visible {

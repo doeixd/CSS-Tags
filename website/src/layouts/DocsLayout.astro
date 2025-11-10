@@ -562,6 +562,14 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 transition: background-color var(--transition-fast),
                             color var(--transition-fast),
                             font-weight var(--transition-fast) !important;
+                /* Force repaint for active state changes */
+                will-change: background-color, color;
+            }
+
+            /* Ensure active state changes repaint immediately */
+            .nav-link.active {
+                /* Trigger immediate repaint for active state */
+                transform: translateZ(0);
             }
 
             /* Prevent view transition from interfering with nav link transitions */
@@ -571,6 +579,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                                 color var(--transition-fast),
                                 font-weight var(--transition-fast) !important;
                 }
+            }
+
+            /* Optimize sidebar for dynamic content changes */
+            .sidebar {
+                /* Allow paint updates for active link changes */
+                contain: layout style;
             }
 
             ::view-transition-old(main) {
@@ -700,8 +714,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
-                /* Improve layout stability */
-                contain: layout style paint;
+                /* Improve layout stability - use style containment only to avoid blocking paint updates */
+                contain: layout style;
             }
 
             /* Only use 3-column layout on desktop where TOC is visible */
