@@ -80,63 +80,33 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
         <link rel="preconnect" href="https://github.com" crossorigin />
         <link rel="dns-prefetch" href="https://github.com" />
 
-        <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
+        <!-- Critical CSS: Inline ONLY essential variables to prevent FOUC -->
         <style is:inline>
-            /* Critical color variables - Light mode defaults */
+            /* Minimal critical variables for initial render */
             :root {
-                --text-primary: #1a1a1a;
-                --text-secondary: #6a737d;
                 --bg-primary: #ffffff;
-                --bg-secondary: #f8f9fa;
-                --bg-hover: #e8eaed;
-                --border-color: #e1e4e8;
-                --accent: #0066cc;
-                --accent-light: #e3f2fd;
-                --accent-dark: #1a3a52;
-
-                /* Critical layout dimensions */
+                --text-primary: #1a1a1a;
                 --header-height: 4rem;
-                --mobile-header-height: 3.5rem;
-                --sidebar-width: 280px;
-                --space-2xl: 2rem;
             }
 
             /* Dark mode system preference */
             @media (prefers-color-scheme: dark) {
                 :root:not(.light-mode) {
-                    --text-primary: #e1e4e8;
-                    --text-secondary: #8b949e;
                     --bg-primary: #171717;
-                    --bg-secondary: #1a1a1a;
-                    --bg-hover: #2d2d2d;
-                    --border-color: #333;
-                    --accent-light: #58a6ff;
-                    --accent-dark: #1a3a52;
+                    --text-primary: #e1e4e8;
                 }
             }
 
             /* Manual dark mode override */
             :root.dark-mode {
-                --text-primary: #e1e4e8;
-                --text-secondary: #8b949e;
                 --bg-primary: #171717;
-                --bg-secondary: #1a1a1a;
-                --bg-hover: #2d2d2d;
-                --border-color: #333;
-                --accent-light: #58a6ff;
-                --accent-dark: #1a3a52;
+                --text-primary: #e1e4e8;
             }
 
             /* Manual light mode override */
             :root.light-mode {
-                --text-primary: #1a1a1a;
-                --text-secondary: #6a737d;
                 --bg-primary: #ffffff;
-                --bg-secondary: #f8f9fa;
-                --bg-hover: #e8eaed;
-                --border-color: #e1e4e8;
-                --accent-light: #e3f2fd;
-                --accent-dark: #1a3a52;
+                --text-primary: #1a1a1a;
             }
 
             /* Critical body styles to prevent layout shift */
@@ -306,12 +276,42 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 --accent-dark: #1a3a52;
             }
 
-            /* Disable all CSS transitions during theme changes */
-            html.theme-transitioning *,
-            html.theme-transitioning *::before,
-            html.theme-transitioning *::after {
+            /* Disable CSS transitions during theme changes - Optimized for performance */
+            /* Target specific containers instead of universal selector to reduce style recalculation */
+            html.theme-transitioning .docs-container,
+            html.theme-transitioning .content-wrapper,
+            html.theme-transitioning .content,
+            html.theme-transitioning .toc-wrapper,
+            html.theme-transitioning .sidebar,
+            html.theme-transitioning .site-header,
+            html.theme-transitioning .mobile-header,
+            html.theme-transitioning a,
+            html.theme-transitioning button,
+            html.theme-transitioning input,
+            html.theme-transitioning select,
+            html.theme-transitioning textarea,
+            html.theme-transitioning .nav-link,
+            html.theme-transitioning .toc-link {
                 transition: none !important;
                 animation: none !important;
+            }
+
+            /* Dynamic containment during transitions for performance */
+            html.theme-transitioning .docs-container {
+                contain: layout style;
+            }
+
+            html.theme-transitioning .toc-wrapper {
+                contain: layout style;
+            }
+
+            /* Apply containment during page navigation as well */
+            html.page-transitioning .docs-container {
+                contain: layout style;
+            }
+
+            html.page-transitioning .toc-wrapper {
+                contain: layout style;
             }
 
             /* Theme transition: Instant switch for speed */
@@ -428,6 +428,13 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 /* transform: translateZ(0); */
             }
 
+            /* Performance optimization: Use CSS classes for overflow control instead of inline styles */
+            body.mobile-menu-open,
+            body.mobile-toc-open,
+            body.mobile-search-open {
+                overflow: hidden;
+            }
+
             /* Minimal scrollbars */
             * {
                 scrollbar-width: var(--scrollbar-thumb-width);
@@ -441,15 +448,18 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             *::-webkit-scrollbar-track {
                 background: transparent;
+                transition: none !important;
             }
 
             *::-webkit-scrollbar-thumb {
                 background: var(--border-color);
                 border-radius: var(--border-radius-md);
+                transition: none !important;
             }
 
             *::-webkit-scrollbar-thumb:hover {
                 background: var(--text-secondary);
+                transition: none !important;
             }
 
             @media (prefers-color-scheme: dark) {
@@ -459,10 +469,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
                 *::-webkit-scrollbar-thumb {
                     background: var(--border-color, #333);
+                    transition: none !important;
                 }
 
                 *::-webkit-scrollbar-thumb:hover {
                     background: var(--text-secondary, #8b949e);
+                    transition: none !important;
                 }
 
                 a {
@@ -753,6 +765,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             .content {
                 width: 100%;
+                /* Safe containment: content area doesn't affect external layout */
+                contain: layout style paint;
             }
 
             .toc-wrapper {
@@ -1312,6 +1326,56 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             document.addEventListener("DOMContentLoaded", setupSidebarResize);
             document.addEventListener("astro:after-swap", setupSidebarResize);
+
+            // PERFORMANCE OPTIMIZATION: Dynamic containment during navigation
+            // Apply CSS containment only during page transitions for performance
+            // Remove it after to avoid layout issues
+            function setupNavigationContainment() {
+                const html = document.documentElement;
+
+                // Add containment class before navigation starts
+                document.addEventListener("astro:before-preparation", () => {
+                    html.classList.add("page-transitioning");
+                });
+
+                // Remove containment class after navigation completes
+                document.addEventListener("astro:after-swap", () => {
+                    // Use setTimeout to ensure containment stays during initial render
+                    setTimeout(() => {
+                        html.classList.remove("page-transitioning");
+                    }, 100);
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", setupNavigationContainment);
+
+            // PERFORMANCE OPTIMIZATION: Service Worker for caching and offline support
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', async () => {
+                    try {
+                        const baseUrl = import.meta.env.BASE_URL || '/';
+                        const swUrl = `${baseUrl}sw.js`;
+
+                        const registration = await navigator.serviceWorker.register(swUrl);
+                        console.log('[SW] Service Worker registered:', registration.scope);
+
+                        // Handle updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            if (newWorker) {
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New service worker available, could show update notification
+                                        console.log('[SW] New version available! Reload to update.');
+                                    }
+                                });
+                            }
+                        });
+                    } catch (error) {
+                        console.error('[SW] Service Worker registration failed:', error);
+                    }
+                });
+            }
         </script>
     </body>
 </html>

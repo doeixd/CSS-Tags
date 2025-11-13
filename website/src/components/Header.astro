@@ -225,14 +225,9 @@ const icons = {
     height: var(--header-height);
     z-index: 1003;
     background: var(--bg-secondary);
-    /* backdrop-filter: blur(10px); */ /* Disabled - causing flicker */
     border-bottom: 1px solid var(--border-color);
-    /* contain: layout style paint; Isolate from document repaints */
-    /* content-visibility: auto; Performance optimization */
-    /* will-change: auto; Optimize for no animations */
-    /* Force layer promotion to prevent repaints */
+    /* Force GPU acceleration for smooth fixed positioning */
     transform: translateZ(0);
-    backface-visibility: hidden;
   }
 
   .header-container {
@@ -486,6 +481,10 @@ const icons = {
   // Check if already initialized (for persisted elements)
   const HEADER_INITIALIZED = '__header_initialized__';
 
+  // Store handler references for cleanup
+  let dropdownClickHandler: ((e: Event) => void) | null = null;
+  let headerSearchClickHandler: ((e: Event) => void) | null = null;
+
   // Dropdown toggle functionality
   function initDropdowns() {
     const header = document.querySelector('.site-header');
@@ -494,6 +493,13 @@ const icons = {
     if (header && (header as any)[HEADER_INITIALIZED]) {
       return;
     }
+
+    // Clean up old handler if it exists
+    if (dropdownClickHandler) {
+      document.removeEventListener('click', dropdownClickHandler);
+      dropdownClickHandler = null;
+    }
+
     const dropdowns = document.querySelectorAll('.header-dropdown');
 
     dropdowns.forEach((dropdown) => {
@@ -516,17 +522,24 @@ const icons = {
       });
     });
 
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', () => {
+    // Close dropdowns when clicking outside - store handler for cleanup
+    dropdownClickHandler = () => {
       dropdowns.forEach((dropdown) => {
         dropdown.classList.remove('open');
       });
-    });
+    };
+    document.addEventListener('click', dropdownClickHandler);
   }
 
   // Close header search dropdown when clicking outside
   function initHeaderSearchClose() {
-    document.addEventListener('click', (e) => {
+    // Clean up old handler if it exists
+    if (headerSearchClickHandler) {
+      document.removeEventListener('click', headerSearchClickHandler);
+      headerSearchClickHandler = null;
+    }
+
+    headerSearchClickHandler = (e) => {
       const headerSearch = document.querySelector('.header-search');
       const searchResults = document.querySelector('.search-container--header .pagefind-ui__results');
 
@@ -534,7 +547,8 @@ const icons = {
         // Clicked outside - could clear the search or just hide results
         // For now, results will auto-hide via the inactive state
       }
-    });
+    };
+    document.addEventListener('click', headerSearchClickHandler);
   }
 
   // Initialize on page load
@@ -571,6 +585,27 @@ const icons = {
       if (header) {
         (header as any)[HEADER_INITIALIZED] = true;
       }
+    }
+  });
+
+  // Cleanup before navigation (only if header is not persisted)
+  document.addEventListener('astro:before-swap', () => {
+    const header = document.querySelector('.site-header');
+
+    // Skip cleanup if header is persisted (it keeps its handlers)
+    if (header && (header as any)[HEADER_INITIALIZED]) {
+      return;
+    }
+
+    // Clean up document-level handlers
+    if (dropdownClickHandler) {
+      document.removeEventListener('click', dropdownClickHandler);
+      dropdownClickHandler = null;
+    }
+
+    if (headerSearchClickHandler) {
+      document.removeEventListener('click', headerSearchClickHandler);
+      headerSearchClickHandler = null;
     }
   });
 </script>

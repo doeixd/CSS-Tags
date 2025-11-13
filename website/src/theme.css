@@ -253,30 +253,19 @@
                 "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
         }
 
-        /* Dark mode overrides */
+        /* Dark mode overrides - OPTIMIZED: Consolidated duplicate selectors */
         @media (prefers-color-scheme: dark) {
-            :root:not(.light-mode)
-                code:not(pre code):not(.expressive-code code) {
+            :root:not(.light-mode) code:not(pre code):not(.expressive-code code) {
                 background: var(--inline-code-bg-dark) !important;
                 color: var(--inline-code-color-dark) !important;
-                border: 1px solid var(--inline-code-border-dark) !important;
-                padding: var(--inline-code-padding) !important;
-                border-radius: var(--inline-code-border-radius) !important;
-                font-size: var(--inline-code-font-size) !important;
-                font-family:
-                    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
+                border-color: var(--inline-code-border-dark) !important;
             }
         }
 
         :root.dark-mode code:not(pre code):not(.expressive-code code) {
             background: var(--inline-code-bg-dark) !important;
             color: var(--inline-code-color-dark) !important;
-            border: 1px solid var(--inline-code-border-dark) !important;
-            padding: var(--inline-code-padding) !important;
-            border-radius: var(--inline-code-border-radius) !important;
-            font-size: var(--inline-code-font-size) !important;
-            font-family:
-                "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
+            border-color: var(--inline-code-border-dark) !important;
         }
 
         /* Reset styling for code blocks */
@@ -308,6 +297,7 @@
                 "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
         }
 
+        /* Dark mode overrides - OPTIMIZED: Only override colors */
         @media (prefers-color-scheme: dark) {
             :root:not(.light-mode) h1 code,
             :root:not(.light-mode) h2 code,
@@ -317,12 +307,7 @@
             :root:not(.light-mode) h6 code {
                 background: var(--header-code-bg-dark);
                 color: var(--header-code-color-dark);
-                border: 1px solid var(--header-code-border-dark);
-                padding: var(--header-code-padding);
-                border-radius: var(--header-code-border-radius);
-                font-size: var(--header-code-font-size);
-                font-family:
-                    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+                border-color: var(--header-code-border-dark);
             }
         }
 
@@ -334,12 +319,7 @@
         :root.dark-mode h6 code {
             background: var(--header-code-bg-dark);
             color: var(--header-code-color-dark);
-            border: 1px solid var(--header-code-border-dark);
-            padding: var(--header-code-padding);
-            border-radius: var(--header-code-border-radius);
-            font-size: var(--header-code-font-size);
-            font-family:
-                "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+            border-color: var(--header-code-border-dark);
         }
 
         /* Backdrop Effects */

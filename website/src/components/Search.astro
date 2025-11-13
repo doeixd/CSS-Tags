@@ -426,6 +426,29 @@ const variant = Astro.props.variant || "default"; // "default" or "header"
         initSearch();
     });
 
+    // Cleanup before navigation
+    document.addEventListener("astro:before-swap", () => {
+        const searchElements = document.querySelectorAll('[id$="-search"]');
+        searchElements.forEach((searchElement) => {
+            // CRITICAL: Clean up click-outside handler
+            if (searchElement._clickOutsideHandler) {
+                document.removeEventListener("click", searchElement._clickOutsideHandler);
+                delete searchElement._clickOutsideHandler;
+            }
+
+            // CRITICAL: Disconnect MutationObservers to prevent memory leaks
+            if (searchElement._resultsObserver) {
+                searchElement._resultsObserver.disconnect();
+                delete searchElement._resultsObserver;
+            }
+
+            if (searchElement._drawerObserver) {
+                searchElement._drawerObserver.disconnect();
+                delete searchElement._drawerObserver;
+            }
+        });
+    });
+
     // Handle navigation events
     document.addEventListener("astro:after-swap", () => {
     // Close search results drawer if we navigated from a search result

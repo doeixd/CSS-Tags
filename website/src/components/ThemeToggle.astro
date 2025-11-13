@@ -11,7 +11,7 @@ const { transitionName = 'theme-toggle' } = Astro.props;
 class="theme-toggle"
 aria-label="Toggle dark mode"
 title="Toggle dark mode"
-    style={`view-transition-name: ${transitionName};`}
+    data-transition-name={transitionName}
 >
     <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="4" fill="currentColor" />
@@ -46,7 +46,23 @@ title="Toggle dark mode"
         position: relative;
         width: var(--theme-toggle-width, 2.5rem);
         height: var(--theme-toggle-height, 2.5rem);
+    }
 
+    /* Set view-transition-name based on data attribute for each instance */
+    .theme-toggle[data-transition-name="header-theme-toggle"] {
+        view-transition-name: header-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="sidebar-theme-toggle"] {
+        view-transition-name: sidebar-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="sidebar-footer-theme-toggle"] {
+        view-transition-name: sidebar-footer-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="theme-toggle"] {
+        view-transition-name: theme-toggle;
     }
 
     .theme-toggle:hover {
@@ -204,12 +220,22 @@ title="Toggle dark mode"
     function applyTheme(theme: Theme, suppressTransitions = false): void {
         const html = document.documentElement;
 
+        // PERFORMANCE OPTIMIZATION: Batch DOM mutations to reduce style recalculations
+        // Store all changes and apply them in one go
         if (suppressTransitions) {
             html.classList.add("theme-transitioning");
         }
 
-        html.classList.remove("dark-mode", "light-mode");
-        html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+        // Batch classList operations by getting current classes and modifying them
+        const themeClass = theme === "dark" ? "dark-mode" : "light-mode";
+        const otherThemeClass = theme === "dark" ? "light-mode" : "dark-mode";
+
+        // Single batch: remove old theme, add new theme
+        html.classList.remove(otherThemeClass);
+        if (!html.classList.contains(themeClass)) {
+            html.classList.add(themeClass);
+        }
+
         html.setAttribute("data-theme", theme);
 
         if (suppressTransitions) {
@@ -259,7 +285,13 @@ title="Toggle dark mode"
     }
 
     buttons.forEach((button) => {
-        // Remove any existing event listeners to prevent duplicates
+        // PERFORMANCE OPTIMIZATION: Skip if button already has handler attached
+        // This prevents unnecessary cloning for persisted elements (header, sidebar)
+        if ((button as any).__theme_handler_attached__) {
+            return;
+        }
+
+        // Remove any existing event listeners to prevent duplicates by cloning
         const newButton = button.cloneNode(true) as HTMLElement;
             button.parentNode?.replaceChild(newButton, button);
 
@@ -285,6 +317,9 @@ title="Toggle dark mode"
             });
             });
             });
+
+        // Mark button as having handler attached
+        (newButton as any).__theme_handler_attached__ = true;
         });
     }
 

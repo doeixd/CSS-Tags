@@ -2,6 +2,11 @@
 # Note: GitHub Pages does not support custom headers
 # If deploying to GitHub Pages, this file will be ignored
 
+# Service Worker: Don't cache, always fetch fresh
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
 # Cache static assets for 1 year (immutable assets with content hashes)
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

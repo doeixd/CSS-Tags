@@ -282,6 +282,13 @@ function isActive(slug: string | undefined) {
             display: block; /* Show when opened */
             transform: translateX(0);
         }
+
+        /* Performance optimization: Handle dragging state */
+        .sidebar.sidebar-dragging {
+            transition: none; /* Disable transitions during drag */
+            transform: translateX(var(--sidebar-drag-x, 0));
+            will-change: transform; /* Hint to browser for optimization */
+        }
     }
 
     /* Sidebar hidden state for footer toggle functionality */
@@ -532,6 +539,8 @@ function isActive(slug: string | undefined) {
         transition: background-color var(--transition-fast),
                     color var(--transition-fast),
                     font-weight var(--transition-fast);
+        /* Safe containment: nav items are self-contained */
+        contain: layout style paint;
     }
 
     .nav-link:hover {
@@ -610,6 +619,7 @@ function isActive(slug: string | undefined) {
     // Cache nav links and their paths for fast lookup (avoids repeated DOM queries)
     let cachedLinks: Array<{ element: Element; path: string }> = [];
     let linksCached = false;
+    let previousActiveLink: Element | null = null;
 
     function cacheNavLinks() {
         if (linksCached) return;
@@ -637,14 +647,21 @@ function isActive(slug: string | undefined) {
             .replace(import.meta.env.BASE_URL, "")
             .replace(/\/$/, "");
 
-        // Iterate cached links (no DOM query needed)
-        cachedLinks.forEach(({ element, path }) => {
-            if (path === currentPath) {
-                element.classList.add("active");
-            } else {
-                element.classList.remove("active");
+        // PERFORMANCE OPTIMIZATION: Only update links that change
+        // Instead of iterating all links, find the new active link
+        // and only update previous + current (2 operations instead of N)
+        const newActiveLink = cachedLinks.find(({ path }) => path === currentPath);
+
+        if (newActiveLink && newActiveLink.element !== previousActiveLink) {
+            // Remove active from previous link (if exists)
+            if (previousActiveLink) {
+                previousActiveLink.classList.remove("active");
             }
-        });
+
+            // Add active to new link
+            newActiveLink.element.classList.add("active");
+            previousActiveLink = newActiveLink.element;
+        }
     }
 
     // Store mobile menu handlers globally to allow cleanup
@@ -671,8 +688,10 @@ function isActive(slug: string | undefined) {
         const sidebar = document.querySelector(".sidebar");
         const backdrop = document.querySelector(".mobile-backdrop");
 
-        // Skip if sidebar already initialized (persisted)
-        if (sidebar && (sidebar as any)[SIDEBAR_INITIALIZED]) {
+        // PERFORMANCE FIX: Don't skip mobile menu setup for persisted sidebars
+        // The sidebar persists, but event listeners on backdrop/touch/links need reattachment
+        // Only skip if sidebar doesn't exist
+        if (!sidebar || !backdrop) {
             return;
         }
 
@@ -705,13 +724,15 @@ function isActive(slug: string | undefined) {
             const openMenu = () => {
                 sidebar.classList.add("open");
                 backdrop.classList.add("visible");
-                document.body.style.overflow = "hidden";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.add("mobile-menu-open");
             };
 
             const closeMenu = () => {
                 sidebar.classList.remove("open");
                 backdrop.classList.remove("visible");
-                document.body.style.overflow = "";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.remove("mobile-menu-open");
                 // Reset transform after animation
                 setTimeout(() => {
                     (sidebar as HTMLElement).style.transform = "";
@@ -752,9 +773,10 @@ function isActive(slug: string | undefined) {
                 // If dragging left (negative deltaX), move sidebar
                 if (touchState.isDragging && deltaX < 0) {
                     e.preventDefault();
-                    // Apply transform to sidebar for visual feedback
-                    (sidebar as HTMLElement).style.transition = "none";
-                    (sidebar as HTMLElement).style.transform = `translateX(${deltaX}px)`;
+
+                    // PERFORMANCE OPTIMIZATION: Use CSS class and variable instead of inline styles
+                    sidebar.classList.add("sidebar-dragging");
+                    document.documentElement.style.setProperty("--sidebar-drag-x", `${deltaX}px`);
                 }
             };
 
@@ -765,16 +787,15 @@ function isActive(slug: string | undefined) {
 
                 const deltaX = touchState.currentX - touchState.startX;
 
-                // Re-enable transition
-                (sidebar as HTMLElement).style.transition = "";
+                // PERFORMANCE OPTIMIZATION: Remove dragging class to re-enable transition
+                sidebar.classList.remove("sidebar-dragging");
+                document.documentElement.style.removeProperty("--sidebar-drag-x");
 
                 // If swiped left more than 50px, close the menu
                 if (deltaX < -50) {
                     closeMenu();
-                } else {
-                    // Snap back to original position
-                    (sidebar as HTMLElement).style.transform = "";
                 }
+                // Else: Transform is automatically reset via CSS when class is removed
 
                 // Reset touch state
                 touchState.startX = 0;
@@ -1040,13 +1061,17 @@ function isActive(slug: string | undefined) {
 
     // Update after view transitions
     document.addEventListener("astro:after-swap", () => {
-        // Only update active link on navigation (sidebar is persisted)
+        // Update active link on navigation
         updateActiveLink();
 
-        // Only setup if not already initialized (for non-persisted cases)
         const sidebar = document.querySelector(".sidebar");
+
+        // ALWAYS setup mobile menu handlers (backdrop, touch, links)
+        // These need to be reattached even for persisted sidebars
+        setupMobileMenu();
+
+        // Only setup collapsible sections and auto-expand once
         if (sidebar && !(sidebar as any)[SIDEBAR_INITIALIZED]) {
-            setupMobileMenu();
             setupCollapsibleSections();
             autoExpandActiveSection();
             (sidebar as any)[SIDEBAR_INITIALIZED] = true;

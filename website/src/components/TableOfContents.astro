@@ -133,6 +133,8 @@ if (hasH3Headings) {
         transition: all var(--transition-fast);
         line-height: 1.4;
         opacity: var(--toc-link-opacity-default, 0.45);
+        /* Safe containment: TOC items are self-contained */
+        contain: layout style paint;
     }
 
     .toc:hover :is(.toc-item a, .toc-item) {

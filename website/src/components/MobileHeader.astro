@@ -485,6 +485,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         transition: all var(--transition-fast);
         border-left: 2px solid transparent;
         scroll-margin-top: var(--toc-scroll-margin, 80px);
+        /* Safe containment: mobile TOC items are self-contained */
+        contain: layout style paint;
     }
 
     .mobile-toc-item.depth-3 .mobile-toc-link {
@@ -559,7 +561,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     function setupMobileHeader() {
         const mobileHeader = document.querySelector('.mobile-header');
 
-        // Always ensure menu button works, even for persisted elements
+        // CRITICAL: Menu button setup happens BEFORE initialization check
+        // This ensures the menu button always works after navigation, even for persisted elements
+        // The button is cloned to remove old listeners, then fresh handler is attached
         const menuButton = document.querySelector(".menu-button");
         const sidebar = document.querySelector(".sidebar");
         const backdrop = document.querySelector(".mobile-backdrop");
@@ -573,13 +577,15 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             const openMenu = () => {
                 sidebar.classList.add("open");
                 backdrop.classList.add("visible");
-                document.body.style.overflow = "hidden";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.add("mobile-menu-open");
             };
 
             const closeMenu = () => {
                 sidebar.classList.remove("open");
                 backdrop.classList.remove("visible");
-                document.body.style.overflow = "";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.remove("mobile-menu-open");
             };
 
             menuButtonHandler = () => {
@@ -593,19 +599,21 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             newMenuButton.addEventListener("click", menuButtonHandler);
         }
 
-        // Skip if already initialized (persisted elements keep their other listeners)
-        if (mobileHeader && (mobileHeader as any)[MOBILE_HEADER_INITIALIZED]) {
-            return;
-        }
+        // CRITICAL: TOC and search setup happens BEFORE initialization check
+        // These handlers need to be reattached on every navigation for persisted elements
+        // Click-outside handlers and overlay handlers reference DOM elements that may be new
 
-        // Clean up previous listeners to prevent memory leaks
+        // Get TOC elements
         const tocButton = document.querySelector(".toc-button");
         const tocOverlay = document.querySelector(".mobile-toc-overlay");
         const tocClose = document.querySelector(".mobile-toc-close");
+
+        // Get search elements
         const searchButton = document.querySelector(".search-button");
         const searchOverlay = document.querySelector(".mobile-search-overlay");
         const searchClose = document.querySelector(".mobile-search-close");
 
+        // Clean up previous TOC listeners
         if (tocButtonHandler && tocButton) {
             tocButton.removeEventListener("click", tocButtonHandler);
         }
@@ -624,6 +632,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         if (tocKeyHandler) {
             document.removeEventListener("keydown", tocKeyHandler);
         }
+
+        // Clean up previous search listeners
         if (searchButtonHandler && searchButton) {
             searchButton.removeEventListener("click", searchButtonHandler);
         }
@@ -636,18 +646,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         if (searchKeyHandler) {
             document.removeEventListener("keydown", searchKeyHandler);
         }
-        if (menuButtonHandler && menuButton) {
-            menuButton.removeEventListener("click", menuButtonHandler);
-        }
-        if (intersectionObserver) {
-            intersectionObserver.disconnect();
-            intersectionObserver = null;
-        }
 
-        // menuButton, sidebar, and backdrop already declared above
-        if (!menuButton) return;
-
-        // TOC functionality
+        // TOC functionality - ALWAYS reattach these handlers
         if (tocButton && tocOverlay && tocClose) {
             const openToc = () => {
                 // Scroll to active link BEFORE showing overlay (so user doesn't see the scroll)
@@ -662,7 +662,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 // Now show the overlay
                 tocOverlay.classList.add("visible");
                 tocButton.setAttribute("aria-expanded", "true");
-                document.body.style.overflow = "hidden";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.add("mobile-toc-open");
 
                 // Focus the close button after opening
                 setTimeout(() => {
@@ -673,7 +674,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             const closeToc = () => {
                 tocOverlay.classList.remove("visible");
                 tocButton.setAttribute("aria-expanded", "false");
-                document.body.style.overflow = "";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.remove("mobile-toc-open");
 
                 // Return focus to the trigger button
                 (tocButton as HTMLElement).focus();
@@ -715,74 +717,15 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 tocLinkHandlers.set(link, handler);
                 link.addEventListener("click", handler);
             });
-
-            // Highlight active section
-            const observerOptions = {
-                rootMargin: "-80px 0px -80% 0px",
-                threshold: 0,
-            };
-
-            intersectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    const id = entry.target.getAttribute("id");
-                    const link = tocOverlay.querySelector(
-                        `.mobile-toc-link[href="#${id}"]`
-                    );
-
-                    if (entry.isIntersecting && link) {
-                        // Remove active class from all links
-                        tocOverlay
-                            .querySelectorAll(".mobile-toc-link")
-                            .forEach((l) => l.classList.remove("active"));
-                        // Add active class to current link
-                        link.classList.add("active");
-
-                        // Update button text with current heading
-                        const buttonText = tocButton.querySelector(".toc-button-text");
-                        const currentHeading = tocButton.querySelector(".toc-current");
-
-                        if (buttonText && currentHeading) {
-                            const headingText = link.textContent?.trim() || "";
-                            currentHeading.textContent = headingText;
-                            buttonText.classList.add("has-active");
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all headings
-            document.querySelectorAll("h2[id], h3[id]").forEach((heading) => {
-                intersectionObserver!.observe(heading);
-            });
-
-            // Reset button text when no heading is active
-            const resetButtonText = () => {
-                const buttonText = tocButton.querySelector(".toc-button-text");
-                const currentHeading = tocButton.querySelector(".toc-current");
-
-                if (buttonText && currentHeading) {
-                    const activeLink = tocOverlay.querySelector(".mobile-toc-link.active");
-                    if (!activeLink) {
-                        currentHeading.textContent = "";
-                        buttonText.classList.remove("has-active");
-                    }
-                }
-            };
-
-            // Check for reset on scroll
-            let resetTimeout: number;
-            window.addEventListener("scroll", () => {
-                clearTimeout(resetTimeout);
-                resetTimeout = window.setTimeout(resetButtonText, 100);
-            }, { passive: true });
         }
 
-        // Search functionality
+        // Search functionality - ALWAYS reattach these handlers
         if (searchButton && searchOverlay && searchClose) {
             const openSearch = () => {
                 searchOverlay.classList.add("visible");
                 searchButton.setAttribute("aria-expanded", "true");
-                document.body.style.overflow = "hidden";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.add("mobile-search-open");
 
                 // Focus the search input after opening
                 setTimeout(() => {
@@ -796,7 +739,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             const closeSearch = () => {
                 searchOverlay.classList.remove("visible");
                 searchButton.setAttribute("aria-expanded", "false");
-                document.body.style.overflow = "";
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.remove("mobile-search-open");
 
                 // Return focus to the trigger button
                 (searchButton as HTMLElement).focus();
@@ -832,9 +776,83 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             document.addEventListener("keydown", searchKeyHandler);
         }
 
-        // Menu functionality is already set up at the top of this function
+        // Skip one-time initialization if already done (intersection observer, etc.)
+        if (mobileHeader && (mobileHeader as any)[MOBILE_HEADER_INITIALIZED]) {
+            return;
+        }
 
-        // Mark as initialized to prevent re-initialization on persisted elements
+        // ONE-TIME INITIALIZATION: Intersection observer for TOC scroll spy
+        if (tocButton && tocOverlay) {
+            const observerOptions = {
+                rootMargin: "-80px 0px -80% 0px",
+                threshold: 0,
+            };
+
+            // PERFORMANCE OPTIMIZATION: Track previous active link to avoid updating all links
+            let previousActiveTocLink: Element | null = null;
+            let updateTextTimeout: number;
+
+            intersectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.getAttribute("id");
+                    const link = tocOverlay.querySelector(
+                        `.mobile-toc-link[href="#${id}"]`
+                    );
+
+                    if (entry.isIntersecting && link && link !== previousActiveTocLink) {
+                        // PERFORMANCE OPTIMIZATION: Only update previous and current links (2 ops instead of N)
+                        if (previousActiveTocLink) {
+                            previousActiveTocLink.classList.remove("active");
+                        }
+
+                        // Add active class to current link
+                        link.classList.add("active");
+                        previousActiveTocLink = link;
+
+                        // PERFORMANCE OPTIMIZATION: Debounce text updates to reduce DOM manipulation
+                        clearTimeout(updateTextTimeout);
+                        updateTextTimeout = window.setTimeout(() => {
+                            const buttonText = tocButton.querySelector(".toc-button-text");
+                            const currentHeading = tocButton.querySelector(".toc-current");
+
+                            if (buttonText && currentHeading) {
+                                const headingText = link.textContent?.trim() || "";
+                                currentHeading.textContent = headingText;
+                                buttonText.classList.add("has-active");
+                            }
+                        }, 50); // 50ms debounce
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all headings
+            document.querySelectorAll("h2[id], h3[id]").forEach((heading) => {
+                intersectionObserver!.observe(heading);
+            });
+
+            // Reset button text when no heading is active
+            const resetButtonText = () => {
+                const buttonText = tocButton.querySelector(".toc-button-text");
+                const currentHeading = tocButton.querySelector(".toc-current");
+
+                if (buttonText && currentHeading) {
+                    const activeLink = tocOverlay.querySelector(".mobile-toc-link.active");
+                    if (!activeLink) {
+                        currentHeading.textContent = "";
+                        buttonText.classList.remove("has-active");
+                    }
+                }
+            };
+
+            // Check for reset on scroll
+            let resetTimeout: number;
+            window.addEventListener("scroll", () => {
+                clearTimeout(resetTimeout);
+                resetTimeout = window.setTimeout(resetButtonText, 100);
+            }, { passive: true });
+        }
+
+        // Mark as initialized (intersection observer and scroll handler set up once)
         if (mobileHeader) {
             (mobileHeader as any)[MOBILE_HEADER_INITIALIZED] = true;
         }
@@ -909,8 +927,6 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     document.addEventListener("DOMContentLoaded", setupMobileHeader);
 
     // Reinitialize after view transitions
-    // Use setTimeout to ensure sidebar and backdrop are available
-    document.addEventListener("astro:after-swap", () => {
-        setTimeout(setupMobileHeader, 0);
-    });
+    // Menu button handler always reattaches; other features respect initialization flag
+    document.addEventListener("astro:after-swap", setupMobileHeader);
 </script>
