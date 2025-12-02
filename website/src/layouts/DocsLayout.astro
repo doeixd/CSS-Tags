@@ -296,23 +296,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 animation: none !important;
             }
 
-            /* Dynamic containment during transitions for performance */
-            html.theme-transitioning .docs-container {
-                contain: layout style;
-            }
-
-            html.theme-transitioning .toc-wrapper {
-                contain: layout style;
-            }
-
-            /* Apply containment during page navigation as well */
-            html.page-transitioning .docs-container {
-                contain: layout style;
-            }
-
-            html.page-transitioning .toc-wrapper {
-                contain: layout style;
-            }
 
             /* Theme transition: Instant switch for speed */
             html.theme-transitioning ::view-transition-old(root),
@@ -415,6 +398,17 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             html {
                 scroll-behavior: smooth;
+            }
+
+            /* Disable view transition pseudo-element rendering overhead */
+            @media (prefers-reduced-motion: no-preference) {
+                ::view-transition-group(*),
+                ::view-transition-image-pair(*),
+                ::view-transition-old(*),
+                ::view-transition-new(*) {
+                    animation-duration: 0ms !important;
+                    animation-delay: 0ms !important;
+                }
             }
 
             body {
@@ -530,35 +524,32 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             /* View Transition Animations */
-            /* Default: No animations - completely disable for navigation */
-            ::view-transition-group(root) {
-                animation-duration: 0s !important;
+            /* Default: No animations - instant transitions for maximum speed */
+            ::view-transition-group(*) {
+                animation-duration: 0ms !important;
             }
 
             ::view-transition-old(root),
             ::view-transition-new(root) {
                 animation: none !important;
-                animation-duration: 0s !important;
+                animation-duration: 0ms !important;
+                mix-blend-mode: normal !important;
             }
 
-            /* Optional: 10ms blur-in animation - ONLY when explicitly set */
-            html[data-animation-preference="blur-in"]:not(.theme-transitioning) ::view-transition-group(root) {
-                animation-duration: 10ms !important;
+            /* Force instant transitions for all elements */
+            ::view-transition-old(*),
+            ::view-transition-new(*) {
+                animation-duration: 0ms !important;
             }
 
-            html[data-animation-preference="blur-in"]:not(.theme-transitioning) ::view-transition-new(root) {
-                animation: blur-in 10ms ease-in !important;
-            }
-
-            @keyframes blur-in {
-                from {
-                    filter: blur(2px);
-                    opacity: 0;
-                }
-                to {
-                    filter: blur(0px);
-                    opacity: 1;
-                }
+            /* Ensure absolutely no delay during instant transitions */
+            html[data-instant-transition] ::view-transition-group(*),
+            html[data-instant-transition] ::view-transition-old(*),
+            html[data-instant-transition] ::view-transition-new(*) {
+                animation: none !important;
+                animation-duration: 0ms !important;
+                animation-delay: 0ms !important;
+                transition: none !important;
             }
 
             /* Keep search stable during transitions */
@@ -765,8 +756,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
             .content {
                 width: 100%;
-                /* Safe containment: content area doesn't affect external layout */
-                contain: layout style paint;
             }
 
             .toc-wrapper {
@@ -1087,6 +1076,19 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             // Expose navigation function globally for debugging
             (window as any).astroNavigate = navigate;
 
+            // Optimize view transitions for maximum speed
+            document.addEventListener('astro:before-preparation', () => {
+                // Signal instant transition
+                document.documentElement.dataset.instantTransition = 'true';
+            }, { passive: true });
+
+            document.addEventListener('astro:after-swap', () => {
+                // Remove flag immediately after swap
+                requestAnimationFrame(() => {
+                    delete document.documentElement.dataset.instantTransition;
+                });
+            }, { passive: true });
+
             // Theme is already applied by inline script in <head>, no need to reapply on every navigation
         </script>
 
@@ -1327,27 +1329,51 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             document.addEventListener("DOMContentLoaded", setupSidebarResize);
             document.addEventListener("astro:after-swap", setupSidebarResize);
 
-            // PERFORMANCE OPTIMIZATION: Dynamic containment during navigation
-            // Apply CSS containment only during page transitions for performance
-            // Remove it after to avoid layout issues
-            function setupNavigationContainment() {
+            // Track page transition state
+            function setupNavigationState() {
                 const html = document.documentElement;
 
-                // Add containment class before navigation starts
                 document.addEventListener("astro:before-preparation", () => {
                     html.classList.add("page-transitioning");
                 });
 
-                // Remove containment class after navigation completes
                 document.addEventListener("astro:after-swap", () => {
-                    // Use setTimeout to ensure containment stays during initial render
                     setTimeout(() => {
                         html.classList.remove("page-transitioning");
                     }, 100);
                 });
             }
 
-            document.addEventListener("DOMContentLoaded", setupNavigationContainment);
+            document.addEventListener("DOMContentLoaded", setupNavigationState);
+
+            // Intercept content area links for Astro navigation
+            function setupContentLinkInterception() {
+                const content = document.querySelector('.content');
+                if (!content) return;
+
+                content.addEventListener('click', (e) => {
+                    const link = (e.target as Element).closest('a[href]');
+                    if (!link) return;
+
+                    const href = link.getAttribute('href');
+                    // Only handle internal links (not hash links, external links, or downloads)
+                    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || link.hasAttribute('download')) {
+                        return;
+                    }
+
+                    // Check if this is an internal navigation
+                    const url = new URL(href, window.location.origin);
+                    if (url.origin !== window.location.origin) {
+                        return; // External link
+                    }
+
+                    // Let Astro handle the navigation
+                    // Don't prevent default - Astro's client-side router will intercept
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", setupContentLinkInterception);
+            document.addEventListener("astro:after-swap", setupContentLinkInterception);
 
             // PERFORMANCE OPTIMIZATION: Service Worker for caching and offline support
             if ('serviceWorker' in navigator) {

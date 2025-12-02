@@ -1,6 +1,10 @@
 ---
 import { getEntry, render } from 'astro:content';
-import LandingLayout from '../layouts/LandingLayout.astro';
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageMeta from "../components/PageMeta.astro";
+import PrevNextNav from "../components/PrevNextNav.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
 
 const entry = await getEntry('docs', 'index');
 
@@ -8,14 +12,31 @@ if (!entry) {
 	return Astro.redirect('/guides/introduction/');
 }
 
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const currentPath = '';
 ---
 
-<LandingLayout
+<ScrollToTop containerSelector=".scroll-to-top-container" />
+<DocsLayout
 	title={entry.data.title}
 	description={entry.data.description}
-	currentPath="/"
+	currentPath={currentPath}
+	headings={headings}
 >
-	<h1>{entry.data.title}</h1>
-	<Content />
-</LandingLayout>
+	<Breadcrumbs currentPath={currentPath} />
+	<div class="scroll-to-top-container" style="position: relative">
+		<h1>{entry.data.title}</h1>
+		{
+			entry.data.description && (
+				<p class="description">{entry.data.description}</p>
+			)
+		}
+		<Content />
+	</div>
+	<div
+		style="z-index: 100; position: relative; background-color: var(--bg-primary);"
+	>
+		<PageMeta currentPath={currentPath} />
+		<PrevNextNav currentPath={currentPath} />
+	</div>
+</DocsLayout>

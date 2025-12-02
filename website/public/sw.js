@@ -1,38 +1,41 @@
 // CSS Tags Documentation - Service Worker
 // Optimized caching strategy for fast, offline-capable documentation
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `css-tags-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `css-tags-dynamic-${CACHE_VERSION}`;
 const SEARCH_CACHE = `css-tags-search-${CACHE_VERSION}`;
+const NAVIGATION_CACHE = `css-tags-nav-${CACHE_VERSION}`;
 
 // Assets to precache on service worker install
-const PRECACHE_ASSETS = [
-  '/CSS-Tags/',
-  '/CSS-Tags/styles.css',
-];
+// Start with empty array - let runtime caching handle everything
+const PRECACHE_ASSETS = [];
 
 // Cache strategies by resource type
 const CACHE_STRATEGIES = {
   // Static assets: Cache first (fonts, images, CSS, JS)
-  static: /\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico|css|js)$/,
+  static: /\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico|css|js|mjs)$/,
 
   // Search index: Stale-while-revalidate (pagefind)
   search: /\/pagefind\//,
 
-  // HTML pages: Network first with cache fallback
+  // HTML pages: Stale-while-revalidate for faster perceived navigation
   pages: /\.html?$/,
+
+  // Navigation pages: Cache with frequent revalidation
+  navigation: /\/(guides|api|examples|reference)\//,
 };
 
 // Install event - precache critical assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
-
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('[SW] Precaching critical assets');
-        return cache.addAll(PRECACHE_ASSETS);
+    Promise.resolve()
+      .then(() => {
+        // Only precache if there are assets to cache
+        if (PRECACHE_ASSETS.length > 0) {
+          return caches.open(STATIC_CACHE)
+            .then((cache) => cache.addAll(PRECACHE_ASSETS));
+        }
       })
       .then(() => self.skipWaiting()) // Activate immediately
   );
@@ -40,8 +43,6 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
-
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
@@ -52,10 +53,7 @@ self.addEventListener('activate', (event) => {
               return name.startsWith('css-tags-') &&
                      !name.includes(CACHE_VERSION);
             })
-            .map((name) => {
-              console.log('[SW] Deleting old cache:', name);
-              return caches.delete(name);
-            })
+            .map((name) => caches.delete(name))
         );
       })
       .then(() => self.clients.claim()) // Take control immediately
@@ -84,9 +82,12 @@ self.addEventListener('fetch', (event) => {
   } else if (CACHE_STRATEGIES.search.test(url.pathname)) {
     // Search index: Stale-while-revalidate
     event.respondWith(staleWhileRevalidate(request, SEARCH_CACHE));
+  } else if (CACHE_STRATEGIES.navigation.test(url.pathname)) {
+    // Navigation pages: Stale-while-revalidate for instant perceived load
+    event.respondWith(staleWhileRevalidate(request, NAVIGATION_CACHE));
   } else if (CACHE_STRATEGIES.pages.test(url.pathname) || url.pathname.endsWith('/')) {
-    // HTML pages: Network first, cache fallback
-    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    // HTML pages: Stale-while-revalidate for instant perceived load
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
   } else {
     // Everything else: Network first with cache fallback
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
@@ -111,7 +112,6 @@ async function cacheFirst(request, cacheName) {
     }
     return response;
   } catch (error) {
-    console.error('[SW] Cache first failed:', error);
     throw error;
   }
 }
@@ -135,22 +135,20 @@ async function networkFirst(request, cacheName) {
     const cached = await cache.match(request);
 
     if (cached) {
-      console.log('[SW] Network failed, returning cached version');
       return cached;
     }
 
-    // No cache available, show offline page
-    console.error('[SW] Network first failed, no cache available:', error);
+    // No cache available
     throw error;
   }
 }
 
-// Strategy: Stale-while-revalidate (for search index)
+// Strategy: Stale-while-revalidate (for instant perceived performance)
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
 
-  // Fetch fresh version in background
+  // Fetch fresh version in background (don't await)
   const fetchPromise = fetch(request)
     .then((response) => {
       if (response.ok) {
@@ -158,10 +156,7 @@ async function staleWhileRevalidate(request, cacheName) {
       }
       return response;
     })
-    .catch((error) => {
-      console.error('[SW] Background fetch failed:', error);
-      return null;
-    });
+    .catch(() => null);
 
   // Return cached version immediately if available
   if (cached) {

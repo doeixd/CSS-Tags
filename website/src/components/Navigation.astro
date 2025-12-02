@@ -134,7 +134,7 @@ function isActive(slug: string | undefined) {
                                                          ),
                                                      },
                                                  ]}
-
+                                                 data-astro-prefetch
                                              >
                                                 {item.label}
                                             </a>
@@ -150,7 +150,7 @@ function isActive(slug: string | undefined) {
                                 "nav-link-standalone",
                                 { active: isActive(section.slug) },
                             ]}
-                            data-astro-prefetch="hover"
+                            data-astro-prefetch
                         >
                             {section.label}
                         </a>
@@ -287,7 +287,6 @@ function isActive(slug: string | undefined) {
         .sidebar.sidebar-dragging {
             transition: none; /* Disable transitions during drag */
             transform: translateX(var(--sidebar-drag-x, 0));
-            will-change: transform; /* Hint to browser for optimization */
         }
     }
 
@@ -349,11 +348,6 @@ function isActive(slug: string | undefined) {
         visibility: hidden;
         transform: translateY(20px);
         transition: var(--scroll-button-transition);
-
-        /* Performance optimizations for fixed positioning */
-        will-change: opacity, visibility;
-        /* Create own stacking context to prevent containment issues */
-        isolation: isolate;
     }
 
     /* Show floating button when sidebar is hidden */
@@ -539,8 +533,6 @@ function isActive(slug: string | undefined) {
         transition: background-color var(--transition-fast),
                     color var(--transition-fast),
                     font-weight var(--transition-fast);
-        /* Safe containment: nav items are self-contained */
-        contain: layout style paint;
     }
 
     .nav-link:hover {
@@ -1019,9 +1011,14 @@ function isActive(slug: string | undefined) {
         const navigate = (window as any).astroNavigate;
         if (!navigate) return;
 
+        let isNavigating = false;
+
         document.addEventListener('mousedown', (e) => {
             // Only trigger on left click (button 0)
             if (e.button !== 0) return;
+
+            // Prevent double navigation
+            if (isNavigating) return;
 
             const link = (e.target as Element).closest('a[href]');
             if (!link) return;
@@ -1038,10 +1035,21 @@ function isActive(slug: string | undefined) {
 
             // Prevent the default click from also firing
             e.preventDefault();
+            e.stopPropagation();
 
-            // Navigate immediately on mousedown
-            navigate(href);
-        });
+            // Set navigation flag
+            isNavigating = true;
+
+            // Use requestAnimationFrame for fastest possible navigation
+            requestAnimationFrame(() => {
+                navigate(href);
+            });
+
+            // Reset flag after navigation starts
+            setTimeout(() => {
+                isNavigating = false;
+            }, 50);
+        }, { capture: true, passive: false });
     }
 
     // Update on page load

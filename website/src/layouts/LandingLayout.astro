@@ -402,6 +402,17 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 scroll-behavior: smooth;
             }
 
+            /* Disable view transition pseudo-element rendering overhead */
+            @media (prefers-reduced-motion: no-preference) {
+                ::view-transition-group(*),
+                ::view-transition-image-pair(*),
+                ::view-transition-old(*),
+                ::view-transition-new(*) {
+                    animation-duration: 0ms !important;
+                    animation-delay: 0ms !important;
+                }
+            }
+
             body {
                 font-family: system-ui, sans-serif;
                 color: var(--text-primary);
@@ -503,29 +514,32 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             /* View Transition Animations */
-            /* Default: No animations */
-            ::view-transition-old(root) {
-                animation: none;
+            /* Default: No animations - instant transitions for maximum speed */
+            ::view-transition-group(*) {
+                animation-duration: 0ms !important;
             }
 
+            ::view-transition-old(root),
             ::view-transition-new(root) {
-                animation: none;
+                animation: none !important;
+                animation-duration: 0ms !important;
+                mix-blend-mode: normal !important;
             }
 
-            /* Optional: 40ms blur-in animation */
-            html[data-animation-preference="blur-in"] ::view-transition-new(root) {
-                animation: blur-in 40ms ease-in;
+            /* Force instant transitions for all elements */
+            ::view-transition-old(*),
+            ::view-transition-new(*) {
+                animation-duration: 0ms !important;
             }
 
-            @keyframes blur-in {
-                from {
-                    filter: blur(2px);
-                    opacity: 0;
-                }
-                to {
-                    filter: blur(0px);
-                    opacity: 1;
-                }
+            /* Ensure absolutely no delay during instant transitions */
+            html[data-instant-transition] ::view-transition-group(*),
+            html[data-instant-transition] ::view-transition-old(*),
+            html[data-instant-transition] ::view-transition-new(*) {
+                animation: none !important;
+                animation-duration: 0ms !important;
+                animation-delay: 0ms !important;
+                transition: none !important;
             }
 
             /* Keep search stable during transitions */
@@ -564,7 +578,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 transition: none !important;
                 /* Optimize fixed positioning */
                 will-change: transform;
-                contain: layout style paint;
             }
 
             .header-container {
@@ -662,8 +675,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             .landing-container {
                 min-height: 100vh;
                 width: 100%;
-                /* Improve layout stability - avoid paint containment for dynamic content */
-                contain: layout style;
             }
 
             .landing-content {
@@ -772,38 +783,26 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
     <body>
         <ClientRouter />
         <script>
-            import {
-                supportsViewTransitions,
-                transitionEnabledOnThisPage
-            } from 'astro:transitions/client';
+            import { navigate } from 'astro:transitions/client';
 
-            // Debug view transitions
-            console.log('View Transitions supported:', supportsViewTransitions);
-            console.log('Transitions enabled on this page:', transitionEnabledOnThisPage);
+            // Expose navigation function globally
+            (window as any).astroNavigate = navigate;
 
-            // Monitor navigation performance
-            document.addEventListener('astro:before-preparation', (e) => {
-                console.log('Navigation starting:', e.to.pathname);
-                performance.mark('nav-start');
-            });
+            // Optimize view transitions for maximum speed
+            document.addEventListener('astro:before-preparation', () => {
+                // Signal instant transition
+                document.documentElement.dataset.instantTransition = 'true';
+            }, { passive: true });
 
-            document.addEventListener('astro:after-swap', (e) => {
-                performance.mark('nav-end');
-                const measure = performance.measure('navigation-duration', 'nav-start', 'nav-end');
-                console.log('Navigation completed in:', measure.duration, 'ms');
-            });
-
-            // Log any transition errors
-            document.addEventListener('error', (e) => {
-                if (e.message.includes('view-transition')) {
-                    console.error('View transition error:', e);
-                }
-            });
+            document.addEventListener('astro:after-swap', () => {
+                // Remove flag immediately after swap
+                requestAnimationFrame(() => {
+                    delete document.documentElement.dataset.instantTransition;
+                });
+            }, { passive: true });
 
             // Ensure scripts re-run properly after navigation
             document.addEventListener('astro:page-load', () => {
-                console.log('Page loaded, re-initializing components');
-
                 // Re-run theme application
                 const theme = localStorage.getItem('theme') || 'light';
                 document.documentElement.classList.remove('light-mode', 'dark-mode');

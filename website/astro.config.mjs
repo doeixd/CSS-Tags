@@ -20,6 +20,8 @@ export default defineConfig({
 	vite: {
 		build: {
 			cssCodeSplit: true,
+			minify: 'terser',
+			cssMinify: 'lightningcss',
 			rollupOptions: {
 				output: {
 					manualChunks: {
@@ -33,8 +35,8 @@ export default defineConfig({
 		}
 	},
 	prefetch: {
-	prefetchAll: true,
-	defaultStrategy: 'viewport',
+		prefetchAll: true,
+		defaultStrategy: 'viewport',
 	},
 	experimental: {
 		clientPrerender: true,
