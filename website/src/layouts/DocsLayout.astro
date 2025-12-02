@@ -699,6 +699,7 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 /* Ensure sidebar wrapper has high z-index */
                 position: relative;
                 z-index: var(--z-index-sidebar);
+                grid-area: sidebar;
             }
 
             /* Add mobile padding to sidebar on mobile */
@@ -718,27 +719,57 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 z-index: 1;
             }
 
-            /* Only use 3-column layout on desktop where TOC is visible */
-            @media (min-width: 1200px) {
-                .docs-container.has-toc {
-                    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
+            /* Desktop: sidebar is positioned via grid in docs-container area */
+            @media (min-width: 769px) {
+                body {
+                    display: grid;
+                    grid-template-areas: "sidebar content";
+                    grid-template-columns: var(--sidebar-width) 1fr;
+                }
+
+                .sidebar-container {
+                    grid-area: sidebar;
+                }
+
+                .docs-container {
+                    grid-area: content;
+                }
+
+                /* Only use 2-column layout within docs-container on desktop where TOC is visible */
+                @media (min-width: 1200px) {
+                    .docs-container.has-toc {
+                        grid-template-columns: minmax(0, 1fr) var(--toc-width);
+                    }
+                }
+
+                .docs-container.no-toc {
+                    grid-template-columns: minmax(0, 1fr);
                 }
             }
 
-            .docs-container.no-toc {
-                grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+            /* Mobile: sidebar is independent, fixed positioned */
+            @media (max-width: 768px) {
+                .docs-container {
+                    grid-template-columns: 1fr;
+                }
             }
 
             .sidebar-resize-handle {
-                position: absolute;
+                position: fixed;
                 top: 0;
                 left: var(--sidebar-width);
                 width: var(--resize-handle-width);
-                height: 100%;
+                height: 100vh;
                 cursor: col-resize;
                 background: transparent;
                 z-index: 10;
                 transition: background var(--transition-normal);
+            }
+
+            @media (max-width: 768px) {
+                .sidebar-resize-handle {
+                    display: none;
+                }
             }
 
             .sidebar-resize-handle:hover,
@@ -1069,10 +1100,6 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             }
 
             @media (max-width: 768px) {
-                .docs-container {
-                    grid-template-columns: 1fr;
-                }
-
                 .content-wrapper {
                     padding: var(--space-2xl) var(--space-lg);
                     /* Ensure content starts below mobile header */
@@ -1243,10 +1270,10 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 footerSticky={true}
                 footerHotEdgeReveal={false}
             />
+            <div class="sidebar-resize-handle"></div>
         </div>
 
         <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
-            <div class="sidebar-resize-handle"></div>
             <div class="content-wrapper">
                 <main class="content" id="main-content" data-pagefind-body >
                     <slot />
