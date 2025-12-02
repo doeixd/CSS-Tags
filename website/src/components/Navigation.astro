@@ -276,6 +276,10 @@ function isActive(slug: string | undefined) {
             transform: translateX(-100%);
             transition: transform var(--transition-nav);
             padding-top: var(--nav-sidebar-mobile-padding-top);
+            /* Optimize for smooth animations */
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .sidebar.open {

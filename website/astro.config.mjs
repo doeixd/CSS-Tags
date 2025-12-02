@@ -18,10 +18,24 @@ export default defineConfig({
 		assets: '_astro'
 	},
 	vite: {
+		// css: {
+		// 	transformer: 'lightningcss',
+		// 	lightningcss: {
+		// 		targets: {
+		// 			chrome: 111, // View Transitions API support
+		// 			edge: 111,
+		// 			safari: 18,
+		// 			firefox: 128
+		// 		},
+		// 		drafts: {
+		// 			customMedia: true,
+		// 		}
+		// 	}
+		// },
 		build: {
 			cssCodeSplit: true,
 			minify: 'terser',
-			cssMinify: 'lightningcss',
+			// cssMinify: 'lightningcss',
 			rollupOptions: {
 				output: {
 					manualChunks: {

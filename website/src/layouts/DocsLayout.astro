@@ -695,11 +695,27 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 }
             }
 
+            .sidebar-container {
+                /* Ensure sidebar wrapper has high z-index */
+                position: relative;
+                z-index: var(--z-index-sidebar);
+            }
+
+            /* Add mobile padding to sidebar on mobile */
+            @media (max-width: 768px) {
+                .sidebar-container {
+                    /* Increase sidebar padding-top on mobile */
+                    --nav-sidebar-mobile-padding-top: calc(var(--mobile-header-height) + var(--space-lg));
+                }
+            }
+
             .docs-container {
                 display: grid;
                 min-height: 100vh;
                 gap: var(--layout-docs-container-gap, var(--space-2xl));
                 position: relative;
+                /* Ensure content stays below sidebar */
+                z-index: 1;
             }
 
             /* Only use 3-column layout on desktop where TOC is visible */
@@ -1059,7 +1075,8 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
 
                 .content-wrapper {
                     padding: var(--space-2xl) var(--space-lg);
-                    padding-top: var(--mobile-header-height);
+                    /* Ensure content starts below mobile header */
+                    padding-top: calc(var(--mobile-header-height) + var(--space-xl));
                 }
 
                 h1 {
@@ -1216,16 +1233,19 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
             <LoadingIndicator />
             <KeyboardShortcuts />
         </div>
+
+        <!-- Sidebar outside docs-container on mobile for proper z-index layering -->
+        <div transition:name="sidebar" transition:persist class="sidebar-container">
+            <Navigation
+                currentPath={currentPath}
+                showSidebarFooter={true}
+                footerShowHideButton={true}
+                footerSticky={true}
+                footerHotEdgeReveal={false}
+            />
+        </div>
+
         <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
-            <div transition:name="sidebar" transition:persist>
-                <Navigation
-                    currentPath={currentPath}
-                    showSidebarFooter={true}
-                    footerShowHideButton={true}
-                    footerSticky={true}
-                    footerHotEdgeReveal={false}
-                />
-            </div>
             <div class="sidebar-resize-handle"></div>
             <div class="content-wrapper">
                 <main class="content" id="main-content" data-pagefind-body >

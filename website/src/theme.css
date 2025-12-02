@@ -159,7 +159,7 @@
         --transition-normal: 0.15s ease-out;
         --transition-slow: 0.2s ease-out;
         --transition-slow-bezier: 0.2s ease-out;
-        --transition-nav: 0.15s ease-out;
+        --transition-nav: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
         /* Transforms */
         --transform-scale-hover: scale(1.05);
