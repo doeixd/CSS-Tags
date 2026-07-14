@@ -46,8 +46,10 @@
   /* ============================================ */
 
   /* Secondary & Tertiary Hues */
-  --secondary-h: calc((var(--accent-h) + var(--secondary-hue-shift)) mod 360);
-  --tertiary-h: calc((var(--accent-h) + var(--tertiary-hue-shift)) mod 360);
+  /* OKLCH hue wraps naturally, so plain calc() is a wider-supported fallback
+     than relying on CSS round/mod syntax here. */
+  --secondary-h: calc(var(--accent-h) + var(--secondary-hue-shift));
+  --tertiary-h: calc(var(--accent-h) + var(--tertiary-hue-shift));
   --neutral-h: var(--accent-h);
 
   /* Feedback Hues */

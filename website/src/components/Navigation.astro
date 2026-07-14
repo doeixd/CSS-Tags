@@ -473,7 +473,7 @@ function isActive(slug: string | undefined) {
     }
 
     .nav-section {
-        margin-bottom: var(--nav-section-margin-bottom, var(--font-size-2xl));
+        margin-bottom: var(--nav-section-margin-bottom, var(--space-lg));
     }
 
     .nav-section[data-collapsed="true"] .section-items {
@@ -481,8 +481,7 @@ function isActive(slug: string | undefined) {
     }
 
     .nav-section:not([data-collapsed="true"]) .section-items {
-        max-height: var(--max-height-expanded);
-        transition: max-height var(--transition-nav);
+        display: block;
     }
 
     .nav-section[data-collapsed="true"] .section-toggle {
@@ -494,7 +493,7 @@ function isActive(slug: string | undefined) {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        padding: var(--space-lg) 0 var(--space-sm) 0;
+        padding: var(--space-sm) 0;
         background: var(--bg-secondary);
         border-bottom: 1px solid var(--border-color);
         border: none;
@@ -503,12 +502,10 @@ function isActive(slug: string | undefined) {
         text-transform: var(--nav-section-title-text-transform, capitalize);
         letter-spacing: var(--nav-section-title-letter-spacing, -0.1px);
         color: var(--nav-section-title-color, hsl(0deg 0% 34.51%));
-        margin: calc(var(--space-2xl) * -1) 0 var(--space-sm) 0;
+        margin: 0 0 var(--space-xs);
         cursor: pointer;
         text-align: left;
-        position: sticky;
-        top: calc(var(--space-2xl) * -1);
-        z-index: 10;
+        position: static;
     }
 
     .section-title:hover {
@@ -536,6 +533,8 @@ function isActive(slug: string | undefined) {
         text-decoration: none;
         border-radius: var(--nav-link-border-radius, var(--border-radius-md));
         font-size: var(--nav-link-font-size, var(--font-size-base));
+        line-height: 1.35;
+        overflow-wrap: anywhere;
         transition: background-color var(--transition-fast),
                     color var(--transition-fast),
                     font-weight var(--transition-fast);
@@ -611,9 +610,6 @@ function isActive(slug: string | undefined) {
 </style>
 
 <script>
-    // Check if sidebar is initialized (for persisted elements)
-    const SIDEBAR_INITIALIZED = '__sidebar_initialized__';
-
     // Cache nav links and their paths for fast lookup (avoids repeated DOM queries)
     let cachedLinks: Array<{ element: Element; path: string }> = [];
     let linksCached = false;
@@ -852,19 +848,15 @@ function isActive(slug: string | undefined) {
 
     // Store sidebar click handler for cleanup
     let sidebarClickHandler: ((e: Event) => void) | null = null;
+    let sidebarWithClickHandler: Element | null = null;
 
     function setupCollapsibleSections() {
         const sidebar = document.querySelector(".sidebar");
         if (!sidebar) return;
 
-        // Skip if sidebar already initialized (persisted)
-        if ((sidebar as any)[SIDEBAR_INITIALIZED]) {
-            return;
-        }
-
         // Clean up old event listener
-        if (sidebarClickHandler) {
-            sidebar.removeEventListener("click", sidebarClickHandler);
+        if (sidebarClickHandler && sidebarWithClickHandler) {
+            sidebarWithClickHandler.removeEventListener("click", sidebarClickHandler);
         }
 
         // Load saved state from localStorage
@@ -931,6 +923,7 @@ function isActive(slug: string | undefined) {
         };
 
         sidebar.addEventListener("click", sidebarClickHandler);
+        sidebarWithClickHandler = sidebar;
     }
 
     function isElementInViewport(element) {
@@ -1009,11 +1002,11 @@ function isActive(slug: string | undefined) {
 
         // Clean up sidebar click handler
         if (sidebarClickHandler) {
-            const sidebar = document.querySelector(".sidebar");
-            if (sidebar) {
-                sidebar.removeEventListener("click", sidebarClickHandler);
+            if (sidebarWithClickHandler) {
+                sidebarWithClickHandler.removeEventListener("click", sidebarClickHandler);
             }
             sidebarClickHandler = null;
+            sidebarWithClickHandler = null;
         }
     });
 
@@ -1084,11 +1077,6 @@ function isActive(slug: string | undefined) {
         autoExpandActiveSection();
         setupInstantNavigation();
 
-        // Mark sidebar as initialized
-        const sidebar = document.querySelector(".sidebar");
-        if (sidebar) {
-            (sidebar as any)[SIDEBAR_INITIALIZED] = true;
-        }
     });
 
     // Update after view transitions
@@ -1096,17 +1084,13 @@ function isActive(slug: string | undefined) {
         // Update active link on navigation
         updateActiveLink();
 
-        const sidebar = document.querySelector(".sidebar");
-
         // ALWAYS setup mobile menu handlers (backdrop, touch, links)
         // These need to be reattached even for persisted sidebars
         setupMobileMenu();
 
-        // Only setup collapsible sections and auto-expand once
-        if (sidebar && !(sidebar as any)[SIDEBAR_INITIALIZED]) {
-            setupCollapsibleSections();
-            autoExpandActiveSection();
-            (sidebar as any)[SIDEBAR_INITIALIZED] = true;
-        }
+        // The persisted sidebar loses this listener during before-swap cleanup,
+        // so it must be reattached after every Astro navigation.
+        setupCollapsibleSections();
+        autoExpandActiveSection();
     });
 </script>

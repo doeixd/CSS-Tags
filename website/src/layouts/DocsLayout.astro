@@ -368,12 +368,10 @@ const hasToc = tocHeadings.length > 0;
                 }
             }
 
-            @layer reset {
-                * {
-                    box-sizing: border-box;
-                    margin: 0;
-                    padding: 0;
-                }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
             }
 
             *:focus-visible {
@@ -411,10 +409,19 @@ const hasToc = tocHeadings.length > 0;
                 color: var(--text-primary);
                 background: var(--bg-primary);
                 line-height: 1.6;
-                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+                overflow-x: clip;
+                overflow-y: visible;
                 min-width: var(--min-mobile-width);
                 /* Force GPU acceleration for smoother rendering */
                 /* transform: translateZ(0); */
+            }
+
+            html {
+                height: auto;
+                min-height: 100%;
+                overflow-y: auto;
             }
 
             /* Performance optimization: Use CSS classes for overflow control instead of inline styles */

@@ -145,8 +145,8 @@
         --z-index-skip-link: 10001;
 
         /* Shadows */
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
-        --shadow-md: 2px 0 16px rgba(0, 0, 0, 0.2);
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 
         /* Opacity */
         --opacity-hover: 0.9;
@@ -341,7 +341,7 @@
         /* ---------------------------------------------------------------------
            NAVIGATION COMPONENT
            --------------------------------------------------------------------- */
-        --nav-sidebar-padding: var(--space-2xl) var(--space-lg);
+        --nav-sidebar-padding: 1.25rem 0.75rem;
         --nav-sidebar-padding-top: var(--nav-sidebar-padding);
         --nav-sidebar-padding-right: var(--nav-sidebar-padding);
         --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
@@ -359,10 +359,10 @@
         --nav-mobile-menu-border-radius: var(--border-radius-lg);
         --nav-mobile-menu-box-shadow: var(--shadow-sm);
 
-        --nav-header-margin-bottom: var(--space-2xl);
-        --nav-header-padding-bottom: var(--space-lg);
+        --nav-header-margin-bottom: var(--space-lg);
+        --nav-header-padding-bottom: var(--space-sm);
 
-        --nav-site-title-font-size: var(--font-size-2xl);
+        --nav-site-title-font-size: var(--font-size-lg);
         --nav-site-title-font-weight: var(--font-weight-bold);
 
         --nav-github-link-padding: var(--space-sm) var(--space-lg);
@@ -372,8 +372,8 @@
         --nav-github-logo-size: 20px;
         --nav-github-logo-color: oklch(from var(--text-secondary) l c h / 50%);
 
-        --nav-section-margin-bottom: var(--font-size-5xl);
-        --nav-section-title-font-size: 15px;
+        --nav-section-margin-bottom: var(--space-lg);
+        --nav-section-title-font-size: var(--font-size-sm);
         --nav-section-title-font-weight: 600;
         --nav-section-title-text-transform: capitalize;
         --nav-section-title-letter-spacing: -0.1px;
@@ -382,9 +382,9 @@
 
         --nav-section-items-margin-bottom: var(--space-xs);
 
-        --nav-link-padding: var(--space-sm) var(--space-md);
+        --nav-link-padding: 0.35rem 0.5rem;
         --nav-link-border-radius: var(--border-radius-md);
-        --nav-link-font-size: var(--font-size-base);
+        --nav-link-font-size: var(--font-size-sm);
 
         /* ---------------------------------------------------------------------
            MOBILE HEADER COMPONENT
@@ -402,11 +402,11 @@
         /* ---------------------------------------------------------------------
            HEADER COMPONENT
            --------------------------------------------------------------------- */
-        --header-height: 4rem;
+        --header-height: 3.5rem;
         --header-height-mobile: 3.5rem;
         --header-bg: var(--bg-secondary);
         --header-border: 1px solid var(--border-color);
-        --header-padding-x: var(--space-2xl);
+        --header-padding-x: var(--space-xl);
         --header-max-width: 100%;
         --header-z-index: 1003;
         --header-logo-height: 2rem;
@@ -415,7 +415,7 @@
         /* ---------------------------------------------------------------------
            LAYOUT COMPONENT
            --------------------------------------------------------------------- */
-        --layout-content-wrapper-padding: 3rem var(--space-2xl);
+        --layout-content-wrapper-padding: 2rem var(--space-xl);
         --layout-content-wrapper-padding-top: var(
             --layout-content-wrapper-padding
         );
@@ -429,7 +429,7 @@
             --layout-content-wrapper-padding
         );
 
-        --layout-toc-wrapper-padding: 3rem var(--space-lg) 3rem 0;
+        --layout-toc-wrapper-padding: 2rem var(--space-md) 2rem 0;
         --layout-toc-wrapper-padding-top: var(--layout-toc-wrapper-padding);
         --layout-toc-wrapper-padding-right: var(--layout-toc-wrapper-padding);
         --layout-toc-wrapper-padding-bottom: var(--layout-toc-wrapper-padding);
@@ -438,29 +438,29 @@
         --layout-docs-container-gap: var(--space-2xl);
 
         /* Typography within layout */
-        --layout-h1-font-size: var(--font-size-4xl);
+        --layout-h1-font-size: 2rem;
         --layout-h1-margin-bottom: var(--space-sm);
 
-        --layout-h2-font-size: var(--font-size-3xl);
-        --layout-h2-margin-top: var(--space-2xl);
-        --layout-h2-margin-bottom: var(--space-lg);
-        --layout-h2-padding-top: var(--space-lg);
+        --layout-h2-font-size: 1.5rem;
+        --layout-h2-margin-top: var(--space-xl);
+        --layout-h2-margin-bottom: var(--space-md);
+        --layout-h2-padding-top: var(--space-sm);
 
-        --layout-h3-font-size: var(--font-size-2xl);
-        --layout-h3-margin-top: var(--font-size-2xl);
-        --layout-h3-margin-bottom: var(--space-md);
+        --layout-h3-font-size: 1.25rem;
+        --layout-h3-margin-top: var(--space-xl);
+        --layout-h3-margin-bottom: var(--space-sm);
 
-        --layout-h4-font-size: var(--font-size-xl);
-        --layout-h4-margin-top: var(--font-size-xl);
+        --layout-h4-font-size: 1.1rem;
+        --layout-h4-margin-top: var(--space-lg);
         --layout-h4-margin-bottom: var(--space-sm);
 
-        --layout-p-margin-bottom: var(--space-lg);
+        --layout-p-margin-bottom: var(--space-md);
 
         /* Code elements within layout */
         --layout-code-padding: 0.2em 0.4em;
         --layout-code-border-radius: 3px;
 
-        --layout-pre-padding: var(--space-lg);
+        --layout-pre-padding: var(--space-md);
         --layout-pre-border-radius: var(--border-radius-lg);
         --layout-pre-margin-bottom: var(--space-lg);
 

@@ -73,8 +73,12 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
     </div>
 
     <p class="palette-status" data-palette-status aria-live="polite">
-        Showing all 31 color scales.
+        Showing all 31 color scales. Scroll horizontally to see every step.
     </p>
+
+    <div class="palette-scrollbar" data-palette-scrollbar aria-hidden="true">
+        <div data-palette-scrollbar-space></div>
+    </div>
 
     <div class="palette-scroll" tabindex="0" aria-label="Scrollable color palette">
         <div class="palette-grid">
@@ -119,8 +123,32 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
 
             const status = viewer.querySelector<HTMLElement>("[data-palette-status]");
             const mode = viewer.querySelector<HTMLSelectElement>("[data-copy-mode]");
+            const paletteScroll = viewer.querySelector<HTMLElement>(".palette-scroll");
+            const topScrollbar = viewer.querySelector<HTMLElement>("[data-palette-scrollbar]");
+            const topScrollbarSpace = viewer.querySelector<HTMLElement>("[data-palette-scrollbar-space]");
             const filterButtons = viewer.querySelectorAll<HTMLButtonElement>("[data-palette-filter]");
             const rows = viewer.querySelectorAll<HTMLElement>("[data-palette-group]");
+
+            if (paletteScroll && topScrollbar && topScrollbarSpace) {
+                const updateScrollbarWidth = () => {
+                    topScrollbarSpace.style.width = `${paletteScroll.scrollWidth}px`;
+                };
+                let syncing = false;
+                topScrollbar.addEventListener("scroll", () => {
+                    if (syncing) return;
+                    syncing = true;
+                    paletteScroll.scrollLeft = topScrollbar.scrollLeft;
+                    requestAnimationFrame(() => syncing = false);
+                });
+                paletteScroll.addEventListener("scroll", () => {
+                    if (syncing) return;
+                    syncing = true;
+                    topScrollbar.scrollLeft = paletteScroll.scrollLeft;
+                    requestAnimationFrame(() => syncing = false);
+                });
+                updateScrollbarWidth();
+                new ResizeObserver(updateScrollbarWidth).observe(paletteScroll);
+            }
 
             filterButtons.forEach((button) => {
                 button.addEventListener("click", () => {
@@ -253,6 +281,20 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
         padding: 0 1.25rem 1.25rem;
         overflow-x: auto;
         overscroll-behavior-inline: contain;
+        touch-action: pan-x pan-y;
+    }
+
+    .palette-scrollbar {
+        height: 0.85rem;
+        margin: 0 1.25rem 0.35rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-gutter: stable;
+    }
+
+    .palette-scrollbar > div {
+        display: block;
+        height: 1px;
     }
 
     .palette-grid {
