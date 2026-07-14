@@ -6,6 +6,8 @@ description: The `list` component provides flexible, styleable list layouts with
 ## Overview
 The `list` component provides flexible, styleable list layouts with support for custom markers, icons, and dividers. It can display as vertical lists or inline horizontal arrangements.
 
+Start with native `<ul>` or `<ol>` semantics. Add `data-list` or `.list` to the list and `data-list-item` or `.list-item` to each `<li>`. The custom `<list>` and `<list-item>` hosts are optional styling shorthand.
+
 ## Key Features
 - **Flexible Layout**: Vertical or inline horizontal display
 - **Custom Markers**: Styleable list item markers with `::marker`
@@ -14,9 +16,9 @@ The `list` component provides flexible, styleable list layouts with support for 
 - **Logical Properties**: RTL-friendly positioning
 
 ## Structure
-- `list`: Main container
-- `list-item`: Individual list items
-- `list-divider`: Separator elements
+- Container: `list`, `[data-list]`, or `.list`
+- Item: `list-item`, `[data-list-item]`, or `.list-item`
+- Divider: `list-divider`, `[data-list-divider]`, or `.list-divider`
 
 ## Attributes
 
@@ -43,11 +45,11 @@ The `list` component provides flexible, styleable list layouts with support for 
 
 ### Basic Vertical List
 ```html
-<list>
-  <list-item>First item</list-item>
-  <list-item>Second item</list-item>
-  <list-item>Third item</list-item>
-</list>
+<ul data-list>
+  <li data-list-item>First item</li>
+  <li data-list-item>Second item</li>
+  <li data-list-item>Third item</li>
+</ul>
 ```
 
 ### Inline List
@@ -61,10 +63,10 @@ The `list` component provides flexible, styleable list layouts with support for 
 
 ### Custom Markers
 ```html
-<list>
-  <list-item marker-color="red" type="→">Important</list-item>
-  <list-item marker-color="green" type="✓">Completed</list-item>
-</list>
+<ul class="list">
+  <li class="list-item" marker-color="red" type="→">Important</li>
+  <li class="list-item" marker-color="green" type="✓">Completed</li>
+</ul>
 ```
 
 ### With Icons
@@ -118,7 +120,7 @@ The `list` component provides flexible, styleable list layouts with support for 
 
 ### Container Styles
 ```css
-list {
+:is(list, [data-list], .list) {
   display: flex;
   flex-direction: column;
   gap: attr(gap type(<length>), var(--l-gap, 0.5rem));
@@ -138,7 +140,7 @@ list {
 
 ### Item Markers
 ```css
-& > list-item::marker {
+& > :is(list-item, [data-list-item], .list-item)::marker {
   color: attr(marker-color type(<color>), var(--theme-primary));
   content: attr(type type(*), '•') ' ';
 }

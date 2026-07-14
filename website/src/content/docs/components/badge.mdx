@@ -12,8 +12,8 @@ Use badges for short, read-only metadata. A badge should support nearby content,
 <LiveExample title="Feedback statuses" compact>
   <layout-cluster gap="var(--space-sm)">
     <badge status="success">Ready</badge>
-    <badge status="warning">Needs review</badge>
-    <badge status="error">Blocked</badge>
+    <span data-badge status="warning">Needs review</span>
+    <span class="badge" status="error">Blocked</span>
     <badge status="info">Draft</badge>
     <badge status="primary">Featured</badge>
   </layout-cluster>
@@ -21,8 +21,8 @@ Use badges for short, read-only metadata. A badge should support nearby content,
 
 ```html
 <badge status="success">Ready</badge>
-<badge status="warning">Needs review</badge>
-<badge status="error">Blocked</badge>
+<span data-badge status="warning">Needs review</span>
+<span class="badge" status="error">Blocked</span>
 <badge status="info">Draft</badge>
 <badge status="primary">Featured</badge>
 ```
@@ -49,7 +49,7 @@ Status colors are visual reinforcement. Keep the status word in the badge so mea
 
 ## Public API
 
-The shipped selector uses the custom `badge` element. Class and `data-*` aliases are not currently defined.
+Use `<badge>`, `[data-badge]`, or `.badge`. When the badge is ordinary inline metadata, prefer semantic HTML such as `<span data-badge>`; the custom element remains available as a concise styling host.
 
 - Sizes: `sm`, `md`, `lg`
 - Surface roles: `subtle`, `default`, `muted`, `overt`

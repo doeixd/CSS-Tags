@@ -8,15 +8,17 @@
  * @feature {attr()} - For custom icon URLs and colors via CSS masks.
  */
 
-list {
+:is(list, [data-list], .list) {
     --b-p: attr(padding type(*), 0);
     --b-m: attr(margin type(*), 0);
     display: flex;
     flex-direction: column;
     gap: attr(gap type(*), var(--l-gap, 0.5rem));
-    padding-inline-start: attr(indent type(*), 1.5rem);
+    padding-block: var(--b-p);
+    padding-inline-end: var(--b-p);
+    padding-inline-start: attr(indent type(*), max(var(--b-p), 1.5rem));
     list-style-position: outside;
-    margin: 0;
+    margin: var(--b-m);
     /* Style for inline lists */
     &[inline] {
       flex-direction: row;
@@ -25,7 +27,7 @@ list {
       list-style: none;
     }
 
-    & > list-item {
+    & > :is(list-item, [data-list-item], .list-item) {
       display: list-item;
       position: relative;
 
@@ -58,7 +60,7 @@ list {
       }
     }
 
-    & > list-divider {
+    & > :is(list-divider, [data-list-divider], .list-divider) {
       height: 1px;
       background-color: oklch(from var(--theme-text) l c h / 0.1);
       margin-block: attr(gap type(*), 0.5rem); /* Logical property */

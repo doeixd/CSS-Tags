@@ -6,6 +6,16 @@ description: The `container` component provides responsive, centered content con
 ## Overview
 The `container` component provides responsive, centered content containers that react to global breakpoint states through CSS Style Queries. Unlike traditional media queries, it responds to a custom property set on an ancestor element, making it truly context-aware.
 
+## Public API
+
+Use `<container>`, `[data-container]`, or `.container`. For page landmarks and meaningful sections, prefer the native element with a data or class host:
+
+```html
+<main data-container max-width-xl="72rem" pad="var(--space-lg)">
+  <!-- page content -->
+</main>
+```
+
 ## Key Features
 - **Style Queries**: Uses `@container style()` instead of media queries
 - **Context-Aware**: Responds to `--breakpoint-active` on ancestor elements
@@ -37,9 +47,9 @@ The container responds to four breakpoint states set via `--breakpoint-active`:
 
 ### Basic Container
 ```html
-<container>
+<main data-container>
   <p>Centered content that responds to breakpoints</p>
-</container>
+</main>
 ```
 
 ### Custom Max-Widths
@@ -84,7 +94,9 @@ body {
 ### Style Queries
 ```css
 @container style(--breakpoint-active = lg) {
-  container { --container-max-width: var(--mw-lg); }
+  :is(container, [data-container], .container) {
+    --container-max-width: var(--mw-lg);
+  }
 }
 ```
 
@@ -96,7 +108,7 @@ This checks the computed value of `--breakpoint-active` on the nearest style que
 
 ### attr() Function
 ```css
---mw-sm: attr(max-width-sm type(<length-percentage>), 100%);
+--mw-sm: attr(max-width-sm type(*), 100%);
 ```
 
 Allows per-element overrides with type checking and fallbacks.

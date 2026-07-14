@@ -12,7 +12,7 @@
  * @feature {Logical Properties} - Uses `padding-inline`, `margin-block`, etc.
  */
 
-box {
+:is(box, [data-box], .box) {
   /*
    * For each CSS property, we define a custom property that reads its value
    * from an HTML attribute using attr(). A fallback value is always provided.
@@ -20,6 +20,7 @@ box {
 
   /* Display & Layout */
   --display: attr(display type(*), block);
+  --gap: attr(gap type(*), 0);
 
   /* Spacing (using logical properties) */
   --padding:         attr(p type(*), 0);
@@ -44,6 +45,7 @@ box {
 
   /* Apply the variables to the actual CSS properties */
   display: var(--display);
+  gap: var(--gap);
   padding-inline: var(--padding-inline);
   padding-block: var(--padding-block);
   margin-inline: var(--margin-inline);

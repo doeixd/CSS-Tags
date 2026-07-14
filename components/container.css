@@ -13,7 +13,7 @@
  * @feature {attr()} - For per-element overrides of max-width values.
  */
 
-container {
+:is(container, [data-container], .container) {
   /*
    * 1. Define the max-width values for EACH possible state.
    *    These can be overridden per-element with HTML attributes.
@@ -43,13 +43,13 @@ container {
  *    container (e.g., <body>) and updates its own max-width accordingly.
  */
 @container style(--breakpoint-active = lg) {
-  container { --container-max-width: var(--mw-lg); }
+  :is(container, [data-container], .container) { --container-max-width: var(--mw-lg); }
 }
 
 @container style(--breakpoint-active = md) {
-  container { --container-max-width: var(--mw-md); }
+  :is(container, [data-container], .container) { --container-max-width: var(--mw-md); }
 }
 
 @container style(--breakpoint-active = sm) {
-  container { --container-max-width: var(--mw-sm); }
+  :is(container, [data-container], .container) { --container-max-width: var(--mw-sm); }
 }

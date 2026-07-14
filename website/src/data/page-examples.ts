@@ -26,8 +26,8 @@ const examples: Record<string, PageExampleDefinition> = {
     "components/box": {
         title: "A token-aware content box",
         description: "Attributes accept raw CSS values, including custom properties.",
-        preview: `<box p="var(--space-lg)" bg="var(--surface-subtle)" radius="var(--radius-lg)"><strong>Account updated</strong><p class="example-muted">Your preferences were saved successfully.</p></box>`,
-        code: `<box\n  p="var(--space-lg)"\n  bg="var(--surface-subtle)"\n  radius="var(--radius-lg)"\n>\n  <strong>Account updated</strong>\n  <p>Your preferences were saved successfully.</p>\n</box>`,
+        preview: `<article data-box p="var(--space-lg)" bg="var(--surface-subtle)" radius="var(--radius-lg)"><strong>Account updated</strong><p class="example-muted">Your preferences were saved successfully.</p></article>`,
+        code: `<article\n  data-box\n  p="var(--space-lg)"\n  bg="var(--surface-subtle)"\n  radius="var(--radius-lg)"\n>\n  <strong>Account updated</strong>\n  <p>Your preferences were saved successfully.</p>\n</article>`,
     },
     "components/box-extra": {
         title: "Compose a reusable box recipe",
@@ -44,8 +44,8 @@ const examples: Record<string, PageExampleDefinition> = {
     "components/container": {
         title: "Centered content with a readable maximum width",
         description: "The custom element, data host, and class host share the same container behavior.",
-        preview: `<container max-width-xl="36rem" pad="var(--space-md)"><div class="example-panel"><strong>Readable by default</strong><p class="example-muted">The container centers this copy and prevents it from stretching across the full preview.</p></div></container>`,
-        code: `<container max-width-xl="36rem" pad="var(--space-md)">\n  <article>\n    <h2>Readable by default</h2>\n    <p>Centered content with a useful maximum width.</p>\n  </article>\n</container>`,
+        preview: `<section data-container max-width-xl="36rem" pad="var(--space-md)"><div class="example-panel"><strong>Readable by default</strong><p class="example-muted">The container centers this copy and prevents it from stretching across the full preview.</p></div></section>`,
+        code: `<section data-container max-width-xl="36rem" pad="var(--space-md)">\n  <article>\n    <h2>Readable by default</h2>\n    <p>Centered content with a useful maximum width.</p>\n  </article>\n</section>`,
     },
     "components/flex": {
         title: "Centered, wrapping flex content",
@@ -66,10 +66,10 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<img-container\n  aspect-ratio="16 / 7"\n  object-fit="cover"\n  radius="var(--radius-lg)"\n  theme="card"\n>\n  <img src="landscape.jpg" alt="Mountain landscape" loading="lazy" />\n</img-container>`,
     },
     "components/list": {
-        title: "Custom markers and dividers",
-        description: "Marker content, marker color, and separators are declared on the list structure itself.",
-        preview: `<list><list-item type="✓" marker-color="var(--success)">Semantic structure</list-item><list-divider></list-divider><list-item type="✓" marker-color="var(--success)">Shared spacing tokens</list-item><list-divider></list-divider><list-item type="✓" marker-color="var(--success)">Optional custom markers</list-item></list>`,
-        code: `<list>\n  <list-item type="✓" marker-color="var(--success)">\n    Semantic structure\n  </list-item>\n  <list-divider></list-divider>\n  <list-item type="✓" marker-color="var(--success)">\n    Shared spacing tokens\n  </list-item>\n</list>`,
+        title: "Semantic lists with custom markers",
+        description: "Native list semantics gain declarative markers and shared spacing without a custom element requirement.",
+        preview: `<ul data-list><li data-list-item type="✓" marker-color="var(--success)">Semantic structure</li><li data-list-item type="✓" marker-color="var(--success)">Shared spacing tokens</li><li data-list-item type="✓" marker-color="var(--success)">Optional custom markers</li></ul>`,
+        code: `<ul data-list>\n  <li data-list-item type="✓" marker-color="var(--success)">\n    Semantic structure\n  </li>\n  <li data-list-item type="✓" marker-color="var(--success)">\n    Shared spacing tokens\n  </li>\n</ul>`,
     },
     "components/masonry": {
         title: "A responsive masonry-like collection",

@@ -6,17 +6,31 @@ description: The `box` component is a versatile utility element that allows decl
 ## Overview
 The `box` component is a versatile utility element that allows declarative control of dozens of CSS properties through HTML attributes. It serves as a "Swiss Army Knife" for layouts, spacers, and custom-styled containers without requiring custom CSS.
 
+## Public API
+
+Use `<box>`, `[data-box]`, or `.box`. Prefer a semantic element with `data-box` or the class host when the content has a natural meaning:
+
+```html
+<article data-box p="var(--space-lg)" bg="var(--surface-subtle)">
+  <h2>Account updated</h2>
+  <p>Your preferences were saved.</p>
+</article>
+```
+
+All three hosts accept the same attributes.
+
 ## Key Features
 - **Attribute-Driven Styling**: Uses HTML attributes to control CSS properties
 - **Logical Properties**: Employs modern CSS logical properties for spacing
-- **Type-Safe Attributes**: Uses `attr()` with type checking and fallbacks
-- **Zero-Specificity**: No class-based styling conflicts
+- **CSS-valued attributes**: Uses `attr(... type(*))` so values such as `var(--space-lg)` work
+- **Shared host API**: Custom element, `data-*`, and class forms behave the same way
 
 ## Supported Attributes
 
 ### Display & Layout
 - `display`: Sets the display property (default: `block`)
   - Values: `block`, `flex`, `grid`, `inline`, etc.
+- `gap`: Sets the gap between flex or grid children (default: `0`)
 
 ### Spacing (Logical Properties)
 - `p`: Shorthand for padding (default: `0`)
@@ -44,9 +58,9 @@ The `box` component is a versatile utility element that allows declarative contr
 
 ### Basic Container
 ```html
-<box p="1rem" bg="var(--surface-subtle)" radius="0.5rem">
+<section data-box p="1rem" bg="var(--surface-subtle)" radius="0.5rem">
   Content
-</box>
+</section>
 ```
 
 ### Flex Layout
@@ -76,11 +90,11 @@ The `box` component is a versatile utility element that allows declarative contr
 The component extensively uses the `attr()` function with type checking:
 
 ```css
---padding: attr(p type(<length-percentage>), 0);
+--padding: attr(p type(*), 0);
 ```
 
 This provides:
-- **Type Safety**: Ensures attribute values match expected types
+- **CSS value support**: Accepts literal values and custom properties
 - **Fallbacks**: Default values when attributes are missing
 - **Dynamic Styling**: Properties update automatically when attributes change
 
