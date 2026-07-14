@@ -134,8 +134,8 @@ const examples: Record<string, PageExampleDefinition> = {
     "core/text": {
         title: "Text roles and truncation",
         description: "The same primitive handles hierarchy, color, weight, and bounded text.",
-        preview: `<layout-stack gap="var(--space-sm)"><text size="lg" weight="bold" color="accent">Large accent text</text><text class="example-muted">Supporting text inherits the semantic palette.</text><text truncate style="max-inline-size:16rem">This long line demonstrates single-line truncation when space is limited.</text></layout-stack>`,
-        code: `<text size="lg" weight="bold" color="accent">\n  Large accent text\n</text>\n<text color="muted">Supporting text</text>\n<text truncate>Long content constrained to one line</text>`,
+        preview: `<layout-stack gap="var(--space-sm)"><h3 data-text size="lg" weight="bold" color="accent">Large accent text</h3><p class="text" color="subtle">Supporting text uses a semantic host and palette role.</p><p data-text truncate style="max-inline-size:16rem">This long line demonstrates single-line truncation when space is limited.</p></layout-stack>`,
+        code: `<h3 data-text size="lg" weight="bold" color="accent">\n  Large accent text\n</h3>\n<p class="text" color="subtle">Supporting text</p>\n<p data-text truncate>Long content constrained to one line</p>`,
     },
     "core/theme": {
         title: "Theme a subtree with three brand inputs",

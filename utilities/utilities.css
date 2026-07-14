@@ -29,7 +29,8 @@
 
   .text-muted { color: var(--text-muted); }
   .text-subtle { color: var(--text-subtle); }
-  .text { color: var(--text); }
+  /* `.text` is the class host for core/text.css. Its default color is
+     derived from the inherited --bg value rather than duplicated here. */
   .text-overt { color: var(--text-overt); }
   .text-link { color: var(--text-link); }
   .text-link:hover { color: var(--text-link-hover); }
@@ -56,7 +57,6 @@
    /* ============================================ */
 
    /* On dark bedrock background, use light text */
-   .bg-bedrock .text,
    .bg-bedrock .text-muted,
    .bg-bedrock .text-subtle,
    .bg-bedrock .text-overt,
@@ -76,7 +76,6 @@
    }
 
    /* On accent background, use appropriate text */
-   .bg-accent .text,
    .bg-accent .text-muted,
    .bg-accent .text-subtle,
    .bg-accent .text-overt {
@@ -93,7 +92,6 @@
    }
 
     /* On secondary background, use appropriate text */
-    .bg-secondary .text,
     .bg-secondary .text-muted,
     .bg-secondary .text-subtle,
     .bg-secondary .text-overt {
@@ -109,7 +107,6 @@
     }
 
     /* On tertiary background, use appropriate text */
-    .bg-tertiary .text,
     .bg-tertiary .text-muted,
     .bg-tertiary .text-subtle,
     .bg-tertiary .text-overt {

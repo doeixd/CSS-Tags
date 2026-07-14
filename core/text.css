@@ -1,7 +1,8 @@
 /**
  * text.css
  *
- * A declarative typography component.
+ * A declarative typography primitive.
+ * Supports <text>, [data-text], and .text hosts.
  * ------------------------------------------------------------------------------
  * Uses the Lea Verou auto-contrast trick: oklch relative color syntax reads
  * the inherited --bg lightness and flips text between light/dark automatically.
@@ -17,13 +18,13 @@
  * @feature {Line-Clamp} - Supports both single-line and multi-line truncation.
  */
 
-text {
+:is(text, [data-text], .text) {
   /* --- Base Styles & Defaults --- */
   --_text-align: attr(align type(*), start);
   --_text-transform: attr(transform type(*), none);
   /* `style` is a native global attribute; use `font-style` for this API. */
   --_font-style: attr(font-style type(*), normal);
-  --_text-wrap: attr(wrap type(*), balance);
+  --_text-wrap: attr(wrap type(*), pretty);
   --_tracking: attr(tracking type(*), normal);
 
   /* --- Inherited Background for Auto-Contrast --- */
@@ -50,34 +51,39 @@ text {
   color: var(--_color, oklch(from var(--_bg) clamp(0.15, (0.65 / l - 1) * 999, 0.85) min(c, 0.03) h));
 }
 
+/* Preserve the expected box behavior of semantic block content. */
+:is(p, h1, h2, h3, h4, h5, h6, blockquote):is([data-text], .text) {
+  display: block;
+}
+
 /* --- Size Variants (Maps to --font-size tokens) --- */
-text[size="xs"]  { --_fs: var(--font-size-xs); }
-text[size="sm"]  { --_fs: var(--font-size-sm); }
-text[size="base"] { --_fs: var(--font-size-base); }
-text[size="lg"]  { --_fs: var(--font-size-lg); }
-text[size="xl"]  { --_fs: var(--font-size-xl); }
-text[size="2xl"] { --_fs: var(--font-size-2xl); }
-text[size="3xl"] { --_fs: var(--font-size-3xl); }
-text[size="4xl"] { --_fs: var(--font-size-4xl); }
-text[size="5xl"] { --_fs: var(--font-size-5xl); }
-text[size="6xl"] { --_fs: var(--font-size-6xl); }
+:is(text, [data-text], .text)[size="xs"]  { --_fs: var(--font-size-xs); }
+:is(text, [data-text], .text)[size="sm"]  { --_fs: var(--font-size-sm); }
+:is(text, [data-text], .text)[size="base"] { --_fs: var(--font-size-base); }
+:is(text, [data-text], .text)[size="lg"]  { --_fs: var(--font-size-lg); }
+:is(text, [data-text], .text)[size="xl"]  { --_fs: var(--font-size-xl); }
+:is(text, [data-text], .text)[size="2xl"] { --_fs: var(--font-size-2xl); }
+:is(text, [data-text], .text)[size="3xl"] { --_fs: var(--font-size-3xl); }
+:is(text, [data-text], .text)[size="4xl"] { --_fs: var(--font-size-4xl); }
+:is(text, [data-text], .text)[size="5xl"] { --_fs: var(--font-size-5xl); }
+:is(text, [data-text], .text)[size="6xl"] { --_fs: var(--font-size-6xl); }
 
 /* --- Weight Variants (Maps to --font-weight tokens) --- */
-text[weight="thin"]     { --_fw: var(--font-weight-thin); }
-text[weight="light"]    { --_fw: var(--font-weight-light); }
-text[weight="normal"]   { --_fw: var(--font-weight-normal); }
-text[weight="medium"]   { --_fw: var(--font-weight-medium); }
-text[weight="semibold"] { --_fw: var(--font-weight-semibold); }
-text[weight="bold"]     { --_fw: var(--font-weight-bold); }
-text[weight="black"]    { --_fw: var(--font-weight-black); }
+:is(text, [data-text], .text)[weight="thin"]     { --_fw: var(--font-weight-thin); }
+:is(text, [data-text], .text)[weight="light"]    { --_fw: var(--font-weight-light); }
+:is(text, [data-text], .text)[weight="normal"]   { --_fw: var(--font-weight-normal); }
+:is(text, [data-text], .text)[weight="medium"]   { --_fw: var(--font-weight-medium); }
+:is(text, [data-text], .text)[weight="semibold"] { --_fw: var(--font-weight-semibold); }
+:is(text, [data-text], .text)[weight="bold"]     { --_fw: var(--font-weight-bold); }
+:is(text, [data-text], .text)[weight="black"]    { --_fw: var(--font-weight-black); }
 
 /* --- Letter Spacing (tracking) Variants --- */
-text[tracking="tighter"] { --_tracking: var(--letter-spacing-tighter); }
-text[tracking="tight"]   { --_tracking: var(--letter-spacing-tight); }
-text[tracking="normal"]  { --_tracking: var(--letter-spacing-normal); }
-text[tracking="wide"]    { --_tracking: var(--letter-spacing-wide); }
-text[tracking="wider"]   { --_tracking: var(--letter-spacing-wider); }
-text[tracking="widest"]  { --_tracking: var(--letter-spacing-widest); }
+:is(text, [data-text], .text)[tracking="tighter"] { --_tracking: var(--letter-spacing-tighter); }
+:is(text, [data-text], .text)[tracking="tight"]   { --_tracking: var(--letter-spacing-tight); }
+:is(text, [data-text], .text)[tracking="normal"]  { --_tracking: var(--letter-spacing-normal); }
+:is(text, [data-text], .text)[tracking="wide"]    { --_tracking: var(--letter-spacing-wide); }
+:is(text, [data-text], .text)[tracking="wider"]   { --_tracking: var(--letter-spacing-wider); }
+:is(text, [data-text], .text)[tracking="widest"]  { --_tracking: var(--letter-spacing-widest); }
 
 /* ======================================================= */
 /* ==               COLOR SYSTEM                        == */
@@ -86,7 +92,7 @@ text[tracking="widest"]  { --_tracking: var(--letter-spacing-widest); }
 /* --- Raw CSS value pass-through ---
    Any color="" value that doesn't match a keyword below flows through
    attr() directly, e.g. color="var(--text-muted)" or color="red". */
-text[color] {
+:is(text, [data-text], .text)[color] {
   --_color: attr(color type(*));
 }
 
@@ -94,57 +100,57 @@ text[color] {
    Each level adjusts the clamp range to control contrast intensity.
    On light bg (l>0.6): text gets the LOW end of the range (dark text).
    On dark bg  (l<0.6): text gets the HIGH end of the range (light text). */
-text[color="muted"] {
+:is(text, [data-text], .text)[color="muted"] {
   --_color: oklch(from var(--_bg) clamp(0.35, (0.65 / l - 1) * 999, 0.65) min(c, 0.02) h);
 }
 
-text[color="subtle"] {
+:is(text, [data-text], .text)[color="subtle"] {
   --_color: oklch(from var(--_bg) clamp(0.25, (0.65 / l - 1) * 999, 0.75) min(c, 0.03) h);
 }
 
-text[color="default"] {
+:is(text, [data-text], .text)[color="default"] {
   --_color: oklch(from var(--_bg) clamp(0.15, (0.65 / l - 1) * 999, 0.85) min(c, 0.03) h);
 }
 
-text[color="overt"] {
+:is(text, [data-text], .text)[color="overt"] {
   --_color: oklch(from var(--_bg) clamp(0.05, (0.65 / l - 1) * 999, 0.95) min(c, 0.04) h);
 }
 
 /* --- Semantic & Brand Colors --- */
-text[color="link"]      { --_color: var(--text-link); }
-text[color="accent"]    { --_color: var(--accent); }
-text[color="secondary"] { --_color: var(--secondary); }
-text[color="tertiary"]  { --_color: var(--tertiary); }
+:is(text, [data-text], .text)[color="link"]      { --_color: var(--text-link); }
+:is(text, [data-text], .text)[color="accent"]    { --_color: var(--accent); }
+:is(text, [data-text], .text)[color="secondary"] { --_color: var(--secondary); }
+:is(text, [data-text], .text)[color="tertiary"]  { --_color: var(--tertiary); }
 
 /* --- Feedback Colors --- */
-text[color="success"] { --_color: var(--text-success); }
-text[color="warning"] { --_color: var(--text-warning); }
-text[color="error"]   { --_color: var(--text-error); }
-text[color="info"]    { --_color: var(--text-info); }
+:is(text, [data-text], .text)[color="success"] { --_color: var(--text-success); }
+:is(text, [data-text], .text)[color="warning"] { --_color: var(--text-warning); }
+:is(text, [data-text], .text)[color="error"]   { --_color: var(--text-error); }
+:is(text, [data-text], .text)[color="info"]    { --_color: var(--text-info); }
 
 /* --- Line Height (leading) Variants --- */
-text[leading="none"]    { --_lh: var(--line-height-none); }
-text[leading="tight"]   { --_lh: var(--line-height-tight); }
-text[leading="snug"]    { --_lh: var(--line-height-snug); }
-text[leading="normal"]  { --_lh: var(--line-height-normal); }
-text[leading="relaxed"] { --_lh: var(--line-height-relaxed); }
-text[leading="loose"]   { --_lh: var(--line-height-loose); }
+:is(text, [data-text], .text)[leading="none"]    { --_lh: var(--line-height-none); }
+:is(text, [data-text], .text)[leading="tight"]   { --_lh: var(--line-height-tight); }
+:is(text, [data-text], .text)[leading="snug"]    { --_lh: var(--line-height-snug); }
+:is(text, [data-text], .text)[leading="normal"]  { --_lh: var(--line-height-normal); }
+:is(text, [data-text], .text)[leading="relaxed"] { --_lh: var(--line-height-relaxed); }
+:is(text, [data-text], .text)[leading="loose"]   { --_lh: var(--line-height-loose); }
 
 /* --- Display Override --- */
-text[display="inline"] { display: inline; }
-text[display="block"]  { display: block; }
+:is(text, [data-text], .text)[display="inline"] { display: inline; }
+:is(text, [data-text], .text)[display="block"]  { display: block; }
 
 /* --- Readable line-length constraints --- */
-text[measure="body"] { max-inline-size: var(--measure-body); }
-text[measure="heading"] { max-inline-size: var(--measure-heading); }
-text[measure="wide"] { max-inline-size: var(--measure-wide, var(--measure-code)); }
+:is(text, [data-text], .text)[measure="body"] { max-inline-size: var(--measure-body); }
+:is(text, [data-text], .text)[measure="heading"] { max-inline-size: var(--measure-heading); }
+:is(text, [data-text], .text)[measure="wide"] { max-inline-size: var(--measure-wide, var(--measure-code)); }
 
 /* ======================================================= */
 /* ==               TRUNCATION LOGIC                    == */
 /* ======================================================= */
 
 /* --- Common styles for all line-clamping --- */
-:is(text[truncate], text[lines]) {
+:is(text, [data-text], .text):is([truncate], [lines]) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -154,12 +160,12 @@ text[measure="wide"] { max-inline-size: var(--measure-wide, var(--measure-code))
 }
 
 /* --- Single-line truncation (shorthand for lines="1") --- */
-text[truncate] {
+:is(text, [data-text], .text)[truncate] {
   -webkit-line-clamp: 1;
 }
 
 /* --- Multi-line truncation --- */
-text[lines="2"] { -webkit-line-clamp: 2; }
-text[lines="3"] { -webkit-line-clamp: 3; }
-text[lines="4"] { -webkit-line-clamp: 4; }
-text[lines="5"] { -webkit-line-clamp: 5; }
+:is(text, [data-text], .text)[lines="2"] { -webkit-line-clamp: 2; }
+:is(text, [data-text], .text)[lines="3"] { -webkit-line-clamp: 3; }
+:is(text, [data-text], .text)[lines="4"] { -webkit-line-clamp: 4; }
+:is(text, [data-text], .text)[lines="5"] { -webkit-line-clamp: 5; }

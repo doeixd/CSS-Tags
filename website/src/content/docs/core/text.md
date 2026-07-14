@@ -1,148 +1,118 @@
 ---
-title: Text Core
-description: The `text.css` file provides a declarative typography component that allows controlling text styles like size, weight, color, and alignment directly from HTML a
+title: Text Primitive
+description: Token-driven text styling for semantic elements, data hosts, class hosts, and the optional text custom element.
 ---
 
-## Overview
-The `text.css` file provides a declarative typography component that allows controlling text styles like size, weight, color, and alignment directly from HTML attributes. It integrates deeply with the library's design token system for consistent theming.
+The text primitive applies the library's typography tokens without replacing document semantics.
 
-## Key Features
-- **Attribute-Based Styling**: Control typography via HTML attributes (e.g., `size="lg"`, `color="muted"`)
-- **Design Token Integration**: Maps attributes to CSS variables from theme and token layers
-- **Auto-Contrast**: `contrast` attribute calculates readable text color against parent background
-- **Text Truncation**: Supports single-line (`truncate`) and multi-line (`lines="..."`) truncation
-- **Modern CSS**: Uses `attr()` function and CSS variables for dynamic styling
+## Public API
 
-## Basic Usage
+Use `<text>`, `[data-text]`, or `.text`. Prefer native headings, paragraphs, captions, links, and spans when they carry meaning:
+
 ```html
-<text size="lg" weight="bold" color="accent">Large bold accent text</text>
-<text truncate>Single-line truncated text</text>
-<text lines="3">Multi-line truncated text</text>
-<text contrast>Auto-contrast text</text>
+<h2 data-text size="3xl" weight="bold" leading="tight">
+  Quarterly results
+</h2>
+
+<p class="text" color="subtle" measure="body">
+  A readable summary constrained to the body measure.
+</p>
+
+<text size="sm" color="muted">Optional custom-element shorthand</text>
 ```
 
-## Attributes
+Semantic paragraphs, headings, and blockquotes keep block layout. Inline hosts default to `inline-block`; use `display="inline"` or `display="block"` when needed.
 
-### Size Variants
-Control font size using the `size` attribute:
-- `size="xs"` - Extra small
-- `size="sm"` - Small
-- `size="base"` - Base (default)
-- `size="lg"` - Large
-- `size="xl"` - Extra large
-- `size="2xl"` - 2X large
-- `size="3xl"` - 3X large
-- `size="4xl"` - 4X large
+## Hierarchy and rhythm
 
-### Weight Variants
-Control font weight using the `weight` attribute:
-- `weight="thin"` - Thin weight
-- `weight="light"` - Light weight
-- `weight="normal"` - Normal weight (default)
-- `weight="medium"` - Medium weight
-- `weight="semibold"` - Semibold weight
-- `weight="bold"` - Bold weight
-- `weight="black"` - Black weight
+Sizes map to `--font-size-*` tokens:
 
-### Color Variants
-Control text color using the `color` attribute:
+`xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `5xl`, `6xl`
 
-**Text Roles:**
-- `color="muted"` - Muted text
-- `color="subtle"` - Subtle text
-- `color="default"` - Default text (default)
-- `color="overt"` - Overt text
-- `color="link"` - Link text
+Weights map to `--font-weight-*` tokens:
 
-**Accent & Brand Colors:**
-- `color="accent"` - Accent color
-- `color="secondary"` - Secondary color
-- `color="tertiary"` - Tertiary color
+`thin`, `light`, `normal`, `medium`, `semibold`, `bold`, `black`
 
-**Feedback Colors:**
-- `color="success"` - Success text
-- `color="warning"` - Warning text
-- `color="error"` - Error text
-- `color="info"` - Info text
+Line-height values use the `leading` attribute:
 
-### Line Height Variants
-Control line height using the `leading` attribute:
-- `leading="none"` - No line height
-- `leading="tight"` - Tight line height
-- `leading="snug"` - Snug line height
-- `leading="normal"` - Normal line height (default)
-- `leading="relaxed"` - Relaxed line height
-- `leading="loose"` - Loose line height
+`none`, `tight`, `snug`, `normal`, `relaxed`, `loose`
 
-### Text Alignment
-Control text alignment using the `align` attribute:
-- `align="start"` - Start alignment (default)
-- `align="center"` - Center alignment
-- `align="end"` - End alignment
-- `align="justify"` - Justified alignment
-
-### Text Transform
-Control text transformation using the `transform` attribute:
-- `transform="none"` - No transformation (default)
-- `transform="capitalize"` - Capitalize
-- `transform="uppercase"` - Uppercase
-- `transform="lowercase"` - Lowercase
-
-### Font Style
-Control font style using the `style` attribute:
-- `style="normal"` - Normal style (default)
-- `style="italic"` - Italic style
-
-### Text Wrapping
-Control text wrapping using the `wrap` attribute:
-- `wrap="balance"` - Balanced wrapping (default)
-- `wrap="wrap"` - Normal wrapping
-- `wrap="nowrap"` - No wrapping
-- `wrap="pretty"` - Pretty wrapping
-
-## Special Features
-
-### Auto-Contrast
-The `contrast` attribute automatically calculates the most readable text color against the parent's background:
 ```html
-<div style="--bg: black;">
-  <text contrast>This text will be white for readability</text>
+<p data-text size="lg" weight="medium" leading="relaxed">
+  Comfortable introductory copy with an explicit hierarchy.
+</p>
+```
+
+## Color and contrast
+
+Auto-contrast is the default. The primitive reads the inherited `--bg` value and derives readable text; no `contrast` attribute is required.
+
+Use semantic color roles when a specific meaning or emphasis is needed:
+
+- Contrast roles: `muted`, `subtle`, `default`, `overt`
+- Brand roles: `link`, `accent`, `secondary`, `tertiary`
+- Feedback roles: `success`, `warning`, `error`, `info`
+
+The `color` attribute also accepts raw CSS values, including custom properties.
+
+```html
+<div style="--bg: var(--bedrock); background: var(--bg); padding: var(--space-lg)">
+  <p data-text>Automatically contrasted body copy</p>
+  <p data-text color="accent">Explicit accent copy</p>
 </div>
 ```
 
-### Text Truncation
-**Single-line truncation:**
+Do not rely on color alone for feedback; keep the status word in the content.
+
+## Alignment, wrapping, and style
+
+- `align="start|center|end|justify"`
+- `transform="none|capitalize|uppercase|lowercase"`
+- `font-style="normal|italic|oblique"`
+- `wrap="pretty|balance|wrap|nowrap"`
+- `tracking="tighter|tight|normal|wide|wider|widest"`
+
+The default wrap mode is `pretty`, which is more suitable for body copy. Use `wrap="balance"` for short headings.
+
 ```html
-<text truncate>Very long text that will be truncated with ellipsis</text>
+<h3 data-text align="center" wrap="balance">
+  A short heading balanced across lines
+</h3>
+
+<cite class="text" font-style="italic">Research team</cite>
 ```
 
-**Multi-line truncation:**
+Use `font-style`, not `style`; `style` remains the native global HTML attribute.
+
+## Measures and truncation
+
+Readable measures are available as `body`, `heading`, and `wide`.
+
 ```html
-<text lines="3">Long text that will be truncated after 3 lines with ellipsis</text>
+<p data-text measure="body">
+  Long-form content constrained to the shared body measure.
+</p>
+
+<p data-text truncate style="max-inline-size: 18rem">
+  A single line that ends with an ellipsis when space runs out.
+</p>
+
+<p data-text lines="3" style="max-inline-size: 32rem">
+  Multi-line content clamped after three lines.
+</p>
 ```
-Supported line counts: 2, 3, 4, 5
 
-## CSS Variables
-The component uses local CSS variables that map to global tokens:
-- `--_fs` → `--font-size-*` tokens
-- `--_fw` → `--font-weight-*` tokens
-- `--_color` → `--text-*` and color tokens
-- `--_lh` → `--line-height-*` tokens
+`truncate` clamps to one line. `lines` supports 2 through 5.
 
-## Integration with Design System
-- **Tokens Layer**: Provides raw font size, weight, and color values
-- **Theme Layer**: Defines semantic color roles
-- **Defaults Layer**: Sets base typography styles
-- **Components Layer**: Uses text component for consistent typography
+## Local customization
 
-## Browser Support
-- **attr() Function**: Chrome 111+, Firefox 126+, Safari 17.4+
-- **CSS Variables**: All modern browsers
-- **Line Clamp**: Chrome 6+, Firefox 68+, Safari 5.1+
-- **Fallback**: Graceful degradation in older browsers
+The primitive exposes local variables that can be overridden directly or through token changes:
 
-## Usage Notes
-- **Semantic HTML**: Use appropriate heading elements when possible
-- **Accessibility**: Ensure sufficient color contrast
-- **Performance**: Attribute-based styling is efficient and performant
-- **Customization**: Override CSS variables for theme customization
+- `--_fs`: font size
+- `--_fw`: font weight
+- `--_lh`: line height
+- `--_tracking`: letter spacing
+- `--_color`: text color
+- `--_bg`: contrast reference background
+
+Prefer the public attributes and global typography tokens for reusable themes; use the local variables for tightly scoped exceptions.
