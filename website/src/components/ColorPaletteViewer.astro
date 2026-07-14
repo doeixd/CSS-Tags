@@ -1,6 +1,4 @@
 ---
-import "../../../index.css";
-
 const groups = [
     {
         id: "brand",
@@ -48,6 +46,7 @@ const groups = [
 const steps = Array.from({ length: 13 }, (_, index) => index);
 ---
 
+<css-tags-tokens class="palette-token-scope">
 <section class="palette-viewer" data-palette-viewer aria-labelledby="palette-viewer-title">
     <div class="palette-viewer__intro">
         <div>
@@ -114,8 +113,11 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
         </div>
     </div>
 </section>
+</css-tags-tokens>
 
 <script>
+    import "../scripts/css-tags-shadow";
+
     function setupPaletteViewers() {
         document.querySelectorAll<HTMLElement>("[data-palette-viewer]").forEach((viewer) => {
             if (viewer.dataset.ready === "true") return;
@@ -198,6 +200,10 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
 </script>
 
 <style>
+    .palette-token-scope {
+        display: block;
+    }
+
     .palette-viewer {
         margin-block: 1.5rem 2rem;
         border: 1px solid var(--border-color, #d8dee4);

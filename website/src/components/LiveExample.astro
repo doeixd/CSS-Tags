@@ -1,6 +1,4 @@
 ---
-import "../../../index.css";
-
 interface Props {
     title?: string;
     description?: string;
@@ -19,10 +17,14 @@ const {
         <span>{title}</span>
         {description && <small>{description}</small>}
     </figcaption>
-    <div class="live-example__stage">
+    <css-tags-example class="live-example__stage">
         <slot />
-    </div>
+    </css-tags-example>
 </figure>
+
+<script>
+    import "../scripts/css-tags-shadow";
+</script>
 
 <style>
     .live-example {
@@ -58,6 +60,7 @@ const {
     }
 
     .live-example__stage {
+        display: block;
         container: live-example / inline-size;
         padding: clamp(0.75rem, 2.5cqi, 1.25rem);
         background:
@@ -69,31 +72,4 @@ const {
         padding: 0.75rem;
     }
 
-    /* Remove unlayered documentation-shell styles from the demo subtree.
-       The library's base/components/layout layers then become the source of
-       truth for every rendered example. Custom properties still inherit. */
-    .live-example__stage :global(*) {
-        all: revert-layer;
-    }
-
-    .live-example__stage :global(> *) {
-        margin-block: 0;
-    }
-
-    .live-example__stage :global(.example-panel) {
-        padding: var(--space-md, 1rem);
-        border: 1px solid var(--outline-subtle, var(--example-border));
-        border-radius: var(--radius-md, 0.5rem);
-        background: var(--surface-default, var(--example-surface));
-    }
-
-    .live-example__stage :global(.example-muted) {
-        color: var(--text-subtle, var(--text-secondary, inherit));
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .live-example__stage :global(*) {
-            scroll-behavior: auto !important;
-        }
-    }
 </style>

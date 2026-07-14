@@ -23,13 +23,17 @@ const id = `dialog-example-${Math.random().toString(36).slice(2)}`;
 
 <script>
     function setupDialogExamples() {
-        document.querySelectorAll<HTMLElement>("[data-open-dialog]").forEach((trigger) => {
-            if (trigger.dataset.dialogReady === "true") return;
-            trigger.dataset.dialogReady = "true";
-            trigger.addEventListener("click", () => {
-                const id = trigger.dataset.openDialog;
-                const dialog = id ? document.getElementById(id) : null;
-                if (dialog instanceof HTMLDialogElement) dialog.showModal();
+        document.querySelectorAll<HTMLElement>(".live-example__stage").forEach((host) => {
+            const root = host.shadowRoot;
+            if (!root) return;
+            root.querySelectorAll<HTMLElement>("[data-open-dialog]").forEach((trigger) => {
+                if (trigger.dataset.dialogReady === "true") return;
+                trigger.dataset.dialogReady = "true";
+                trigger.addEventListener("click", () => {
+                    const id = trigger.dataset.openDialog;
+                    const dialog = id ? root.getElementById(id) : null;
+                    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+                });
             });
         });
     }
