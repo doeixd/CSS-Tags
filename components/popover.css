@@ -19,12 +19,21 @@
   border: var(--b-bw) solid var(--b-bc);
   border-radius: var(--b-r);
   padding: var(--b-p);
-  max-width: clamp(250px, 90vw, 400px);
+  position: fixed;
+  inset: 0;
+  inline-size: min(var(--popover-width, 22rem), calc(100vw - 2rem));
+  max-inline-size: min(90vw, var(--popover-max-width, 24rem));
+  max-block-size: min(80vh, var(--popover-max-height, 32rem));
+  margin: auto;
+  overflow: auto;
   @apply --elevation(3);
 }
 [popover]::backdrop {
-  background-color: oklch(from black l c h / 0.5);
-  backdrop-filter: blur(4px);
+  background: var(--popover-backdrop, transparent);
+}
+
+[popover][data-scrim]::backdrop {
+  --popover-backdrop: oklch(0% 0 0 / 0.4);
 }
 
 /* Modern entry/exit animation support */

@@ -1,10 +1,6 @@
 :root {
  /* == Extended Palette (Common Colors) == */
- /* Brown Scale */
- --brown-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-brown)); --brown-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-brown)); --brown-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-brown)); --brown-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-brown)); --brown-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-brown)); --brown-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-brown)); --brown-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-brown)); --brown-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-brown)); --brown-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-brown)); --brown-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-brown)); --brown-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-brown)); --brown-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-brown)); --brown-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-brown));
 
- /* Gold Scale */
- --gold-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-gold)); --gold-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-gold)); --gold-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-gold)); --gold-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-gold)); --gold-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-gold)); --gold-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-gold)); --gold-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-gold)); --gold-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-gold)); --gold-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-gold)); --gold-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-gold)); --gold-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-gold)); --gold-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-gold)); --gold-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-gold));
 
  /* Olive Scale */
  --olive-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-olive)); --olive-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-olive)); --olive-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-olive)); --olive-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-olive)); --olive-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-olive)); --olive-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-olive)); --olive-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-olive)); --olive-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-olive)); --olive-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-olive)); --olive-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-olive)); --olive-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-olive)); --olive-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-olive)); --olive-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-olive));
@@ -21,17 +17,11 @@
  /* Green Scale */
  --green-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-green)); --green-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-green)); --green-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-green)); --green-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-green)); --green-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-green)); --green-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-green)); --green-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-green)); --green-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-green)); --green-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-green)); --green-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-green)); --green-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-green)); --green-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-green)); --green-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-green));
  
- /* Slate Scale */
- --slate-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-slate)); --slate-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-slate)); --slate-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-slate)); --slate-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-slate)); --slate-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-slate)); --slate-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-slate)); --slate-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-slate)); --slate-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-slate)); --slate-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-slate)); --slate-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-slate)); --slate-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-slate)); --slate-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-slate)); --slate-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-slate));
  
- /* Orange Scale */
- --orange-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-orange)); --orange-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-orange)); --orange-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-orange)); --orange-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-orange)); --orange-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-orange-max-c-2, var(--clamp-max-c-2))) var(--hue-orange)); --orange-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-orange-max-c-2, var(--clamp-max-c-2))) var(--hue-orange)); --orange-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-orange-max-c-3, var(--clamp-max-c-3))) var(--hue-orange)); --orange-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-orange-max-c-3, var(--clamp-max-c-3))) var(--hue-orange)); --orange-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-orange-max-c-4, var(--clamp-max-c-4))) var(--hue-orange)); --orange-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-orange-max-c-4, var(--clamp-max-c-4))) var(--hue-orange)); --orange-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-orange)); --orange-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-orange)); --orange-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-orange));
  
  /* Amber Scale */
  --amber-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-amber)); --amber-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-amber)); --amber-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-amber)); --amber-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-amber)); --amber-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-amber)); --amber-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-amber)); --amber-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-amber)); --amber-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-amber)); --amber-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-amber)); --amber-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-amber)); --amber-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-amber)); --amber-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-amber)); --amber-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-amber));
  
- /* Yellow Scale */
- --yellow-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-yellow)); --yellow-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-yellow)); --yellow-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-yellow)); --yellow-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-yellow)); --yellow-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-yellow)); --yellow-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-yellow)); --yellow-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-yellow)); --yellow-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-yellow)); --yellow-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-yellow)); --yellow-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-yellow)); --yellow-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-yellow)); --yellow-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-yellow)); --yellow-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-yellow));
  
  /* Lime Scale */
  --lime-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-lime)); --lime-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-lime)); --lime-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-lime)); --lime-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-lime)); --lime-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-lime)); --lime-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-lime)); --lime-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-lime)); --lime-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-lime)); --lime-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-lime)); --lime-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-lime)); --lime-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-lime)); --lime-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-lime)); --lime-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-lime));
@@ -42,8 +32,6 @@
  /* Teal Scale */
  --teal-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-teal)); --teal-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-teal)); --teal-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-teal)); --teal-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-teal)); --teal-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-teal)); --teal-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-teal)); --teal-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-teal)); --teal-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-teal)); --teal-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-teal)); --teal-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-teal)); --teal-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-teal)); --teal-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-teal)); --teal-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-teal));
  
- /* Cyan Scale */
- --cyan-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-cyan)); --cyan-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-cyan)); --cyan-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-cyan)); --cyan-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-cyan)); --cyan-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-cyan)); --cyan-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-cyan)); --cyan-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-cyan)); --cyan-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-cyan)); --cyan-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-cyan)); --cyan-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-cyan)); --cyan-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-cyan)); --cyan-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-cyan)); --cyan-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-cyan));
  
  /* Sky Scale */
  --sky-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-sky)); --sky-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-sky)); --sky-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-sky)); --sky-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-sky)); --sky-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-sky)); --sky-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-sky)); --sky-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-sky)); --sky-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-sky)); --sky-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-sky)); --sky-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-sky)); --sky-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-sky)); --sky-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-sky)); --sky-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-sky));
@@ -65,4 +53,90 @@
  
  /* Rose Scale */
  --rose-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-rose)); --rose-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-rose)); --rose-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-rose)); --rose-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-rose)); --rose-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-rose)); --rose-5: oklch(var(--scale-l-5) min(var(--scale-c-6), var(--clamp-max-c-2)) var(--hue-rose)); --rose-6: oklch(var(--scale-l-6) min(var(--scale-c-7), var(--clamp-max-c-3)) var(--hue-rose)); --rose-7: oklch(var(--scale-l-7) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-rose)); --rose-8: oklch(var(--scale-l-8) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-rose)); --rose-9: oklch(var(--scale-l-9) min(var(--scale-c-6), var(--clamp-max-c-4)) var(--hue-rose)); --rose-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-rose)); --rose-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-rose)); --rose-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-rose));
+
+ /* Perceptually tuned named scales. Hue alone does not produce equally vivid families. */
+ /* Brown profile */
+ --brown-0: oklch(var(--scale-l-0) var(--palette-brown-chroma-0) var(--hue-brown));
+ --brown-1: oklch(var(--scale-l-1) var(--palette-brown-chroma-1) var(--hue-brown));
+ --brown-2: oklch(var(--scale-l-2) var(--palette-brown-chroma-2) var(--hue-brown));
+ --brown-3: oklch(var(--scale-l-3) var(--palette-brown-chroma-3) var(--hue-brown));
+ --brown-4: oklch(var(--scale-l-4) var(--palette-brown-chroma-4) var(--hue-brown));
+ --brown-5: oklch(var(--scale-l-5) var(--palette-brown-chroma-5) var(--hue-brown));
+ --brown-6: oklch(var(--scale-l-6) var(--palette-brown-chroma-6) var(--hue-brown));
+ --brown-7: oklch(var(--scale-l-7) var(--palette-brown-chroma-7) var(--hue-brown));
+ --brown-8: oklch(var(--scale-l-8) var(--palette-brown-chroma-8) var(--hue-brown));
+ --brown-9: oklch(var(--scale-l-9) var(--palette-brown-chroma-9) var(--hue-brown));
+ --brown-10: oklch(var(--scale-l-10) var(--palette-brown-chroma-10) var(--hue-brown));
+ --brown-11: oklch(var(--scale-l-11) var(--palette-brown-chroma-11) var(--hue-brown));
+ --brown-12: oklch(var(--scale-l-12) var(--palette-brown-chroma-12) var(--hue-brown));
+ /* Gold profile */
+ --gold-0: oklch(var(--scale-l-0) var(--palette-gold-chroma-0) var(--hue-gold));
+ --gold-1: oklch(var(--scale-l-1) var(--palette-gold-chroma-1) var(--hue-gold));
+ --gold-2: oklch(var(--scale-l-2) var(--palette-gold-chroma-2) var(--hue-gold));
+ --gold-3: oklch(var(--scale-l-3) var(--palette-gold-chroma-3) var(--hue-gold));
+ --gold-4: oklch(var(--scale-l-4) var(--palette-gold-chroma-4) var(--hue-gold));
+ --gold-5: oklch(var(--scale-l-5) var(--palette-gold-chroma-5) var(--hue-gold));
+ --gold-6: oklch(var(--scale-l-6) var(--palette-gold-chroma-6) var(--hue-gold));
+ --gold-7: oklch(var(--scale-l-7) var(--palette-gold-chroma-7) var(--hue-gold));
+ --gold-8: oklch(var(--scale-l-8) var(--palette-gold-chroma-8) var(--hue-gold));
+ --gold-9: oklch(var(--scale-l-9) var(--palette-gold-chroma-9) var(--hue-gold));
+ --gold-10: oklch(var(--scale-l-10) var(--palette-gold-chroma-10) var(--hue-gold));
+ --gold-11: oklch(var(--scale-l-11) var(--palette-gold-chroma-11) var(--hue-gold));
+ --gold-12: oklch(var(--scale-l-12) var(--palette-gold-chroma-12) var(--hue-gold));
+ /* Orange profile */
+ --orange-0: oklch(var(--scale-l-0) var(--palette-orange-chroma-0) var(--hue-orange));
+ --orange-1: oklch(var(--scale-l-1) var(--palette-orange-chroma-1) var(--hue-orange));
+ --orange-2: oklch(var(--scale-l-2) var(--palette-orange-chroma-2) var(--hue-orange));
+ --orange-3: oklch(var(--scale-l-3) var(--palette-orange-chroma-3) var(--hue-orange));
+ --orange-4: oklch(var(--scale-l-4) var(--palette-orange-chroma-4) var(--hue-orange));
+ --orange-5: oklch(var(--scale-l-5) var(--palette-orange-chroma-5) var(--hue-orange));
+ --orange-6: oklch(var(--scale-l-6) var(--palette-orange-chroma-6) var(--hue-orange));
+ --orange-7: oklch(var(--scale-l-7) var(--palette-orange-chroma-7) var(--hue-orange));
+ --orange-8: oklch(var(--scale-l-8) var(--palette-orange-chroma-8) var(--hue-orange));
+ --orange-9: oklch(var(--scale-l-9) var(--palette-orange-chroma-9) var(--hue-orange));
+ --orange-10: oklch(var(--scale-l-10) var(--palette-orange-chroma-10) var(--hue-orange));
+ --orange-11: oklch(var(--scale-l-11) var(--palette-orange-chroma-11) var(--hue-orange));
+ --orange-12: oklch(var(--scale-l-12) var(--palette-orange-chroma-12) var(--hue-orange));
+ /* Yellow profile */
+ --yellow-0: oklch(var(--scale-l-0) var(--palette-yellow-chroma-0) var(--hue-yellow));
+ --yellow-1: oklch(var(--scale-l-1) var(--palette-yellow-chroma-1) var(--hue-yellow));
+ --yellow-2: oklch(var(--scale-l-2) var(--palette-yellow-chroma-2) var(--hue-yellow));
+ --yellow-3: oklch(var(--scale-l-3) var(--palette-yellow-chroma-3) var(--hue-yellow));
+ --yellow-4: oklch(var(--scale-l-4) var(--palette-yellow-chroma-4) var(--hue-yellow));
+ --yellow-5: oklch(var(--scale-l-5) var(--palette-yellow-chroma-5) var(--hue-yellow));
+ --yellow-6: oklch(var(--scale-l-6) var(--palette-yellow-chroma-6) var(--hue-yellow));
+ --yellow-7: oklch(var(--scale-l-7) var(--palette-yellow-chroma-7) var(--hue-yellow));
+ --yellow-8: oklch(var(--scale-l-8) var(--palette-yellow-chroma-8) var(--hue-yellow));
+ --yellow-9: oklch(var(--scale-l-9) var(--palette-yellow-chroma-9) var(--hue-yellow));
+ --yellow-10: oklch(var(--scale-l-10) var(--palette-yellow-chroma-10) var(--hue-yellow));
+ --yellow-11: oklch(var(--scale-l-11) var(--palette-yellow-chroma-11) var(--hue-yellow));
+ --yellow-12: oklch(var(--scale-l-12) var(--palette-yellow-chroma-12) var(--hue-yellow));
+ /* Cyan profile */
+ --cyan-0: oklch(var(--scale-l-0) var(--palette-cyan-chroma-0) var(--hue-cyan));
+ --cyan-1: oklch(var(--scale-l-1) var(--palette-cyan-chroma-1) var(--hue-cyan));
+ --cyan-2: oklch(var(--scale-l-2) var(--palette-cyan-chroma-2) var(--hue-cyan));
+ --cyan-3: oklch(var(--scale-l-3) var(--palette-cyan-chroma-3) var(--hue-cyan));
+ --cyan-4: oklch(var(--scale-l-4) var(--palette-cyan-chroma-4) var(--hue-cyan));
+ --cyan-5: oklch(var(--scale-l-5) var(--palette-cyan-chroma-5) var(--hue-cyan));
+ --cyan-6: oklch(var(--scale-l-6) var(--palette-cyan-chroma-6) var(--hue-cyan));
+ --cyan-7: oklch(var(--scale-l-7) var(--palette-cyan-chroma-7) var(--hue-cyan));
+ --cyan-8: oklch(var(--scale-l-8) var(--palette-cyan-chroma-8) var(--hue-cyan));
+ --cyan-9: oklch(var(--scale-l-9) var(--palette-cyan-chroma-9) var(--hue-cyan));
+ --cyan-10: oklch(var(--scale-l-10) var(--palette-cyan-chroma-10) var(--hue-cyan));
+ --cyan-11: oklch(var(--scale-l-11) var(--palette-cyan-chroma-11) var(--hue-cyan));
+ --cyan-12: oklch(var(--scale-l-12) var(--palette-cyan-chroma-12) var(--hue-cyan));
+ /* Slate profile */
+ --slate-0: oklch(var(--scale-l-0) var(--palette-slate-chroma-0) var(--hue-slate));
+ --slate-1: oklch(var(--scale-l-1) var(--palette-slate-chroma-1) var(--hue-slate));
+ --slate-2: oklch(var(--scale-l-2) var(--palette-slate-chroma-2) var(--hue-slate));
+ --slate-3: oklch(var(--scale-l-3) var(--palette-slate-chroma-3) var(--hue-slate));
+ --slate-4: oklch(var(--scale-l-4) var(--palette-slate-chroma-4) var(--hue-slate));
+ --slate-5: oklch(var(--scale-l-5) var(--palette-slate-chroma-5) var(--hue-slate));
+ --slate-6: oklch(var(--scale-l-6) var(--palette-slate-chroma-6) var(--hue-slate));
+ --slate-7: oklch(var(--scale-l-7) var(--palette-slate-chroma-7) var(--hue-slate));
+ --slate-8: oklch(var(--scale-l-8) var(--palette-slate-chroma-8) var(--hue-slate));
+ --slate-9: oklch(var(--scale-l-9) var(--palette-slate-chroma-9) var(--hue-slate));
+ --slate-10: oklch(var(--scale-l-10) var(--palette-slate-chroma-10) var(--hue-slate));
+ --slate-11: oklch(var(--scale-l-11) var(--palette-slate-chroma-11) var(--hue-slate));
+ --slate-12: oklch(var(--scale-l-12) var(--palette-slate-chroma-12) var(--hue-slate));
 }

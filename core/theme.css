@@ -113,6 +113,8 @@
   --outline-muted: oklch(from var(--base) calc(l - 0.04) calc(c + var(--surface-saturation) * 0.5) h);
   --outline-subtle: oklch(from var(--base) calc(l - 0.05) calc(c + var(--surface-saturation)) h);
   --outline: oklch(from var(--base) calc(l - 0.06) calc(c + var(--surface-saturation) * 1.5) h);
+  /* Stable semantic alias consumed by form controls and components. */
+  --outline-default: var(--outline);
   --outline-overt: oklch(from var(--base) calc(l - 0.07) calc(c + var(--surface-saturation) * 2) h);
 
   /* Semantic outlines */

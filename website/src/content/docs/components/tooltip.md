@@ -1,95 +1,45 @@
 ---
 title: Tooltip Component
-description: The `tooltip` component provides simple CSS-only tooltips that appear on hover or focus. It uses the `content` attribute to display tooltip text and supports mu
+description: Small CSS-only text hints that appear on pointer hover or keyboard focus.
 ---
 
 ## Overview
-The `tooltip` component provides simple CSS-only tooltips that appear on hover or focus. It uses the `content` attribute to display tooltip text and supports multiple placement positions.
 
-## Key Features
-- **CSS-Only**: No JavaScript required for basic functionality
-- **Attribute-Driven**: Uses `content` attribute for tooltip text
-- **Multiple Positions**: Top, right, bottom, left placements
-- **Motion Preferences**: Respects `prefers-reduced-motion`
-- **Inline Display**: Doesn't disrupt document flow
+The simple tooltip wraps an ordinary trigger and generates a short text bubble from an attribute. It is hidden at rest, appears on both hover and `:focus-within`, respects reduced-motion preferences, and supports four placements.
 
-## Attributes
-- `content`: Tooltip text content
-- `place`: Position of tooltip (default: `top`)
-  - `top`: Above the element
-  - `right`: To the right of the element
-  - `bottom`: Below the element
-  - `left`: To the left of the element
-
-## Styling Details
-
-### Base Tooltip
-- **Position**: Relative container
-- **Display**: Inline-block to maintain flow
-- **Pseudo-element**: `::after` for tooltip content
-- **Positioning**: Absolute with transforms for centering
-
-### Tooltip Bubble
-- **Content**: From `content` attribute
-- **Background**: Surface role with border
-- **Text Color**: Auto-contrast for readability
-- **Border Radius**: Small radius
-- **Padding**: Minimal padding
-- **Max Width**: 60ch for readability
-- **White Space**: No-wrap to prevent breaking
-
-### Positioning
-- **Top**: Above element, centered horizontally
-- **Right**: Right of element, centered vertically
-- **Bottom**: Below element, centered horizontally
-- **Left**: Left of element, centered vertically
-
-## Usage Example
 ```html
-<button tooltip content="Save your changes" place="top">
-  Save
-</button>
+<tooltip content="Saved to your workspace" place="top">
+  <button type="button">Save</button>
+</tooltip>
 
-<span tooltip content="This field is required" place="right">
-  Name *
+<span data-tooltip="Required before publishing" place="right">
+  <button type="button">Status</button>
 </span>
 ```
 
-## CSS Custom Properties Used
-- `--role`: Surface role (default: `overt`)
-- `--bg`: Background color
-- `--border`: Border color
-- `--radius-sm`: Border radius
-- `--l-padding`: Padding (default: `0.25em 0.5em`)
+The public host forms are:
+
+- `<tooltip content="…">`
+- `[data-tooltip="…"]`
+- `.tooltip[data-tooltip="…"]`
+
+## Placement
+
+Set `place` to `top`, `right`, `bottom`, or `left`. Top is the default. Placement is absolute relative to the tooltip host and does not depend on experimental anchor positioning.
+
+## Theme tokens
+
+```css
+[data-tooltip] {
+  --tooltip-background: var(--surface-overt);
+  --tooltip-color: var(--text-on-bedrock);
+  --tooltip-border-color: var(--outline-overt);
+  --tooltip-offset: 0.5rem;
+  --tooltip-max-width: 28ch;
+  --tooltip-delay: 150ms;
+}
+```
 
 ## Accessibility
-- **Hover/Focus**: Appears on both hover and keyboard focus
-- **Motion**: Disabled when `prefers-reduced-motion: reduce`
-- **Screen Readers**: May need ARIA attributes for full accessibility
-- **Timing**: No delay (immediate appearance)
 
-## Limitations
-- **CSS-Only**: No advanced features like delays or animations
-- **Positioning**: Fixed offsets, no collision detection
-- **Styling**: Limited customization options
-- **Advanced Features**: For complex tooltips, see `tooltips.css`
-
-## Browser Support
-- All modern browsers
-- CSS pseudo-elements and attribute selectors
-- Fallback: No tooltip display in very old browsers
-
-## Use Cases
-- **Form Labels**: Field help text
-- **Button Tooltips**: Action explanations
-- **Icon Buttons**: Clarify icon meanings
-- **Abbreviations**: Expand acronyms
-- **Status Indicators**: Explain status icons
-
-## Related Components
-For more advanced tooltip functionality, see `tooltips.css` which includes:
-- Anchor positioning
-- Popover API integration
-- Animation and transitions
-- Collision detection
-- Customizable styling
+Generated tooltip text is supplemental. The trigger must still have an accessible name, especially when it contains only an icon. Keep essential instructions in visible content or connect a real element with `aria-describedby`. Use the structured tooltip pattern when assistive technology needs access to the tooltip content.

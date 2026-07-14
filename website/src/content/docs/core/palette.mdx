@@ -10,6 +10,8 @@ The palette system provides a comprehensive, perceptually uniform color system u
 
 <ColorPaletteViewer />
 
+Open **Live token editor** to change palette inputs in place. The editor writes overrides to the explorer's isolated token host, so you can safely tune brand and feedback hues, shared lightness/chroma values, gamut clamps, and the six named-family chroma profiles. The generated `:root` block contains only the values you changed; **Reset selected** and **Reset all** remove those overrides.
+
 ## Color Space: OKLCH
 
 The palette uses OKLCH (LCH in OKLab color space) for:
@@ -28,12 +30,12 @@ Each color scale includes 13 steps (0-12):
 
 ## Color Calculation
 
-Colors are calculated using:
+Most colors use the shared lightness, chroma, and gamut-clamp tokens. Families that need perceptual correction expose dedicated chroma steps; Yellow is representative:
 ```css
 oklch(
   var(--scale-l-[step])     /* Lightness from scale */
-  min(var(--scale-c-[step]), var(--clamp-max-c-[level]))  /* Clamped chroma */
-  var(--[color]-h)          /* Hue angle */
+  var(--palette-yellow-chroma-[step])
+  var(--hue-yellow)         /* Hue angle */
 )
 ```
 
@@ -42,6 +44,9 @@ Chroma values are clamped to prevent out-of-gamut colors:
 - **Base clamps**: `--clamp-max-c-0` through `--clamp-max-c-6`
 - **Special clamps**: Higher chroma allowed for error/warning colors
 - **Neutral clamps**: Reduced chroma for gray/neutral scales
+- **Named-family profiles**: Brown, gold, orange, yellow, cyan, and slate expose `--palette-[color]-chroma-0` through `--palette-[color]-chroma-12` so each family keeps the expected visual character across the full scale
+
+Hue angles are not equally vivid to the eye. For example, Slate deliberately uses a low-chroma blue-gray profile, while Yellow uses a stronger profile so its middle steps remain clear and useful. Override both the hue and chroma-step tokens when creating a substantially different family.
 
 ## Palette Categories
 
@@ -119,7 +124,8 @@ Comprehensive color library with 20+ color scales.
 The palette requires variables from `tokens.css`:
 - **Lightness scales**: `--scale-l-0` through `--scale-l-12`
 - **Chroma scales**: `--scale-c-0` through `--scale-c-10`
-- **Hue values**: `--[color]-h` (e.g., `--accent-h`, `--red-h`)
+- **Hue values**: named scales use `--hue-[color]` (for example, `--hue-red`); configurable accent scales use `--accent-h`, `--secondary-h`, and `--tertiary-h`
+- **Family chroma profiles**: `--palette-[color]-chroma-0` through `--palette-[color]-chroma-12` for perceptually tuned named families
 - **Max chroma clamps**: `--max-chroma-0` through `--max-chroma-6`
 
 ### Layer Organization
@@ -153,12 +159,22 @@ Override hue values for custom branding:
 ```
 
 ### Extended Palettes
-Add custom color scales:
+For a single stop, the experimental `--palette-color()` function removes the repeated OKLCH construction:
 ```css
---brand-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--brand-h));
---brand-palette-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--brand-h));
-/* ... continue for all 13 steps */
+--brand-palette-7: oklch(var(--scale-l-7) var(--brand-chroma-7) var(--brand-h)); /* fallback */
+
+@supports (color: --palette-color(50%, 0.2, 85)) {
+  --brand-palette-7: --palette-color(var(--scale-l-7), var(--brand-chroma-7), var(--brand-h));
+}
 ```
+
+There are three whole-palette recipes:
+
+- `@apply --palette-scale(var(--brand-h))` uses your local `--palette-chroma-0` through `--palette-chroma-12` profile.
+- `@apply --palette-clamped-scale(var(--brand-h))` generates all 13 steps from the library's standard gamut-limited curve.
+- `@apply --palette-seed-scale(var(--brand-seed))` derives the scale from an OKLCH seed color while preserving its hue.
+
+Each emits scoped `--palette-step-0` through `--palette-step-12` tokens. `@apply --palette-roles` adds convenient positional aliases, and `@apply --palette-alpha-scale(var(--palette-step-7))` produces nine opacity variants. See [Mixins Core](/CSS-Tags/core/mixins/) for complete examples. Keep direct declarations as production fallbacks because mixin support remains experimental.
 
 ## Performance Considerations
 

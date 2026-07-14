@@ -19,10 +19,10 @@ The `navigation` component provides responsive navbar and sidebar components wit
 Horizontal navigation bar with brand, links, and mobile toggle.
 
 #### Features
-- **Sticky Positioning**: Sticks to top of viewport
+- **Optional Sticky Positioning**: Add `data-sticky`, `.is-sticky`, or `sticky`
 - **Brand Area**: For logo or site title
 - **Navigation Links**: Horizontal list of links
-- **Mobile Toggle**: Hamburger menu button for small screens
+- **Mobile Toggle**: Opt-in collapsible menu for small containers
 - **Responsive**: Links stack vertically on mobile
 
 ### Sidebar (`nav-sidebar`)
@@ -71,13 +71,13 @@ Vertical navigation sidebar with scrollable content.
 
 ## Responsive Behavior
 
-### Mobile Navbar (< 768px)
-- Navigation links hidden by default
-- Toggle button becomes visible
-- Active class shows vertical menu overlay
-- Full-width dropdown from top
+### Mobile Navbar (< 34rem container width)
+- Links stack vertically and remain visible by default, preserving navigation without JavaScript.
+- Add `data-collapsible` or `.is-collapsible` to opt into a toggle-enhanced menu.
+- The toggle's `aria-expanded="true"` state or `.active` on the link list reveals the menu.
+- The menu stays in normal flow rather than covering nearby content.
 
-### Desktop Navbar (≥ 768px)
+### Desktop Navbar (> 34rem container width)
 - Horizontal link layout
 - Toggle button hidden
 - Inline navigation display
@@ -126,7 +126,7 @@ Vertical navigation sidebar with scrollable content.
 - **Fallback**: Basic styling without scoping in unsupported browsers
 
 ## JavaScript Integration
-The mobile menu requires JavaScript to:
+Only the opt-in `data-collapsible` mobile menu requires JavaScript. Without that attribute, links remain visible at every width. Enhancement should:
 - Toggle `.active` class on `.nav-links`
 - Handle toggle button clicks
 - Manage focus and accessibility

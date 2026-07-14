@@ -1,36 +1,87 @@
-/* tooltip.css */
+/**
+ * tooltip.css
+ *
+ * A small CSS-only text tooltip. The host wraps the trigger and reveals the
+ * generated bubble on pointer hover or keyboard focus.
+ */
 
-tooltip {
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip]) {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  inline-size: fit-content;
 }
 
-tooltip[content]::after {
-  content: attr(content);
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])::after {
   position: absolute;
-  inset-block-end: 100%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -0.5em);
-  white-space: nowrap;
+  z-index: var(--tooltip-z-index, 1000);
+  inline-size: max-content;
+  max-inline-size: min(var(--tooltip-max-width, 28ch), 80vw);
+  padding: var(--tooltip-padding, 0.4rem 0.6rem);
+  border: var(--tooltip-border-width, 1px) solid var(--tooltip-border-color, var(--outline-overt, currentColor));
+  border-radius: var(--tooltip-radius, var(--radius-sm, 0.25rem));
+  background: var(--tooltip-background, var(--bedrock, #1f2937));
+  color: var(--tooltip-color, var(--text-on-bedrock, Canvas));
+  box-shadow: var(--tooltip-shadow, var(--shadow-sm, none));
+  font-size: var(--tooltip-font-size, var(--font-size-sm, 0.875rem));
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-snug, 1.3);
+  text-align: start;
+  white-space: normal;
   pointer-events: none;
-  --role: overt;
-   @apply --surface-role(var(--role));
-   background-color: var(--tooltip-bg, var(--bg));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: var(--l-padding, 0.25em 0.5em);
-  font-size: 0.85em;
-  max-width: 60ch;
-  @apply --contrast-text-for-bg;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms ease-out, transform 120ms ease-out, visibility 0s linear 120ms;
 }
 
-/* placements */
-tooltip[place="top"][content]::after { inset-block-end: 100%; inset-inline-start: 50%; transform: translate(-50%, -0.5em); }
-tooltip[place="right"][content]::after { inset-block: 50% auto; inset-inline-start: 100%; transform: translate(0.5em, -50%); }
-tooltip[place="bottom"][content]::after { inset-block-start: 100%; inset-inline-start: 50%; transform: translate(-50%, 0.5em); }
-tooltip[place="left"][content]::after { inset-block: 50% auto; inset-inline-end: 100%; transform: translate(-0.5em, -50%); }
+tooltip[content]::after { content: attr(content); }
+:is([data-tooltip], .tooltip[data-tooltip])::after { content: attr(data-tooltip); }
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip]):is(:hover, :focus-within)::after {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: var(--tooltip-delay, 150ms), var(--tooltip-delay, 150ms), 0s;
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip]):is(:not([place]), [place="top"])::after {
+  inset-block-end: calc(100% + var(--tooltip-offset, 0.5rem));
+  inset-inline-start: 50%;
+  transform: translate(-50%, 0.25rem);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip]):is(:not([place]), [place="top"]):is(:hover, :focus-within)::after {
+  transform: translate(-50%, 0);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="bottom"]::after {
+  inset-block-start: calc(100% + var(--tooltip-offset, 0.5rem));
+  inset-inline-start: 50%;
+  transform: translate(-50%, -0.25rem);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="bottom"]:is(:hover, :focus-within)::after {
+  transform: translate(-50%, 0);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="right"]::after {
+  inset-block-start: 50%;
+  inset-inline-start: calc(100% + var(--tooltip-offset, 0.5rem));
+  transform: translate(-0.25rem, -50%);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="right"]:is(:hover, :focus-within)::after {
+  transform: translate(0, -50%);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="left"]::after {
+  inset-block-start: 50%;
+  inset-inline-end: calc(100% + var(--tooltip-offset, 0.5rem));
+  transform: translate(0.25rem, -50%);
+}
+
+:is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])[place="left"]:is(:hover, :focus-within)::after {
+  transform: translate(0, -50%);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  tooltip[content]::after { transition: none; }
+  :is(tooltip[content], [data-tooltip], .tooltip[data-tooltip])::after { transition: none; }
 }
-

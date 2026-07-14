@@ -9,6 +9,7 @@
   box-sizing: border-box;
   font-family: inherit;
   font-size: var(--font-size-base, 1rem);
+  font-weight: var(--form-control-weight, var(--font-weight-normal, 400));
   line-height: var(--line-height-normal, 1.5);
 }
 
@@ -16,11 +17,24 @@
   display: block;
   inline-size: 100%;
   padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-  border: var(--border-width, 1px) solid var(--outline-default);
+  border: var(--border-width, 1px) solid var(--form-control-border-color, var(--outline-default, var(--outline, currentColor)));
   border-radius: var(--radius-md, 6px);
-  background: var(--bg, var(--surface-default));
-  color: var(--fg, var(--text-default));
+  background: var(--form-control-background, var(--surface-default));
+  color: var(--form-control-color, var(--text-default));
   transition: border-color 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
+}
+
+:where(.form-field, label:has(> :is(.form-input, .form-select, .form-textarea))) {
+  display: grid;
+  inline-size: 100%;
+  gap: var(--form-field-gap, var(--space-xs, 0.5rem));
+  color: var(--form-label-color, var(--text-overt, var(--text-default)));
+  font-weight: var(--form-label-weight, var(--font-weight-medium, 500));
+}
+
+:where(.form-field, label:has(> :is(.form-input, .form-select, .form-textarea))) > :is(small, .form-help) {
+  color: var(--text-muted);
+  font-weight: var(--font-weight-normal, 400);
 }
 
 .form-input::placeholder,

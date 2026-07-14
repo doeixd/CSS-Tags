@@ -12,7 +12,7 @@
  * @feature {CSS Nesting} - Co-locates child item styles for better organization.
  */
 
-flex {
+:is(flex, [data-flex], .flex) {
   /* --- Core Flex Container Properties --- */
   --flex-direction:   attr(direction type(*), row);
   --flex-wrap:        attr(wrap type(*), nowrap);

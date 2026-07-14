@@ -49,6 +49,8 @@ The `flex` component provides a declarative way to create flexible one-dimension
 
 ## Usage Examples
 
+The host supports `<flex>`, `[data-flex]`, and `.flex`. All three accept the same configuration attributes.
+
 ### Basic Horizontal Layout
 ```html
 <flex>
@@ -64,6 +66,8 @@ The `flex` component provides a declarative way to create flexible one-dimension
   <div>Centered Item</div>
 </flex>
 ```
+
+`justify="center"` centers items on the main axis. `align="center"` centers them on the cross axis; most horizontal examples need both when they should be centered in both directions.
 
 ### Space Between Items
 ```html

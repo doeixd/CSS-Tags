@@ -7,9 +7,10 @@
  * CSS @function and @mixin specification.
  *
  * ==============================================================================
- * ⚠️ IMPORTANT: PROPOSED FEATURE NOTICE ⚠️
- * The @function and @mixin rules are NOT SUPPORTED in any browser as of late 2025.
- * This file demonstrates a forward-looking, pre-processor-free approach.
+ * ⚠️ IMPORTANT: PROGRESSIVE ENHANCEMENT NOTICE ⚠️
+ * Custom @function support is available in Chromium 139+, but is not yet a
+ * cross-browser baseline. @mixin remains an actively changing draft feature.
+ * Keep standard declarations as fallbacks for production output.
  * ==============================================================================
  */
 
@@ -42,7 +43,140 @@
   result: oklch(from var(--bg-color) var(--l-result) 0 h);
 }
 
+/** @function --palette-color: Builds one OKLCH palette stop from token values. */
+@function --palette-color(
+  --lightness type(*),
+  --chroma type(*),
+  --hue type(*)
+) returns type(*) {
+  result: oklch(var(--lightness) var(--chroma) var(--hue));
+}
+
+/** @function --palette-clamped-color: Builds a gamut-limited OKLCH stop. */
+@function --palette-clamped-color(
+  --lightness type(*),
+  --chroma type(*),
+  --max-chroma type(*),
+  --hue type(*)
+) returns type(*) {
+  result: oklch(var(--lightness) min(var(--chroma), var(--max-chroma)) var(--hue));
+}
+
+/** @function --palette-seed-color: Rebuilds a stop while preserving a seed color's hue. */
+@function --palette-seed-color(
+  --seed type(*),
+  --lightness type(*),
+  --chroma type(*),
+  --max-chroma type(*)
+) returns type(*) {
+  result: oklch(from var(--seed) var(--lightness) min(var(--chroma), var(--max-chroma)) h);
+}
+
+/** @function --palette-alpha: Applies an alpha token without changing OKLCH channels. */
+@function --palette-alpha(--color type(*), --alpha type(*)) returns type(*) {
+  result: oklch(from var(--color) l c h / var(--alpha));
+}
+
+/** @function --palette-mix: Mixes two colors perceptually in OKLCH. */
+@function --palette-mix(
+  --from type(*),
+  --to type(*),
+  --amount type(*): 50%
+) returns type(*) {
+  result: color-mix(in oklch, var(--from) calc(100% - var(--amount)), var(--to) var(--amount));
+}
+
 /* --- MIXINS (apply blocks of declarations) --- */
+
+/**
+ * @mixin --palette-scale: Builds generic --palette-step-0..12 output tokens.
+ * Set --palette-chroma-0..12 on the target before applying the mixin.
+ */
+@mixin --palette-scale(--hue type(*)) {
+  @result {
+    --palette-step-0: --palette-color(var(--scale-l-0), var(--palette-chroma-0), var(--hue));
+    --palette-step-1: --palette-color(var(--scale-l-1), var(--palette-chroma-1), var(--hue));
+    --palette-step-2: --palette-color(var(--scale-l-2), var(--palette-chroma-2), var(--hue));
+    --palette-step-3: --palette-color(var(--scale-l-3), var(--palette-chroma-3), var(--hue));
+    --palette-step-4: --palette-color(var(--scale-l-4), var(--palette-chroma-4), var(--hue));
+    --palette-step-5: --palette-color(var(--scale-l-5), var(--palette-chroma-5), var(--hue));
+    --palette-step-6: --palette-color(var(--scale-l-6), var(--palette-chroma-6), var(--hue));
+    --palette-step-7: --palette-color(var(--scale-l-7), var(--palette-chroma-7), var(--hue));
+    --palette-step-8: --palette-color(var(--scale-l-8), var(--palette-chroma-8), var(--hue));
+    --palette-step-9: --palette-color(var(--scale-l-9), var(--palette-chroma-9), var(--hue));
+    --palette-step-10: --palette-color(var(--scale-l-10), var(--palette-chroma-10), var(--hue));
+    --palette-step-11: --palette-color(var(--scale-l-11), var(--palette-chroma-11), var(--hue));
+    --palette-step-12: --palette-color(var(--scale-l-12), var(--palette-chroma-12), var(--hue));
+  }
+}
+
+/** @mixin --palette-clamped-scale: Generates a complete shared-curve palette from a hue. */
+@mixin --palette-clamped-scale(--hue type(*)) {
+  @result {
+    --palette-step-0: --palette-clamped-color(var(--scale-l-0), var(--scale-c-1), var(--clamp-max-c-0), var(--hue));
+    --palette-step-1: --palette-clamped-color(var(--scale-l-1), var(--scale-c-2), var(--clamp-max-c-0), var(--hue));
+    --palette-step-2: --palette-clamped-color(var(--scale-l-2), var(--scale-c-3), var(--clamp-max-c-1), var(--hue));
+    --palette-step-3: --palette-clamped-color(var(--scale-l-3), var(--scale-c-4), var(--clamp-max-c-1), var(--hue));
+    --palette-step-4: --palette-clamped-color(var(--scale-l-4), var(--scale-c-5), var(--clamp-max-c-2), var(--hue));
+    --palette-step-5: --palette-clamped-color(var(--scale-l-5), var(--scale-c-7), var(--clamp-max-c-2), var(--hue));
+    --palette-step-6: --palette-clamped-color(var(--scale-l-6), var(--scale-c-8), var(--clamp-max-c-3), var(--hue));
+    --palette-step-7: --palette-clamped-color(var(--scale-l-7), var(--scale-c-9), var(--clamp-max-c-3), var(--hue));
+    --palette-step-8: --palette-clamped-color(var(--scale-l-8), var(--scale-c-8), var(--clamp-max-c-4), var(--hue));
+    --palette-step-9: --palette-clamped-color(var(--scale-l-9), var(--scale-c-7), var(--clamp-max-c-4), var(--hue));
+    --palette-step-10: --palette-clamped-color(var(--scale-l-10), var(--scale-c-5), var(--clamp-max-c-5), var(--hue));
+    --palette-step-11: --palette-clamped-color(var(--scale-l-11), var(--scale-c-4), var(--clamp-max-c-5), var(--hue));
+    --palette-step-12: --palette-clamped-color(var(--scale-l-12), var(--scale-c-3), var(--clamp-max-c-6), var(--hue));
+  }
+}
+
+/** @mixin --palette-seed-scale: Generates a complete palette while preserving a seed color's hue. */
+@mixin --palette-seed-scale(--seed type(*)) {
+  @result {
+    --palette-step-0: --palette-seed-color(var(--seed), var(--scale-l-0), var(--scale-c-1), var(--clamp-max-c-0));
+    --palette-step-1: --palette-seed-color(var(--seed), var(--scale-l-1), var(--scale-c-2), var(--clamp-max-c-0));
+    --palette-step-2: --palette-seed-color(var(--seed), var(--scale-l-2), var(--scale-c-3), var(--clamp-max-c-1));
+    --palette-step-3: --palette-seed-color(var(--seed), var(--scale-l-3), var(--scale-c-4), var(--clamp-max-c-1));
+    --palette-step-4: --palette-seed-color(var(--seed), var(--scale-l-4), var(--scale-c-5), var(--clamp-max-c-2));
+    --palette-step-5: --palette-seed-color(var(--seed), var(--scale-l-5), var(--scale-c-7), var(--clamp-max-c-2));
+    --palette-step-6: --palette-seed-color(var(--seed), var(--scale-l-6), var(--scale-c-8), var(--clamp-max-c-3));
+    --palette-step-7: --palette-seed-color(var(--seed), var(--scale-l-7), var(--scale-c-9), var(--clamp-max-c-3));
+    --palette-step-8: --palette-seed-color(var(--seed), var(--scale-l-8), var(--scale-c-8), var(--clamp-max-c-4));
+    --palette-step-9: --palette-seed-color(var(--seed), var(--scale-l-9), var(--scale-c-7), var(--clamp-max-c-4));
+    --palette-step-10: --palette-seed-color(var(--seed), var(--scale-l-10), var(--scale-c-5), var(--clamp-max-c-5));
+    --palette-step-11: --palette-seed-color(var(--seed), var(--scale-l-11), var(--scale-c-4), var(--clamp-max-c-5));
+    --palette-step-12: --palette-seed-color(var(--seed), var(--scale-l-12), var(--scale-c-3), var(--clamp-max-c-6));
+  }
+}
+
+/** @mixin --palette-alpha-scale: Generates transparent variants of one palette color. */
+@mixin --palette-alpha-scale(--color type(*)) {
+  @result {
+    --palette-alpha-0: --palette-alpha(var(--color), var(--alpha-0));
+    --palette-alpha-1: --palette-alpha(var(--color), var(--alpha-1));
+    --palette-alpha-2: --palette-alpha(var(--color), var(--alpha-2));
+    --palette-alpha-3: --palette-alpha(var(--color), var(--alpha-3));
+    --palette-alpha-4: --palette-alpha(var(--color), var(--alpha-4));
+    --palette-alpha-5: --palette-alpha(var(--color), var(--alpha-5));
+    --palette-alpha-6: --palette-alpha(var(--color), var(--alpha-6));
+    --palette-alpha-7: --palette-alpha(var(--color), var(--alpha-7));
+    --palette-alpha-8: --palette-alpha(var(--color), var(--alpha-8));
+  }
+}
+
+/** @mixin --palette-roles: Adds convenient aliases without making contrast guarantees. */
+@mixin --palette-roles {
+  @result {
+    --palette-lightest: var(--palette-step-0);
+    --palette-subtle: var(--palette-step-2);
+    --palette-light: var(--palette-step-4);
+    --palette-mid: var(--palette-step-7);
+    --palette-dark: var(--palette-step-9);
+    --palette-strong: var(--palette-step-11);
+    --palette-darkest: var(--palette-step-12);
+  }
+}
+
+
 
 /** @mixin --center-grid: Centers content using grid. */
 @mixin --center-grid {

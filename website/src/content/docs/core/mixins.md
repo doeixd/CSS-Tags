@@ -7,7 +7,7 @@ description: The `mixins.css` file provides a library of reusable CSS functions 
 The `mixins.css` file provides a library of reusable CSS functions and mixins based on proposed CSS specifications. It demonstrates forward-looking CSS patterns for calculations, utilities, and component styling.
 
 ## Important Notice
-⚠️ **PROPOSED SPECIFICATIONS**: These custom functions and mixins are experimental and are not a dependable production-browser API. Shipped components provide standard CSS fallbacks; treat this page as forward-looking reference material.
+⚠️ **PROGRESSIVE ENHANCEMENT**: Custom functions are available in [Chromium 139+](https://developer.chrome.com/release-notes/139#css_custom_functions), but are not yet a cross-browser baseline. Custom mixins remain an actively changing [draft feature](https://drafts.csswg.org/css-mixins-1/#defining-custom-mixins). Shipped components provide standard CSS fallbacks; treat mixins as forward-looking reference material.
 
 ## Functions
 
@@ -72,7 +72,120 @@ Calculates black or white for optimal contrast against a background.
 }
 ```
 
+### --palette-color Function
+Builds one OKLCH palette stop from lightness, chroma, and hue tokens. It is useful when a family needs a custom chroma profile instead of the shared clamped curve.
+
+```css
+@function --palette-color(--lightness type(*), --chroma type(*), --hue type(*)) returns type(*) {
+  result: oklch(var(--lightness) var(--chroma) var(--hue));
+}
+
+.gold-swatch {
+  background: --palette-color(var(--scale-l-7), var(--palette-gold-chroma-7), var(--hue-gold));
+}
+```
+
+### Palette Transformation Functions
+
+The remaining helpers cover the common operations needed while constructing or consuming a scale:
+
+- `--palette-clamped-color(lightness, chroma, max-chroma, hue)` limits chroma before producing the stop.
+- `--palette-seed-color(seed, lightness, chroma, max-chroma)` preserves a seed color's hue while replacing its lightness and chroma.
+- `--palette-alpha(color, alpha)` creates a transparent variant without changing the OKLCH channels.
+- `--palette-mix(from, to, amount)` blends two colors in OKLCH; `amount` defaults to `50%`.
+
+```css
+.example {
+  --safe-gold: --palette-clamped-color(58%, .24, .22, 85);
+  --seed-step: --palette-seed-color(oklch(62% .18 320), 82%, .08, .08);
+  --glass-gold: --palette-alpha(var(--safe-gold), 40%);
+  --gold-rose: --palette-mix(var(--safe-gold), var(--rose-6), 30%);
+}
+```
+
 ## Mixins
+
+### --palette-scale Mixin
+Generates generic `--palette-step-0` through `--palette-step-12` output tokens from the shared lightness scale and a local `--palette-chroma-*` profile. This follows the current draft's `@result` and `@apply` syntax.
+
+```css
+.brand-scale {
+  --palette-chroma-0: .02;
+  --palette-chroma-1: .04;
+  --palette-chroma-2: .06;
+  --palette-chroma-3: .08;
+  --palette-chroma-4: .10;
+  --palette-chroma-5: .14;
+  --palette-chroma-6: .18;
+  --palette-chroma-7: .22;
+  --palette-chroma-8: .18;
+  --palette-chroma-9: .14;
+  --palette-chroma-10: .10;
+  --palette-chroma-11: .08;
+  --palette-chroma-12: .06;
+
+  @apply --palette-scale(85);
+}
+
+.brand-swatch {
+  background: var(--palette-step-7);
+}
+```
+
+The mixin is an experimental convenience API. Keep direct `oklch(...)` declarations as fallbacks when the output must work across today's browsers.
+
+### Generate a Complete Palette
+
+`--palette-clamped-scale()` is the shortest path from a hue to a complete, gamut-limited 13-step palette. It uses the library's shared lightness, chroma, and clamp curves.
+
+```css
+.violet-palette {
+  @apply --palette-clamped-scale(285);
+  @apply --palette-roles;
+
+  color: var(--palette-strong);
+  background: var(--palette-subtle);
+}
+```
+
+The generated contract is:
+
+- `--palette-step-0` through `--palette-step-12`: the complete scale
+- `--palette-lightest`, `--palette-subtle`, `--palette-light`, `--palette-mid`, `--palette-dark`, `--palette-strong`, and `--palette-darkest`: optional convenience aliases from `--palette-roles`
+
+These aliases describe relative positions, not guaranteed text/background contrast. Test the exact pair you use.
+
+### Generate a Palette from a Seed Color
+
+`--palette-seed-scale()` extracts the seed's OKLCH hue and applies the standard lightness, chroma, and gamut curves. This is useful when design input arrives as a color instead of a hue number.
+
+```css
+.product-palette {
+  --product-seed: oklch(62% .2 330);
+  @apply --palette-seed-scale(var(--product-seed));
+}
+
+.product-card {
+  border-color: var(--palette-step-6);
+  background: var(--palette-step-2);
+}
+```
+
+### Generate an Alpha Scale
+
+`--palette-alpha-scale()` creates `--palette-alpha-0` through `--palette-alpha-8` using the library's shared alpha tokens.
+
+```css
+.scrim-palette {
+  @apply --palette-alpha-scale(var(--palette-step-11));
+}
+
+.scrim {
+  background: var(--palette-alpha-5);
+}
+```
+
+Because CSS cannot interpolate a custom-property name from a mixin argument, whole-scale mixins intentionally emit a scoped generic contract. Apply them on the component or theme scope that consumes `--palette-step-*`, then alias individual steps to public names when needed.
 
 ### --center-grid Mixin
 Centers content using CSS Grid.
@@ -317,7 +430,8 @@ Applies semantic colors for status feedback.
 ```
 
 ## Browser Support & Adoption
-- **@function/@mixin**: Not supported (proposed for future CSS)
+- **@function**: Chromium 139+; retain a direct-value fallback for other engines
+- **@mixin**: Experimental draft; do not make production output depend on it
 - **@property**: Chrome 85+, Firefox 128+ (limited)
 - **@supports**: All modern browsers
 - **Fallback**: Use preprocessor equivalents or manual implementations

@@ -11,15 +11,22 @@
   container-type: inline-size;
   container-name: navbar-container;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md, 1rem);
-  padding: var(--spacing-md, 1rem);
+  min-block-size: var(--nav-min-height, 3.5rem);
+  padding: var(--nav-padding, var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem));
   background-color: var(--nav-background, var(--bg, var(--surface-default)));
-  border-bottom: var(--border-width, 1px) solid var(--nav-border-color, var(--outline-subtle));
-  position: sticky;
-  top: 0;
+  border: var(--border-width, 1px) solid var(--nav-border-color, var(--outline-subtle));
+  border-radius: var(--nav-radius, var(--radius-lg, 0.75rem));
+  position: relative;
   z-index: var(--nav-z-index, var(--z-index-50, 50));
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar):is([sticky], [data-sticky], .is-sticky) {
+  position: sticky;
+  top: var(--nav-sticky-offset, 0);
 }
 
 :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-brand {
@@ -29,6 +36,7 @@
   line-height: 1.1;
   text-decoration: none;
   white-space: nowrap;
+  margin-inline-end: auto;
 }
 
 :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links {
@@ -80,31 +88,22 @@
   color: var(--nav-toggle-hover-color, var(--text-overt));
 }
 
-@container navbar-container (max-width: 48rem) {
-  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) {
-    position: relative;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
+@container navbar-container (max-width: 34rem) {
   :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    box-sizing: border-box;
     width: 100%;
-    position: absolute;
-    top: calc(100% + var(--border-width, 1px));
-    left: 0;
-    right: 0;
-    z-index: 1;
+    flex: 0 0 100%;
     background-color: var(--nav-menu-background, var(--surface-default));
-    border: var(--border-width, 1px) solid var(--nav-menu-border-color, var(--outline-subtle));
-    border-radius: 0 0 var(--radius-md, 6px) var(--radius-md, 6px);
-    padding: var(--spacing-md, 1rem);
+    border-block-start: var(--border-width, 1px) solid var(--nav-menu-border-color, var(--outline-subtle));
+    padding: var(--spacing-sm, 0.5rem) 0 0;
     box-shadow: var(--shadow-dropdown, none);
   }
 
-  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links.active {
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links.active,
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle[aria-expanded="true"] + .nav-links {
     display: flex;
   }
 
@@ -114,8 +113,16 @@
   }
 
   :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle {
-    display: inline-flex;
+    display: none;
     margin-inline-start: auto;
+  }
+
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar):is([data-collapsible], .is-collapsible) .nav-links {
+    display: none;
+  }
+
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar):is([data-collapsible], .is-collapsible) .nav-toggle {
+    display: inline-flex;
   }
 }
 

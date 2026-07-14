@@ -55,8 +55,12 @@ Popover content is non-modal: it does not make the rest of the page inert or tra
   --b-bw: 1px;
   --b-r: var(--radius-lg);
   --b-p: var(--space-lg);
+  --popover-max-width: 24rem;
+  --popover-max-height: 32rem;
 }
 ```
+
+Popovers are centered in the top layer by default, which remains reliable when anchor positioning is unavailable. Add `data-scrim` when the popover benefits from a dimmed backdrop; ordinary non-modal popovers keep the page unobscured.
 
 ## Progressive enhancement
 

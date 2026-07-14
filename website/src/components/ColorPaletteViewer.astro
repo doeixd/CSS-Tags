@@ -44,6 +44,62 @@ const groups = [
 ] as const;
 
 const steps = Array.from({ length: 13 }, (_, index) => index);
+
+const namedHues = [
+    "brown", "gold", "olive", "orange", "amber", "yellow", "lime", "green",
+    "emerald", "teal", "cyan", "sky", "blue", "slate", "indigo", "violet",
+    "purple", "fuchsia", "magenta", "pink", "rose", "red",
+];
+
+const tunedFamilies = ["brown", "gold", "orange", "yellow", "cyan", "slate"];
+
+const editableTokenGroups = [
+    {
+        label: "Brand relationships",
+        tokens: [
+            ["Accent hue", "--accent-h", 0, 360, 1, ""],
+            ["Secondary hue shift", "--secondary-hue-shift", -360, 360, 1, ""],
+            ["Tertiary hue shift", "--tertiary-hue-shift", -360, 360, 1, ""],
+        ],
+    },
+    {
+        label: "Feedback hues",
+        tokens: [
+            ["Success hue", "--success-h", 0, 360, 1, ""],
+            ["Warning hue", "--warning-h", 0, 360, 1, ""],
+            ["Error hue", "--error-h", 0, 360, 1, ""],
+            ["Info hue", "--info-h", 0, 360, 1, ""],
+        ],
+    },
+    {
+        label: "Named hues",
+        tokens: namedHues.map((name) => [
+            `${name[0].toUpperCase()}${name.slice(1)} hue`, `--hue-${name}`, 0, 360, 1, "",
+        ]),
+    },
+    {
+        label: "Shared lightness",
+        tokens: steps.map((step) => [`Lightness ${step}`, `--scale-l-${step}`, 0, 100, 1, "%"]),
+    },
+    {
+        label: "Shared chroma",
+        tokens: Array.from({ length: 12 }, (_, index) => index + 1).map((step) => [
+            `Chroma ${step}`, `--scale-c-${step}`, 0, 0.4, 0.005, "",
+        ]),
+    },
+    {
+        label: "Gamut clamps",
+        tokens: Array.from({ length: 7 }, (_, step) => [
+            `Maximum chroma ${step}`, `--max-chroma-${step}`, 0, 0.4, 0.005, "",
+        ]),
+    },
+    ...tunedFamilies.map((family) => ({
+        label: `${family[0].toUpperCase()}${family.slice(1)} chroma profile`,
+        tokens: steps.map((step) => [
+            `${family} chroma ${step}`, `--palette-${family}-chroma-${step}`, 0, 0.4, 0.001, "",
+        ]),
+    })),
+] as const;
 ---
 
 <css-tags-tokens class="palette-token-scope">
@@ -61,6 +117,45 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
             </select>
         </label>
     </div>
+
+    <details class="palette-editor" data-palette-editor>
+        <summary>Live token editor</summary>
+        <div class="palette-editor__body">
+            <p>Edit the real palette input tokens. Changes are scoped to this explorer and update every dependent swatch immediately.</p>
+            <div class="palette-editor__controls">
+                <label>
+                    <span>CSS variable</span>
+                    <select data-token-select>
+                        {editableTokenGroups.map((group) => (
+                            <optgroup label={group.label}>
+                                {group.tokens.map(([label, token, min, max, step, unit]) => (
+                                    <option value={token} data-min={min} data-max={max} data-step={step} data-unit={unit}>
+                                        {label} ({token})
+                                    </option>
+                                ))}
+                            </optgroup>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    <span>Value</span>
+                    <div class="palette-editor__value">
+                        <input type="range" data-token-range aria-label="Token value slider" />
+                        <input type="number" data-token-value aria-label="Token numeric value" />
+                        <span data-token-unit aria-hidden="true"></span>
+                    </div>
+                </label>
+            </div>
+            <div class="palette-editor__actions">
+                <button type="button" data-token-reset>Reset selected</button>
+                <button type="button" data-token-reset-all>Reset all</button>
+                <span data-token-status aria-live="polite">No overrides applied.</span>
+            </div>
+            <pre class="palette-editor__output" data-token-output aria-label="Current CSS overrides">:root {
+  /* Edit a token to generate an override. */
+}</pre>
+        </div>
+    </details>
 
     <div class="palette-filters" aria-label="Filter palette groups">
         <button type="button" data-palette-filter="all" aria-pressed="true">All</button>
@@ -130,6 +225,87 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
             const topScrollbarSpace = viewer.querySelector<HTMLElement>("[data-palette-scrollbar-space]");
             const filterButtons = viewer.querySelectorAll<HTMLButtonElement>("[data-palette-filter]");
             const rows = viewer.querySelectorAll<HTMLElement>("[data-palette-group]");
+            const tokenScope = viewer.closest<HTMLElement>("css-tags-tokens");
+            const tokenSelect = viewer.querySelector<HTMLSelectElement>("[data-token-select]");
+            const tokenRange = viewer.querySelector<HTMLInputElement>("[data-token-range]");
+            const tokenValue = viewer.querySelector<HTMLInputElement>("[data-token-value]");
+            const tokenUnit = viewer.querySelector<HTMLElement>("[data-token-unit]");
+            const tokenStatus = viewer.querySelector<HTMLElement>("[data-token-status]");
+            const tokenOutput = viewer.querySelector<HTMLElement>("[data-token-output]");
+            const tokenReset = viewer.querySelector<HTMLButtonElement>("[data-token-reset]");
+            const tokenResetAll = viewer.querySelector<HTMLButtonElement>("[data-token-reset-all]");
+
+            if (tokenScope && tokenSelect && tokenRange && tokenValue) {
+                const defaults = new Map<string, string>();
+                const overrides = new Map<string, string>();
+
+                Array.from(tokenSelect.options).forEach((option) => {
+                    defaults.set(option.value, getComputedStyle(tokenScope).getPropertyValue(option.value).trim());
+                });
+
+                const selectedOption = () => tokenSelect.selectedOptions[0];
+                const formatValue = (value: string) => `${value}${selectedOption()?.dataset.unit ?? ""}`;
+
+                const updateOutput = () => {
+                    if (tokenOutput) {
+                        tokenOutput.textContent = overrides.size
+                            ? `:root {\n${Array.from(overrides, ([token, value]) => `  ${token}: ${value};`).join("\n")}\n}`
+                            : ":root {\n  /* Edit a token to generate an override. */\n}";
+                    }
+                    if (tokenStatus) {
+                        tokenStatus.textContent = overrides.size
+                            ? `${overrides.size} palette ${overrides.size === 1 ? "override" : "overrides"} applied.`
+                            : "No overrides applied.";
+                    }
+                };
+
+                const configureInputs = () => {
+                    const option = selectedOption();
+                    if (!option) return;
+                    const unit = option.dataset.unit ?? "";
+                    const raw = overrides.get(option.value) ?? defaults.get(option.value) ?? "0";
+                    const numeric = Number.parseFloat(raw);
+
+                    [tokenRange, tokenValue].forEach((input) => {
+                        input.min = option.dataset.min ?? "0";
+                        input.max = option.dataset.max ?? "360";
+                        input.step = option.dataset.step ?? "1";
+                        input.value = Number.isFinite(numeric) ? String(numeric) : "0";
+                    });
+                    if (tokenUnit) tokenUnit.textContent = unit;
+                };
+
+                const applyInput = (source: HTMLInputElement) => {
+                    const token = tokenSelect.value;
+                    const numeric = Number.parseFloat(source.value);
+                    if (!token || !Number.isFinite(numeric)) return;
+                    const value = formatValue(String(numeric));
+                    tokenRange.value = String(numeric);
+                    tokenValue.value = String(numeric);
+                    tokenScope.style.setProperty(token, value);
+                    overrides.set(token, value);
+                    updateOutput();
+                };
+
+                tokenSelect.addEventListener("change", configureInputs);
+                tokenRange.addEventListener("input", () => applyInput(tokenRange));
+                tokenValue.addEventListener("input", () => applyInput(tokenValue));
+                tokenReset?.addEventListener("click", () => {
+                    const token = tokenSelect.value;
+                    tokenScope.style.removeProperty(token);
+                    overrides.delete(token);
+                    configureInputs();
+                    updateOutput();
+                });
+                tokenResetAll?.addEventListener("click", () => {
+                    overrides.forEach((_, token) => tokenScope.style.removeProperty(token));
+                    overrides.clear();
+                    configureInputs();
+                    updateOutput();
+                });
+
+                configureInputs();
+            }
 
             if (paletteScroll && topScrollbar && topScrollbarSpace) {
                 const updateScrollbarWidth = () => {
@@ -247,6 +423,110 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
         background: var(--bg-secondary, #f6f8fa);
         border: 1px solid var(--border-color, #d8dee4);
         border-radius: 0.4rem;
+    }
+
+    .palette-editor {
+        margin: 0.85rem 1.25rem 0;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.5rem;
+        background: var(--bg-secondary, #f6f8fa);
+    }
+
+    .palette-editor summary {
+        padding: 0.7rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 650;
+        cursor: pointer;
+    }
+
+    .palette-editor__body {
+        display: grid;
+        gap: 0.8rem;
+        padding: 0 0.85rem 0.85rem;
+        border-top: 1px solid var(--border-color, #d8dee4);
+    }
+
+    .palette-editor__body > p {
+        margin: 0.75rem 0 0;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.78rem;
+    }
+
+    .palette-editor__controls {
+        display: grid;
+        grid-template-columns: minmax(14rem, 1fr) minmax(18rem, 1.2fr);
+        gap: 0.75rem;
+    }
+
+    .palette-editor__controls label {
+        display: grid;
+        gap: 0.3rem;
+        min-width: 0;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .palette-editor__controls select,
+    .palette-editor__controls input[type="number"] {
+        min-width: 0;
+        min-height: 2.25rem;
+        padding-inline: 0.6rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font: inherit;
+        font-size: 0.8rem;
+    }
+
+    .palette-editor__value {
+        display: grid;
+        grid-template-columns: minmax(7rem, 1fr) 5.5rem auto;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .palette-editor__value input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent, #06c);
+    }
+
+    .palette-editor__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .palette-editor__actions button {
+        min-height: 2rem;
+        padding: 0.35rem 0.65rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font: inherit;
+        font-size: 0.75rem;
+        cursor: pointer;
+    }
+
+    .palette-editor__actions span {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.75rem;
+    }
+
+    .palette-editor__output {
+        max-height: 9rem;
+        margin: 0;
+        padding: 0.65rem;
+        overflow: auto;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font-size: 0.72rem;
+        line-height: 1.45;
     }
 
     .palette-filters {
@@ -406,6 +686,14 @@ const steps = Array.from({ length: 13 }, (_, index) => index);
 
         .copy-mode {
             min-width: 0;
+        }
+
+        .palette-editor__controls {
+            grid-template-columns: 1fr;
+        }
+
+        .palette-editor__value {
+            grid-template-columns: minmax(6rem, 1fr) 5rem auto;
         }
     }
 

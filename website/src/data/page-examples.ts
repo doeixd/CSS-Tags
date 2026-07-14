@@ -48,10 +48,10 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<container max-width-xl="36rem" pad="var(--space-md)">\n  <article>\n    <h2>Readable by default</h2>\n    <p>Centered content with a useful maximum width.</p>\n  </article>\n</container>`,
     },
     "components/flex": {
-        title: "Flexible alignment without utility chains",
-        description: "Change direction, wrapping, alignment, and gap directly on the host.",
-        preview: `<flex gap="var(--space-sm)" wrap="wrap" align="center">${tiles(["Alpha", "Beta", "Gamma", "Delta"])}</flex>`,
-        code: `<flex gap="var(--space-sm)" wrap="wrap" align="center">\n  <div>Alpha</div>\n  <div>Beta</div>\n  <div>Gamma</div>\n  <div>Delta</div>\n</flex>`,
+        title: "Centered, wrapping flex content",
+        description: "Change direction, wrapping, main-axis alignment, cross-axis alignment, and gap directly on the host.",
+        preview: `<flex gap="var(--space-sm)" wrap="wrap" justify="center" align="center">${tiles(["Alpha", "Beta", "Gamma", "Delta"])}</flex>`,
+        code: `<flex gap="var(--space-sm)" wrap="wrap" justify="center" align="center">\n  <div>Alpha</div>\n  <div>Beta</div>\n  <div>Gamma</div>\n  <div>Delta</div>\n</flex>`,
     },
     "components/grid": {
         title: "An auto-fitting card grid",
@@ -78,27 +78,27 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<masonry-layout\n  cols="repeat(auto-fit, minmax(12rem, 1fr))"\n  gap="var(--space-md)"\n>\n  <article>Short card</article>\n  <article>Card with more content...</article>\n  <article>Another card</article>\n</masonry-layout>`,
     },
     "components/navigation": {
-        title: "Responsive navigation with a semantic host",
-        description: "The toggle becomes active when this preview is narrow enough to collapse the links.",
-        preview: `<nav-navbar data-doc-nav><a class="nav-brand" href="#">Acme</a><button class="nav-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation">Menu</button><ul class="nav-links"><li><a class="nav-link" href="#overview">Overview</a></li><li><a class="nav-link" href="#activity">Activity</a></li><li><a class="nav-link" href="#settings">Settings</a></li></ul></nav-navbar>`,
-        code: `<nav-navbar>\n  <a class="nav-brand" href="/">Acme</a>\n  <button class="nav-toggle" aria-expanded="false">Menu</button>\n  <ul class="nav-links">\n    <li><a class="nav-link" href="/overview">Overview</a></li>\n    <li><a class="nav-link" href="/settings">Settings</a></li>\n  </ul>\n</nav-navbar>`,
+        title: "Responsive navigation on a native nav element",
+        description: "The links remain readable at ordinary widths and collapse behind the accessible toggle only in narrow containers.",
+        preview: `<nav class="navbar" data-collapsible data-doc-nav aria-label="Example"><a class="nav-brand" href="#">Acme</a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="example-nav-links">Menu</button><ul class="nav-links" id="example-nav-links"><li><a class="nav-link" aria-current="page" href="#overview">Overview</a></li><li><a class="nav-link" href="#activity">Activity</a></li><li><a class="nav-link" href="#settings">Settings</a></li></ul></nav>`,
+        code: `<nav class="navbar" data-collapsible aria-label="Primary">\n  <a class="nav-brand" href="/">Acme</a>\n  <button class="nav-toggle" aria-expanded="false" aria-controls="primary-links">Menu</button>\n  <ul class="nav-links" id="primary-links">\n    <li><a class="nav-link" aria-current="page" href="/overview">Overview</a></li>\n    <li><a class="nav-link" href="/settings">Settings</a></li>\n  </ul>\n</nav>`,
     },
     "components/tooltip": {
         title: "Declarative tooltip placement",
         description: "Compare top and bottom placement around ordinary button controls.",
-        preview: `<layout-cluster justify="center"><tooltip content="Saved to your workspace" place="top"><button type="button">Save</button></tooltip><tooltip content="Removes this draft" place="bottom"><button type="button">Delete</button></tooltip></layout-cluster>`,
+        preview: `<layout-cluster justify="center" style="padding-block:2rem"><tooltip content="Saved to your workspace" place="top"><button type="button">Save</button></tooltip><tooltip content="Removes this draft" place="bottom"><button type="button">Delete</button></tooltip></layout-cluster>`,
         code: `<tooltip content="Saved to your workspace" place="top">\n  <button type="button">Save</button>\n</tooltip>\n\n<tooltip content="Removes this draft" place="bottom">\n  <button type="button">Delete</button>\n</tooltip>`,
     },
     "components/tooltips": {
         title: "Rich tooltip content",
         description: "The tooltip element supports structured content while the button remains the trigger.",
-        preview: `<layout-cluster justify="center"><button type="button" aria-describedby="billing-tip">Billing info<tooltip id="billing-tip" position="top"><strong>Next invoice</strong><br><small>Due on August 1</small></tooltip></button></layout-cluster>`,
-        code: `<button aria-describedby="billing-tip">\n  Billing info\n  <tooltip id="billing-tip" position="top">\n    <strong>Next invoice</strong>\n    <small>Due on August 1</small>\n  </tooltip>\n</button>`,
+        preview: `<layout-cluster justify="center" style="padding-block:2rem"><button type="button" aria-describedby="billing-tip">Billing info<tooltip id="billing-tip" role="tooltip" position="top"><strong>Next invoice</strong><br><small>Due on August 1</small></tooltip></button></layout-cluster>`,
+        code: `<button aria-describedby="billing-tip">\n  Billing info\n  <tooltip id="billing-tip" role="tooltip" position="top">\n    <strong>Next invoice</strong>\n    <small>Due on August 1</small>\n  </tooltip>\n</button>`,
     },
     "components/view-transition": {
         title: "Name the elements that should persist",
         description: "Shared transition names let the browser connect matching elements between pages.",
-        preview: `<layout-cluster><div class="example-tile" style="view-transition-name:demo-avatar;border-radius:999px;inline-size:4rem;block-size:4rem;display:grid;place-items:center">A</div><div><strong style="view-transition-name:demo-title">Account profile</strong><p class="example-muted">The avatar and heading can morph between routes.</p></div></layout-cluster>`,
+        preview: `<layout-cluster justify="center"><div class="example-tile" style="view-transition-name:demo-avatar;border-radius:999px;inline-size:4rem;block-size:4rem;display:grid;place-items:center">A</div><div><strong style="view-transition-name:demo-title">Account profile</strong><p class="example-muted" style="margin-block:.25rem 0">The avatar and heading can morph between routes.</p></div></layout-cluster>`,
         code: `<meta name="view-transition" content="same-origin" />\n\n<img class="profile-avatar" src="avatar.jpg" alt="" />\n<h1>Account profile</h1>\n\n<style>\n  .profile-avatar { view-transition-name: profile-avatar; }\n  h1 { view-transition-name: page-title; }\n</style>`,
     },
     "core/base": {
@@ -140,7 +140,7 @@ const examples: Record<string, PageExampleDefinition> = {
     "core/theme": {
         title: "Theme a subtree with three brand inputs",
         description: "Changing hue, chroma, and lightness updates components and their contrast colors together.",
-        preview: `<div class="example-panel" style="--accent-h:190;--accent-c:.16;--accent-l:55%;--accent:oklch(55% .16 190)"><layout-stack><span eyebrow>Local theme</span><h3>Teal campaign</h3><p class="example-muted">Only this subtree receives the override.</p><layout-cluster><button class="form-button btn-primary" type="button">Primary action</button><badge status="info">Preview</badge></layout-cluster></layout-stack></div>`,
+        preview: `<div class="example-panel" style="--accent-h:190;--accent-c:.16;--accent-l:55%;--accent:oklch(55% .16 190)"><layout-stack gap="var(--space-sm)"><span eyebrow>Local theme</span><h3>Teal campaign</h3><p class="example-muted">Only this subtree receives the override.</p><button class="form-button btn-primary" type="button">Primary action</button><badge class="stack-intrinsic" status="info">Preview</badge></layout-stack></div>`,
         code: `<section style="--accent-h: 190; --accent-c: 0.16; --accent-l: 55%">\n  <h2>Teal campaign</h2>\n  <p>Only this subtree receives the override.</p>\n  <button class="form-button btn-primary">Primary action</button>\n</section>`,
     },
     "guides/color-system": {
@@ -206,13 +206,13 @@ const examples: Record<string, PageExampleDefinition> = {
     "themes/example-brand": {
         title: "Apply a brand theme at any boundary",
         description: "The example brand file supplies coordinated accents, surfaces, text, and feedback colors.",
-        preview: `<div data-theme="ocean" class="example-panel" style="--accent-h:200;--accent-c:.16;--accent-l:60%;--accent:oklch(60% .16 200)"><layout-stack><span eyebrow>Ocean</span><h3>Quarterly report</h3><p class="example-muted">A complete theme is activated by one attribute.</p><button class="form-button btn-primary" type="button">Open report</button></layout-stack></div>`,
+        preview: `<div data-theme="ocean" class="example-panel" style="--accent-h:200;--accent-c:.16;--accent-l:60%;--accent:oklch(60% .16 200)"><layout-stack gap="var(--space-sm)"><span eyebrow>Ocean</span><h3>Quarterly report</h3><p class="example-muted">A complete theme is activated by one attribute.</p><button class="form-button btn-primary" type="button">Open report</button></layout-stack></div>`,
         code: `<link rel="stylesheet" href="/themes/example-brand.css" />\n\n<html data-theme="ocean">\n  <body>\n    <h1>Quarterly report</h1>\n    <button class="form-button btn-primary">Open report</button>\n  </body>\n</html>`,
     },
     "themes/theme-packs": {
         title: "Switch coordinated theme packs",
         description: "Theme packs replace brand inputs while preserving every semantic component role.",
-        preview: `<grid columns="repeat(auto-fit,minmax(9rem,1fr))" gap="var(--space-sm)"><div data-theme="ocean" class="example-panel" style="--accent-h:200;--accent:oklch(60% .16 200)"><button class="form-button btn-primary" type="button">Ocean</button></div><div data-theme="sunrise" class="example-panel" style="--accent-h:30;--accent:oklch(62% .18 30)"><button class="form-button btn-primary" type="button">Sunrise</button></div><div data-theme="forest" class="example-panel" style="--accent-h:145;--accent:oklch(58% .16 145)"><button class="form-button btn-primary" type="button">Forest</button></div></grid>`,
+        preview: `<grid columns="repeat(auto-fit,minmax(9rem,1fr))" gap="var(--space-sm)"><div data-theme="ocean" class="example-panel" style="--accent-h:200;--accent:oklch(60% .16 200)"><button class="form-button btn-primary" style="inline-size:100%" type="button">Ocean</button></div><div data-theme="sunrise" class="example-panel" style="--accent-h:30;--accent:oklch(62% .18 30)"><button class="form-button btn-primary" style="inline-size:100%" type="button">Sunrise</button></div><div data-theme="forest" class="example-panel" style="--accent-h:145;--accent:oklch(58% .16 145)"><button class="form-button btn-primary" style="inline-size:100%" type="button">Forest</button></div></grid>`,
         code: `<link rel="stylesheet" href="/themes/theme-packs.css" />\n\n<html data-theme="ocean">...</html>\n<html data-theme="sunrise">...</html>\n<html data-theme="forest">...</html>`,
     },
     "utilities/utilities": {

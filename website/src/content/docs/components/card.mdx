@@ -6,7 +6,7 @@ description: The `card` component is a responsive, self-contained card element t
 import LiveExample from '../../../components/LiveExample.astro';
 
 ## Overview
-The `card` component is a responsive, self-contained card element that adapts its layout based on its container size using container queries. It features scoped styling to prevent conflicts and includes hover effects with elevation changes.
+The `card` component is a responsive, self-contained surface that adapts its layout based on its container size. Its selectors stay component-scoped through explicit card host and part names, and its visual roles are controlled by semantic tokens.
 
 <LiveExample title="Live card" description="Hover it, then resize the page to see its container-query layout.">
   <card>
@@ -25,12 +25,12 @@ The `card` component is a responsive, self-contained card element that adapts it
   </card>
 </LiveExample>
 
-The shipped card selectors currently support the custom-element form (`card`, `card-body`, and related tags). Class and `data-*` host aliases are not currently defined for this component.
+The card supports custom-element, class, and `data-*` hosts. The same structure can use `<card>`, `.card`, or `[data-card]`; its parts likewise support `card-body`, `.card-body`, and `[data-card-body]`.
 
 ## Key Features
 - **Container Queries**: Layout adapts to the card's own width, not viewport
-- **Scoped Styling**: Uses `@scope` to isolate internal styles
-- **Responsive Design**: Switches from vertical to horizontal layout at 400px width
+- **Explicit Styling**: Selectors target only card hosts and named card parts
+- **Responsive Design**: Switches from vertical to horizontal layout at 32rem container width
 - **Elevation Effects**: Hover animations with shadow changes
 - **Flexible Content**: Supports media, header, content, and footer sections
 
@@ -45,12 +45,12 @@ The card component consists of several semantic elements:
 
 ## Layout Behavior
 
-### Narrow Layout (< 400px)
+### Narrow Layout (< 32rem)
 - Vertical stack layout
 - Media at top (16:9 aspect ratio)
 - Body content below
 
-### Wide Layout (≥ 400px)
+### Wide Layout (≥ 32rem)
 - Horizontal layout
 - Media on left (150px square)
 - Body content on right (60% width)
@@ -90,17 +90,16 @@ The card supports several CSS custom properties for customization:
 
 ## Technical Implementation
 
-### @scope Usage
+### Selector scope
 ```css
-@scope (card) {
-  /* All styles contained within card elements */
-}
+:is(card, [data-card], .card) { /* card host */ }
+:is(card-body, [data-card-body], .card-body) { /* card body */ }
 ```
-This prevents card styles from affecting elements outside the card.
+Explicit host and part selectors prevent unrelated page content from inheriting card layout.
 
 ### Container Queries
 ```css
-@container card-container (min-width: 400px) {
+@container card-container (min-width: 32rem) {
   /* Styles applied when card is ≥400px wide */
 }
 ```
@@ -110,7 +109,6 @@ The card establishes itself as a container with `container-type: inline-size`.
 Uses native CSS nesting for organized, hierarchical styles.
 
 ## Browser Support
-- Requires `@scope` support (Chrome 118+, Firefox 128+)
 - Container queries (Chrome 105+, Firefox 110+, Safari 16+)
 - CSS nesting (all modern browsers)
 - Fallback: Cards display in vertical layout in unsupported browsers

@@ -121,11 +121,11 @@
 
   /* Base Hue Definitions for Palette */
   --hue-gray: 250;
-  --hue-slate: 215;
+  --hue-slate: 255;
   --hue-red: 25;
-  --hue-orange: 40;
-  --hue-amber: 55;
-  --hue-yellow: 90;
+  --hue-orange: 55;
+  --hue-amber: 75;
+  --hue-yellow: 100;
   --hue-lime: 120;
   --hue-green: 145;
   --hue-emerald: 160;

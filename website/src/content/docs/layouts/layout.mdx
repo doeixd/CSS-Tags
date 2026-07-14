@@ -16,10 +16,7 @@ Most pages can begin with `layout-stack` for vertical rhythm, `layout-cluster` f
     <div class="example-panel">
       <layout-cluster gap="var(--space-sm)" justify="space-between">
         <strong>Project activity</strong>
-        <layout-cluster gap="var(--space-xs)">
-          <badge role="subtle">This week</badge>
-          <button type="button">Export</button>
-        </layout-cluster>
+        <button type="button">Export</button>
       </layout-cluster>
     </div>
     <layout-grid min-item-size="10rem" gap="var(--space-sm)">
@@ -45,7 +42,7 @@ Most pages can begin with `layout-stack` for vertical rhythm, `layout-cluster` f
 </layout-stack>
 ```
 
-The current layout selectors primarily support the custom-element form shown above. `layout-stack` additionally exposes `[data-layout-stack]` and `.layout-stack` for the `.stack-intrinsic` child hook, but those aliases do not yet receive the complete host layout rules. Use custom layout tags for reliable behavior today.
+The primary layouts support custom-element, class, and `data-*` hosts. For example, `<layout-stack>`, `.layout-stack`, and `[data-layout-stack]` share the same behavior. Stack children stretch to the available width by default; add `.stack-intrinsic` to a child that should keep its content width.
 
 ## Philosophy
 

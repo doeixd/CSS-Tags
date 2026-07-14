@@ -1,7 +1,7 @@
 :root {
  /* Additional Hues */
- --hue-brown: 30;
- --hue-gold: 50;
+ --hue-brown: 55;
+ --hue-gold: 85;
  --hue-olive: 95;
  --hue-magenta: 320;
  /* Max Chroma Clamps */
@@ -13,6 +13,92 @@
  --clamp-orange-max-c-2: calc(var(--max-chroma-2) * 1.1); --clamp-orange-max-c-3: calc(var(--max-chroma-3) * 1.1); --clamp-orange-max-c-4: calc(var(--max-chroma-4) * 1.1);
  --clamp-neutral-max-c-0: calc(var(--max-chroma-0) * 0.5); --clamp-neutral-max-c-1: calc(var(--max-chroma-1) * 0.5); --clamp-neutral-max-c-2: calc(var(--max-chroma-2) * 0.5);
  --clamp-neutral-max-c-3: calc(var(--max-chroma-3) * 0.5); --clamp-neutral-max-c-4: calc(var(--max-chroma-4) * 0.5); --clamp-neutral-max-c-5: calc(var(--max-chroma-5) * 0.5); --clamp-neutral-max-c-6: calc(var(--max-chroma-6) * 0.5);
+
+ /* Perceptual chroma profiles for named color families. */
+ /* Brown */
+ --palette-brown-chroma-0: 0.011;
+ --palette-brown-chroma-1: 0.022;
+ --palette-brown-chroma-2: 0.033;
+ --palette-brown-chroma-3: 0.044;
+ --palette-brown-chroma-4: 0.055;
+ --palette-brown-chroma-5: 0.083;
+ --palette-brown-chroma-6: 0.099;
+ --palette-brown-chroma-7: 0.121;
+ --palette-brown-chroma-8: 0.099;
+ --palette-brown-chroma-9: 0.083;
+ --palette-brown-chroma-10: 0.055;
+ --palette-brown-chroma-11: 0.044;
+ --palette-brown-chroma-12: 0.033;
+ /* Gold */
+ --palette-gold-chroma-0: 0.022;
+ --palette-gold-chroma-1: 0.044;
+ --palette-gold-chroma-2: 0.066;
+ --palette-gold-chroma-3: 0.088;
+ --palette-gold-chroma-4: 0.11;
+ --palette-gold-chroma-5: 0.165;
+ --palette-gold-chroma-6: 0.198;
+ --palette-gold-chroma-7: 0.22;
+ --palette-gold-chroma-8: 0.18;
+ --palette-gold-chroma-9: 0.165;
+ --palette-gold-chroma-10: 0.11;
+ --palette-gold-chroma-11: 0.088;
+ --palette-gold-chroma-12: 0.06;
+ /* Orange */
+ --palette-orange-chroma-0: 0.023;
+ --palette-orange-chroma-1: 0.046;
+ --palette-orange-chroma-2: 0.069;
+ --palette-orange-chroma-3: 0.092;
+ --palette-orange-chroma-4: 0.115;
+ --palette-orange-chroma-5: 0.138;
+ --palette-orange-chroma-6: 0.207;
+ --palette-orange-chroma-7: 0.24;
+ --palette-orange-chroma-8: 0.2;
+ --palette-orange-chroma-9: 0.173;
+ --palette-orange-chroma-10: 0.115;
+ --palette-orange-chroma-11: 0.092;
+ --palette-orange-chroma-12: 0.06;
+ /* Yellow */
+ --palette-yellow-chroma-0: 0.028;
+ --palette-yellow-chroma-1: 0.056;
+ --palette-yellow-chroma-2: 0.084;
+ --palette-yellow-chroma-3: 0.112;
+ --palette-yellow-chroma-4: 0.14;
+ --palette-yellow-chroma-5: 0.168;
+ --palette-yellow-chroma-6: 0.21;
+ --palette-yellow-chroma-7: 0.24;
+ --palette-yellow-chroma-8: 0.2;
+ --palette-yellow-chroma-9: 0.168;
+ --palette-yellow-chroma-10: 0.13;
+ --palette-yellow-chroma-11: 0.112;
+ --palette-yellow-chroma-12: 0.065;
+ /* Cyan */
+ --palette-cyan-chroma-0: 0.022;
+ --palette-cyan-chroma-1: 0.04;
+ --palette-cyan-chroma-2: 0.066;
+ --palette-cyan-chroma-3: 0.08;
+ --palette-cyan-chroma-4: 0.11;
+ --palette-cyan-chroma-5: 0.132;
+ --palette-cyan-chroma-6: 0.165;
+ --palette-cyan-chroma-7: 0.198;
+ --palette-cyan-chroma-8: 0.165;
+ --palette-cyan-chroma-9: 0.132;
+ --palette-cyan-chroma-10: 0.11;
+ --palette-cyan-chroma-11: 0.088;
+ --palette-cyan-chroma-12: 0.06;
+ /* Slate */
+ --palette-slate-chroma-0: 0.006;
+ --palette-slate-chroma-1: 0.012;
+ --palette-slate-chroma-2: 0.018;
+ --palette-slate-chroma-3: 0.024;
+ --palette-slate-chroma-4: 0.03;
+ --palette-slate-chroma-5: 0.036;
+ --palette-slate-chroma-6: 0.045;
+ --palette-slate-chroma-7: 0.054;
+ --palette-slate-chroma-8: 0.045;
+ --palette-slate-chroma-9: 0.036;
+ --palette-slate-chroma-10: 0.03;
+ --palette-slate-chroma-11: 0.024;
+ --palette-slate-chroma-12: 0.018;
 
  /* Gray Scale */
  --gray-0: oklch(var(--scale-l-0) 0 0); --gray-1: oklch(var(--scale-l-1) 0 0); --gray-2: oklch(var(--scale-l-2) 0 0); --gray-3: oklch(var(--scale-l-3) 0 0); --gray-4: oklch(var(--scale-l-4) 0 0); --gray-5: oklch(var(--scale-l-5) 0 0); --gray-6: oklch(var(--scale-l-6) 0 0); --gray-7: oklch(var(--scale-l-7) 0 0); --gray-8: oklch(var(--scale-l-8) 0 0); --gray-9: oklch(var(--scale-l-9) 0 0); --gray-10: oklch(var(--scale-l-10) 0 0); --gray-11: oklch(var(--scale-l-11) 0 0); --gray-12: oklch(var(--scale-l-12) 0 0);
