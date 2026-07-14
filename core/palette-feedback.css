@@ -1,3 +1,4 @@
+:root {
  /* Feedback Scales (Success, Warning, Error, Info) */
  /* Success Palette */
  --success-palette-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--success-h));
@@ -58,3 +59,4 @@
  --info-palette-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--info-h));
  --info-palette-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--info-h));
  --info-palette-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--info-h));
+}

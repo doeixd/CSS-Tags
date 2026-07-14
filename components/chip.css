@@ -1,36 +1,50 @@
 /* chip.css */
 
-chip {
+:is(chip, [data-chip], .chip) {
   display: inline-flex;
   align-items: center;
-  gap: var(--l-gap, 0.5em);
-  --role: subtle;
-  @apply --surface-role(var(--role));
-  --b-bg: var(--bg);
-  --b-bw: var(--border-width, 1px);
-  --b-bc: var(--border);
-   --b-r: var(--border-radius-full, 9999px);
-  --b-py: 0.35em;
-  --b-px: 0.75em;
+  gap: var(--chip-gap, var(--l-gap, 0.5em));
+  --b-bg: var(--chip-bg, var(--surface-subtle));
+  --b-bw: var(--chip-border-width, var(--border-width, 1px));
+  --b-bc: var(--chip-border-color, var(--outline-subtle));
+  --b-fg: var(--chip-color, var(--text-default));
+  --b-r: var(--chip-radius, var(--border-radius-full, 9999px));
+  --b-py: var(--chip-padding-block, 0.35em);
+  --b-px: var(--chip-padding-inline, 0.75em);
   background-color: var(--b-bg);
   border: var(--b-bw) solid var(--b-bc);
   border-radius: var(--b-r);
+  color: var(--b-fg);
   padding: var(--b-py) var(--b-px);
   font-size: 0.9em;
   line-height: 1;
-  @apply --contrast-text-for-bg;
-  @apply --state-adjust;
 }
 
-chip[size="sm"] { --b-py: 0.25em; --b-px: 0.6em; font-size: 0.85em; }
-chip[size="md"] { --b-py: 0.35em; --b-px: 0.75em; font-size: 0.9em; }
-chip[size="lg"] { --b-py: 0.5em; --b-px: 0.9em; font-size: 1em; }
+@supports (text-box: trim-both cap alphabetic) {
+  :is(chip, [data-chip], .chip) {
+    text-box: var(--text-box-chip, var(--text-box-ui));
+  }
+}
 
-chip[removable]:focus-visible { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); }
-chip[removable]:hover { filter: brightness(1.02); }
+@supports (text-box-trim: trim-both) and (text-box-edge: cap alphabetic) {
+  :is(chip, [data-chip], .chip) {
+    text-box-trim: var(--text-box-trim-chip, var(--text-box-trim-ui));
+    text-box-edge: var(--text-box-edge-chip, var(--text-box-edge-ui));
+  }
+}
 
+:is(chip, [data-chip], .chip):is([size="sm"], [data-size="sm"]) { --b-py: 0.25em; --b-px: 0.6em; font-size: 0.85em; }
+:is(chip, [data-chip], .chip):is([size="md"], [data-size="md"]) { --b-py: 0.35em; --b-px: 0.75em; font-size: 0.9em; }
+:is(chip, [data-chip], .chip):is([size="lg"], [data-size="lg"]) { --b-py: 0.5em; --b-px: 0.9em; font-size: 1em; }
 
-chip[removable]::after {
+:is(chip, [data-chip], .chip):is([removable], [data-removable]):focus-visible {
+  outline: var(--focus-ring-width, 2px) var(--focus-ring-style, solid) var(--focus-ring-color, currentColor);
+  outline-offset: 2px;
+}
+
+:is(chip, [data-chip], .chip):is([removable], [data-removable]):hover { filter: brightness(1.02); }
+
+:is(chip, [data-chip], .chip):is([removable], [data-removable])::after {
   content: "✕";
   display: inline-block;
   margin-inline-start: 0.25em;
@@ -38,6 +52,20 @@ chip[removable]::after {
   opacity: 0.7;
 }
 
-chip[role="default"] { --role: default; }
-chip[role="overt"] { --role: overt; }
-chip[role="muted"] { --role: muted; }
+:is(chip, [data-chip], .chip):is([role="default"], [data-variant="default"]) {
+  --b-bg: var(--chip-bg, var(--surface-default));
+  --b-bc: var(--chip-border-color, var(--outline-default));
+  --b-fg: var(--chip-color, var(--text-default));
+}
+
+:is(chip, [data-chip], .chip):is([role="overt"], [data-variant="overt"]) {
+  --b-bg: var(--chip-bg, var(--surface-overt));
+  --b-bc: var(--chip-border-color, var(--outline-overt));
+  --b-fg: var(--chip-color, var(--text-on-surface-overt, var(--text-overt)));
+}
+
+:is(chip, [data-chip], .chip):is([role="muted"], [data-variant="muted"]) {
+  --b-bg: var(--chip-bg, var(--surface-muted));
+  --b-bc: var(--chip-border-color, var(--outline-muted, var(--outline-subtle)));
+  --b-fg: var(--chip-color, var(--text-subtle));
+}

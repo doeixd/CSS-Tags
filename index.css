@@ -11,8 +11,9 @@
 @import url("core/engine.css") layer(engine);
 @import url("core/theme.css") layer(theme); /* The new canonical theme file */
 @import url("core/palette.css") layer(palette);
-/* @import url("core/defaults.css") layer(defaults); */ /* Excluded from website build */
 @import url('core/base.css') layer(base);
+@import url('core/defaults.css') layer(defaults); /* Restored for semantic styling */
+@import url('core/typography.css') layer(defaults);
 @import url('core/mixins.css') layer(base);
 @import url('core/text.css') layer(components);
 /* THEMES */
@@ -41,6 +42,10 @@
 @import url('components/list.css') layer(components);
 @import url('components/carousel.css') layer(components);
 @import url('components/popover.css') layer(components);
+@import url('components/disclosure.css') layer(components);
+@import url('components/tabs.css') layer(components);
+@import url('components/loading.css') layer(components);
+@import url('components/status.css') layer(components);
 @import url('components/view-transition.css') layer(components); /* Corrected path */
 @import url('components/table.css') layer(components);
 @import url('components/form.css') layer(components);

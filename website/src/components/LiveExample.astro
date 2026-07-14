@@ -1,0 +1,99 @@
+---
+import "../../../index.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+    compact?: boolean;
+}
+
+const {
+    title = "Live preview",
+    description,
+    compact = false,
+} = Astro.props;
+---
+
+<figure class:list={["live-example", { "live-example--compact": compact }]}>
+    <figcaption class="live-example__header">
+        <span>{title}</span>
+        {description && <small>{description}</small>}
+    </figcaption>
+    <div class="live-example__stage">
+        <slot />
+    </div>
+</figure>
+
+<style>
+    .live-example {
+        --example-border: var(--outline-subtle, var(--border-color, #d8dee4));
+        --example-surface: var(--surface-default, var(--bg-primary, #fff));
+        --example-canvas: var(--surface-subtle, var(--bg-secondary, #f6f8fa));
+
+        margin: 1.25rem 0 0.75rem;
+        overflow: clip;
+        border: 1px solid var(--example-border);
+        border-radius: var(--radius-lg, 0.75rem);
+        background: var(--example-surface);
+    }
+
+    .live-example__header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.25rem 1rem;
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--example-border);
+        background: var(--example-surface);
+        color: var(--text-overt, var(--text-primary, inherit));
+        font-size: var(--font-size-sm, 0.875rem);
+        font-weight: var(--font-weight-semibold, 600);
+    }
+
+    .live-example__header small {
+        color: var(--text-subtle, var(--text-secondary, inherit));
+        font-size: inherit;
+        font-weight: var(--font-weight-normal, 400);
+    }
+
+    .live-example__stage {
+        container: live-example / inline-size;
+        padding: clamp(1rem, 4cqi, 2rem);
+        background:
+            linear-gradient(var(--example-canvas), var(--example-canvas)) padding-box,
+            var(--example-canvas);
+    }
+
+    .live-example--compact .live-example__stage {
+        padding: 1rem;
+    }
+
+    /* Remove unlayered documentation-shell styles from the demo subtree.
+       The library's base/components/layout layers then become the source of
+       truth for every rendered example. Custom properties still inherit. */
+    .live-example__stage :global(*) {
+        all: revert-layer;
+    }
+
+    .live-example__stage :global(> *) {
+        margin-block: 0;
+    }
+
+    .live-example__stage :global(.example-panel) {
+        padding: var(--space-md, 1rem);
+        border: 1px solid var(--outline-subtle, var(--example-border));
+        border-radius: var(--radius-md, 0.5rem);
+        background: var(--surface-default, var(--example-surface));
+    }
+
+    .live-example__stage :global(.example-muted) {
+        color: var(--text-subtle, var(--text-secondary, inherit));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .live-example__stage :global(*) {
+            scroll-behavior: auto !important;
+        }
+    }
+</style>

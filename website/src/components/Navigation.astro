@@ -102,21 +102,26 @@ function isActive(slug: string | undefined) {
                             <button
                                 class="section-title"
                                 data-section-index={index}
+                                aria-expanded={section.collapsed ? "false" : "true"}
+                                aria-controls={`nav-section-${index}`}
                             >
                                 <span>{section.label}</span>
-                                {section.collapsed !== undefined && (
-                                    <svg
-                                        class="section-toggle"
-                                        width="12"
-                                        height="12"
-                                        viewBox="0 0 12 12"
-                                        fill="currentColor"
-                                    >
-                                        <path d="M6 9L2 5h8z" />
-                                    </svg>
-                                )}
+                                <svg
+                                    class="section-toggle"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 12 12"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M6 9L2 5h8z" />
+                                </svg>
                             </button>
-                            <ul class="section-items">
+                            <ul
+                                class="section-items"
+                                id={`nav-section-${index}`}
+                                hidden={section.collapsed === true}
+                            >
                                 {section.items
                                     .filter((item) => item.slug !== undefined)
                                     .map((item) => (
@@ -158,8 +163,7 @@ function isActive(slug: string | undefined) {
                 </li>
             ))
         }
-            </ul>
-    </div>
+    </ul>
 
         {showSidebarFooter && (
         <SidebarFooter
@@ -473,9 +477,7 @@ function isActive(slug: string | undefined) {
     }
 
     .nav-section[data-collapsed="true"] .section-items {
-        max-height: var(--max-height-collapsed);
-        overflow: hidden;
-        transition: max-height var(--transition-nav);
+        display: none;
     }
 
     .nav-section:not([data-collapsed="true"]) .section-items {
@@ -882,6 +884,15 @@ function isActive(slug: string | undefined) {
                     collapsedSections[sectionIndex] ? "true" : "false",
                 );
             }
+
+            title.setAttribute(
+                "aria-expanded",
+                section.getAttribute("data-collapsed") === "true" ? "false" : "true",
+            );
+            const items = section.querySelector<HTMLElement>(".section-items");
+            if (items) {
+                items.hidden = section.getAttribute("data-collapsed") === "true";
+            }
         });
 
         // Use event delegation on sidebar
@@ -902,6 +913,12 @@ function isActive(slug: string | undefined) {
                 "data-collapsed",
                 newState ? "true" : "false",
             );
+            sectionTitle.setAttribute(
+                "aria-expanded",
+                newState ? "false" : "true",
+            );
+            const items = section.querySelector<HTMLElement>(".section-items");
+            if (items) items.hidden = newState;
 
             // Save state to localStorage
             if (sectionIndex) {
@@ -954,7 +971,10 @@ function isActive(slug: string | undefined) {
         }
 
         // Expand the section
-    section.setAttribute("data-collapsed", "false");
+	section.setAttribute("data-collapsed", "false");
+        section.querySelector(".section-title")?.setAttribute("aria-expanded", "true");
+        const sectionItems = section.querySelector<HTMLElement>(".section-items");
+        if (sectionItems) sectionItems.hidden = false;
 
         // Update localStorage
         const savedState = localStorage.getItem("nav-collapsed-state");

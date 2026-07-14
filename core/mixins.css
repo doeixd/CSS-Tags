@@ -16,17 +16,17 @@
 /* --- FUNCTIONS (return single values) --- */
 
 /** @function --rem: Converts pixels to rems. */
-@function --rem(--px type(<number>), --base type(<number>): 16) returns type(<length>) {
+@function --rem(--px type(*), --base type(*): 16) returns type(*) {
   result: calc(var(--px) / var(--base) * 1rem);
 }
 
 /** @function --fluid: Creates a fluid value that scales with the viewport. */
 @function --fluid(
-  --min-val type(<length>),
-  --max-val type(<length>),
-  --min-vp type(<length>): 375px,
-  --max-vp type(<length>): 1280px
-) returns type(<length>) {
+  --min-val type(*),
+  --max-val type(*),
+  --min-vp type(*): 375px,
+  --max-vp type(*): 1280px
+) returns type(*) {
   --slope: calc((var(--max-val) - var(--min-val)) / (var(--max-vp) - var(--min-vp)));
   --intercept: calc(var(--min-val) - var(--slope) * var(--min-vp));
   --preferred-val: calc(var(--slope) * 100vw + var(--intercept));
@@ -35,9 +35,9 @@
 
 /** @function --contrast-color: Calculates black or white for best contrast. */
 @function --contrast-color(
-  --bg-color type(<color>),
-  --threshold type(<number>): 0.65
-) returns type(<color>) {
+  --bg-color type(*),
+  --threshold type(*): 0.65
+) returns type(*) {
   --l-result: clamp(0, (l / var(--threshold) - 1) * -infinity, 1);
   result: oklch(from var(--bg-color) var(--l-result) 0 h);
 }
@@ -51,7 +51,7 @@
 }
 
 /** @mixin --elevation: Applies a consistent box-shadow from a scale. */
-@mixin --elevation(--level type(<integer>)) {
+@mixin --elevation(--level type(*)) {
   --shadow-1: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-2: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-3: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -84,10 +84,9 @@
     text-shadow: none;
   }
 }
-
 /* Theme mixins: property-driven role system */
 
-@mixin --surface-role(--role type(<custom-ident>)) {
+@mixin --surface-role(--role type(*)) {
   @when (var(--role) = muted) {
     --bg: var(--surface-muted);
     --border: var(--outline-subtle);
@@ -109,7 +108,6 @@
     --text: var(--text-overt);
   }
 }
-
 @mixin --state-adjust {
   transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
               border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
@@ -156,7 +154,7 @@
   @apply --state-adjust;
 }
 
-@mixin --feedback-role(--kind type(<custom-ident>)) {
+@mixin --feedback-role(--kind type(*)) {
   @when (var(--kind) = success) {
     --bg: var(--surface-success);
     --border: var(--outline-success);

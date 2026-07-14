@@ -1,0 +1,110 @@
+/**
+ * status.css
+ *
+ * Token-driven defaults for native progress and meter elements.
+ * Native elements are canonical so value, range, and status semantics remain
+ * available to browsers and assistive technology.
+ */
+
+@keyframes progress-indeterminate {
+  to { background-position-x: -200%; }
+}
+
+:is(progress, progress.progress, progress[data-progress]) {
+  --_progress-height: var(--progress-height, 0.75rem);
+  --_progress-radius: var(--progress-radius, var(--radius-full, 9999px));
+  --_progress-bg: var(--progress-background, var(--surface-muted, #e5e7eb));
+  --_progress-border: var(--progress-border, var(--outline-subtle, transparent));
+  --_progress-value: var(--progress-value-background, var(--accent));
+
+  appearance: none;
+  display: block;
+  inline-size: 100%;
+  block-size: var(--_progress-height);
+  overflow: hidden;
+  border: var(--border-width, 1px) solid var(--_progress-border);
+  border-radius: var(--_progress-radius);
+  background: var(--_progress-bg);
+  color: var(--_progress-value);
+}
+
+:is(progress, progress.progress, progress[data-progress])::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--_progress-bg);
+}
+
+:is(progress, progress.progress, progress[data-progress])::-webkit-progress-value {
+  border-radius: inherit;
+  background: var(--_progress-value);
+}
+
+:is(progress, progress.progress, progress[data-progress])::-moz-progress-bar {
+  border-radius: inherit;
+  background: var(--_progress-value);
+}
+
+:is(progress, progress.progress, progress[data-progress]):not([value]) {
+  background-image: linear-gradient(
+    100deg,
+    var(--_progress-bg) 20%,
+    var(--progress-indeterminate-background, var(--_progress-value)) 50%,
+    var(--_progress-bg) 80%
+  );
+  background-size: 200% 100%;
+  animation: progress-indeterminate var(--progress-indeterminate-speed, 1.4s) linear infinite;
+}
+
+:is(progress, progress.progress, progress[data-progress]):not([value])::-webkit-progress-bar {
+  background: transparent;
+}
+
+:is(meter, meter.meter, meter[data-meter]) {
+  --_meter-height: var(--meter-height, 0.75rem);
+  --_meter-radius: var(--meter-radius, var(--radius-full, 9999px));
+  --_meter-bg: var(--meter-background, var(--surface-muted, #e5e7eb));
+  --_meter-border: var(--meter-border, var(--outline-subtle, transparent));
+  --_meter-optimum: var(--meter-optimum-background, var(--success));
+  --_meter-suboptimum: var(--meter-suboptimum-background, var(--warning));
+  --_meter-low: var(--meter-even-less-good-background, var(--error));
+
+  appearance: none;
+  display: block;
+  inline-size: 100%;
+  block-size: var(--_meter-height);
+  overflow: hidden;
+  border: var(--border-width, 1px) solid var(--_meter-border);
+  border-radius: var(--_meter-radius);
+  background: var(--_meter-bg);
+}
+
+:is(meter, meter.meter, meter[data-meter])::-webkit-meter-bar {
+  border: 0;
+  border-radius: inherit;
+  background: var(--_meter-bg);
+}
+
+:is(meter, meter.meter, meter[data-meter])::-webkit-meter-optimum-value {
+  border-radius: inherit;
+  background: var(--_meter-optimum);
+}
+
+:is(meter, meter.meter, meter[data-meter])::-webkit-meter-suboptimum-value {
+  border-radius: inherit;
+  background: var(--_meter-suboptimum);
+}
+
+:is(meter, meter.meter, meter[data-meter])::-webkit-meter-even-less-good-value {
+  border-radius: inherit;
+  background: var(--_meter-low);
+}
+
+:is(meter, meter.meter, meter[data-meter])::-moz-meter-bar {
+  border-radius: inherit;
+  background: var(--_meter-optimum);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(progress, progress.progress, progress[data-progress]):not([value]) {
+    animation: none;
+  }
+}

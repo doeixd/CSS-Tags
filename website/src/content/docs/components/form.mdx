@@ -1,0 +1,136 @@
+---
+title: Forms
+description: Accessible native form controls styled through focused class hooks, with labels, validation, and layout recipes.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+The form layer styles native controls through `.form-input`, `.form-select`, `.form-textarea`, and `.form-button`. Use real `input`, `select`, `textarea`, and `button` elements so browser behavior and accessibility remain intact.
+
+## Complete settings form
+
+<LiveExample title="Profile settings" description="Tab through the form to see the shipped focus states.">
+  <form class="example-panel">
+    <layout-stack gap="var(--space-md)">
+      <label>
+        <span>Display name</span>
+        <input class="form-input" name="display-name" autocomplete="name" value="Ada Lovelace" />
+      </label>
+      <label>
+        <span>Email address</span>
+        <input class="form-input" type="email" name="email" autocomplete="email" placeholder="you@example.com" />
+      </label>
+      <label>
+        <span>Update frequency</span>
+        <select class="form-select" name="updates">
+          <option>Weekly summary</option>
+          <option>Important changes only</option>
+          <option>Never</option>
+        </select>
+      </label>
+      <label>
+        <span>Short bio</span>
+        <textarea class="form-textarea" name="bio" rows="4" placeholder="What are you working on?"></textarea>
+      </label>
+      <layout-cluster gap="var(--space-sm)">
+        <button class="form-button" type="button">Save settings</button>
+        <button class="form-button btn-secondary" type="button">Cancel</button>
+      </layout-cluster>
+    </layout-stack>
+  </form>
+</LiveExample>
+
+```html
+<form>
+  <layout-stack gap="var(--space-md)">
+    <label>
+      <span>Display name</span>
+      <input class="form-input" name="display-name" autocomplete="name">
+    </label>
+
+    <label>
+      <span>Email address</span>
+      <input class="form-input" type="email" name="email" autocomplete="email">
+    </label>
+
+    <label>
+      <span>Update frequency</span>
+      <select class="form-select" name="updates">
+        <option>Weekly summary</option>
+        <option>Important changes only</option>
+      </select>
+    </label>
+
+    <button class="form-button stack-intrinsic" type="submit">Save settings</button>
+  </layout-stack>
+</form>
+```
+
+## Validation
+
+Native constraint attributes provide browser validation. Add `aria-invalid="true"` when your application knows a value is invalid, connect the explanation with `aria-describedby`, and use `.input-error` for the current visual state.
+
+<LiveExample title="Invalid field">
+  <label>
+    <span>Project slug</span>
+    <input class="form-input input-error" name="slug" value="My Project" aria-invalid="true" aria-describedby="slug-error" />
+    <small id="slug-error">Use lowercase letters, numbers, and hyphens only.</small>
+  </label>
+</LiveExample>
+
+```html
+<label>
+  <span>Project slug</span>
+  <input
+    class="form-input input-error"
+    name="slug"
+    aria-invalid="true"
+    aria-describedby="slug-error"
+  >
+  <small id="slug-error">Use lowercase letters, numbers, and hyphens only.</small>
+</label>
+```
+
+The available visual state classes are `.input-error` and `.input-success`. They do not set ARIA state for you.
+
+## Button variants
+
+<LiveExample title="Button colors" compact>
+  <layout-cluster gap="var(--space-sm)">
+    <button class="form-button btn-primary" type="button">Primary</button>
+    <button class="form-button btn-secondary" type="button">Secondary</button>
+    <button class="form-button btn-success" type="button">Approve</button>
+    <button class="form-button btn-error" type="button">Delete</button>
+  </layout-cluster>
+</LiveExample>
+
+Variants set `--bg` and `--fg`: `.btn-primary`, `.btn-secondary`, `.btn-success`, `.btn-warning`, and `.btn-error`.
+
+## Public API
+
+The current form API is class-based:
+
+- `.form-input` on text-like native inputs
+- `.form-select` on `select`
+- `.form-textarea` on `textarea`
+- `.form-button` on `button` or button-like inputs
+
+Custom tags such as `<form-input>` are not shipped and should not be used. Native controls nested inside a scoped form class may inherit some rules, but putting the class directly on each control is the clearest and most reliable API.
+
+## Useful tokens
+
+- `--spacing-sm`, `--spacing-md`, `--spacing-lg`
+- `--surface-default`, `--text-default`, `--text-muted`
+- `--outline-default`, `--outline-overt`, `--outline-focus`
+- `--radius-md`, `--border-width`
+- `--focus-ring-width`, `--focus-ring-color`, `--focus-ring-offset`
+- `--accent`, `--accent-overt`, `--accent-muted`
+
+## Accessibility checklist
+
+- Give every control a visible `label`; placeholders are examples, not labels.
+- Use the correct input `type` and `autocomplete` value.
+- Connect hints and errors with `aria-describedby`.
+- Set `aria-invalid` only after validation determines the value is invalid.
+- Keep a real submit button inside forms that submit data.
+- Group related checkboxes or radios with `fieldset` and `legend`.

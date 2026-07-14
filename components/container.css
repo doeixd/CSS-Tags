@@ -18,17 +18,17 @@ container {
    * 1. Define the max-width values for EACH possible state.
    *    These can be overridden per-element with HTML attributes.
    */
-  --mw-sm: attr(max-width-sm type(<length-percentage>), 100%);
-  --mw-md: attr(max-width-md type(<length-percentage>), 768px);
-  --mw-lg: attr(max-width-lg type(<length-percentage>), 1024px);
-  --mw-xl: attr(max-width-xl type(<length-percentage>), 1280px);
+  --mw-sm: attr(max-width-sm type(*), 100%);
+  --mw-md: attr(max-width-md type(*), 768px);
+  --mw-lg: attr(max-width-lg type(*), 1024px);
+  --mw-xl: attr(max-width-xl type(*), 1280px);
 
   /*
    * 2. Initialize the master variable and apply base styles.
    *    It defaults to the largest size.
    */
   --container-max-width: var(--mw-xl);
-  --container-padding-inline: attr(pad type(<length>), 1.5rem);
+  --container-padding-inline: attr(pad type(*), 1.5rem);
 
   display: block;
   width: 100%;

@@ -1,0 +1,121 @@
+/**
+ * typography.css
+ *
+ * Semantic typography, long-form prose rhythm, and callout surfaces.
+ */
+
+:is(.lead, [data-lead], text[variant="lead"]) {
+  --_fs: var(--font-size-lead);
+  --_lh: var(--line-height-lead);
+  display: block;
+  color: var(--text-subtle);
+  font-size: var(--font-size-lead);
+  line-height: var(--line-height-lead);
+  max-inline-size: var(--measure-body);
+}
+
+:is(.caption, [data-caption], text[variant="caption"]) {
+  --_fs: var(--font-size-caption);
+  display: block;
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-normal);
+}
+
+:is(eyebrow, .eyebrow, [data-eyebrow], text[variant="eyebrow"]) {
+  --_fs: var(--font-size-sm);
+  --_fw: var(--font-weight-semibold);
+  --_tracking: var(--letter-spacing-eyebrow, var(--letter-spacing-widest));
+  display: block;
+  margin-block-end: var(--space-eyebrow-bottom, 0.5rem);
+  color: var(--text-accent, var(--accent));
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-eyebrow, var(--letter-spacing-widest));
+  text-transform: uppercase;
+}
+
+:is(.prose, [data-prose]) {
+  max-inline-size: var(--measure-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+:is(.prose, [data-prose]) > * {
+  margin-block: 0;
+}
+
+:is(.prose, [data-prose]) > * + * {
+  margin-block-start: var(--space-flow, 1em);
+}
+
+:is(.prose, [data-prose]) > :is(h2, h3, h4, h5, h6) {
+  margin-block-start: var(--space-heading-top, 1.8em);
+  margin-block-end: var(--space-heading-bottom, 0.65em);
+}
+
+:is(.prose, [data-prose]) > :is(h1, h2, h3, h4, h5, h6) + :is(p, ul, ol) {
+  margin-block-start: 0;
+}
+
+:is(.prose, [data-prose]) :is(ul, ol) {
+  padding-inline-start: var(--space-list-indent, 1.5em);
+}
+
+:is(.prose, [data-prose]) :is(pre, figure, blockquote, hr, .callout, [data-callout]) {
+  margin-block: var(--space-rich-block, 1.5em);
+}
+
+:is(.prose, [data-prose]) img {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+:is(.prose, [data-prose]) figcaption {
+  margin-block-start: var(--space-figure-caption-top, 0.5rem);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+:is(.prose, [data-prose]) mark {
+  padding-inline: 0.15em;
+  background: var(--highlight-bg-overt, mark);
+  color: var(--text-overt, marktext);
+}
+
+:is(.prose, [data-prose]) abbr[title] {
+  text-decoration-style: dotted;
+  text-underline-offset: 0.15em;
+  cursor: help;
+}
+
+:is(.callout, [data-callout]) {
+  --_callout-accent: var(--callout-border, var(--info));
+  --_callout-bg: var(--callout-background, var(--surface-subtle));
+
+  padding: var(--space-callout-pad-y, 1rem) var(--space-callout-pad-x, 1rem);
+  border: var(--border-width, 1px) solid var(--_callout-accent);
+  border-inline-start-width: var(--callout-border-width, 0.3rem);
+  border-radius: var(--callout-radius, var(--radius-md));
+  background: var(--_callout-bg);
+  color: var(--text-default);
+}
+
+:is(.callout-info, [data-callout="info"]) { --_callout-accent: var(--callout-info-border, var(--info)); }
+:is(.callout-success, [data-callout="success"]) { --_callout-accent: var(--callout-success-border, var(--success)); }
+:is(.callout-warning, [data-callout="warning"]) { --_callout-accent: var(--callout-warning-border, var(--warning)); }
+:is(.callout-error, [data-callout="error"]) { --_callout-accent: var(--callout-error-border, var(--error)); }
+
+:is(.callout-title, [data-callout-title]) {
+  display: block;
+  margin-block-end: var(--space-xs, 0.5rem);
+  color: var(--text-overt);
+  font-weight: var(--font-weight-semibold);
+}
+
+@supports (text-box: trim-both cap alphabetic) {
+  :is(eyebrow, .eyebrow, [data-eyebrow], text[variant="eyebrow"]) {
+    text-box: var(--text-box-eyebrow, var(--text-box-ui));
+  }
+}

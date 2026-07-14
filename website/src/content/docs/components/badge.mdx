@@ -1,0 +1,79 @@
+---
+title: Badges
+description: Compact labels for status, counts, and metadata with size, surface, and feedback variants.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Use badges for short, read-only metadata. A badge should support nearby content, not replace a heading, button, or full status message.
+
+## Status badges
+
+<LiveExample title="Feedback statuses" compact>
+  <layout-cluster gap="var(--space-sm)">
+    <badge status="success">Ready</badge>
+    <badge status="warning">Needs review</badge>
+    <badge status="error">Blocked</badge>
+    <badge status="info">Draft</badge>
+    <badge status="primary">Featured</badge>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<badge status="success">Ready</badge>
+<badge status="warning">Needs review</badge>
+<badge status="error">Blocked</badge>
+<badge status="info">Draft</badge>
+<badge status="primary">Featured</badge>
+```
+
+Status colors are visual reinforcement. Keep the status word in the badge so meaning is not communicated by color alone.
+
+## Size and emphasis
+
+<LiveExample title="Size and surface roles" compact>
+  <layout-cluster gap="var(--space-sm)" align="center">
+    <badge size="sm" role="subtle">Small</badge>
+    <badge size="md" role="default">Medium</badge>
+    <badge size="lg" role="overt">Large</badge>
+    <badge role="muted">Muted</badge>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<badge size="sm" role="subtle">Small</badge>
+<badge size="md" role="default">Medium</badge>
+<badge size="lg" role="overt">Large</badge>
+<badge role="muted">Muted</badge>
+```
+
+## Public API
+
+The shipped selector uses the custom `badge` element. Class and `data-*` aliases are not currently defined.
+
+- Sizes: `sm`, `md`, `lg`
+- Surface roles: `subtle`, `default`, `muted`, `overt`
+- Statuses: `success`, `warning`, `error`, `info`, `primary`, `overt`
+
+Common customization variables:
+
+- `--b-bg`: background
+- `--b-bc`: border color
+- `--b-bw`: border width
+- `--b-r`: radius
+- `--b-px` and `--b-py`: inline and block padding
+
+## Practical patterns
+
+```html
+<h3>
+  Deployment
+  <badge status="success">Live</badge>
+</h3>
+
+<button type="button">
+  Notifications <badge role="overt" aria-label="3 unread">3</badge>
+</button>
+```
+
+When a numeric badge lacks nearby context, give it an accessible label. Badges are not interactive on their own; put one inside a real button or link when the surrounding control is interactive.

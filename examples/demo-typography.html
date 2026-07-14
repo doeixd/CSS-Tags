@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Tags Typography Demo</title>
+  <link rel="stylesheet" href="../index.css">
+  <style>
+    :root {
+      --demo-cq-width: 32rem;
+      --demo-cq-h1-min: 1.9rem;
+      --demo-cq-h1-fluid: 7;
+      --demo-cq-h1-max: 3.4rem;
+      --demo-cq-lead-min: 1rem;
+      --demo-cq-lead-fluid: 2.2;
+      --demo-cq-lead-max: 1.35rem;
+      --demo-cq-body-measure: 34ch;
+    }
+
+    body {
+      background: var(--base);
+      color: var(--text-default);
+      padding: var(--space-xl);
+    }
+
+    .demo-shell {
+      display: grid;
+      grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    .demo-panel {
+      position: sticky;
+      top: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      border: 1px solid var(--outline-subtle);
+      border-radius: var(--radius-lg);
+      background: color-mix(in oklch, var(--surface-subtle) 88%, var(--base));
+    }
+
+    .demo-panel h1,
+    .demo-panel h2,
+    .demo-stage h2,
+    .demo-stage h3 {
+      margin: 0;
+      max-inline-size: none;
+    }
+
+    .demo-panel p {
+      margin: 0;
+      max-inline-size: none;
+    }
+
+    .demo-controls {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .demo-control {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .demo-control-head {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-size: var(--font-size-sm);
+      color: var(--text-subtle);
+    }
+
+    .demo-control input {
+      width: 100%;
+    }
+
+    .slider-value {
+      color: var(--text-default);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .demo-panel-actions {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .demo-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline-subtle);
+      border-radius: var(--radius-md);
+      background: var(--surface-default);
+    }
+
+    .demo-toggle input {
+      width: auto;
+    }
+
+    .demo-stage {
+      display: grid;
+      gap: var(--space-xl);
+    }
+
+    .demo-card {
+      padding: var(--space-xl);
+      border: 1px solid var(--outline-subtle);
+      border-radius: var(--radius-lg);
+      background: var(--surface-default);
+    }
+
+    .demo-card > * + * {
+      margin-top: var(--space-lg);
+    }
+
+    .demo-note {
+      font-size: var(--font-size-sm);
+      color: var(--text-subtle);
+    }
+
+    .demo-scale {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .demo-scale-row {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: baseline;
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px dashed var(--outline-subtle);
+    }
+
+    .demo-scale-row:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .demo-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-widest);
+    }
+
+    .demo-eyebrow {
+      display: inline-block;
+      font-size: var(--font-size-small, var(--font-size-sm));
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-eyebrow, 0.1em);
+      text-transform: uppercase;
+      color: var(--text-subtle);
+    }
+
+    @supports (text-box: trim-both cap alphabetic) {
+      .demo-eyebrow {
+        text-box: var(--text-box-eyebrow, var(--text-box-ui));
+      }
+    }
+
+    @supports (text-box-trim: trim-both) and (text-box-edge: cap alphabetic) {
+      .demo-eyebrow {
+        text-box-trim: var(--text-box-trim-eyebrow, var(--text-box-trim-ui));
+        text-box-edge: var(--text-box-edge-eyebrow, var(--text-box-edge-ui));
+      }
+    }
+
+    .demo-lead {
+      font-size: var(--font-size-lead);
+      line-height: var(--line-height-lead, 1.5);
+      color: var(--text-subtle);
+      max-inline-size: var(--measure-body, 68ch);
+    }
+
+    .demo-caption {
+      font-size: var(--font-size-caption);
+      color: var(--text-muted);
+    }
+
+    .demo-figure {
+      margin: 0;
+    }
+
+    .demo-figure img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: var(--figure-image-radius, 6px);
+    }
+
+    .demo-cq-wrap {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .demo-cq-stage {
+      width: min(100%, var(--demo-cq-width));
+      min-width: 18rem;
+      max-width: 100%;
+      resize: horizontal;
+      overflow: auto;
+      padding: var(--space-xs);
+      border: 1px dashed var(--outline-default);
+      border-radius: var(--radius-md);
+      background: color-mix(in oklch, var(--surface-subtle) 60%, transparent);
+    }
+
+    .demo-cq-card {
+      container-type: inline-size;
+      padding: var(--space-lg);
+      border: 1px solid var(--outline-subtle);
+      border-radius: var(--radius-lg);
+      background: var(--surface-default);
+      box-shadow: var(--shadow-card);
+      --font-size-h1: clamp(var(--demo-cq-h1-min), calc(1rem + var(--demo-cq-h1-fluid) * 1cqi), var(--demo-cq-h1-max));
+      --font-size-lead: clamp(var(--demo-cq-lead-min), calc(0.85rem + var(--demo-cq-lead-fluid) * 1cqi), var(--demo-cq-lead-max));
+      --measure-body: var(--demo-cq-body-measure);
+    }
+
+    .demo-cq-card > * + * {
+      margin-top: var(--space-md);
+    }
+
+    .demo-cq-card h1,
+    .demo-cq-card p {
+      max-inline-size: none;
+    }
+
+    code.demo-token {
+      font-size: var(--font-size-sm);
+    }
+
+    @media (max-width: 960px) {
+      .demo-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <aside class="demo-panel">
+      <div>
+        <h1>Typography Controls</h1>
+        <p class="demo-note">Tune the shipped typography tokens live. Page controls update root semantic tokens. Container controls drive a local `cqi`-based clamp inside the resizable card.</p>
+      </div>
+
+      <section>
+        <h2>Page Scale</h2>
+        <div class="demo-controls">
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Body Size</span><span class="slider-value"></span></span>
+            <input type="range" min="0.95" max="1.2" step="0.01" value="1" data-var="--font-size-body" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Body Measure</span><span class="slider-value"></span></span>
+            <input type="range" min="52" max="80" step="1" value="68" data-var="--measure-body" data-unit="ch">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Lead Size</span><span class="slider-value"></span></span>
+            <input type="range" min="1" max="1.8" step="0.05" value="1.25" data-var="--font-size-lead" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>H1 Max</span><span class="slider-value"></span></span>
+            <input type="range" min="3" max="5.5" step="0.05" value="4.25" data-var="--font-size-h1" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>H2 Max</span><span class="slider-value"></span></span>
+            <input type="range" min="2.25" max="4" step="0.05" value="3.25" data-var="--font-size-h2" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>H3 Max</span><span class="slider-value"></span></span>
+            <input type="range" min="1.75" max="3" step="0.05" value="2.5" data-var="--font-size-h3" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Heading Measure</span><span class="slider-value"></span></span>
+            <input type="range" min="12" max="28" step="1" value="18" data-var="--measure-heading" data-unit="ch">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Body Leading</span><span class="slider-value"></span></span>
+            <input type="range" min="1.35" max="1.9" step="0.05" value="1.6" data-var="--line-height-body" data-unit="">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Eyebrow Tracking</span><span class="slider-value"></span></span>
+            <input type="range" min="0.04" max="0.18" step="0.005" value="0.1" data-var="--letter-spacing-eyebrow" data-unit="em">
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Container Scale</h2>
+        <div class="demo-controls">
+          <label class="demo-control">
+            <span class="demo-control-head"><span>Container Width</span><span class="slider-value"></span></span>
+            <input type="range" min="18" max="52" step="1" value="32" data-var="--demo-cq-width" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ H1 Min</span><span class="slider-value"></span></span>
+            <input type="range" min="1.4" max="2.6" step="0.05" value="1.9" data-var="--demo-cq-h1-min" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ H1 Fluid</span><span class="slider-value"></span></span>
+            <input type="range" min="3" max="12" step="0.25" value="7" data-var="--demo-cq-h1-fluid" data-unit="">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ H1 Max</span><span class="slider-value"></span></span>
+            <input type="range" min="2.4" max="4.4" step="0.05" value="3.4" data-var="--demo-cq-h1-max" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ Lead Min</span><span class="slider-value"></span></span>
+            <input type="range" min="0.95" max="1.2" step="0.01" value="1" data-var="--demo-cq-lead-min" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ Lead Fluid</span><span class="slider-value"></span></span>
+            <input type="range" min="0.5" max="4" step="0.1" value="2.2" data-var="--demo-cq-lead-fluid" data-unit="">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ Lead Max</span><span class="slider-value"></span></span>
+            <input type="range" min="1.1" max="1.6" step="0.01" value="1.35" data-var="--demo-cq-lead-max" data-unit="rem">
+          </label>
+          <label class="demo-control">
+            <span class="demo-control-head"><span>CQ Body Measure</span><span class="slider-value"></span></span>
+            <input type="range" min="24" max="42" step="1" value="34" data-var="--demo-cq-body-measure" data-unit="ch">
+          </label>
+        </div>
+      </section>
+
+      <div class="demo-panel-actions">
+        <label class="demo-toggle">
+          <span>Enable text-box enhancement</span>
+          <input type="checkbox" id="toggle-text-box" checked>
+        </label>
+        <button type="button" class="button" id="reset-demo">Reset Demo</button>
+      </div>
+    </aside>
+
+    <main class="demo-stage">
+      <section class="demo-card">
+        <h2>Viewport-Driven Scale</h2>
+        <p class="demo-note">These samples consume the root semantic tokens. Small/body text stays comparatively stable while larger display sizes are intended to feel more fluid.</p>
+        <div class="demo-scale">
+          <div class="demo-scale-row"><div class="demo-label">Eyebrow</div><div><span class="demo-eyebrow">Release Notes</span></div></div>
+          <div class="demo-scale-row"><div class="demo-label">H1</div><div><h1>Fluid display text should stretch without losing its reading shape</h1></div></div>
+          <div class="demo-scale-row"><div class="demo-label">H2</div><div><h2>Section headings can scale harder than body copy</h2></div></div>
+          <div class="demo-scale-row"><div class="demo-label">H3</div><div><h3>Supporting hierarchy still reads as part of the same system</h3></div></div>
+          <div class="demo-scale-row"><div class="demo-label">Lead</div><div><p class="demo-lead">Lead copy can open up the page without forcing paragraph text to become oversized on small screens.</p></div></div>
+          <div class="demo-scale-row"><div class="demo-label">Body</div><div><p>Body text should stay comfortable and predictable. The token model is meant to give you fluid emphasis where it helps, not motion everywhere just because the viewport changed.</p></div></div>
+          <div class="demo-scale-row"><div class="demo-label">Caption</div><div><p class="demo-caption">Captions and supporting text remain quieter while still inheriting the broader typography system.</p></div></div>
+        </div>
+      </section>
+
+      <article class="demo-card prose">
+        <span class="demo-eyebrow">Longform Sample</span>
+        <h1>Typography should feel intentional before any component chrome shows up</h1>
+        <p class="demo-lead">This article block shows the semantic tokens in context: headings, paragraph measure, code, figures, and callouts all share the same typographic contract.</p>
+        <p>When type is token-driven, you can reshape the whole reading experience by editing a small set of variables instead of chasing selectors. That means the visual system is easier to tune and much easier to document.</p>
+        <h2>Readable defaults first</h2>
+        <p>A good default body size, line-height, and measure do more work than a dozen one-off utility classes. Larger display sizes can be more expressive, while body copy remains stable and editorial.</p>
+        <pre><code>/* Page-level override */
+:root {
+  --font-size-h1: 4.75rem;
+  --measure-body: 72ch;
+}</code></pre>
+        <blockquote>
+          <p>The scale should be customizable at the token layer, not trapped inside component-specific selectors.</p>
+        </blockquote>
+        <figure class="demo-figure">
+          <img src="https://picsum.photos/1200/675?grayscale" alt="Monochrome editorial landscape">
+          <figcaption class="demo-caption">Figures can stay tied into the same body measure and caption sizing without feeling like a separate subsystem.</figcaption>
+        </figure>
+        <aside class="callout callout-info">
+          <span class="callout-title">Token-first benefit</span>
+          <p>Changing `--font-size-body`, `--font-size-h1`, or `--measure-body` affects the whole reading system consistently.</p>
+        </aside>
+      </article>
+
+      <section class="demo-card">
+        <h2>Container-Driven Scale</h2>
+        <p class="demo-note">This card creates its own inline-size container and uses local semantic overrides. Resize the frame or move the container sliders to see the `cqi` clamp react to the card width instead of the page width.</p>
+        <div class="demo-cq-wrap">
+          <div class="demo-cq-stage">
+            <article class="demo-cq-card">
+              <span class="demo-eyebrow">Embedded Module</span>
+              <h1>Container queries let a card own its headline rhythm</h1>
+              <p class="demo-lead">The same semantic tokens can be remapped locally so embedded UI, sidebars, and dashboards scale according to their container width.</p>
+              <p>Use page-level tokens for your default editorial voice, then opt individual regions into container-relative behavior when their width is more important than the viewport.</p>
+              <p><code class="demo-token">--font-size-h1</code> inside this card is powered by <code class="demo-token">clamp(min, calc(base + fluid * 1cqi), max)</code>.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-card">
+        <h2>Text Primitive</h2>
+        <p class="demo-note">The public `text[size]` API still works because the size aliases map to the updated token ladder.</p>
+        <layout-stack gap="1rem">
+          <text size="xs" tracking="widest" weight="semibold" transform="uppercase" color="subtle">Primitive label</text>
+          <text size="5xl" weight="bold">Attribute-driven display text still rides on the same token system.</text>
+          <text size="xl" display="block" leading="relaxed" color="subtle">Because the aliases now point to a step scale, your existing `text[size]` usage stays compatible while gaining a stronger responsive story.</text>
+          <text size="sm" color="muted">Try the page-scale sliders and this block will follow along without changing markup.</text>
+        </layout-stack>
+      </section>
+
+      <section class="demo-card">
+        <h2>Text-Box Samples</h2>
+        <p class="demo-note">This is where `text-box`, `text-box-trim`, and `text-box-edge` help most: compact UI labels and controls. Toggle the enhancement on and off to compare supported browsers.</p>
+        <layout-stack gap="1rem">
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+            <button type="button" class="button">Primary Action</button>
+            <badge status="primary">New</badge>
+            <chip role="default">Compact Chip</chip>
+            <span class="demo-eyebrow" data-text-box>Beta Label</span>
+            <text box size="xs" tracking="widest" weight="semibold" transform="uppercase" color="subtle">Primitive Label</text>
+          </div>
+        </layout-stack>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const defaults = new Map();
+
+    function updateVar(name, value) {
+      document.documentElement.style.setProperty(name, value);
+    }
+
+    function formatValue(value, unit) {
+      return unit ? `${value}${unit}` : `${value}`;
+    }
+
+    function updateReadout(input) {
+      const readout = input.closest('.demo-control').querySelector('.slider-value');
+      readout.textContent = formatValue(input.value, input.dataset.unit || '');
+    }
+
+    function applyInput(input) {
+      updateVar(input.dataset.var, formatValue(input.value, input.dataset.unit || ''));
+      updateReadout(input);
+    }
+
+    function resetDemo() {
+      document.querySelectorAll('input[type="range"][data-var]').forEach(input => {
+        input.value = defaults.get(input);
+        applyInput(input);
+      });
+      document.getElementById('toggle-text-box').checked = true;
+      syncTextBoxToggle();
+    }
+
+    function syncTextBoxToggle() {
+      const enabled = document.getElementById('toggle-text-box').checked;
+      updateVar('--text-box-button', enabled ? 'trim-both cap alphabetic' : 'normal');
+      updateVar('--text-box-badge', enabled ? 'trim-both cap alphabetic' : 'normal');
+      updateVar('--text-box-chip', enabled ? 'trim-both cap alphabetic' : 'normal');
+      updateVar('--text-box-eyebrow', enabled ? 'trim-both cap alphabetic' : 'normal');
+      updateVar('--text-box', enabled ? 'trim-both cap alphabetic' : 'normal');
+      updateVar('--text-box-trim-button', enabled ? 'trim-both' : 'initial');
+      updateVar('--text-box-trim-badge', enabled ? 'trim-both' : 'initial');
+      updateVar('--text-box-trim-chip', enabled ? 'trim-both' : 'initial');
+      updateVar('--text-box-trim-eyebrow', enabled ? 'trim-both' : 'initial');
+      updateVar('--text-box-trim', enabled ? 'trim-both' : 'initial');
+      updateVar('--text-box-edge-button', enabled ? 'cap alphabetic' : 'auto');
+      updateVar('--text-box-edge-badge', enabled ? 'cap alphabetic' : 'auto');
+      updateVar('--text-box-edge-chip', enabled ? 'cap alphabetic' : 'auto');
+      updateVar('--text-box-edge-eyebrow', enabled ? 'cap alphabetic' : 'auto');
+      updateVar('--text-box-edge', enabled ? 'cap alphabetic' : 'auto');
+    }
+
+    document.querySelectorAll('input[type="range"][data-var]').forEach(input => {
+      defaults.set(input, input.value);
+      input.addEventListener('input', () => applyInput(input));
+      applyInput(input);
+    });
+
+    document.getElementById('reset-demo').addEventListener('click', resetDemo);
+    document.getElementById('toggle-text-box').addEventListener('change', syncTextBoxToggle);
+    syncTextBoxToggle();
+  </script>
+</body>
+</html>

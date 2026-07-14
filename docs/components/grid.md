@@ -1,11 +1,13 @@
 # Grid Component Documentation
 
 ## Overview
-The `grid` component provides a comprehensive, declarative CSS Grid system with advanced features like named areas, subgrid support, and experimental gap decorations. It allows complex two-dimensional layouts through HTML attributes.
+The `grid` component provides a comprehensive, declarative CSS Grid system with advanced features like named areas, subgrid support, experimental gap decorations, and progressive enhancement for CSS Grid Lanes. It allows complex two-dimensional layouts through HTML attributes.
 
 ## Key Features
 - **Declarative API**: Configure grid properties via HTML attributes
 - **Named Areas**: Template areas for semantic layouts
+- **Grid Lanes**: Opt into `display: grid-lanes` for masonry-style lane packing when supported
+- **Named Grid Lines**: Use line names in template tracks and place items by line name
 - **Subgrid Support**: Nested grids that align with parent tracks
 - **Item Placement**: Individual control over grid item positioning
 - **Gap Decorations**: Experimental styling of grid lines (limited browser support)
@@ -13,15 +15,24 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
 ## Container Attributes
 
 ### Template Definition
+- `display`: Grid display mode override (default: `grid`)
+  - Example: `grid`, `grid-lanes`
 - `columns`: Grid template columns (default: `none`)
   - Examples: `1fr 2fr`, `repeat(3, 1fr)`, `200px auto`
+  - Named line example: `[content-start] 1fr [content-end sidebar-start] 20rem [sidebar-end]`
 - `rows`: Grid template rows (default: `none`)
   - Examples: `100px auto`, `repeat(auto-fit, 100px)`
+  - Named line example: `[hero-start] auto [hero-end body-start] 1fr [body-end]`
 - `areas`: Named grid areas (default: `none`)
   - Example: `"header header" "sidebar main" "footer footer"`
 
 ### Spacing
 - `gap`: Gap between grid items (default: `1.5rem`)
+
+### Grid Lanes
+- `lanes`: Opt-in boolean attribute for `display: grid-lanes` when supported
+- `flow-tolerance`: Controls how aggressively items change lanes (default: `1em`)
+  - Examples: `0`, `0.5rem`, `1em`, `2lh`
 
 ### Item Alignment
 - `justify-items`: Default horizontal alignment for items (default: `stretch`)
@@ -47,6 +58,14 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
   - Examples: `1 / 3`, `span 2`, `2`
 - `row`: Grid row position
   - Examples: `1 / -1`, `span 3`, `2 / 4`
+- `col-start`: Grid column start line when `col` is not set
+  - Examples: `main-start`, `content-start`, `col-start 4`
+- `col-end`: Grid column end line when `col` is not set
+  - Examples: `main-end`, `span 3`, `col-start 10`
+- `row-start`: Grid row start line when `row` is not set
+  - Examples: `hero-start`, `body-start`
+- `row-end`: Grid row end line when `row` is not set
+  - Examples: `body-end`, `span 2`
 
 ### Self Alignment
 - `justify-self`: Horizontal alignment for this item (default: `auto`)
@@ -94,6 +113,50 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
 </grid>
 ```
 
+### Grid Lanes
+```html
+<grid lanes columns="repeat(auto-fill, minmax(16rem, 1fr))" gap="1rem">
+  <article>Short card</article>
+  <article>Much taller card with more content that will pack into the nearest lane.</article>
+  <article>Another card</article>
+</grid>
+```
+
+For a row-driven brick layout, define rows instead of columns:
+
+```html
+<grid lanes rows="repeat(3, 1fr)" gap="1rem">
+  <div>Item</div>
+  <div>Item</div>
+  <div>Item</div>
+</grid>
+```
+
+Tune lane-packing behavior with `flow-tolerance`:
+
+```html
+<grid lanes columns="repeat(auto-fill, minmax(20ch, 1fr))" flow-tolerance="1.5em">
+  <article>...</article>
+</grid>
+```
+
+### Named Grid Lines
+```html
+<grid columns="[content-start] 2fr [content-end rail-start] 1fr [rail-end]" rows="[top] auto [body] 1fr [bottom]">
+  <main col-start="content-start" col-end="content-end" row-start="top" row-end="bottom">Main content</main>
+  <aside col-start="rail-start" col-end="rail-end" row-start="body" row-end="bottom">Rail</aside>
+</grid>
+```
+
+You can also use line names directly in the shorthand placement attributes:
+
+```html
+<grid columns="repeat(12, [col-start] 1fr)">
+  <header col="col-start / span 12">Header</header>
+  <main col="col-start 4 / span 6">Content</main>
+</grid>
+```
+
 ### Subgrid
 ```html
 <grid columns="1fr 2fr" rows="100px auto">
@@ -107,7 +170,7 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
 ### Container Styles
 ```css
 grid {
-  display: grid;
+  display: var(--grid-display);
   grid-template-columns: var(--grid-columns);
   grid-template-rows: var(--grid-rows);
   grid-template-areas: var(--grid-areas);
@@ -115,12 +178,40 @@ grid {
 }
 ```
 
+Grid Lanes enhancement:
+
+```css
+@supports (display: grid-lanes) {
+  :is(grid, [data-grid], .grid):is([lanes], [data-lanes]) {
+    display: grid-lanes;
+    flow-tolerance: var(--grid-flow-tolerance);
+  }
+}
+```
+
+Outside that feature query, lane layouts remain standard CSS Grid. This keeps
+the content usable in browsers that do not implement `grid-lanes`.
+
 ### Item Styles
 ```css
 grid > * {
   grid-area: attr(area type(*), auto);
   grid-column: attr(col type(*), auto);
   grid-row: attr(row type(*), auto);
+}
+```
+
+Named line placement attrs:
+
+```css
+grid > *:not([col]) {
+  grid-column-start: attr(col-start type(*), auto);
+  grid-column-end: attr(col-end type(*), auto);
+}
+
+grid > *:not([row]) {
+  grid-row-start: attr(row-start type(*), auto);
+  grid-row-end: attr(row-end type(*), auto);
 }
 ```
 
@@ -145,7 +236,9 @@ Gap decorations allow styling of the lines between grid tracks:
 
 ## Browser Support
 - **CSS Grid**: All modern browsers
+- **Grid Lanes**: Emerging support; currently progressive enhancement
 - **Subgrid**: Firefox 71+, Chrome 117+ (limited)
+- **Named Grid Lines**: Part of standard CSS Grid support
 - **Gap Decorations**: Experimental, limited browser support
 - **attr() with types**: Limited support (graceful fallbacks)
 

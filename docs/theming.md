@@ -100,7 +100,7 @@ Applies semantic meaning to colors and defines component roles:
   --tertiary-hue-shift: -90;       /* -90° for tertiary */
 
   /* Surface configuration */
-  --surface-c: 0.015;              /* Surface chroma */
+  --surface-saturation: 0.015;     /* Surface chroma */
   --contrast-factor: 1.0;          /* Contrast multiplier */
 }
 ```
@@ -179,8 +179,8 @@ The system defines text color variables that browsers can automatically calculat
 For complex scenarios, explicit contrast calculations are used:
 
 ```css
---text-default: oklch(20% calc(var(--surface-c) * 2) var(--neutral-h));
---text-overt: oklch(10% calc(var(--surface-c) * 2.2) var(--neutral-h));
+--text-default: oklch(20% calc(var(--surface-saturation) * 2) var(--neutral-h));
+--text-overt: oklch(10% calc(var(--surface-saturation) * 2.2) var(--neutral-h));
 ```
 
 ## Theme Variables & Roles
@@ -189,21 +189,23 @@ For complex scenarios, explicit contrast calculations are used:
 Five levels of surface elevation with clear semantic meaning:
 
 ```css
-/* Hierarchy: overt > default > base > subtle > muted */
---surface-muted: oklch(95% calc(var(--surface-c) * 0.8) var(--neutral-h));
---surface-subtle: oklch(95% calc(var(--surface-c) * 1.05) var(--neutral-h));
---surface-default: oklch(94% calc(var(--surface-c) * 1.2) var(--neutral-h));
---surface-overt-dark: oklch(77.5% calc(var(--surface-c) * 2.25) var(--neutral-h));
+/* Hierarchy: overt > surface > base > subtle > muted */
+--surface-muted: oklch(95% calc(var(--surface-saturation) * 0.8) var(--neutral-h));
+--surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--neutral-h));
+--surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+--surface-default: var(--surface);
+--surface-overt: oklch(77.5% calc(var(--surface-saturation) * 2.25) var(--neutral-h));
+--surface-overt-dark: var(--surface-overt);
 ```
 
 ### Text Hierarchy
 Four levels of text contrast:
 
 ```css
---text-muted: oklch(45% calc(var(--surface-c) * 1.5) var(--neutral-h) / 0.8);
---text-subtle: oklch(35% calc(var(--surface-c) * 1.8) var(--neutral-h));
---text-default: oklch(20% calc(var(--surface-c) * 2) var(--neutral-h));
---text-overt: oklch(10% calc(var(--surface-c) * 2.2) var(--neutral-h));
+--text-muted: oklch(45% calc(var(--surface-saturation) * 1.5) var(--neutral-h) / 0.8);
+--text-subtle: oklch(35% calc(var(--surface-saturation) * 1.8) var(--neutral-h));
+--text-default: oklch(20% calc(var(--surface-saturation) * 2) var(--neutral-h));
+--text-overt: oklch(10% calc(var(--surface-saturation) * 2.2) var(--neutral-h));
 ```
 
 ### Accent Color Family
@@ -220,9 +222,21 @@ Complete accent color system with variations:
 Highlight backgrounds for hover/active states:
 
 ```css
---highlight-bg-muted: oklch(from var(--base) calc(l + var(--l-delta-1-down)) c h);
---highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3-down)) c h);
---highlight-bg-overt: oklch(from var(--accent) calc(l + var(--l-delta-10)) calc(c + var(--c-delta-6-down)) h);
+--highlight-bg-muted: color-mix(in oklch, var(--base) 88%, var(--accent) 12%);
+--highlight-bg-subtle: color-mix(in oklch, var(--base) 76%, var(--accent) 24%);
+--highlight-bg-overt: color-mix(in oklch, var(--base) 58%, var(--accent) 42%);
+```
+
+### Native Accent, Selection, And Custom Highlights
+
+```css
+accent-color: var(--accent);
+
+--selection-bg: color-mix(in oklch, var(--accent) 60%, var(--base) 40%);
+--selection-color: var(--text-on-accent);
+
+--highlight-search-results-bg: color-mix(in oklch, var(--accent-highlight) 72%, var(--base));
+--highlight-search-results-color: var(--text-on-accent);
 ```
 
 ## Light/Dark Mode Support
@@ -238,11 +252,11 @@ Uses `prefers-color-scheme` media queries:
 @media (prefers-color-scheme: dark) {
   :root {
     --accent-l: 70%;           /* Lighter accent for dark backgrounds */
-    --surface-c: 0.02;         /* Reduced surface chroma */
-    --base: oklch(22% calc(var(--surface-c) * 0.9) var(--neutral-h));
+    --surface-saturation: 0.02; /* Reduced surface chroma */
+    --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--neutral-h));
     /* Inverted text hierarchy */
-    --text-default: oklch(88% calc(var(--surface-c) * 0.8) var(--neutral-h));
-    --text-overt: oklch(95% calc(var(--surface-c) * 0.6) var(--neutral-h));
+    --text-default: oklch(88% calc(var(--surface-saturation) * 0.8) var(--neutral-h));
+    --text-overt: oklch(95% calc(var(--surface-saturation) * 0.6) var(--neutral-h));
   }
 }
 ```
@@ -313,7 +327,7 @@ Three core variables define a brand:
   --accent-l: 65%;        /* Lighter */
 
   /* Custom surface settings */
-  --surface-c: 0.012;     /* Subtle surfaces */
+  --surface-saturation: 0.012; /* Subtle surfaces */
 
   /* Custom spacing */
   --spacing-md: 1.25rem;  /* Custom medium spacing */
@@ -357,7 +371,7 @@ Three core variables define a brand:
   --tertiary-hue-shift: -90;   /* Triadic tertiary */
 
   /* Surface characteristics */
-  --surface-c: 0.018;     /* Surface chroma */
+  --surface-saturation: 0.018; /* Surface chroma */
 
   /* Optional: custom feedback colors */
   --success-h: 120;       /* Custom success hue */
@@ -370,7 +384,7 @@ Three core variables define a brand:
   :root[data-theme="custom"] {
     --accent-l: 75%;      /* Lighter for dark mode */
     --accent-c: 0.18;     /* More saturated */
-    --surface-c: 0.025;   /* Higher surface contrast */
+    --surface-saturation: 0.025; /* Higher surface contrast */
   }
 }
 ```
@@ -405,7 +419,7 @@ Three core variables define a brand:
 /* Responsive theme adjustments */
 @media (max-width: 768px) {
   :root[data-theme="custom"] {
-    --surface-c: 0.01;  /* Reduce chroma on small screens */
+    --surface-saturation: 0.01; /* Reduce chroma on small screens */
   }
 }
 ```

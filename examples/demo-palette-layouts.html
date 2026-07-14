@@ -32,7 +32,44 @@
      .component-demo .card { margin-bottom: 1rem; }
      #theme-toggle { margin-bottom: 1rem; background: var(--accent); color: var(--text-on-accent); border: none; padding: 0.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; }
      .layout-demo { background: var(--surface-muted); padding: 1rem; border-radius: var(--radius-md); }
-      .cq-demo { container-type: inline-size; container-name: demo; }
+      .lane-demo {
+        --lane-min: 15rem;
+      }
+      .lane-grid {
+        margin-top: 1rem;
+      }
+      .lane-card {
+        display: grid;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 1px solid var(--outline-subtle);
+        border-radius: var(--radius-md);
+        background: var(--surface-default);
+        box-shadow: var(--shadow-sm);
+      }
+      .lane-card h4 {
+        margin: 0;
+      }
+      .lane-card p {
+        margin: 0;
+      }
+      .lane-media {
+        border-radius: var(--radius-sm);
+        background: linear-gradient(160deg, var(--accent-subtle), var(--tertiary-subtle));
+      }
+      .lane-media[data-height="sm"] { min-block-size: 6rem; }
+      .lane-media[data-height="md"] { min-block-size: 9rem; }
+      .lane-media[data-height="lg"] { min-block-size: 12rem; }
+      .lane-media[data-height="xl"] { min-block-size: 15rem; }
+      .lane-support {
+        font-size: var(--font-size-sm);
+        color: var(--text-subtle);
+      }
+      .lane-code {
+        margin-top: 1rem;
+        font-size: var(--font-size-sm);
+      }
+       .cq-demo { container-type: inline-size; container-name: demo; }
       @container demo (min-width: 400px) { .cq-demo .responsive-card { flex-direction: row; } }
       @container demo (min-width: 600px) { .cq-demo .responsive-card { flex-direction: column; } }
       .contrast-color {
@@ -336,6 +373,53 @@
           <div class="bg-surface-subtle p-md rounded-md">Stack Item 2</div>
           <div class="bg-surface-subtle p-md rounded-md">Stack Item 3</div>
         </div>
+      </div>
+      <div class="layout-demo lane-demo">
+        <h3>Grid Lanes</h3>
+        <p class="lane-support">This uses <code>grid-lanes</code> when the browser supports it and falls back to normal grid otherwise. The uneven card heights make the lane-packing behavior easy to spot in Safari Technology Preview.</p>
+        <grid lanes columns="repeat(auto-fill, minmax(15rem, 1fr))" gap="1rem" flow-tolerance="1em" class="lane-grid">
+          <article class="lane-card">
+            <div class="lane-media" data-height="lg"></div>
+            <h4>Feature Story</h4>
+            <p>A larger visual and a short summary create a taller first card.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="sm"></div>
+            <h4>Release Note</h4>
+            <p>Small update card.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="xl"></div>
+            <h4>Case Study</h4>
+            <p>Longer teaser content with more depth, examples, and supporting detail to create a much taller item in the lane flow.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="md"></div>
+            <h4>Changelog</h4>
+            <p>Medium-height content that should tuck into the nearest available lane.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="sm"></div>
+            <h4>Interview</h4>
+            <p>Compact teaser with a quick description.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="lg"></div>
+            <h4>Patterns</h4>
+            <p>Collections of practical UI patterns often land somewhere in the middle, which helps show how the lanes rebalance.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="md"></div>
+            <h4>Design Notes</h4>
+            <p>Another medium card to make the waterfall arrangement clearer.</p>
+          </article>
+          <article class="lane-card">
+            <div class="lane-media" data-height="xl"></div>
+            <h4>Field Report</h4>
+            <p>This intentionally tall card makes the packing algorithm visible even at a glance, especially once several shorter cards need to decide which lane gets them furthest ahead.</p>
+          </article>
+        </grid>
+        <pre class="lane-code"><code>&lt;grid lanes columns="repeat(auto-fill, minmax(15rem, 1fr))" gap="1rem" flow-tolerance="1em"&gt;</code></pre>
       </div>
     </section>
 

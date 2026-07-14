@@ -127,8 +127,6 @@
   /* Allow button borders to escape their containers. I think this is what most people want. Also, trim additional space in buttons */
   :where(button) { 
     box-sizing: content-box;
-    text-box-trim: both;
-    text-box-edge: cap alphabetic;
   }
 
   /* SPA containers should be isolated. Maybe will help with css performance? Doubt it tho. */

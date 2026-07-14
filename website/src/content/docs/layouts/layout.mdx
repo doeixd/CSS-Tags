@@ -3,7 +3,49 @@ title: Layout Components (`layouts/layout.css`)
 description: This file provides a comprehensive library of declarative, property-driven layout components that integrate deeply with the framework's design token system. The
 ---
 
+import LiveExample from '../../../components/LiveExample.astro';
+
 This file provides a comprehensive library of declarative, property-driven layout components that integrate deeply with the framework's design token system. These components use custom HTML elements for semantic, maintainable layouts.
+
+## Start with these three
+
+Most pages can begin with `layout-stack` for vertical rhythm, `layout-cluster` for wrapping groups, and `layout-grid` for responsive columns.
+
+<LiveExample title="The everyday layout toolkit" description="Resize the page to watch the grid and cluster adapt.">
+  <layout-stack gap="var(--space-md)">
+    <div class="example-panel">
+      <layout-cluster gap="var(--space-sm)" justify="space-between">
+        <strong>Project activity</strong>
+        <layout-cluster gap="var(--space-xs)">
+          <badge role="subtle">This week</badge>
+          <button type="button">Export</button>
+        </layout-cluster>
+      </layout-cluster>
+    </div>
+    <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+      <div class="example-panel"><strong>24</strong><br /><small>Open tasks</small></div>
+      <div class="example-panel"><strong>8</strong><br /><small>In review</small></div>
+      <div class="example-panel"><strong>17</strong><br /><small>Completed</small></div>
+    </layout-grid>
+  </layout-stack>
+</LiveExample>
+
+```html
+<layout-stack gap="var(--space-md)">
+  <layout-cluster gap="var(--space-sm)" justify="space-between">
+    <strong>Project activity</strong>
+    <button type="button">Export</button>
+  </layout-cluster>
+
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <section>Open tasks</section>
+    <section>In review</section>
+    <section>Completed</section>
+  </layout-grid>
+</layout-stack>
+```
+
+The current layout selectors primarily support the custom-element form shown above. `layout-stack` additionally exposes `[data-layout-stack]` and `.layout-stack` for the `.stack-intrinsic` child hook, but those aliases do not yet receive the complete host layout rules. Use custom layout tags for reliable behavior today.
 
 ## Philosophy
 
@@ -39,6 +81,15 @@ All layout components (`[class^="layout-"]`) share these base styles:
 ### `<layout-grid>`
 
 A responsive grid that automatically fits columns based on minimum item size.
+
+<LiveExample title="Auto-fitting grid" description="Each item stays at least 9rem wide, then the grid wraps.">
+  <layout-grid min-item-size="9rem" gap="var(--space-sm)">
+    <div class="example-panel">Alpha</div>
+    <div class="example-panel">Beta</div>
+    <div class="example-panel">Gamma</div>
+    <div class="example-panel">Delta</div>
+  </layout-grid>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-min-item-size`: Minimum size for each item (default: 16rem)
@@ -86,6 +137,16 @@ A two-column layout that splits at a breakpoint, stacking on smaller screens.
 ### `<layout-stack>`
 
 A vertical stack with consistent spacing.
+
+Children stretch to the available width by default. Add `.stack-intrinsic` when a button or other child should keep its natural width.
+
+<LiveExample title="Stack with an intrinsic action">
+  <layout-stack gap="var(--space-sm)">
+    <h3 style="margin: 0">Invite your team</h3>
+    <p style="margin: 0">Send a reusable link or invite people individually.</p>
+    <button class="stack-intrinsic" type="button">Create invite link</button>
+  </layout-stack>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-gap`: Gap between items
@@ -251,6 +312,13 @@ Creates responsive media containers with fixed aspect ratios.
 ### `<layout-sidebar>`
 
 Sidebar layout that stacks on small screens.
+
+<LiveExample title="Content with a supporting sidebar" description="The regions wrap when the content can no longer keep its minimum width.">
+  <layout-sidebar side-width="12rem" content-min-width="55%" gap="var(--space-md)">
+    <section class="example-panel"><strong>Main content</strong><p>The main region grows to use the remaining space.</p></section>
+    <aside class="example-panel" slot="aside"><strong>On this page</strong><p>Supporting links or metadata.</p></aside>
+  </layout-sidebar>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-breakpoint`: Breakpoint for stacking

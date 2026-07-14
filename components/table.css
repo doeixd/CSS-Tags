@@ -1,90 +1,98 @@
 /**
- * table.css
+ * Responsive data tables.
  *
- * Responsive, accessible table component with design token integration.
- * ------------------------------------------------------------------------------
- * @feature {@scope} - Isolates table styles.
- * @feature {Container Queries} - Adapts layout on small containers.
- * @feature {CSS Nesting} - Organized internal styles.
+ * Prefer a native table with `data-table` or `.data-table`. A custom
+ * `<data-table>` can be used as an overflow wrapper around a native table;
+ * keeping `<table>`, `<th>`, and `<td>` preserves browser table semantics.
  */
 
-@scope (data-table) {
-  :scope {
-    container-type: inline-size;
-    container-name: table-container;
+:is(data-table, [data-table-scroll], .table-scroll) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--table-radius, var(--radius-md, 0.5rem));
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
 
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--bg, var(--surface-default));
-    color: var(--fg, var(--text-default));
-    border: var(--border-width, 1px) solid var(--outline-default);
-    border-radius: var(--radius-md, 6px);
-    overflow: hidden;
-    font-size: var(--font-size-sm, 0.875rem);
-  }
+:is(table[data-table], table.data-table, data-table > table) {
+  width: 100%;
+  min-width: var(--table-min-width, 36rem);
+  border-spacing: 0;
+  border-collapse: separate;
+  overflow: hidden;
+  color: var(--table-text, var(--text-default, inherit));
+  background: var(--table-bg, var(--surface-default, Canvas));
+  border: var(--table-border-width, 1px) solid
+    var(--table-border-color, var(--outline-subtle, currentColor));
+  border-radius: var(--table-radius, var(--radius-md, 0.5rem));
+  font-size: var(--table-font-size, var(--font-size-sm, 0.875rem));
+}
 
-  th, td {
-    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-    text-align: left;
-    border-bottom: 1px solid var(--outline-subtle);
-  }
+:is(table[data-table], table.data-table, data-table > table) caption {
+  padding-block-end: var(--table-caption-gap, var(--space-sm, 0.5rem));
+  color: var(--table-caption-color, var(--text-subtle, currentColor));
+  font-weight: var(--font-weight-medium, 500);
+  text-align: start;
+}
 
-  th {
-    background-color: var(--surface-subtle);
-    font-weight: var(--font-weight-semibold, 600);
-    color: var(--text-overt);
-  }
+:is(table[data-table], table.data-table, data-table > table) :is(th, td) {
+  padding: var(--table-cell-padding-block, var(--space-sm, 0.5rem))
+    var(--table-cell-padding-inline, var(--space-md, 1rem));
+  border-block-end: 1px solid
+    var(--table-divider-color, var(--outline-subtle, currentColor));
+  text-align: start;
+  vertical-align: middle;
+}
 
+:is(table[data-table], table.data-table, data-table > table) th {
+  color: var(--table-heading-color, var(--text-overt, inherit));
+  background: var(--table-heading-bg, var(--surface-subtle, transparent));
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+:is(table[data-table], table.data-table, data-table > table) tbody tr:last-child > * {
+  border-block-end: 0;
+}
+
+:is(table[data-table], table.data-table, data-table > table, .table-striped)
   tbody tr:nth-child(even) {
-    background-color: var(--highlight-bg-muted);
-  }
-
-   tbody tr:hover {
-     background-color: var(--table-row-hover-bg);
-   }
-
-  /* Responsive: Stack on small containers */
-  @container table-container (max-width: 600px) {
-    :scope {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-
-    th, td {
-      display: block;
-      text-align: right;
-      border-bottom: none;
-      border-right: 1px solid var(--outline-subtle);
-    }
-
-    th {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-    }
-
-    td:before {
-      content: attr(data-label) ": ";
-      float: left;
-      font-weight: bold;
-    }
-  }
+  background: var(--table-stripe-bg, var(--surface-muted, transparent));
 }
 
-/* Utility classes for table */
-.table-striped tbody tr:nth-child(odd) {
-  background-color: var(--surface-muted);
+:is(table[data-table], table.data-table, data-table > table, .table-hover)
+  tbody tr:hover {
+  background: var(--table-row-hover-bg, var(--surface-subtle, transparent));
 }
 
-.table-hover tbody tr:hover {
-  background-color: var(--table-row-hover-bg);
+:is(table[data-table], table.data-table, data-table > table) :is(a, button):focus-visible {
+  outline: var(--focus-ring-width, 2px) solid
+    var(--focus-ring-color, Highlight);
+  outline-offset: var(--focus-ring-offset, 2px);
 }
 
 .table-bordered {
-  border: var(--border-width-thick, 2px) solid var(--outline-default);
+  --table-border-width: var(--border-width-thick, 2px);
 }
 
-.table-borderless :scope {
-  border: none;
+.table-borderless {
+  --table-border-width: 0;
+  --table-divider-color: transparent;
+}
+
+@media (max-width: 40rem) {
+  :is(table[data-table], table.data-table):not(
+    :is(data-table, [data-table-scroll], .table-scroll) > table
+  ) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  :is(data-table, [data-table-scroll], .table-scroll)
+    > :is(table[data-table], table.data-table) {
+    display: table;
+    overflow: visible;
+  }
 }

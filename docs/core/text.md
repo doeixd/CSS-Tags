@@ -126,6 +126,8 @@ The component uses local CSS variables that map to global tokens:
 - `--_color` → `--text-*` and color tokens
 - `--_lh` → `--line-height-*` tokens
 
+The shipped `--font-size-*` tokens are hybrid responsive defaults: small/body sizes stay stable while larger display sizes use fluid `clamp(...)` values. You can override them with fixed values, viewport units, or container units.
+
 ## Integration with Design System
 - **Tokens Layer**: Provides raw font size, weight, and color values
 - **Theme Layer**: Defines semantic color roles
@@ -143,3 +145,17 @@ The component uses local CSS variables that map to global tokens:
 - **Accessibility**: Ensure sufficient color contrast
 - **Performance**: Attribute-based styling is efficient and performant
 - **Customization**: Override CSS variables for theme customization
+
+### Container Typography Example
+```css
+.cq {
+  container-type: inline-size;
+  --font-size-4xl: clamp(1.75rem, 1.2rem + 3cqi, 2.5rem);
+}
+```
+
+```html
+<section class="cq">
+  <text size="4xl" weight="bold">Container-scaled title</text>
+</section>
+```

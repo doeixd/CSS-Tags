@@ -1,10 +1,14 @@
 ---
 title: Palette Core
-description: The palette system provides a comprehensive, perceptually uniform color system using OKLCH color space. It includes accent colors, semantic feedback colors, ext
+description: Explore every shipped OKLCH color scale, copy CSS variables or resolved values, and learn how palette tokens support semantic themes.
 ---
+
+import ColorPaletteViewer from '../../../components/ColorPaletteViewer.astro';
 
 ## Overview
 The palette system provides a comprehensive, perceptually uniform color system using OKLCH color space. It includes accent colors, semantic feedback colors, extended color ranges, and systematic scales for consistent theming.
+
+<ColorPaletteViewer />
 
 ## Color Space: OKLCH
 
@@ -131,9 +135,7 @@ All palette definitions are organized under the `palette` cascade layer.
 ## Color Accessibility
 
 ### Contrast Ratios
-The 13-step scales ensure sufficient contrast:
-- **Step differences**: At least 3 steps for WCAG AA compliance
-- **Auto-contrast**: Framework calculates text colors dynamically
+Scale distance is not a contrast guarantee. The final ratio depends on the hue, chroma, font size, and the two exact steps being paired. Test semantic foreground/background combinations with a contrast checker; do not assume that a fixed number of steps always meets WCAG.
 
 ### Gamut Awareness
 - **Clamping**: Prevents colors from exceeding display capabilities
@@ -161,12 +163,12 @@ Add custom color scales:
 ## Performance Considerations
 
 ### CSS Size
-- **Large palette**: ~2000+ color variables
-- **Tree-shaking**: Only used colors included in final CSS
+- **Complete palette**: 31 scales × 13 steps, plus supporting hue and clamp tokens
+- **Default import**: `index.css` includes the complete palette; import individual files when building a smaller custom entry point
 - **Compression**: Well-suited to GZIP compression
 
 ### Runtime Performance
-- **Static calculations**: All colors computed at build time
+- **Native calculations**: Browsers resolve the OKLCH expressions from CSS custom properties
 - **No JavaScript**: Pure CSS color system
 - **Efficient resolution**: CSS variable lookups are fast
 
@@ -174,7 +176,7 @@ Add custom color scales:
 - **OKLCH**: Chrome 111+, Firefox 113+, Safari 15.4+
 - **CSS Layers**: All modern browsers
 - **CSS Imports**: All browsers
-- **Fallback**: Basic color names work in older browsers
+- **Fallbacks**: If older browsers are required, provide conventional color declarations before the OKLCH declarations you override
 
 ## Integration with Framework
 The palette system integrates with:

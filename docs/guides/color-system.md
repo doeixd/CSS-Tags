@@ -107,7 +107,8 @@ Semantic tokens map palette colors to their functional purpose:
 ```css
 /* Surface Colors */
 --base: oklch(var(--scale-l-0) var(--scale-c-1) var(--gray-h));
---surface-default: oklch(var(--scale-l-3) var(--scale-c-2) var(--gray-h));
+--surface: oklch(var(--scale-l-3) var(--scale-c-2) var(--gray-h));
+--surface-default: var(--surface);
 
 /* Text Colors */
 --text-default: oklch(var(--scale-l-10) var(--scale-c-2) var(--gray-h));
@@ -324,7 +325,7 @@ The framework provides comprehensive color utilities:
 ```html
 <!-- Background colors -->
 <div class="bg-accent">Accent background</div>
-<div class="bg-surface-default">Default surface</div>
+<div class="bg-surface">Default surface</div>
 <div class="bg-success">Success background</div>
 
 <!-- Text colors -->

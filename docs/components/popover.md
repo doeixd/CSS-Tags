@@ -65,7 +65,7 @@ The `popover` component provides styles for the native HTML Popover API, enablin
 
 ## Accessibility
 - **Light Dismiss**: Click outside to close (native)
-- **Focus Management**: Automatic focus trapping
+- **Focus Management**: Popovers are non-modal and do not trap focus or make the page inert; use a modal `<dialog>` when that behavior is required
 - **Keyboard**: Escape key closes popover
 - **Screen Readers**: Proper announcement of popover state
 

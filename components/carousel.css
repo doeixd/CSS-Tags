@@ -15,7 +15,7 @@ carousel {
   position: relative;
   display: block;
   overflow: hidden;
-  border-radius: attr(radius type(<length>), 0.75rem);
+  border-radius: attr(radius type(*), 0.75rem);
   width: 300px;
 }
 

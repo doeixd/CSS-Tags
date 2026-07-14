@@ -16,9 +16,9 @@ img-container {
   --ic-aspect-ratio: attr(aspect-ratio type(*), auto);
   --ic-object-fit: attr(object-fit type(*), cover);
   --ic-object-position: attr(object-position type(*), center);
-  --ic-radius: attr(radius type(<length>), 0);
+  --ic-radius: attr(radius type(*), 0);
   --ic-shadow: attr(shadow type(*), none);
-  --ic-bg: attr(bg type(<color>), transparent);
+  --ic-bg: attr(bg type(*), transparent);
   --ic-transition: attr(transition type(*), opacity 0.3s ease);
 
   position: relative;

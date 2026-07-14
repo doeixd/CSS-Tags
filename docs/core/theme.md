@@ -52,9 +52,11 @@ From these core inputs, the system automatically generates a complete semantic p
 
 ### Surface Hierarchy
 The system creates a layered surface system for visual hierarchy:
-- `--base`: Primary background (light in light mode, dark in dark mode)
-- `--bedrock`: Opposite extreme for highlights/accents
-- `--surface-muted/subtle/default/overt`: Progressive surface elevations
+- `--base`: primary background
+- `--bedrock`: opposite extreme for strong contrast contexts
+- `--surface-muted`, `--surface-subtle`, `--surface`, `--surface-overt`: progressive surface levels
+- `--surface-default`: alias of `--surface`
+- `--surface-overt-dark`: alias of `--surface-overt` for backward compatibility
 
 ### Bedrock Color Purpose
 The bedrock color serves as the "opposite" background:
@@ -98,8 +100,9 @@ This ensures optimal readability without manual color selection, using Lea Verou
 ```
 overt > default > base > subtle > muted
 ```
-- `--surface-overt`: Most prominent (cards, panels)
-- `--surface-default`: Standard surfaces
+- `--surface-overt`: Most prominent surface
+- `--surface`: Standard surface token
+- `--surface-default`: Alias for `--surface`
 - `--surface-subtle`: Subtle backgrounds
 - `--surface-muted`: Disabled/low-contrast states
 
@@ -122,9 +125,10 @@ overt > default > subtle > muted
 
 ### Surface System
 ```css
---base: oklch(97.5% 0.015 250); /* Near-white background */
---surface-default: oklch(94% 0.12 250); /* Card backgrounds */
---surface-subtle: oklch(95% 0.105 250); /* Subtle surfaces */
+--base: oklch(97.5% 0.015 250);
+--surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+--surface-default: var(--surface);
+--surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--neutral-h));
 ```
 
 ### Text System
@@ -144,9 +148,10 @@ overt > default > subtle > muted
 
 ### Inverted Surfaces
 ```css
---base: oklch(22% 0.02 250); /* Dark background */
---surface-default: oklch(25% 0.02 250); /* Elevated surfaces */
---bedrock: oklch(95% 0.007 250); /* Light text/highlights */
+--base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--neutral-h));
+--surface: oklch(25% var(--surface-saturation) var(--neutral-h));
+--surface-default: var(--surface);
+--bedrock: oklch(98% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
 ```
 
 ### Adjusted Text Colors
@@ -221,6 +226,34 @@ Text colors automatically adjust for readability:
 --table-row-hover-bg: var(--highlight-bg-subtle);
 ```
 
+## Native Accent And Highlight Styling
+
+The theme layer also styles browser-native accent and highlight surfaces from the accent system.
+
+Built-in behavior:
+
+- `accent-color: var(--accent)` on `:root`
+- `::selection` and `::-moz-selection` use accent-derived tokens
+- `::highlight(search-results)` uses accent-aware custom highlight styling
+- `::highlight(current-search-result)` uses a stronger active accent treatment
+
+Relevant tokens:
+
+- `--selection-bg`
+- `--selection-color`
+- `--highlight-search-results-bg`
+- `--highlight-search-results-color`
+- `--highlight-search-results-decoration`
+- `--highlight-search-results-decoration-color`
+
+Example:
+
+```css
+:root {
+  --selection-bg: color-mix(in oklch, var(--accent) 75%, var(--base) 25%);
+}
+```
+
 ### Code Blocks
 ```css
 --code-block-bg: var(--surface-subtle);
@@ -258,7 +291,7 @@ Text colors automatically adjust for readability:
 @media (prefers-color-scheme: dark) {
   :root {
     --accent-l: 70%; /* Brighter accent in dark mode */
-    --surface-c: 0.025; /* Higher contrast surfaces */
+    --surface-saturation: 0.025; /* Higher contrast surfaces */
   }
 }
 ```

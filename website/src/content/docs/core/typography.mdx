@@ -1,0 +1,260 @@
+---
+title: Typography Core
+description: Hierarchical typography scale, prose rules, rhythm tokens, callouts, and rich-content defaults for the CSS Tags system.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+## Overview
+The typography system provides the library's default content rhythm, hierarchical type scale, prose rules, and rich-content styling. It is built from tokens first, then applied through `core/typography.css`, `core/text.css`, utilities, and optional mixins.
+
+<LiveExample title="Semantic type hierarchy">
+  <layout-stack gap="var(--space-sm)">
+    <eyebrow>Design systems</eyebrow>
+    <h2 style="margin: 0">A hierarchy that reads clearly</h2>
+    <text variant="lead">Lead text introduces the idea with more presence than body copy.</text>
+    <p style="margin: 0">Body copy keeps a comfortable measure and rhythm for sustained reading.</p>
+    <text variant="caption">Updated July 14 · 6 minute read</text>
+  </layout-stack>
+</LiveExample>
+
+## Files
+- `core/tokens.css`: type scale, semantic typography variables, spacing rhythm tokens
+- `core/typography.css`: default element and prose styling
+- `core/text.css`: declarative text primitive
+- `core/mixins.css`: prose and callout mixins
+- `utilities/utilities.css`: typography and callout utility classes
+
+## Philosophy
+- **Token-first**: tune typography by changing variables, not rewriting selectors
+- **Readable by default**: body copy, headings, code, and rich content should look intentional without extra classes
+- **Hierarchical**: body, headings, lead, caption, code, and callouts each have their own semantic layer
+- **Composable**: prose containers, utilities, and the `text` primitive all share the same variables
+
+## Type Scale
+The shipped scale is a curated fluid scale rather than a strict formula-only ladder.
+
+Core step tokens:
+- `--font-size-step--2`
+- `--font-size-step--1`
+- `--font-size-step-0`
+- `--font-size-step-1`
+- `--font-size-step-2`
+- `--font-size-step-3`
+- `--font-size-step-4`
+- `--font-size-step-5`
+- `--font-size-step-6`
+
+Convenience aliases:
+- `--font-size-xs`
+- `--font-size-sm`
+- `--font-size-base`
+- `--font-size-lg`
+- `--font-size-xl`
+- `--font-size-2xl`
+- `--font-size-3xl`
+- `--font-size-4xl`
+- `--font-size-5xl`
+
+## Semantic Typography Tokens
+
+### Families
+- `--font-family-body`
+- `--font-family-heading`
+- `--font-family-code`
+
+### Body and Supporting Text
+- `--font-size-body`
+- `--font-size-body-sm`
+- `--font-size-body-lg`
+- `--font-size-lead`
+- `--font-size-small`
+- `--font-size-caption`
+- `--line-height-body`
+- `--line-height-lead`
+- `--font-weight-body`
+- `--letter-spacing-body`
+
+### Headings
+- `--font-size-h1` through `--font-size-h6`
+- `--line-height-h1` through `--line-height-h6`
+- `--font-weight-h1` through `--font-weight-h6`
+- `--letter-spacing-h1` through `--letter-spacing-h6`
+- `--font-weight-heading`
+- `--font-weight-display`
+- `--letter-spacing-heading`
+- `--letter-spacing-display`
+- `--letter-spacing-eyebrow`
+
+### Code and Rich Content
+- `--font-size-code`
+- `--line-height-code`
+- `--font-weight-code`
+- `--measure-body`
+- `--measure-heading`
+- `--measure-code`
+
+## Rhythm Tokens
+These control how content blocks interact.
+
+- `--space-flow`
+- `--space-heading-top`
+- `--space-heading-bottom`
+- `--space-heading-compact-top`
+- `--space-heading-after-lead`
+- `--space-paragraph`
+- `--space-list-indent`
+- `--space-list-item`
+- `--space-list-nested-top`
+- `--space-code-block-top`
+- `--space-code-block-bottom`
+- `--space-code-block-x`
+- `--space-code-block-y`
+- `--space-figure-top`
+- `--space-figure-bottom`
+- `--space-figure-caption-top`
+- `--space-blockquote-top`
+- `--space-blockquote-bottom`
+- `--space-blockquote-pad`
+- `--space-hr-top`
+- `--space-hr-bottom`
+- `--space-callout-top`
+- `--space-callout-bottom`
+- `--space-callout-pad-x`
+- `--space-callout-pad-y`
+
+## Prose Containers
+For longform content, use:
+
+<LiveExample title="Long-form prose">
+  <article data-prose>
+    <eyebrow>Field notes</eyebrow>
+    <h2>Start with the content</h2>
+    <p class="lead">Good defaults make semantic HTML feel intentional before component work begins.</p>
+    <p>Paragraphs share a readable measure, while headings use tighter spacing to keep related ideas together.</p>
+    <blockquote>Rhythm is the relationship between unlike elements, not a pile of identical margins.</blockquote>
+    <aside data-callout="info">
+      <span data-callout-title>Token tip</span>
+      <p>Change <code>--space-flow</code> to tune the whole article before overriding individual elements.</p>
+    </aside>
+  </article>
+</LiveExample>
+
+```html
+<article class="prose">
+  <h1>Readable longform content</h1>
+  <p>Paragraphs, lists, code blocks, figures, and callouts all share the same rhythm.</p>
+</article>
+
+<article data-prose>
+  <h2>Data attribute host</h2>
+  <p>Same prose rules without a required class name.</p>
+</article>
+```
+
+What prose does:
+- constrains paragraph and content measure
+- keeps headings tighter than body copy
+- gives figures, code blocks, blockquotes, and callouts consistent spacing
+- improves link readability inside rich content
+
+## Text Primitive
+The `text` primitive now supports semantic variants in addition to size/weight/color:
+
+```html
+<text variant="lead">Lead paragraph</text>
+<text variant="caption">Figure caption</text>
+<text variant="eyebrow">Section label</text>
+<text measure="heading" size="4xl" weight="bold">Display text</text>
+```
+
+Additional text features:
+- `size="5xl"`
+- `measure="body|heading|wide"`
+- `contrast`
+- `truncate`
+- `lines="2|3|4|5"`
+
+## Eyebrow Label
+For section labels above headings, use the semantic eyebrow host or its aliases:
+
+```html
+<eyebrow>Pricing</eyebrow>
+<h2>Three plans for teams from first launch to scale.</h2>
+
+<p class="eyebrow">FAQ</p>
+<h2>Common questions before you publish.</h2>
+```
+
+`eyebrow`, `.eyebrow`, and `[data-eyebrow]` use the same semantic tokens as `text variant="eyebrow"`, but with heading-friendly spacing built in.
+
+## Callouts
+The system includes built-in callout styling.
+
+<LiveExample title="Callout roles">
+  <layout-stack gap="var(--space-sm)">
+    <aside data-callout="info"><span data-callout-title>Note</span><p>Use info for helpful context.</p></aside>
+    <aside data-callout="success"><span data-callout-title>Complete</span><p>The migration finished successfully.</p></aside>
+    <aside data-callout="warning"><span data-callout-title>Before you continue</span><p>Back up the current theme tokens.</p></aside>
+    <aside data-callout="error"><span data-callout-title>Build failed</span><p>Correct the invalid color value and retry.</p></aside>
+  </layout-stack>
+</LiveExample>
+
+```html
+<aside class="callout callout-info">
+  <span class="callout-title">Note</span>
+  <p>Callouts use the same content rhythm as prose blocks.</p>
+</aside>
+
+<aside data-callout="warning">
+  <span data-callout-title>Warning</span>
+  <p>Data attribute variant form.</p>
+</aside>
+```
+
+## Utilities
+Useful typography utilities now include:
+
+- `.text-3xl`, `.text-4xl`, `.text-5xl`
+- `.text-lead`
+- `.text-caption`
+- `.text-eyebrow`
+- `.measure-body`
+- `.measure-heading`
+- `.measure-wide`
+- `.prose`
+- `.callout`, `.callout-info`, `.callout-success`, `.callout-warning`, `.callout-error`
+
+## Mixins
+Forward-looking mixins are available for teams experimenting with native CSS mixins:
+
+- `@mixin --prose-flow`
+- `@mixin --callout-role(--kind)`
+
+## Example Customization
+
+```css
+:root {
+  --font-family-body: "IBM Plex Sans", sans-serif;
+  --font-family-heading: "Fraunces", serif;
+
+  --font-size-h1: clamp(2.5rem, 2rem + 2vw, 4.75rem);
+  --font-size-h2: clamp(2rem, 1.7rem + 1.2vw, 3.25rem);
+
+  --measure-body: 72ch;
+  --measure-heading: 16ch;
+
+  --space-heading-top: 2.2em;
+  --space-code-block-top: 1.5em;
+  --space-code-block-bottom: 1.5em;
+
+  --typography-code-bg: var(--surface-overt);
+  --typography-blockquote-border: var(--secondary);
+  --callout-info-border: var(--info);
+}
+```
+
+## Usage Notes
+- Use semantic HTML first; use the `text` primitive when you want attribute-driven control.
+- Prefer `.prose` or `[data-prose]` around longform docs/article content.
+- Tune the semantic typography tokens before overriding element selectors directly.

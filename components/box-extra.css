@@ -132,6 +132,10 @@
  *   <div class="u-panel">This content is inside a panel.</div>
  */
 .u-panel {
+  display: block;
+  padding: var(--space-md, 1.5rem);
+  background-color: var(--surface-subtle);
+  border-radius: var(--radius-lg, 8px);
   @apply --box(
     --p: var(--space-md, 1.5rem),
     --bg: var(--surface-subtle),
@@ -147,6 +151,11 @@
  *   <div class="u-well">This content is inside a well.</div>
  */
 .u-well {
+  display: block;
+  padding: var(--space-md, 1.5rem);
+  background-color: var(--surface-muted);
+  border: 1px solid var(--outline-muted);
+  border-radius: var(--radius-md, 6px);
   @apply --box(
     --p: var(--space-md, 1.5rem),
     --bg: var(--surface-muted),
@@ -167,6 +176,8 @@
  */
 .u-spacer-block {
   --_height: var(--space-lg, 2rem);
+  display: block;
+  height: var(--_height);
 
   @apply --box(
     --display: block,
@@ -183,6 +194,11 @@
  * fully-styled custom component from a semantic element.
  */
 .callout-info {
+  display: grid;
+  padding: var(--space-lg, 2rem);
+  background-color: var(--surface-info);
+  border: 1px solid var(--info);
+  border-radius: var(--radius-lg, 8px);
   /* Apply base styles using the box mixin */
   @apply --box(
     --display: grid,

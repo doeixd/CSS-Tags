@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Tags Landing Page Demo</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+  <layout-page min-height="100vh">
+    <header slot="header">
+      <layout-center max-width="1200px">
+        <box py="1rem">
+          <layout-split fraction="1fr auto" gap="1rem" no-stack>
+            <layout-cluster align="center" gap="0.75rem">
+              <badge status="info" size="lg">G</badge>
+              <layout-stack gap="0.15rem">
+                <strong>Graffiti Cloud</strong>
+                <small class="text-subtle">Landing page demo with library primitives</small>
+              </layout-stack>
+            </layout-cluster>
+            <layout-cluster justify="flex-end" gap="0.75rem">
+              <a href="#features" class="button button-ghost">Features</a>
+              <a href="#pricing" class="button button-ghost">Pricing</a>
+              <a href="#faq" class="button button-ghost">FAQ</a>
+              <a href="#cta" class="button button-primary">Start free</a>
+            </layout-cluster>
+          </layout-split>
+        </box>
+        <hr>
+      </layout-center>
+    </header>
+
+    <main slot="main">
+      <layout-center max-width="1200px">
+        <layout-stack gap="5rem">
+          <section>
+            <layout-split fraction="1.1fr 0.9fr" gap="2rem">
+              <layout-stack gap="1.25rem" center>
+                <eyebrow class="stack-intrinsic">Ship your next launch faster</eyebrow>
+                <h1>Your SaaS landing page, minus the assembly work.</h1>
+                <p class="text-subtle">A library-first recreation of the Graffiti landing pattern using `layout-*`, `box`, `badge`, buttons, lists, and native disclosure styles.</p>
+                <layout-cluster gap="0.75rem" justify="center">
+                  <a href="#pricing" class="button button-primary">Start 14-day trial</a>
+                  <a href="#features" class="button button-outline">See product tour</a>
+                </layout-cluster>
+                <layout-cluster gap="0.65rem" justify="center">
+                  <badge status="success" size="md">No custom demo CSS</badge>
+                  <badge role="subtle" size="md">Built from library primitives</badge>
+                </layout-cluster>
+              </layout-stack>
+
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="1rem">
+                  <layout-cluster justify="space-between" align="center" gap="0.75rem">
+                    <badge status="success" size="sm">Live pipeline</badge>
+                    <small class="text-subtle">graffiti.app/dashboard</small>
+                  </layout-cluster>
+                  <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                    <layout-stack gap="0.75rem">
+                      <h3>Weekly launch score</h3>
+                      <p class="text-subtle">Campaign pages, email capture, and trial routing working from one system.</p>
+                      <layout-grid min-item-size="120px" gap="0.75rem">
+                        <box p="1rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                          <strong>42%</strong><br>
+                          <small class="text-subtle">signup lift</small>
+                        </box>
+                        <box p="1rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                          <strong>3.1x</strong><br>
+                          <small class="text-subtle">faster setup</small>
+                        </box>
+                        <box p="1rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                          <strong>18m</strong><br>
+                          <small class="text-subtle">to publish</small>
+                        </box>
+                      </layout-grid>
+                    </layout-stack>
+                  </box>
+                  <layout-grid min-item-size="180px" gap="0.75rem">
+                    <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                      <small class="text-subtle">Traffic allocation</small>
+                      <h4>Organic</h4>
+                      <p class="text-subtle">74% of traffic landing on the new page variant.</p>
+                    </box>
+                    <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                      <small class="text-subtle">Next release</small>
+                      <h4>Pricing experiment</h4>
+                      <p class="text-subtle">Ready to launch after stakeholder review.</p>
+                    </box>
+                  </layout-grid>
+                </layout-stack>
+              </box>
+            </layout-split>
+          </section>
+
+          <section aria-label="Social proof">
+            <layout-stack gap="1rem" center>
+              <p class="text-subtle stack-intrinsic">Trusted by launch teams everywhere</p>
+              <layout-grid min-item-size="120px" gap="1rem">
+                <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center"><strong>Northstar</strong></box>
+                <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center"><strong>Relay</strong></box>
+                <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center"><strong>Fathom</strong></box>
+                <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center"><strong>Arcline</strong></box>
+                <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center"><strong>Vector</strong></box>
+              </layout-grid>
+            </layout-stack>
+          </section>
+
+          <section id="features">
+            <layout-center and-text>
+              <layout-stack gap="1rem" center>
+                <eyebrow class="stack-intrinsic">Everything in one system</eyebrow>
+                <h2>Hero, proof, features, pricing, FAQ, and CTA wired together.</h2>
+                <p class="text-subtle">This version keeps the layout intentionally close to the original template while using the library's public APIs instead of demo-only CSS.</p>
+              </layout-stack>
+            </layout-center>
+
+            <layout-grid min-item-size="260px" gap="1.25rem">
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">01</badge>
+                  <h3>Token-first theming</h3>
+                  <p class="text-subtle">Adjust page character with semantic tokens instead of rewriting section styles.</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">02</badge>
+                  <h3>Semantic interactions</h3>
+                  <p class="text-subtle">Use native `details` for FAQ and plain anchors styled as buttons for conversion points.</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">03</badge>
+                  <h3>Responsive by default</h3>
+                  <p class="text-subtle">Sections collapse cleanly through layout primitives without extra breakpoint CSS.</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">04</badge>
+                  <h3>Flexible surfaces</h3>
+                  <p class="text-subtle">Cards, pricing plans, and small dashboard panels can all be composed from the same primitives.</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">05</badge>
+                  <h3>Readable content rhythm</h3>
+                  <p class="text-subtle">The page leans on the library's readable defaults instead of custom type scales.</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="0.75rem">
+                  <badge role="subtle" size="sm">06</badge>
+                  <h3>Copy-first composition</h3>
+                  <p class="text-subtle">This demo is now a cleaner showcase of the library itself rather than extra decorative CSS.</p>
+                </layout-stack>
+              </box>
+            </layout-grid>
+          </section>
+
+          <section id="pricing">
+            <layout-center and-text>
+              <layout-stack gap="1rem" center>
+                <eyebrow class="stack-intrinsic">Pricing</eyebrow>
+                <h2>Three plans for teams from first launch to scale.</h2>
+                <p class="text-subtle">Each pricing block stays vertically stacked because it uses library boxes and lists instead of custom pricing CSS.</p>
+              </layout-stack>
+            </layout-center>
+
+            <layout-grid min-item-size="240px" gap="1.25rem">
+                <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                  <layout-stack gap="1rem" center>
+                    <h3>Starter</h3>
+                    <p class="text-subtle">For solo builders validating a new product.</p>
+                    <h2>$19<span class="text-subtle">/mo</span></h2>
+                  </layout-stack>
+                  <list gap="0.75rem">
+                    <li>One conversion-focused landing page</li>
+                    <li>Email capture and analytics blocks</li>
+                    <li>Basic theme token overrides</li>
+                  </list>
+                  <box py="0.75rem"></box>
+                  <a href="#cta" class="button button-outline">Choose Starter</a>
+                </box>
+
+                <box p="1.5rem" bg="var(--surface-subtle)" border="1px solid var(--accent)" radius="var(--radius-lg)">
+                  <layout-stack gap="1rem" center>
+                    <badge status="info" size="sm">Most popular</badge>
+                    <h3>Growth</h3>
+                    <p class="text-subtle">For SaaS teams running experiments every week.</p>
+                    <h2>$59<span class="text-subtle">/mo</span></h2>
+                  </layout-stack>
+                  <list gap="0.75rem">
+                    <li>Unlimited landing sections and A/B variants</li>
+                    <li>Reusable feature, testimonial, and pricing blocks</li>
+                    <li>Team collaboration with launch-ready themes</li>
+                  </list>
+                  <box py="0.75rem"></box>
+                  <a href="#cta" class="button button-primary">Choose Growth</a>
+                </box>
+
+                <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                  <layout-stack gap="1rem" center>
+                    <h3>Scale</h3>
+                    <p class="text-subtle">For larger teams standardizing the whole site surface.</p>
+                    <h2>$129<span class="text-subtle">/mo</span></h2>
+                  </layout-stack>
+                  <list gap="0.75rem">
+                    <li>Multi-brand themes and launch playbooks</li>
+                    <li>Priority design review and migration support</li>
+                    <li>Advanced analytics and campaign environments</li>
+                  </list>
+                  <box py="0.75rem"></box>
+                  <a href="#cta" class="button button-outline">Talk to sales</a>
+                </box>
+              </layout-grid>
+          </section>
+
+          <section>
+            <layout-center and-text>
+              <layout-stack gap="1rem" center>
+                <eyebrow class="stack-intrinsic">Testimonials</eyebrow>
+                <h2>Teams use it to turn rough launch ideas into pages that convert.</h2>
+              </layout-stack>
+            </layout-center>
+
+            <layout-grid min-item-size="260px" gap="1.25rem">
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="1rem">
+                  <p>"We rebuilt our launch page in one afternoon and lifted trial starts by 31% without inventing new design patterns."</p>
+                  <p class="text-subtle"><strong>Mina Patel</strong><br>Head of Growth, Northstar</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="1rem">
+                  <p>"The layout primitives got us 90% of the way there, and the remaining polish came from tokens instead of brittle overrides."</p>
+                  <p class="text-subtle"><strong>Jordan Lee</strong><br>Design Engineer, Relay</p>
+                </layout-stack>
+              </box>
+              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-stack gap="1rem">
+                  <p>"Using native `details` for FAQ and shared card markup for pricing kept the codebase much cleaner than our previous marketing stack."</p>
+                  <p class="text-subtle"><strong>Casey Morgan</strong><br>Product Marketing, Arcline</p>
+                </layout-stack>
+              </box>
+            </layout-grid>
+          </section>
+
+          <section id="faq">
+            <layout-center and-text>
+              <layout-stack gap="1rem" center>
+                <eyebrow class="stack-intrinsic">FAQ</eyebrow>
+                <h2>Common questions before you publish.</h2>
+              </layout-stack>
+            </layout-center>
+
+            <div class="accordion" data-accordion>
+              <details name="landing-faq" open>
+                <summary>Is this page built with the existing library, or custom section CSS?</summary>
+                <p>It is now entirely library-first. The dedicated demo stylesheet has been removed so the page showcases primitives, tokens, and utilities directly.</p>
+              </details>
+              <details name="landing-faq">
+                <summary>Can I swap the custom tags for classes or `data-*` hosts?</summary>
+                <p>Yes. The library's selector conventions support component tags, classes, and `data-*` hosts for most primitives.</p>
+              </details>
+              <details name="landing-faq">
+                <summary>Does the FAQ need JavaScript?</summary>
+                <p>No. It uses native `details` and `summary`, which matches the project's preference for semantic no-JS disclosure patterns.</p>
+              </details>
+              <details name="landing-faq">
+                <summary>Where should I start if I want to adapt this for the docs site?</summary>
+                <p>Start from this file, keep the layout primitives, and extract repeated content into site components only if you need that extra reuse.</p>
+              </details>
+            </div>
+          </section>
+
+          <section id="cta">
+            <box p="2rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+              <layout-switcher threshold="40rem" gap="1rem">
+                <layout-stack gap="0.75rem" center>
+                  <eyebrow class="stack-intrinsic">Ready to launch?</eyebrow>
+                  <h2>Build your own version from the library demo.</h2>
+                  <p class="text-subtle">Open `examples/demo-landing.html`, swap the copy, and tune the tokens to match your product.</p>
+                </layout-stack>
+                <layout-cluster justify="center" align="center" gap="0.75rem">
+                  <a href="#" class="button button-primary">Create account</a>
+                  <a href="#features" class="button button-outline">View sections</a>
+                </layout-cluster>
+              </layout-switcher>
+            </box>
+          </section>
+        </layout-stack>
+      </layout-center>
+    </main>
+
+    <footer slot="footer">
+      <box py="4rem 0 3rem">
+        <layout-center max-width="var(--readable-width)">
+          <layout-stack gap="2rem">
+            <layout-grid min-item-size="150px" gap="1.5rem">
+              <nav aria-label="Product">
+                <layout-stack gap="0.5rem">
+                  <p><strong>Product</strong></p>
+                  <a href="#features">Features</a>
+                  <a href="#pricing">Pricing</a>
+                  <a href="#">Changelog</a>
+                  <a href="#">Integrations</a>
+                  <a href="#">Documentation</a>
+                </layout-stack>
+              </nav>
+              <nav aria-label="Company">
+                <layout-stack gap="0.5rem">
+                  <p><strong>Company</strong></p>
+                  <a href="#">About</a>
+                  <a href="#">Blog</a>
+                  <a href="#">Careers</a>
+                  <a href="#">Press Kit</a>
+                  <a href="#">Contact</a>
+                </layout-stack>
+              </nav>
+              <nav aria-label="Resources">
+                <layout-stack gap="0.5rem">
+                  <p><strong>Resources</strong></p>
+                  <a href="#">Guides</a>
+                  <a href="#">API Reference</a>
+                  <a href="#">Status Page</a>
+                  <a href="#">Community</a>
+                  <a href="#">Support</a>
+                </layout-stack>
+              </nav>
+              <nav aria-label="Legal">
+                <layout-stack gap="0.5rem">
+                  <p><strong>Legal</strong></p>
+                  <a href="#">Privacy Policy</a>
+                  <a href="#">Terms of Service</a>
+                  <a href="#">Cookie Policy</a>
+                  <a href="#">GDPR</a>
+                  <a href="#">Security</a>
+                </layout-stack>
+              </nav>
+            </layout-grid>
+
+            <hr>
+
+            <layout-split fraction="1fr auto" gap="1rem" no-stack>
+              <p class="text-subtle text-caption">© 2026 Beacon, Inc. All rights reserved.</p>
+              <layout-cluster gap="1rem">
+                <a href="#" class="text-subtle text-caption">Twitter</a>
+                <a href="#" class="text-subtle text-caption">GitHub</a>
+                <a href="#" class="text-subtle text-caption">Discord</a>
+              </layout-cluster>
+            </layout-split>
+          </layout-stack>
+        </layout-center>
+      </box>
+    </footer>
+  </layout-page>
+</body>
+</html>

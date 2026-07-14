@@ -4,7 +4,7 @@
 The `mixins.css` file provides a library of reusable CSS functions and mixins based on proposed CSS specifications. It demonstrates forward-looking CSS patterns for calculations, utilities, and component styling.
 
 ## Important Notice
-⚠️ **PROPOSED SPECIFICATIONS**: The `@function` and `@mixin` rules are NOT supported in any browser as of late 2025. This file showcases future CSS capabilities and preprocessor-free patterns.
+⚠️ **PROPOSED SPECIFICATIONS**: These custom functions and mixins are experimental and are not a dependable production-browser API. Shipped components provide standard CSS fallbacks; treat this file as forward-looking reference material.
 
 ## Functions
 
@@ -223,10 +223,10 @@ Combines surface role with button-specific styling.
 
 ```css
 @mixin --button-role(--role: default, --accent-color: var(--accent)) {
-  @mixin --surface-role(var(--role));
+  @apply --surface-role(var(--role));
   background-color: var(--bg);
   border: var(--border-width, 1px) solid var(--border);
-  @mixin --contrast-text-for-bg;
+  @apply --contrast-text-for-bg;
   @apply --state-adjust;
 }
 ```
@@ -236,7 +236,7 @@ Applies input-specific surface styling.
 
 ```css
 @mixin --input-role(--role: subtle) {
-  @mixin --surface-role(var(--role));
+  @apply --surface-role(var(--role));
   background-color: var(--bg);
   border: var(--border-width, 1px) solid var(--border);
   color: var(--text);

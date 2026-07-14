@@ -1,0 +1,369 @@
+---
+import "../../../index.css";
+
+const groups = [
+    {
+        id: "brand",
+        label: "Brand",
+        colors: [
+            ["Accent", "accent-palette"],
+            ["Secondary", "secondary-palette"],
+            ["Tertiary", "tertiary-palette"],
+        ],
+    },
+    {
+        id: "foundations",
+        label: "Foundations",
+        colors: [
+            ["Gray", "gray"],
+            ["Neutral", "neutral"],
+        ],
+    },
+    {
+        id: "feedback",
+        label: "Feedback",
+        colors: [
+            ["Success", "success-palette"],
+            ["Warning", "warning-palette"],
+            ["Error", "error-palette"],
+            ["Info", "info-palette"],
+        ],
+    },
+    {
+        id: "extended",
+        label: "Extended",
+        colors: [
+            ["Brown", "brown"], ["Gold", "gold"], ["Olive", "olive"],
+            ["Orange", "orange"], ["Amber", "amber"], ["Yellow", "yellow"],
+            ["Lime", "lime"], ["Green", "green"], ["Emerald", "emerald"],
+            ["Teal", "teal"], ["Cyan", "cyan"], ["Sky", "sky"],
+            ["Blue", "blue"], ["Slate", "slate"], ["Indigo", "indigo"],
+            ["Violet", "violet"], ["Purple", "purple"], ["Fuchsia", "fuchsia"],
+            ["Magenta", "magenta"], ["Pink", "pink"], ["Rose", "rose"],
+            ["Red", "red"],
+        ],
+    },
+] as const;
+
+const steps = Array.from({ length: 13 }, (_, index) => index);
+---
+
+<section class="palette-viewer" data-palette-viewer aria-labelledby="palette-viewer-title">
+    <div class="palette-viewer__intro">
+        <div>
+            <h2 id="palette-viewer-title">Palette explorer</h2>
+            <p>Choose a group, then select any swatch to copy it.</p>
+        </div>
+        <label class="copy-mode">
+            <span>Copy</span>
+            <select data-copy-mode>
+                <option value="token">CSS variable</option>
+                <option value="value">Resolved color</option>
+            </select>
+        </label>
+    </div>
+
+    <div class="palette-filters" aria-label="Filter palette groups">
+        <button type="button" data-palette-filter="all" aria-pressed="true">All</button>
+        {groups.map((group) => (
+            <button type="button" data-palette-filter={group.id} aria-pressed="false">
+                {group.label}
+            </button>
+        ))}
+    </div>
+
+    <p class="palette-status" data-palette-status aria-live="polite">
+        Showing all 31 color scales.
+    </p>
+
+    <div class="palette-scroll" tabindex="0" aria-label="Scrollable color palette">
+        <div class="palette-grid">
+            <div class="palette-grid__steps" aria-hidden="true">
+                <span></span>
+                {steps.map((step) => <span>{step}</span>)}
+            </div>
+
+            {groups.map((group) => group.colors.map(([label, prefix]) => (
+                <div class="palette-row" data-palette-group={group.id}>
+                    <div class="palette-row__name">
+                        <strong>{label}</strong>
+                        <small>{prefix}</small>
+                    </div>
+                    {steps.map((step) => {
+                        const token = `--${prefix}-${step}`;
+                        return (
+                            <button
+                                type="button"
+                                class="swatch"
+                                style={`--swatch-color: var(${token})`}
+                                data-color-token={token}
+                                aria-label={`Copy ${token}`}
+                                title={`Copy var(${token})`}
+                            >
+                                <span class="swatch__color" aria-hidden="true"></span>
+                                <span class="swatch__step">{step}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            )))}
+        </div>
+    </div>
+</section>
+
+<script>
+    function setupPaletteViewers() {
+        document.querySelectorAll<HTMLElement>("[data-palette-viewer]").forEach((viewer) => {
+            if (viewer.dataset.ready === "true") return;
+            viewer.dataset.ready = "true";
+
+            const status = viewer.querySelector<HTMLElement>("[data-palette-status]");
+            const mode = viewer.querySelector<HTMLSelectElement>("[data-copy-mode]");
+            const filterButtons = viewer.querySelectorAll<HTMLButtonElement>("[data-palette-filter]");
+            const rows = viewer.querySelectorAll<HTMLElement>("[data-palette-group]");
+
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const filter = button.dataset.paletteFilter ?? "all";
+                    filterButtons.forEach((candidate) => {
+                        candidate.setAttribute("aria-pressed", String(candidate === button));
+                    });
+
+                    let visible = 0;
+                    rows.forEach((row) => {
+                        row.hidden = filter !== "all" && row.dataset.paletteGroup !== filter;
+                        if (!row.hidden) visible += 1;
+                    });
+
+                    if (status) {
+                        const label = button.textContent?.trim() ?? "Selected";
+                        status.textContent = `Showing ${visible} ${label.toLowerCase()} color ${visible === 1 ? "scale" : "scales"}.`;
+                    }
+                });
+            });
+
+            viewer.addEventListener("click", async (event) => {
+                const button = (event.target as Element).closest<HTMLButtonElement>("[data-color-token]");
+                if (!button) return;
+
+                const token = button.dataset.colorToken;
+                if (!token) return;
+                const color = button.querySelector<HTMLElement>(".swatch__color");
+                const value = mode?.value === "value" && color
+                    ? getComputedStyle(color).backgroundColor
+                    : `var(${token})`;
+
+                try {
+                    await navigator.clipboard.writeText(value);
+                    if (status) status.textContent = `Copied ${value}`;
+                    button.dataset.copied = "true";
+                    window.setTimeout(() => delete button.dataset.copied, 900);
+                } catch {
+                    if (status) status.textContent = `Copy unavailable. Use ${value}`;
+                }
+            });
+        });
+    }
+
+    setupPaletteViewers();
+    document.addEventListener("astro:page-load", setupPaletteViewers);
+</script>
+
+<style>
+    .palette-viewer {
+        margin-block: 1.5rem 2rem;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: var(--border-radius-lg, 0.75rem);
+        overflow: clip;
+        background: var(--bg-primary, #fff);
+    }
+
+    .palette-viewer__intro {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-color, #d8dee4);
+    }
+
+    .palette-viewer__intro h2,
+    .palette-viewer__intro p {
+        margin: 0;
+    }
+
+    .palette-viewer__intro p {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.875rem;
+    }
+
+    .copy-mode {
+        display: grid;
+        gap: 0.25rem;
+        min-width: 10rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .copy-mode select {
+        min-height: 2.25rem;
+        padding-inline: 0.65rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-secondary, #f6f8fa);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+    }
+
+    .palette-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        padding: 0.85rem 1.25rem 0;
+    }
+
+    .palette-filters button {
+        min-height: 2rem;
+        padding: 0.35rem 0.7rem;
+        color: var(--text-secondary, inherit);
+        background: transparent;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 999px;
+        font: inherit;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .palette-filters button[aria-pressed="true"] {
+        color: white;
+        background: var(--accent, #06c);
+        border-color: transparent;
+    }
+
+    .palette-status {
+        min-height: 1.5em;
+        margin: 0;
+        padding: 0.55rem 1.25rem 0.75rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.8rem;
+    }
+
+    .palette-scroll {
+        max-width: 100%;
+        padding: 0 1.25rem 1.25rem;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+    }
+
+    .palette-grid {
+        min-width: 58rem;
+    }
+
+    .palette-grid__steps,
+    .palette-row {
+        display: grid;
+        grid-template-columns: 8rem repeat(13, minmax(3.25rem, 1fr));
+        gap: 0.35rem;
+        align-items: center;
+    }
+
+    .palette-grid__steps {
+        margin-block-end: 0.35rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.7rem;
+        text-align: center;
+    }
+
+    .palette-row + .palette-row {
+        margin-block-start: 0.65rem;
+    }
+
+    .palette-row[hidden] {
+        display: none;
+    }
+
+    .palette-row__name {
+        min-width: 0;
+    }
+
+    .palette-row__name strong,
+    .palette-row__name small {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .palette-row__name strong {
+        font-size: 0.85rem;
+    }
+
+    .palette-row__name small {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.65rem;
+    }
+
+    .swatch {
+        position: relative;
+        display: grid;
+        gap: 0.2rem;
+        min-width: 0;
+        padding: 0;
+        color: var(--text-secondary, inherit);
+        background: transparent;
+        border: 0;
+        border-radius: 0.35rem;
+        cursor: copy;
+    }
+
+    .swatch__color {
+        display: block;
+        height: 2.65rem;
+        background: var(--swatch-color);
+        border: 1px solid rgb(127 127 127 / 0.18);
+        border-radius: 0.3rem;
+        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+    }
+
+    .swatch__step {
+        font-size: 0.65rem;
+        line-height: 1;
+        text-align: center;
+    }
+
+    .swatch:hover .swatch__color,
+    .swatch:focus-visible .swatch__color {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgb(0 0 0 / 0.18);
+    }
+
+    .swatch[data-copied="true"]::after {
+        position: absolute;
+        z-index: 1;
+        inset: 0.35rem 0.2rem auto;
+        padding: 0.2rem;
+        content: "Copied";
+        color: white;
+        background: rgb(0 0 0 / 0.72);
+        border-radius: 0.25rem;
+        font-size: 0.65rem;
+        text-align: center;
+    }
+
+    @media (max-width: 42rem) {
+        .palette-viewer__intro {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .copy-mode {
+            min-width: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .swatch__color {
+            transition: transform 120ms ease, box-shadow 120ms ease;
+        }
+    }
+</style>

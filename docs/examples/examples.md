@@ -60,6 +60,29 @@ Demonstrates layout components with various color themes applied.
 - Color integration
 - Themed layout examples
 - Responsive color behavior
+- Grid Lanes progressive enhancement example
+
+### `demo-typography.html` - Typography System Demo
+
+Interactive demo of the token-driven typography system.
+
+**Features Demonstrated:**
+- viewport-fluid display scale
+- semantic typography tokens
+- container-relative type using `cqi`
+- text-box toggle for compact UI text
+- live sliders that update typography variables
+
+### `demo-beacon.html` - Product Landing Demo
+
+Landing-page style demo built from the framework's primitives and components.
+
+**Features Demonstrated:**
+- hero, pricing, and CTA composition
+- badge usage on gradients and accent surfaces
+- details/summary FAQ section
+- tabs-details workflow section
+- conversion-oriented layout patterns
 
 ### `demo-theme.html` - Theme Switching
 

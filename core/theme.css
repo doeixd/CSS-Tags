@@ -25,6 +25,7 @@
 
   /* Theme Configuration */
   --surface-saturation: 0.015;  /* Surface chroma multiplier */
+  --surface-c: var(--surface-saturation); /* Legacy alias */
   --contrast-factor: 1.0;       /* Overall contrast multiplier */
   --border-width: 1px;          /* Default border width */
   --border-width-thick: 2px;    /* Thick border width */
@@ -64,6 +65,8 @@
   --surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--neutral-h));
   --surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
   --surface-overt: oklch(77.5% calc(var(--surface-saturation) * 2.25) var(--neutral-h));
+  --surface-default: var(--surface);
+  --surface-overt-dark: var(--surface-overt);
 
   /* ============================================ */
   /* TEXT COLORS - Auto-contrast calculation     */
@@ -93,6 +96,12 @@
   --text-highlight-subtle: oklch(from var(--accent) calc(l + 0.2) calc(c - 0.05) h);
   --text-highlight-overt: oklch(from var(--accent) calc(l - 0.1) calc(c + 0.05) h);
   --text-highlight-bg: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+  --selection-bg: color-mix(in oklch, var(--accent) 60%, var(--base) 40%);
+  --selection-color: var(--text-on-accent);
+  --highlight-search-results-bg: color-mix(in oklch, var(--accent-highlight) 72%, var(--base));
+  --highlight-search-results-color: var(--text-on-accent);
+  --highlight-search-results-decoration: underline;
+  --highlight-search-results-decoration-color: color-mix(in oklch, var(--accent) 72%, black 28%);
 
   /* ============================================ */
   /* OUTLINE & BORDER COLORS                     */
@@ -117,9 +126,9 @@
   /* ============================================ */
 
    /* Selection and hover backgrounds */
-   --highlight-muted: oklch(from var(--base) calc(l - 0.01) c h);
-   --highlight-subtle: oklch(from var(--base) calc(l - 0.03) c h);
-   --highlight-overt: oklch(from var(--accent) calc(l + 0.8) calc(c - 0.3) h);
+   --highlight-muted: color-mix(in oklch, var(--base) 88%, var(--accent) 12%);
+   --highlight-subtle: color-mix(in oklch, var(--base) 76%, var(--accent) 24%);
+   --highlight-overt: color-mix(in oklch, var(--base) 58%, var(--accent) 42%);
 
    /* Background highlight variants */
    --highlight-bg-muted: var(--highlight-muted);
@@ -145,26 +154,31 @@
   --accent-overt: oklch(from var(--accent) calc(l - 0.1) calc(c + 0.05) h);
   --accent-highlight: oklch(from var(--accent) calc(l + 0.5) calc(c - 0.2) h);
 
-   /* Accent text on different surfaces (simplified) */
-   --accent-on-base: oklch(15% 0.02 var(--neutral-h)); /* Dark text on light base */
-   --accent-on-bedrock: oklch(98% 0.01 var(--neutral-h)); /* Near-white text on dark bedrock */
-   --accent-on-surface: oklch(15% 0.02 var(--neutral-h)); /* Dark text on light surface */
+   /* Accent text on different surfaces (dynamic auto-contrast) */
+   --text-on-accent: oklch(from var(--accent) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
+   --accent-on-base: var(--text-on-accent);
+   --accent-on-bedrock: var(--text-on-accent);
+   --accent-on-surface: var(--text-on-accent);
 
   /* ============================================ */
   /* SECONDARY & TERTIARY SYSTEMS                */
   /* ============================================ */
 
   /* Secondary colors */
-  --secondary: oklch(var(--accent-l) var(--accent-c) var(--secondary-h));
+  --secondary: oklch(from var(--accent) l c calc(h + var(--secondary-hue-shift)));
+  --text-on-secondary: oklch(from var(--secondary) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
   --secondary-muted: oklch(from var(--secondary) calc(l + 0.15) calc(c - 0.05) h);
   --secondary-subtle: oklch(from var(--secondary) calc(l + 0.05) calc(c - 0.02) h);
   --secondary-overt: oklch(from var(--secondary) calc(l - 0.1) calc(c + 0.05) h);
+  --secondary-highlight: oklch(from var(--secondary) calc(l + 0.5) calc(c - 0.2) h);
 
   /* Tertiary colors */
-  --tertiary: oklch(var(--accent-l) var(--accent-c) var(--tertiary-h));
+  --tertiary: oklch(from var(--accent) l c calc(h + var(--tertiary-hue-shift)));
+  --text-on-tertiary: oklch(from var(--tertiary) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
   --tertiary-muted: oklch(from var(--tertiary) calc(l + 0.15) calc(c - 0.05) h);
   --tertiary-subtle: oklch(from var(--tertiary) calc(l + 0.05) calc(c - 0.02) h);
   --tertiary-overt: oklch(from var(--tertiary) calc(l - 0.1) calc(c + 0.05) h);
+  --tertiary-highlight: oklch(from var(--tertiary) calc(l + 0.5) calc(c - 0.2) h);
 
   /* ============================================ */
   /* SEMANTIC COLORS (Success, Warning, etc.)    */
@@ -180,12 +194,20 @@
   --text-warning: var(--warning);
   --text-error: var(--error);
   --text-info: var(--info);
+  --text-on-success: oklch(from var(--success) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
+  --text-on-warning: oklch(from var(--warning) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
+  --text-on-error: oklch(from var(--error) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
+  --text-on-info: oklch(from var(--info) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
 
   /* Semantic surface colors */
   --surface-success: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h);
   --surface-warning: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h);
   --surface-error: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h);
   --surface-info: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h);
+  --success-highlight: oklch(from var(--success) calc(l + 0.5) calc(c - 0.2) h);
+  --warning-highlight: oklch(from var(--warning) calc(l + 0.5) calc(c - 0.2) h);
+  --error-highlight: oklch(from var(--error) calc(l + 0.5) calc(c - 0.2) h);
+  --info-highlight: oklch(from var(--info) calc(l + 0.5) calc(c - 0.2) h);
 
   /* ============================================ */
   /* LEGACY FRAMEWORK COMPATIBILITY              */
@@ -254,6 +276,32 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --line-height-base: 1.5;
+
+  accent-color: var(--accent);
+}
+
+::selection {
+  background-color: var(--selection-bg, var(--accent-highlight));
+  color: var(--selection-color, var(--text-on-accent));
+}
+
+::-moz-selection {
+  background-color: var(--selection-bg, var(--accent-highlight));
+  color: var(--selection-color, var(--text-on-accent));
+}
+
+::highlight(search-results) {
+  background-color: var(--highlight-search-results-bg, var(--accent-highlight));
+  color: var(--highlight-search-results-color, var(--text-on-accent));
+  text-decoration: var(--highlight-search-results-decoration, underline);
+  text-decoration-color: var(--highlight-search-results-decoration-color, currentColor);
+}
+
+::highlight(current-search-result) {
+  background-color: var(--accent);
+  color: var(--text-on-accent);
+  text-decoration: var(--highlight-search-results-decoration, underline);
+  text-decoration-color: var(--highlight-search-results-decoration-color, currentColor);
 }
 
 /* ============================================ */
@@ -271,10 +319,13 @@
      --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--neutral-h));
      --bedrock: oklch(98% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
 
-     --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--neutral-h));
-     --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
-     --surface: oklch(25% var(--surface-saturation) var(--neutral-h));
-     --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+      --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--neutral-h));
+      --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
+      --surface: oklch(25% var(--surface-saturation) var(--neutral-h));
+      --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+      --surface-c: var(--surface-saturation); /* Legacy alias */
+      --surface-default: var(--surface);
+      --surface-overt-dark: var(--surface-overt);
 
       /* Adjust text for dark backgrounds */
       --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
@@ -291,11 +342,8 @@
      --text-on-surface: oklch(90% 0.02 var(--neutral-h)); /* Light text on dark surface */
      --text-on-surface-overt: oklch(92% 0.02 var(--neutral-h)); /* Light text on dark surface-overt */
 
-     /* Accent text on surfaces for dark mode */
-     --accent-on-base: oklch(90% 0.02 var(--neutral-h)); /* Light text on dark base */
-     --accent-on-bedrock: oklch(5% 0.01 var(--neutral-h)); /* Near-black text on light bedrock */
-     --accent-on-surface: oklch(90% 0.02 var(--neutral-h)); /* Light text on dark surface */
-   }
+    /* Accent text on surfaces for dark mode (handled by auto-contrast) */
+    }
 }
 
 /* ============================================ */
@@ -494,8 +542,8 @@
   color: var(--text-on-surface);
 }
 .bg-accent .button-primary {
-  background-color: var(--accent);
-  color: var(--accent-on-base);
+  background-color: var(--base);
+  color: var(--text-on-base);
 }
 
 .bg-accent .button-primary {

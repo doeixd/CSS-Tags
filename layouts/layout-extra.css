@@ -132,7 +132,7 @@
  *     aspect-ratio: --aspect-ratio(16, 9);
  *   }
  */
-@function --aspect-ratio(--width type(<number>), --height type(<number>)) returns type(*) {
+@function --aspect-ratio(--width type(*), --height type(*)) returns type(*) {
   result: var(--width) + ' / ' + var(--height);
 }
 

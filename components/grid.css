@@ -9,42 +9,57 @@
  * @feature {Subgrid} - Allows nested grids to align with the parent grid.
  */
 
-grid {
+:is(grid, [data-grid], .grid) {
   /* --- Core Grid Layout & Template Properties --- */
+  --grid-display: attr(display type(*), grid);
   --grid-columns: attr(columns type(*), none);
   --grid-rows:    attr(rows type(*), none);
   --grid-areas:   attr(areas type(*), none);
-  --grid-gap:     attr(gap type(<length>), 1.5rem);
+  --grid-gap:     attr(gap type(*), 1.5rem);
+  --grid-flow-tolerance: attr(flow-tolerance type(*), 1em);
 
   display: grid;
+  display: var(--grid-display);
   grid-template-columns: var(--grid-columns);
   grid-template-rows: var(--grid-rows);
   grid-template-areas: var(--grid-areas);
   gap: var(--grid-gap);
 
   /* --- Grid-wide Item Alignment --- */
-  justify-items: attr(justify-items type(<custom-ident>), stretch);
-  align-items:   attr(align-items type(<custom-ident>), stretch);
+  justify-items: attr(justify-items type(*), stretch);
+  align-items:   attr(align-items type(*), stretch);
 
   /* --- CSS Gap Decoration Properties (Experimental) --- */
   column-rule-width:  attr(col-rule-width type(*), none);
   column-rule-style:  attr(col-rule-style type(*), none);
-  column-rule-color:  attr(col-rule-color type(<color>), currentColor);
+  column-rule-color:  attr(col-rule-color type(*), currentColor);
   row-rule-width:     attr(row-rule-width type(*), none);
   row-rule-style:     attr(row-rule-style type(*), none);
-  row-rule-color:     attr(row-rule-color type(<color>), currentColor);
+  row-rule-color:     attr(row-rule-color type(*), currentColor);
+}
+
+:is(grid, [data-grid], .grid):is([lanes], [data-lanes]) {
+  /* Unsupported browsers retain the normal grid layout. */
+  display: grid;
+}
+
+@supports (display: grid-lanes) {
+  :is(grid, [data-grid], .grid):is([lanes], [data-lanes]) {
+    display: grid-lanes;
+    flow-tolerance: var(--grid-flow-tolerance);
+  }
 }
 
 /* Target any direct child of <grid> for maximum flexibility */
-grid > * {
+:is(grid, [data-grid], .grid) > * {
   /* --- Item Placement Properties --- */
   grid-area:    attr(area type(*), auto);
   grid-column:  attr(col type(*), auto);
   grid-row:     attr(row type(*), auto);
 
   /* --- Individual Item Self-Alignment --- */
-  justify-self: attr(justify-self type(<custom-ident>), auto);
-  align-self:   attr(align-self type(<custom-ident>), auto);
+  justify-self: attr(justify-self type(*), auto);
+  align-self:   attr(align-self type(*), auto);
 
   /* --- Subgrid Capability --- */
   &[subgrid] {
@@ -53,4 +68,15 @@ grid > * {
     grid-template-rows: subgrid;
     gap: 0; /* Gaps are inherited from parent grid */
   }
+}
+
+/* Named line placement when shorthand col/row are not provided */
+:is(grid, [data-grid], .grid) > *:not([col]) {
+  grid-column-start: attr(col-start type(*), auto);
+  grid-column-end: attr(col-end type(*), auto);
+}
+
+:is(grid, [data-grid], .grid) > *:not([row]) {
+  grid-row-start: attr(row-start type(*), auto);
+  grid-row-end: attr(row-end type(*), auto);
 }

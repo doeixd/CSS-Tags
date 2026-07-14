@@ -1,20 +1,73 @@
-/* modal.css */
+/**
+ * Dialog and legacy modal surfaces.
+ *
+ * Native `<dialog>` is the canonical interactive API. `modal-dialog` is an
+ * optional visual host; consumers must still provide dialog behaviour and
+ * accessibility semantics when they do not use the native element.
+ */
 
-.modal {
+:is(dialog[data-modal], dialog.modal, modal-dialog) {
+  width: min(var(--modal-width, 36rem), calc(100% - 2rem));
+  max-height: min(var(--modal-max-height, 85dvh), calc(100% - 2rem));
+  margin: auto;
+  padding: var(--modal-padding, var(--space-lg, 1.5rem));
+  overflow: auto;
+  color: var(--modal-text, var(--text-default, CanvasText));
+  background: var(--modal-bg, var(--surface-default, Canvas));
+  border: var(--modal-border-width, 1px) solid
+    var(--modal-border-color, var(--outline-default, currentColor));
+  border-radius: var(--modal-radius, var(--radius-lg, 0.75rem));
+  box-shadow: var(--modal-shadow, 0 1.25rem 3rem rgb(0 0 0 / 0.24));
+}
+
+:is(dialog[data-modal], dialog.modal, modal-dialog)::backdrop {
+  background: var(--modal-backdrop, rgb(0 0 0 / 0.55));
+  backdrop-filter: blur(var(--modal-backdrop-blur, 3px));
+}
+
+:is(dialog[data-modal], dialog.modal, modal-dialog) > :first-child {
+  margin-block-start: 0;
+}
+
+:is(dialog[data-modal], dialog.modal, modal-dialog) > :last-child {
+  margin-block-end: 0;
+}
+
+/* Backwards-compatible overlay for applications that already manage the
+   interaction and focus lifecycle themselves. */
+:is([data-modal-overlay], .modal-overlay) {
   position: fixed;
+  z-index: var(--modal-z-index, 1000);
   inset: 0;
   display: grid;
   place-items: center;
-  padding: var(--l-padding, var(--spacing-lg));
-  background-color: oklch(from var(--bedrock) l c h / 0.5);
+  padding: var(--space-lg, 1.5rem);
+  background: var(--modal-backdrop, rgb(0 0 0 / 0.55));
+  backdrop-filter: blur(var(--modal-backdrop-blur, 3px));
 }
-.modal__panel {
-  --role: default;
-  @apply --surface-role(var(--role));
-  background-color: var(--bg);
-  border: var(--border-width, 1px) solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--l-padding, var(--spacing-lg));
-  min-width: min(90vw, 720px);
-  @apply --contrast-text-for-bg;
+
+:is([data-modal-overlay], .modal-overlay) > :is(.modal__panel, [data-modal-panel]) {
+  width: min(var(--modal-width, 36rem), 100%);
+  max-height: var(--modal-max-height, 85dvh);
+  padding: var(--modal-padding, var(--space-lg, 1.5rem));
+  overflow: auto;
+  color: var(--modal-text, var(--text-default, CanvasText));
+  background: var(--modal-bg, var(--surface-default, Canvas));
+  border: var(--modal-border-width, 1px) solid
+    var(--modal-border-color, var(--outline-default, currentColor));
+  border-radius: var(--modal-radius, var(--radius-lg, 0.75rem));
+  box-shadow: var(--modal-shadow, 0 1.25rem 3rem rgb(0 0 0 / 0.24));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(dialog[data-modal], dialog.modal)[open] {
+    animation: modal-enter var(--modal-duration, 160ms) ease-out;
+  }
+
+  @keyframes modal-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
+  }
 }

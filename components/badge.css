@@ -4,12 +4,12 @@ badge {
   display: inline-flex;
   align-items: center;
   gap: var(--_gap);
-  --role: overt;
-  @apply --surface-role(var(--role));
-  --b-bg: var(--bg);
+  --b-bg: var(--surface-overt);
   --b-bw: var(--border-width, 1px);
-  --b-bc: var(--border);
-   --b-r: var(--border-radius-full, 9999px);
+  --b-bc: var(--outline-overt);
+  --bg: var(--b-bg);
+  --border: var(--b-bc);
+  --b-r: var(--border-radius-full, 9999px);
   --b-px: 0.55em;
   --b-py: 0.15em;
   background-color: var(--b-bg);
@@ -22,16 +22,32 @@ badge {
   @apply --state-adjust;
 }
 
+@supports (text-box: trim-both cap alphabetic) {
+  badge {
+    text-box: var(--text-box-badge, var(--text-box-ui));
+  }
+}
+
+@supports (text-box-trim: trim-both) and (text-box-edge: cap alphabetic) {
+  badge {
+    text-box-trim: var(--text-box-trim-badge, var(--text-box-trim-ui));
+    text-box-edge: var(--text-box-edge-badge, var(--text-box-edge-ui));
+  }
+}
+
 badge[size="sm"] { --b-py: 0.1em; --b-px: 0.45em; font-size: 0.75em; }
 badge[size="md"] { --b-py: 0.15em; --b-px: 0.55em; font-size: 0.85em; }
 badge[size="lg"] { --b-py: 0.25em; --b-px: 0.7em; font-size: 0.95em; }
 
-badge[role="subtle"] { --role: subtle; }
-badge[role="default"] { --role: default; }
-badge[role="muted"] { --role: muted; }
+badge[role="subtle"] { --b-bg: var(--surface-subtle); --b-bc: var(--outline-subtle); }
+badge[role="default"] { --b-bg: var(--surface-default); --b-bc: var(--outline-default); }
+badge[role="muted"] { --b-bg: var(--surface-muted); --b-bc: var(--outline-subtle); }
+badge[role="overt"] { --b-bg: var(--surface-overt); --b-bc: var(--outline-overt); }
 
 /* status variants */
-badge[status="success"] { @apply --feedback-role(success); --bg: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
-badge[status="warning"] { @apply --feedback-role(warning); --bg: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
-badge[status="error"]   { @apply --feedback-role(error);   --bg: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
-badge[status="info"]    { @apply --feedback-role(info);    --bg: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h); --b-bg: var(--bg); --b-bc: var(--border); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
+badge[status="success"] { @apply --feedback-role(success); --bg: var(--surface-success); --b-bg: var(--bg); --b-bc: var(--outline-success); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-success); @apply --contrast-text-for-bg; }
+badge[status="warning"] { @apply --feedback-role(warning); --bg: var(--surface-warning); --b-bg: var(--bg); --b-bc: var(--outline-warning); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-warning); @apply --contrast-text-for-bg; }
+badge[status="error"]   { @apply --feedback-role(error);   --bg: var(--surface-error); --b-bg: var(--bg); --b-bc: var(--outline-error); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-error); @apply --contrast-text-for-bg; }
+badge[status="info"]    { @apply --feedback-role(info);    --bg: var(--surface-info); --b-bg: var(--bg); --b-bc: var(--outline-info); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-info); @apply --contrast-text-for-bg; }
+badge[status="primary"] { --bg: var(--accent); --b-bg: var(--bg); --b-bc: var(--accent-overt, var(--accent)); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-on-accent); }
+badge[status="overt"]   { --bg: var(--surface-overt); --b-bg: var(--bg); --b-bc: var(--outline-overt); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }

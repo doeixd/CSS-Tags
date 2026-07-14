@@ -3,8 +3,29 @@ title: Card Component
 description: The `card` component is a responsive, self-contained card element that adapts its layout based on its container size using container queries. It features scoped
 ---
 
+import LiveExample from '../../../components/LiveExample.astro';
+
 ## Overview
 The `card` component is a responsive, self-contained card element that adapts its layout based on its container size using container queries. It features scoped styling to prevent conflicts and includes hover effects with elevation changes.
+
+<LiveExample title="Live card" description="Hover it, then resize the page to see its container-query layout.">
+  <card>
+    <card-media aria-hidden="true" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); min-height: 10rem;"></card-media>
+    <card-body>
+      <layout-cluster gap="var(--space-sm)" justify="space-between">
+        <badge status="primary">Featured</badge>
+        <small>6 min read</small>
+      </layout-cluster>
+      <card-header>Designing with container queries</card-header>
+      <card-content>
+        <p>A card can respond to the space it receives instead of the viewport.</p>
+      </card-content>
+      <card-footer><button type="button">Read article</button></card-footer>
+    </card-body>
+  </card>
+</LiveExample>
+
+The shipped card selectors currently support the custom-element form (`card`, `card-body`, and related tags). Class and `data-*` host aliases are not currently defined for this component.
 
 ## Key Features
 - **Container Queries**: Layout adapts to the card's own width, not viewport
@@ -49,15 +70,15 @@ The card supports several CSS custom properties for customization:
 ```html
 <card>
   <card-media>
-    <img src="image.jpg" alt="Card image">
+    <img src="article-cover.jpg" alt="A CSS layout drawn on a whiteboard">
   </card-media>
   <card-body>
-    <card-header>Card Title</card-header>
+    <card-header>Designing with container queries</card-header>
     <card-content>
-      <p>Main content of the card goes here.</p>
+      <p>A card can respond to the space it receives instead of the viewport.</p>
     </card-content>
     <card-footer>
-      <small>Footer information</small>
+      <button type="button">Read article</button>
     </card-footer>
   </card-body>
 </card>

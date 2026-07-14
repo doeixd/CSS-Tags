@@ -1,0 +1,95 @@
+---
+title: Alerts
+description: Semantic feedback messages with status and density variants, copyable markup, and accessibility guidance.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Alerts communicate the outcome of an action or a condition that needs attention. The CSS supplies the surface and layout; native ARIA roles determine how assistive technology announces the message.
+
+## Status variants
+
+<LiveExample title="Alert statuses" description="The same structure works for every feedback role.">
+  <layout-stack gap="var(--space-sm)">
+    <div class="alert" status="success" role="status">
+      <span class="alert__icon" aria-hidden="true">✓</span>
+      <div><div class="alert__title">Changes saved</div><div class="alert__body">Your profile is up to date.</div></div>
+    </div>
+    <div class="alert" status="info" role="status">
+      <span class="alert__icon" aria-hidden="true">i</span>
+      <div><div class="alert__title">New version available</div><div class="alert__body">Refresh when you are ready.</div></div>
+    </div>
+    <div class="alert" status="warning" role="alert">
+      <span class="alert__icon" aria-hidden="true">!</span>
+      <div><div class="alert__title">Payment expires soon</div><div class="alert__body">Update your card before July 30.</div></div>
+    </div>
+    <div class="alert" status="error" role="alert">
+      <span class="alert__icon" aria-hidden="true">×</span>
+      <div><div class="alert__title">Upload failed</div><div class="alert__body">The file is larger than 10 MB.</div></div>
+    </div>
+  </layout-stack>
+</LiveExample>
+
+```html
+<div class="alert" status="success" role="status">
+  <span class="alert__icon" aria-hidden="true">✓</span>
+  <div>
+    <div class="alert__title">Changes saved</div>
+    <div class="alert__body">Your profile is up to date.</div>
+  </div>
+</div>
+```
+
+Use `role="status"` for routine, polite updates. Reserve `role="alert"` for urgent information that should be announced immediately. Do not choose the ARIA role based only on the color.
+
+## Actions and density
+
+<LiveExample title="Compact alert with an action">
+  <div class="alert" status="warning" density="compact" role="alert">
+    <span class="alert__icon" aria-hidden="true">!</span>
+    <div><div class="alert__title">Session expires in 2 minutes</div><div class="alert__body">Extend it to keep editing.</div></div>
+    <div class="alert__actions"><button type="button">Extend</button></div>
+  </div>
+</LiveExample>
+
+```html
+<div class="alert" status="warning" density="compact" role="alert">
+  <span class="alert__icon" aria-hidden="true">!</span>
+  <div>
+    <div class="alert__title">Session expires in 2 minutes</div>
+    <div class="alert__body">Extend it to keep editing.</div>
+  </div>
+  <div class="alert__actions">
+    <button type="button">Extend</button>
+  </div>
+</div>
+```
+
+Available density values are `compact` and `spacious`; omit the attribute for the default spacing.
+
+## Public API
+
+The current alert host is class-based: `.alert`. Internal hooks are `.alert__icon`, `.alert__title`, `.alert__body`, and `.alert__actions`. Custom-element and `data-alert` aliases are not currently shipped.
+
+Status values:
+
+- `success`
+- `info`
+- `warning`
+- `error`
+
+Useful customization variables:
+
+- `--l-padding`: alert padding
+- `--l-gap`: gap between icon, content, and actions
+- `--border-width`: border thickness
+- `--border-radius-md`: corner radius
+- `--bg`: local background override
+- `--border`: local border-color override
+
+## Accessibility checklist
+
+- Keep meaningful text in the alert; icons should usually use `aria-hidden="true"`.
+- Use `role="status"` or `role="alert"` only when a dynamically inserted message needs announcement.
+- Keep action labels specific—“Retry upload” is more useful than “OK.”
+- Move focus only when the user must act before continuing; an alert role does not move focus by itself.

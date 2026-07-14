@@ -22,23 +22,22 @@ box {
   --display: attr(display type(*), block);
 
   /* Spacing (using logical properties) */
-  --padding:         attr(p type(<length-percentage>), 0);
-  --padding-inline:  attr(px type(<length-percentage>), var(--padding));
-  --padding-block:   attr(py type(<length-percentage>), var(--padding));
-  --margin:          attr(m type(<length-percentage>), 0);
-  --margin-inline:   attr(mx type(<length-percentage>), var(--margin));
-  --margin-block:    attr(my type(<length-percentage>), var(--margin));
+  --padding:         attr(p type(*), 0);
+  --padding-inline:  attr(px type(*), var(--padding));
+  --padding-block:   attr(py type(*), var(--padding));
+  --margin:          attr(m type(*), 0);
+  --margin-inline:   attr(mx type(*), var(--margin));
+  --margin-block:    attr(my type(*), var(--margin));
 
   /* Sizing */
-  --width:  attr(width type(<length-percentage>), auto);
-  --height: attr(height type(<length-percentage>), auto);
-  --max-width: attr(max-width type(<length-percentage>), none);
+  --width:  attr(width type(*), auto);
+  --height: attr(height type(*), auto);
+  --max-width: attr(max-width type(*), none);
 
   /* Appearance */
-  --background: attr(bg type(<color>), transparent);
-  --color:      attr(color type(<color>), inherit);
+  --color:      attr(color type(*), inherit);
   --border:     attr(border type(*), none);
-  --radius:     attr(radius type(<length-percentage>), 0);
+  --radius:     attr(radius type(*), 0);
 
   /* Typography */
   --text-align: attr(align type(*), start);
@@ -52,7 +51,7 @@ box {
   width: var(--width);
   height: var(--height);
   max-width: var(--max-width);
-  background: var(--background);
+  background: attr(bg type(*), transparent);
   color: var(--color);
   border: var(--border);
   border-radius: var(--radius);
@@ -63,6 +62,12 @@ box {
    * A box with `elevation="2"` would receive a pre-defined shadow.
    */
   &[elevation] {
-    /* @apply --elevation(attr(elevation type(<integer>))); */
+    /* @apply --elevation(attr(elevation type(*))); */
+  }
+
+  /* Only propagate --bg when a bg attribute is explicitly set.
+     This lets --bg inherit through non-bg boxes to reach <text> etc. */
+  &[bg] {
+    --bg: attr(bg type(*));
   }
 }

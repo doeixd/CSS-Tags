@@ -1,0 +1,85 @@
+---
+title: Data Table
+description: Token-driven native tables with captions, row states, and a responsive overflow strategy that preserves table semantics.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+CSS Tags enhances native tables instead of replacing their accessibility model. Add `data-table` or `.data-table` to a `<table>`. For narrow containers, wrap it in `<data-table>`, `[data-table-scroll]`, or `.table-scroll`.
+
+<LiveExample title="Responsive data table" description="On narrow screens, the table scrolls horizontally without turning cells into unrelated blocks.">
+  <data-table tabindex="0" aria-label="Scrollable deployment table">
+    <table data-table class="table-hover">
+      <caption>Recent deployments</caption>
+      <thead>
+        <tr><th scope="col">Environment</th><th scope="col">Version</th><th scope="col">Status</th><th scope="col">Updated</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Production</th><td>v2.8.0</td><td><badge status="success">Healthy</badge></td><td>4 minutes ago</td></tr>
+        <tr><th scope="row">Staging</th><td>v2.9.0-rc.1</td><td><badge status="warning">Testing</badge></td><td>18 minutes ago</td></tr>
+        <tr><th scope="row">Preview</th><td>feat/docs</td><td><badge status="info">Ready</badge></td><td>1 hour ago</td></tr>
+      </tbody>
+    </table>
+  </data-table>
+</LiveExample>
+
+```html
+<data-table tabindex="0" aria-label="Scrollable deployment table">
+  <table data-table class="table-hover">
+    <caption>Recent deployments</caption>
+    <thead>
+      <tr>
+        <th scope="col">Environment</th>
+        <th scope="col">Version</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Production</th>
+        <td>v2.8.0</td>
+        <td>Healthy</td>
+      </tr>
+    </tbody>
+  </table>
+</data-table>
+```
+
+## Why the wrapper matters
+
+Changing every cell to `display: block` can obscure row and column relationships and requires duplicated `data-label` content. CSS Tags keeps the native table intact and makes only its wrapper scroll. `tabindex="0"` lets keyboard users reach the scroll region; use an accessible label when the surrounding heading does not already describe it.
+
+For a table used directly without a wrapper, CSS Tags provides a small-screen overflow fallback:
+
+```html
+<table class="data-table table-striped">
+  <!-- normal table structure -->
+</table>
+```
+
+## Variants
+
+- `.table-striped` adds alternating row surfaces.
+- `.table-hover` highlights the row under the pointer.
+- `.table-bordered` uses the thick border token.
+- `.table-borderless` removes the outer border and row dividers.
+
+## Theme tokens
+
+```css
+.billing-table {
+  --table-min-width: 44rem;
+  --table-cell-padding-block: 0.75rem;
+  --table-cell-padding-inline: 1rem;
+  --table-heading-bg: var(--surface-subtle);
+  --table-stripe-bg: var(--surface-muted);
+  --table-row-hover-bg: var(--highlight-bg-subtle);
+}
+```
+
+## Accessibility checklist
+
+- Use `<caption>` when a visible name helps identify the dataset.
+- Add `scope="col"` to column headers and `scope="row"` to row headers.
+- Keep sorting controls as real buttons inside header cells and expose direction with `aria-sort`.
+- Do not use a table for visual page layout.

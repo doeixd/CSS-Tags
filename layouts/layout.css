@@ -95,10 +95,10 @@
  */
 layout-grid {
   --_min-item-size: attr(min-item-size type(*), var(--l-min-item-size, 16rem));
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_gap: attr(gap type(*), var(--l-gap));
 
   display: grid;
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_min-item-size)), 1fr));
 }
 
@@ -112,20 +112,20 @@ layout-grid {
  */
 layout-split {
   --_fraction: attr(fraction type(*), var(--l-fraction, 1fr));
-  --_breakpoint: attr(breakpoint type(<length>), var(--l-breakpoint));
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_breakpoint: attr(breakpoint type(*), var(--l-breakpoint));
+  --_gap: attr(gap type(*), var(--l-gap));
 
   display: grid;
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
   grid-template-columns: 1fr; /* Default to stacked */
 }
 @media (min-width: 30em) {
   layout-split:not([force-stack]) {
-    grid-template-columns: var(--_fraction);
+    grid-template-columns: var(--_fraction, 1fr 1fr);
   }
 }
 :is(layout-split[no-stack]):has(:nth-child(2):last-child) {
-  grid-template-columns: var(--_fraction);
+  grid-template-columns: var(--_fraction, 1fr 1fr);
 }
 
 /*
@@ -141,14 +141,28 @@ layout-split {
  * @attr gap, align
  */
 layout-stack {
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_gap: attr(gap type(*), var(--l-gap));
   --_align: attr(align type(*), var(--l-align, stretch));
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: var(--_align);
-  gap: var(--_gap);
+  align-items: var(--_align, stretch);
+  gap: var(--_gap, var(--l-gap));
+
+  &[center] {
+    align-items: center;
+  }
+
+  &[center] > :is(h1, h2, h3, h4, h5, h6, p, small, span, blockquote, pre, a, button, label, summary, details) {
+    text-align: center;
+  }
+}
+
+:is(layout-stack, [data-layout-stack], .layout-stack) > .stack-intrinsic {
+  flex-grow: 0;
+  max-inline-size: max-content;
+  align-self: center; /* If the text needs to be centered, intrinsic width children should self-align center! */
 }
 
 /**
@@ -158,15 +172,15 @@ layout-stack {
  * @attr gap, justify, align
  */
 layout-cluster {
-  --_gap: attr(gap type(<length>), var(--space-sm, 0.75rem));
+  --_gap: attr(gap type(*), var(--space-sm, 0.75rem));
   --_justify: attr(justify type(*), var(--l-justify, flex-start));
   --_align: attr(align type(*), var(--l-align, center));
 
   display: flex;
   flex-wrap: wrap;
-  gap: var(--_gap);
-  justify-content: var(--_justify);
-  align-items: var(--_align);
+  gap: var(--_gap, var(--l-gap));
+  justify-content: var(--_justify, flex-start);
+  align-items: var(--_align, stretch);
 }
 
 /**
@@ -176,12 +190,12 @@ layout-cluster {
  * @attr gap, no-scrollbar
  */
 layout-reel {
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_gap: attr(gap type(*), var(--l-gap));
   --_thumb: var(--scrollbar-thumb, oklch(from var(--theme-primary) l c h / 0.5));
   --_track: var(--scrollbar-track, oklch(from var(--theme-bg) l c h / 0.5));
 
   display: flex;
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--_thumb) var(--_track);
@@ -197,12 +211,12 @@ layout-reel {
  * @attr threshold, gap
  */
 layout-switcher {
-  --_threshold: attr(threshold type(<length>), var(--l-threshold, 30rem));
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_threshold: attr(threshold type(*), var(--l-threshold, 30rem));
+  --_gap: attr(gap type(*), var(--l-gap));
 
   display: flex;
   flex-wrap: wrap;
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
 
   & > * {
     flex-grow: 1;
@@ -223,9 +237,9 @@ layout-switcher {
  * @attr padding, padding-x, padding-y
  */
 layout-pad {
-  --_padding: attr(padding type(<length>), var(--l-padding));
-  --_padding-inline: attr(padding-x type(<length>), var(--_padding));
-  --_padding-block: attr(padding-y type(<length>), var(--_padding));
+  --_padding: attr(padding type(*), var(--l-padding));
+  --_padding-inline: attr(padding-x type(*), var(--_padding));
+  --_padding-block: attr(padding-y type(*), var(--_padding));
 
   padding-inline: var(--_padding-inline);
   padding-block: var(--_padding-block);
@@ -238,8 +252,8 @@ layout-pad {
  * @attr max-width, gutters, and-text
  */
 layout-center {
-  --_max-width: attr(max-width type(<length>), var(--l-max-width, 65ch));
-  --_gutters: attr(gutters type(<length>), var(--l-gutters, var(--space-md, 1.5rem)));
+  --_max-width: attr(max-width type(*), var(--l-max-width, 65ch));
+  --_gutters: attr(gutters type(*), var(--l-gutters, var(--space-md, 1.5rem)));
 
   box-sizing: content-box;
   margin-inline: auto;
@@ -255,7 +269,7 @@ layout-center {
  * @attr gutters, and-text
  */
 layout-inline-center {
-  --_gutters: attr(gutters type(<length>), var(--l-gutters, var(--space-md, 1.5rem)));
+  --_gutters: attr(gutters type(*), var(--l-gutters, var(--space-md, 1.5rem)));
 
   box-sizing: content-box;
   margin-inline: auto;
@@ -296,14 +310,14 @@ layout-frame {
  * @attr breakpoint, side-width, side, gap
  */
 layout-sidebar {
-  --_breakpoint: attr(breakpoint type(<length>), var(--l-breakpoint));
+  --_breakpoint: attr(breakpoint type(*), var(--l-breakpoint));
   --_side-width: attr(side-width type(*), var(--l-side-width, 20rem));
   --_content-min: attr(content-min-width type(*), var(--l-content-min, 50%));
-  --_gap: attr(gap type(<length>), var(--l-gap));
+  --_gap: attr(gap type(*), var(--l-gap));
 
   display: flex;
   flex-wrap: wrap;
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
 
   /* The "switcher" logic for the main content area */
   & > :not([slot="aside"]) {
@@ -330,13 +344,13 @@ layout-sidebar {
  * @attr min-height, gap
  */
 layout-page {
-  --_min-height: attr(min-height type(<length>), var(--l-min-height, 100vh));
-  --_gap: attr(gap type(<length>), var(--l-gap, 0));
+  --_min-height: attr(min-height type(*), var(--l-min-height, 100vh));
+  --_gap: attr(gap type(*), var(--l-gap, 0));
 
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: var(--_min-height);
-  gap: var(--_gap);
+  gap: var(--_gap, var(--l-gap));
 }
 layout-page > [slot="header"] { grid-row: 1; }
 layout-page > [slot="main"] { grid-row: 2; }

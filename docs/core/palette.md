@@ -128,9 +128,10 @@ All palette definitions are organized under the `palette` cascade layer.
 ## Color Accessibility
 
 ### Contrast Ratios
-The 13-step scales ensure sufficient contrast:
-- **Step differences**: At least 3 steps for WCAG AA compliance
-- **Auto-contrast**: Framework calculates text colors dynamically
+The 13-step scales provide a consistent perceptual progression, but distance
+between steps is not a WCAG contrast guarantee. Test the actual foreground and
+background pair at the rendered size and weight. Semantic `--text-on-*` tokens
+provide useful defaults for common surfaces.
 
 ### Gamut Awareness
 - **Clamping**: Prevents colors from exceeding display capabilities
@@ -158,12 +159,12 @@ Add custom color scales:
 ## Performance Considerations
 
 ### CSS Size
-- **Large palette**: ~2000+ color variables
-- **Tree-shaking**: Only used colors included in final CSS
+- **Predictable palette**: 31 hue scales with 13 steps each, plus supporting variables
+- **Import behavior**: `index.css` includes the full palette; import a smaller custom entry point if your project needs fewer scales
 - **Compression**: Well-suited to GZIP compression
 
 ### Runtime Performance
-- **Static calculations**: All colors computed at build time
+- **Browser calculations**: Custom properties and OKLCH expressions resolve in the browser
 - **No JavaScript**: Pure CSS color system
 - **Efficient resolution**: CSS variable lookups are fast
 

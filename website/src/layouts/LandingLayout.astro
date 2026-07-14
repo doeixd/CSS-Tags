@@ -15,17 +15,10 @@ interface Props {
 const { title, description, currentPath = "/" } = Astro.props;
 const base = normalizeBase(import.meta.env.BASE_URL);
 
-// Get theme from cookie for server-side rendering
-const themeCookie = Astro.cookies.get("theme");
-const theme = themeCookie?.value === "dark" ? "dark" : "light";
 ---
 
 <!doctype html>
-<html
-    lang="en"
-    class={theme === "dark" ? "dark-mode" : "light-mode"}
-    data-theme={theme}
->
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -377,10 +370,12 @@ const theme = themeCookie?.value === "dark" ? "dark" : "light";
                 }
             }
 
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
+            @layer reset {
+                * {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+                }
             }
 
             *:focus-visible {

@@ -3,50 +3,64 @@
  *
  * A declarative typography component.
  * ------------------------------------------------------------------------------
- * This component provides a declarative way to control typography styles like
- * size, weight, color, and alignment directly from HTML attributes. It is
- * deeply integrated with the library's design token system.
+ * Uses the Lea Verou auto-contrast trick: oklch relative color syntax reads
+ * the inherited --bg lightness and flips text between light/dark automatically.
  *
- * @feature {attr()} - Used for direct property control (e.g., text-align).
- * @feature {Attribute Selectors} - Maps semantic attributes (e.g., size="lg")
- *   to corresponding CSS variables from the theme and token layers.
- * @feature {Auto-Contrast} - The `contrast` attribute calculates the most
- *   readable text color against a parent's background.
- * @feature {Line-Clamp} - Supports both single-line (`truncate`) and multi-line
- *   (`lines="..."`) text truncation.
+ * The color="" attribute accepts:
+ *   - Keywords: "muted", "subtle", "default", "overt" (auto-contrast levels)
+ *   - Semantic: "success", "warning", "error", "info", "link", "accent"
+ *   - Raw CSS values: "var(--text-muted)", "oklch(50% 0.2 250)", etc.
+ *
+ * @feature {attr()} - Used for direct property control.
+ * @feature {Lea Verou Auto-Contrast} - oklch(from var(--bg) ...) for automatic
+ *   readable text color against any background.
+ * @feature {Line-Clamp} - Supports both single-line and multi-line truncation.
  */
 
 text {
   /* --- Base Styles & Defaults --- */
-  --_text-align: attr(align type(string), start);
-  --_text-transform: attr(transform type(string), none);
-  --_font-style: attr(style type(string), normal);
-  --_text-wrap: attr(wrap type(string), balance); /* Use balance for better headlines by default */
-  
-  display: block;
-  margin: 0; /* Consistent with the library's reset */
-  
+  --_text-align: attr(align type(*), start);
+  --_text-transform: attr(transform type(*), none);
+  /* `style` is a native global attribute; use `font-style` for this API. */
+  --_font-style: attr(font-style type(*), normal);
+  --_text-wrap: attr(wrap type(*), balance);
+  --_tracking: attr(tracking type(*), normal);
+
+  /* --- Inherited Background for Auto-Contrast --- */
+  /* --bg inherits from the nearest ancestor that sets it (box, body, etc.).
+     Falls back to --base when no ancestor has set --bg. */
+  --_bg: var(--bg, var(--base));
+
+  display: inline-block;
+  margin: 0;
+
   /* --- Apply variables to actual CSS properties --- */
-  /* Use local variables with fallbacks to the library's global tokens */
   font-size: var(--_fs, var(--font-size-base));
   font-weight: var(--_fw, var(--font-weight-normal));
-  color: var(--_color, var(--text-default));
   line-height: var(--_lh, var(--line-height-normal));
+  letter-spacing: var(--_tracking);
   text-align: var(--_text-align);
   text-transform: var(--_text-transform);
   font-style: var(--_font-style);
   text-wrap: var(--_text-wrap);
+
+  /* Default color: auto-contrast "default" level against --bg.
+     clamp flips lightness: dark bg → high l (light text), light bg → low l (dark text).
+     The clamp range [0.15, 0.85] controls how extreme the contrast is. */
+  color: var(--_color, oklch(from var(--_bg) clamp(0.15, (0.65 / l - 1) * 999, 0.85) min(c, 0.03) h));
 }
 
 /* --- Size Variants (Maps to --font-size tokens) --- */
 text[size="xs"]  { --_fs: var(--font-size-xs); }
 text[size="sm"]  { --_fs: var(--font-size-sm); }
-text[size="base"]{ --_fs: var(--font-size-base); }
+text[size="base"] { --_fs: var(--font-size-base); }
 text[size="lg"]  { --_fs: var(--font-size-lg); }
 text[size="xl"]  { --_fs: var(--font-size-xl); }
 text[size="2xl"] { --_fs: var(--font-size-2xl); }
 text[size="3xl"] { --_fs: var(--font-size-3xl); }
 text[size="4xl"] { --_fs: var(--font-size-4xl); }
+text[size="5xl"] { --_fs: var(--font-size-5xl); }
+text[size="6xl"] { --_fs: var(--font-size-6xl); }
 
 /* --- Weight Variants (Maps to --font-weight tokens) --- */
 text[weight="thin"]     { --_fw: var(--font-weight-thin); }
@@ -57,55 +71,86 @@ text[weight="semibold"] { --_fw: var(--font-weight-semibold); }
 text[weight="bold"]     { --_fw: var(--font-weight-bold); }
 text[weight="black"]    { --_fw: var(--font-weight-black); }
 
-/* --- Color Variants (Maps to semantic color roles and direct palette colors) --- */
-/* Text Roles */
-text[color="muted"]  { --_color: var(--text-muted); }
-text[color="subtle"] { --_color: var(--text-subtle); }
-text[color="default"]{ --_color: var(--text-default); }
-text[color="overt"]  { --_color: var(--text-overt); }
-text[color="link"]   { --_color: var(--text-link); }
-/* Accent & Brand Colors */
+/* --- Letter Spacing (tracking) Variants --- */
+text[tracking="tighter"] { --_tracking: var(--letter-spacing-tighter); }
+text[tracking="tight"]   { --_tracking: var(--letter-spacing-tight); }
+text[tracking="normal"]  { --_tracking: var(--letter-spacing-normal); }
+text[tracking="wide"]    { --_tracking: var(--letter-spacing-wide); }
+text[tracking="wider"]   { --_tracking: var(--letter-spacing-wider); }
+text[tracking="widest"]  { --_tracking: var(--letter-spacing-widest); }
+
+/* ======================================================= */
+/* ==               COLOR SYSTEM                        == */
+/* ======================================================= */
+
+/* --- Raw CSS value pass-through ---
+   Any color="" value that doesn't match a keyword below flows through
+   attr() directly, e.g. color="var(--text-muted)" or color="red". */
+text[color] {
+  --_color: attr(color type(*));
+}
+
+/* --- Auto-Contrast Keyword Levels ---
+   Each level adjusts the clamp range to control contrast intensity.
+   On light bg (l>0.6): text gets the LOW end of the range (dark text).
+   On dark bg  (l<0.6): text gets the HIGH end of the range (light text). */
+text[color="muted"] {
+  --_color: oklch(from var(--_bg) clamp(0.35, (0.65 / l - 1) * 999, 0.65) min(c, 0.02) h);
+}
+
+text[color="subtle"] {
+  --_color: oklch(from var(--_bg) clamp(0.25, (0.65 / l - 1) * 999, 0.75) min(c, 0.03) h);
+}
+
+text[color="default"] {
+  --_color: oklch(from var(--_bg) clamp(0.15, (0.65 / l - 1) * 999, 0.85) min(c, 0.03) h);
+}
+
+text[color="overt"] {
+  --_color: oklch(from var(--_bg) clamp(0.05, (0.65 / l - 1) * 999, 0.95) min(c, 0.04) h);
+}
+
+/* --- Semantic & Brand Colors --- */
+text[color="link"]      { --_color: var(--text-link); }
 text[color="accent"]    { --_color: var(--accent); }
 text[color="secondary"] { --_color: var(--secondary); }
 text[color="tertiary"]  { --_color: var(--tertiary); }
-/* Feedback Colors */
+
+/* --- Feedback Colors --- */
 text[color="success"] { --_color: var(--text-success); }
 text[color="warning"] { --_color: var(--text-warning); }
 text[color="error"]   { --_color: var(--text-error); }
 text[color="info"]    { --_color: var(--text-info); }
 
-/* --- Line Height (leading) Variants (Maps to --line-height tokens) --- */
-text[leading="none"]   { --_lh: var(--line-height-none); }
-text[leading="tight"]  { --_lh: var(--line-height-tight); }
-text[leading="snug"]   { --_lh: var(--line-height-snug); }
-text[leading="normal"] { --_lh: var(--line-height-normal); }
-text[leading="relaxed"]{ --_lh: var(--line-height-relaxed); }
-text[leading="loose"]  { --_lh: var(--line-height-loose); }
+/* --- Line Height (leading) Variants --- */
+text[leading="none"]    { --_lh: var(--line-height-none); }
+text[leading="tight"]   { --_lh: var(--line-height-tight); }
+text[leading="snug"]    { --_lh: var(--line-height-snug); }
+text[leading="normal"]  { --_lh: var(--line-height-normal); }
+text[leading="relaxed"] { --_lh: var(--line-height-relaxed); }
+text[leading="loose"]   { --_lh: var(--line-height-loose); }
 
-/* --- Automatic Contrast Calculation --- */
-/* When the `contrast` attribute is present, calculate the most readable text color
-   against the parent's `--bg` custom property. */
-text[contrast] {
-  /* This powerful mixin is defined in mixins.css */
-  @apply --contrast-text-for-bg;
-  /* Override the local --_color to ensure the calculated value takes precedence */
-  --_color: var(--auto-contrast-text);
-}
+/* --- Display Override --- */
+text[display="inline"] { display: inline; }
+text[display="block"]  { display: block; }
 
+/* --- Readable line-length constraints --- */
+text[measure="body"] { max-inline-size: var(--measure-body); }
+text[measure="heading"] { max-inline-size: var(--measure-heading); }
+text[measure="wide"] { max-inline-size: var(--measure-wide, var(--measure-code)); }
 
 /* ======================================================= */
 /* ==               TRUNCATION LOGIC                    == */
 /* ======================================================= */
 
 /* --- Common styles for all line-clamping --- */
-/* The :is() selector groups the shared properties needed for line-clamp to work. */
 :is(text[truncate], text[lines]) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   /* text-wrap: balance or pretty breaks line-clamp, so it MUST be disabled. */
-  text-wrap: initial !important; 
+  text-wrap: initial !important;
 }
 
 /* --- Single-line truncation (shorthand for lines="1") --- */
@@ -114,7 +159,6 @@ text[truncate] {
 }
 
 /* --- Multi-line truncation --- */
-/* Sets the line-clamp value for a predefined set of common line counts. */
 text[lines="2"] { -webkit-line-clamp: 2; }
 text[lines="3"] { -webkit-line-clamp: 3; }
 text[lines="4"] { -webkit-line-clamp: 4; }

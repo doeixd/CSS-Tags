@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beacon — The Modern Deployment Platform</title>
+  <meta name="description"
+    content="Beacon is the modern deployment platform for developers who build the future. Zero-config builds, global edge network, and real-time observability.">
+  <link rel="stylesheet" href="../index.css">
+</head>
+
+<body>
+  <layout-page gap="0" min-height="100vh">
+    <!-- ╔══════════════════════════════════════════════════════════════════════════╗
+         ║  NAVIGATION                                                          ║
+         ╚══════════════════════════════════════════════════════════════════════════╝ -->
+    <header slot="header">
+      <layout-center max-width="1200px">
+        <nav-navbar class="border-none" style="padding-block: 0.5rem;">
+          <div class="nav-brand">
+            <flex align="center" gap="0.75rem">
+              <badge status="primary" size="lg">B</badge>
+              <text weight="bold" size="lg" display="inline">Beacon</text>
+            </flex>
+          </div>
+          <ul class="nav-links">
+            <li><a href="#features" class="nav-link">Features</a></li>
+            <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+            <li><a href="#pricing" class="nav-link">Pricing</a></li>
+            <li><a href="#faq" class="nav-link">FAQ</a></li>
+            <li><a href="#cta" class="button button-primary" style="margin-left: 1rem;">Start Free Trial</a></li>
+          </ul>
+          <button class="nav-toggle">☰</button>
+        </nav-navbar>
+      </layout-center>
+    </header>
+
+    <!-- ╔══════════════════════════════════════════════════════════════════════════╗
+         ║  MAIN CONTENT AREA                                                   ║
+         ╚══════════════════════════════════════════════════════════════════════════╝ -->
+    <main slot="main">
+      <layout-stack gap="0">
+
+        <!-- ── Hero Section (Stripe) ── -->
+        <box bg="linear-gradient(180deg, var(--base) 0%, var(--surface-subtle) 100%)" py="8rem">
+          <layout-center max-width="1200px">
+            <layout-stack gap="2.5rem" center>
+              <badge role="subtle" size="md" class="stack-intrinsic">Beacon 3.0 is now live →</badge>
+              <text size="4xl" weight="black" align="center" leading="tight" style="max-width: 20ch;">
+                The fastest path from code to global scale.
+              </text>
+              <text color="subtle" align="center" size="xl" style="max-width: 60ch;">
+                Eliminates configuration files, reduces build times by 80%, and lets your team focus on shipping
+                features
+                instead of fighting infrastructure.
+              </text>
+              <flex gap="1.5rem" justify="center">
+                <a href="#pricing" class="button button-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Start
+                  Free Trial</a>
+                <a href="#features" class="button button-outline" style="padding: 1rem 2rem; font-size: 1.1rem;">Ship a
+                  Preview</a>
+              </flex>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── Social Proof (Centered in Main) ── -->
+        <box py="4rem">
+          <layout-center max-width="1200px">
+            <layout-stack gap="2.5rem" center>
+              <text color="muted" weight="semibold" transform="uppercase" size="xs" tracking="widest">
+                Trusted by engineering teams at
+              </text>
+              <flex gap="4rem" justify="center" wrap="wrap" align="center">
+                <text weight="black" size="xl" color="muted" style="opacity: 0.4;">LATTICE</text>
+                <text weight="black" size="xl" color="muted" style="opacity: 0.4;">STREAMLINE</text>
+                <text weight="black" size="xl" color="muted" style="opacity: 0.4;">RAYCAST</text>
+                <text weight="black" size="xl" color="muted" style="opacity: 0.4;">VERCEL</text>
+                <text weight="black" size="xl" color="muted" style="opacity: 0.4;">LINEAR</text>
+              </flex>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── Statistics (Stripe) ── -->
+        <box py="4rem">
+          <layout-center max-width="1200px">
+            <box bg="var(--accent)" radius="var(--radius-lg)" p="3rem" class="bg-accent shadow-lg">
+              <grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="2rem">
+                <layout-stack gap="0.25rem" center>
+                  <text size="4xl" weight="black" color="overt">8s</text>
+                  <text size="sm" weight="medium" color="overt" style="opacity: 0.8;">Avg deploy time</text>
+                </layout-stack>
+                <layout-stack gap="0.25rem" center>
+                  <text size="4xl" weight="black" color="overt">99.99%</text>
+                  <text size="sm" weight="medium" color="overt" style="opacity: 0.8;">Uptime SLA</text>
+                </layout-stack>
+                <layout-stack gap="0.25rem" center>
+                  <text size="4xl" weight="black" color="overt">40+</text>
+                  <text size="sm" weight="medium" color="overt" style="opacity: 0.8;">Edge regions</text>
+                </layout-stack>
+                <layout-stack gap="0.25rem" center>
+                  <text size="4xl" weight="black" color="overt">12K+</text>
+                  <text size="sm" weight="medium" color="overt" style="opacity: 0.8;">Teams shipping</text>
+                </layout-stack>
+              </grid>
+            </box>
+          </layout-center>
+        </box>
+
+        <!-- ── Features (Stripe) ── -->
+        <box py="6rem">
+          <layout-center max-width="1200px">
+            <layout-stack gap="4rem">
+              <layout-stack gap="1rem" center>
+                <text size="3xl" weight="bold" align="center">Ship without the hassle</text>
+                <text color="subtle" align="center" size="lg" style="max-width: 65ch; margin-inline: auto;">
+                  From zero-config builds to real-time observability, Beacon handles the heavy infrastructure lifting.
+                </text>
+              </layout-stack>
+
+              <layout-grid min-item-size="320px" gap="2rem">
+                <box p="2.5rem" bg="var(--surface-subtle)" radius="var(--radius-lg)"
+                  border="1px solid var(--outline-subtle)" class="shadow-sm">
+                  <layout-stack gap="1.25rem">
+                    <badge status="info" size="md" class="stack-intrinsic">⚡</badge>
+                    <text weight="bold" size="xl">Instant Deploys</text>
+                    <text color="subtle">Push your code and it's live in under 8 seconds. No build queues, no cold
+                      starts.</text>
+                  </layout-stack>
+                </box>
+                <box p="2.5rem" bg="var(--surface-subtle)" radius="var(--radius-lg)"
+                  border="1px solid var(--outline-subtle)" class="shadow-sm">
+                  <layout-stack gap="1.25rem">
+                    <badge status="success" size="md" class="stack-intrinsic">🔒</badge>
+                    <text weight="bold" size="xl">Secure by Default</text>
+                    <text color="subtle">Automatic SSL, DDoS protection, and SOC 2 compliance out of the box. No manual
+                      setup.</text>
+                  </layout-stack>
+                </box>
+                <box p="2.5rem" bg="var(--surface-subtle)" radius="var(--radius-lg)"
+                  border="1px solid var(--outline-subtle)" class="shadow-sm">
+                  <layout-stack gap="1.25rem">
+                    <badge status="warning" size="md" class="stack-intrinsic">📊</badge>
+                    <text weight="bold" size="xl">Observability</text>
+                    <text color="subtle">Monitor latency and error rates with dashboards that update every second.
+                      Real-time insights.</text>
+                  </layout-stack>
+                </box>
+              </layout-grid>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── Terminal Section (Stripe) ── -->
+        <box bg="var(--surface-subtle)" py="6rem" border-block="1px solid var(--outline-subtle)">
+          <layout-center max-width="1200px">
+            <layout-split fraction="1fr 1fr" gap="5rem" align="center">
+              <layout-stack gap="1.5rem">
+                <text size="3xl" weight="bold">Zero-config that actually works</text>
+                <text color="subtle" size="lg">Beacon detects your framework, installs dependencies, and configures the
+                  build pipeline automatically. No YAML, no Dockerfiles.</text>
+                <text color="subtle">Optimized for Next.js, Remix, Astro, SvelteKit, Nuxt, and many more.</text>
+              </layout-stack>
+
+              <box p="2rem" bg="var(--bedrock)" radius="var(--radius-lg)" class="shadow-xl">
+                <layout-stack gap="1.5rem">
+                  <flex gap="0.5rem">
+                    <box width="10px" height="10px" radius="50%" bg="var(--error)"></box>
+                    <box width="10px" height="10px" radius="50%" bg="var(--warning)"></box>
+                    <box width="10px" height="10px" radius="50%" bg="var(--success)"></box>
+                  </flex>
+                  <box p="0" bg="transparent" overflow="auto">
+                    <pre
+                      style="margin:0; padding:0; background:transparent; border:none; color: #fff; font-family: monospace; font-size: 1rem; line-height: 1.6;"><code><span style="opacity: 0.4;">$</span> git push origin main
+
+<text color="success" display="inline">✔</text> Framework: Next.js (App Dir)
+<text color="success" display="inline">✔</text> Install dependency tree
+<text color="success" display="inline">✔</text> Production build: 4.2s
+🚀 <text color="info" display="inline">Live at https://app.beacon.sh</text></code></pre>
+                  </box>
+                </layout-stack>
+              </box>
+            </layout-split>
+          </layout-center>
+        </box>
+
+        <!-- ── How It Works (Tabs) ── -->
+        <box py="6rem">
+          <layout-center max-width="1200px">
+            <layout-stack gap="4rem">
+              <layout-stack gap="1rem" center>
+                <text size="3xl" weight="bold" align="center">Deploy in minutes, not hours</text>
+                <text color="subtle" align="center">A workflow designed for modern engineering teams.</text>
+              </layout-stack>
+
+              <div class="tabs-details pills" data-tabs-pills
+                style="--tab-count: 3; max-width: 900px; margin-inline: auto;">
+                <details name="beacon-steps" open style="--n: 1">
+                  <summary>1. Connect Repo</summary>
+                  <box py="4rem">
+                    <layout-split fraction="1fr 1fr" gap="4rem" align="center">
+                      <layout-stack gap="1rem">
+                        <text weight="bold" size="xl">Securely link your repository</text>
+                        <text color="subtle">Authorize Beacon to access your GitHub or GitLab. We automatically detect
+                          your tech stack and environment variables.</text>
+                      </layout-stack>
+                      <flex justify="center">
+                        <badge status="info" size="lg">GITHUB AUTHORIZED</badge>
+                      </flex>
+                    </layout-split>
+                  </box>
+                </details>
+
+                <details name="beacon-steps" style="--n: 2">
+                  <summary>2. Build & Test</summary>
+                  <box py="4rem">
+                    <layout-split fraction="1fr 1fr" gap="4rem" align="center">
+                      <layout-stack gap="1rem">
+                        <text weight="bold" size="xl">Continuous Integration</text>
+                        <text color="subtle">Every commit triggers a lightning-fast build. We run your test suite in
+                          parallel to ensure reliability.</text>
+                      </layout-stack>
+                      <flex justify="center">
+                        <badge status="success" size="lg">TESTS PASSED (0.8s)</badge>
+                      </flex>
+                    </layout-split>
+                  </box>
+                </details>
+
+                <details name="beacon-steps" style="--n: 3">
+                  <summary>3. Scale Globally</summary>
+                  <box py="4rem">
+                    <layout-split fraction="1fr 1fr" gap="4rem" align="center">
+                      <layout-stack gap="1rem">
+                        <text weight="bold" size="xl">Edge Deployment</text>
+                        <text color="subtle">Your app is pushed to every global node in the Beacon network, ensuring
+                          minimal latency for every user.</text>
+                      </layout-stack>
+                      <flex justify="center">
+                        <badge status="primary" size="lg">PROMOTED TO PROD</badge>
+                      </flex>
+                    </layout-split>
+                  </box>
+                </details>
+              </div>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── Pricing Section (Stripe) ── -->
+        <box py="6rem" bg="var(--surface-subtle)">
+          <layout-center max-width="1200px">
+            <layout-stack gap="4rem">
+              <layout-stack gap="1rem" center>
+                <text size="3xl" weight="bold" align="center">Simplified pricing</text>
+                <text color="subtle" align="center">Scale from $0 to enterprise with ease.</text>
+              </layout-stack>
+
+              <layout-grid min-item-size="320px" gap="2.5rem">
+                <!-- Hobby -->
+                <box p="2.5rem" bg="var(--base)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                  <layout-stack gap="2.5rem">
+                    <layout-stack gap="0.75rem">
+                      <text weight="bold" size="xl">Hobby</text>
+                      <flex align="baseline" gap="0.25rem">
+                        <text size="4xl" weight="black">$0</text>
+                        <text color="muted">/ mo</text>
+                      </flex>
+                      <text color="subtle" size="sm">Perfect for personal projects and experimentation.</text>
+                    </layout-stack>
+                    <a href="#cta" class="button button-outline" style="width: 100%;">Get Started Free</a>
+                    <list gap="1rem">
+                      <list-item>
+                        <flex gap="0.75rem" align="baseline"><text color="success">✓</text> <text size="sm">3 active
+                            projects</text></flex>
+                      </list-item>
+                      <list-item>
+                        <flex gap="0.75rem" align="baseline"><text color="success">✓</text> <text size="sm">100 GB
+                            bandwidth</text></flex>
+                      </list-item>
+                    </list>
+                    </list>
+                </box>
+                <!-- Pro -->
+                <box p="2.5rem" bg="var(--base)" border="2px solid var(--accent)" radius="var(--radius-lg)"
+                  class="shadow-xl" style="position: relative;">
+                  <badge status="primary" size="md"
+                    style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%);">RECOMMENDED</badge>
+                  <layout-stack gap="2.5rem">
+                    <layout-stack gap="0.75rem">
+                      <text weight="bold" size="xl">Pro</text>
+                      <flex align="baseline" gap="0.25rem">
+                        <text size="4xl" weight="black">$24</text>
+                        <text color="muted">/ mo / seat</text>
+                      </flex>
+                      <text color="subtle" size="sm">For scaling teams that need reliability and speed.</text>
+                    </layout-stack>
+                    <a href="#cta" class="button button-primary" style="width: 100%;">Start Free Trial</a>
+                    <list gap="1rem">
+                      <list-item>
+                        <flex gap="0.75rem" align="baseline"><text color="accent" weight="bold">✓</text> <text size="sm"
+                            weight="semibold">Unlimited projects</text></flex>
+                      </list-item>
+                    </list>
+                    </list>
+                </box>
+                <!-- Enterprise -->
+                <box p="2.5rem" bg="var(--base)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                  <layout-stack gap="2.5rem">
+                    <layout-stack gap="0.75rem">
+                      <text weight="bold" size="xl">Enterprise</text>
+                      <text size="4xl" weight="black">Custom</text>
+                      <text color="subtle" size="sm">For organizations with compliance and security needs.</text>
+                    </layout-stack>
+                    <a href="#cta" class="button button-outline" style="width: 100%;">Contact Sales</a>
+                    <list gap="1rem">
+                      <list-item>
+                        <flex gap="0.75rem" align="baseline"><text color="success">✓</text> <text size="sm">SSO /
+                            SAML</text></flex>
+                      </list-item>
+                    </list>
+                    </list>
+                </box>
+              </layout-grid>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── FAQ Section (Details / Summary) ── -->
+        <box py="6rem" id="faq">
+          <layout-center max-width="900px">
+            <layout-stack gap="3rem">
+              <layout-stack gap="1rem" center>
+                <badge role="subtle" size="md" class="stack-intrinsic">FAQ</badge>
+                <text size="3xl" weight="bold" align="center">Questions teams ask before they switch</text>
+                <text color="subtle" align="center" style="max-width: 60ch;">
+                  Everything Beacon needs to be useful on day one, without adding a new deployment platform learning curve.
+                </text>
+              </layout-stack>
+
+              <div class="accordion" style="--accordion-gap: 1rem;">
+                <details data-disclosure="bordered" open>
+                  <summary>Does Beacon replace our current CI pipeline?</summary>
+                  <box p="1.5rem">
+                    <text color="subtle">
+                      Beacon can run builds, tests, previews, and production deployments out of the box. Teams with existing CI often start by using Beacon for preview environments and production promotion, then consolidate more pipeline steps over time.
+                    </text>
+                  </box>
+                </details>
+
+                <details data-disclosure="bordered">
+                  <summary>How fast can we migrate an existing app?</summary>
+                  <box p="1.5rem">
+                    <text color="subtle">
+                      Most teams ship a first preview in under ten minutes. Beacon auto-detects common frameworks, pulls environment variables, and gives you a working build path before you need to tune anything advanced.
+                    </text>
+                  </box>
+                </details>
+
+                <details data-disclosure="bordered">
+                  <summary>Can we control promotion to production?</summary>
+                  <box p="1.5rem">
+                    <text color="subtle">
+                      Yes. You can gate production with approvals, test checks, protected branches, or scheduled rollouts. Preview deployments stay automatic, while production can match however strict your release process needs to be.
+                    </text>
+                  </box>
+                </details>
+
+                <details data-disclosure="bordered">
+                  <summary>What happens with environment variables and secrets?</summary>
+                  <box p="1.5rem">
+                    <text color="subtle">
+                      Secrets are scoped by environment and project, with audit history and rotation support. Teams can separate preview, staging, and production credentials without duplicating app configuration manually.
+                    </text>
+                  </box>
+                </details>
+
+                <details data-disclosure="bordered">
+                  <summary>Is Beacon only for frontend apps?</summary>
+                  <box p="1.5rem">
+                    <text color="subtle">
+                      No. It works well for frontend frameworks, APIs, background services, and multi-service repos. The platform is designed around deployments and observability, not a single framework or runtime.
+                    </text>
+                  </box>
+                </details>
+              </div>
+            </layout-stack>
+          </layout-center>
+        </box>
+
+        <!-- ── Final CTA (Stripe) ── -->
+        <box py="8rem" id="cta">
+          <layout-center max-width="1200px">
+            <box p="5rem" bg="var(--accent)" radius="var(--radius-xl)" class="bg-accent shadow-lg" align="center">
+              <layout-stack gap="3rem">
+                <layout-stack gap="1.5rem">
+                  <text size="4xl" weight="black" align="center" color="overt">Ready to ship faster?</text>
+                  <box max-width="50ch" mx="auto">
+                    <text size="xl" align="center" color="overt" style="opacity: 0.9;">
+                      Join 12,000+ teams shipping with confidence. Deploy your first application in under five minutes.
+                    </text>
+                  </box>
+                </layout-stack>
+                <flex gap="1.5rem" justify="center" wrap="wrap">
+                  <a href="#pricing" class="button button-primary"
+                    style="padding: 1rem 2.5rem; font-size: 1.25rem;">Get
+                    Started Free</a>
+                  <a href="#" class="button button-outline"
+                    style="padding: 1rem 2.5rem; font-size: 1.25rem;">Talk
+                    to Sales</a>
+                </flex>
+              </layout-stack>
+            </box>
+          </layout-center>
+        </box>
+
+      </layout-stack>
+    </main>
+
+    <!-- ╔══════════════════════════════════════════════════════════════════════════╗
+         ║  FOOTER                                                              ║
+         ╚══════════════════════════════════════════════════════════════════════════╝ -->
+    <footer slot="footer">
+      <box py="5rem" border-top="1px solid var(--outline-subtle)" bg="var(--surface-subtle)">
+        <layout-center max-width="1200px">
+          <grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="4rem">
+            <layout-stack gap="1.5rem">
+              <flex align="center" gap="0.75rem">
+                <badge status="primary" size="md">B</badge>
+                <text weight="bold" size="lg">Beacon</text>
+              </flex>
+              <text color="muted" size="sm" style="max-width: 25ch;">
+                The modern deployment platform for developers who build the future of the web.
+              </text>
+            </layout-stack>
+
+            <layout-stack gap="1.25rem">
+              <text weight="bold" size="sm" transform="uppercase" tracking="widest">Product</text>
+              <layout-stack gap="0.75rem">
+                <a href="#features" class="text-subtle text-sm">Features</a>
+                <a href="#pricing" class="text-subtle text-sm">Pricing</a>
+              </layout-stack>
+            </layout-stack>
+
+            <layout-stack gap="1.25rem">
+              <text weight="bold" size="sm" transform="uppercase" tracking="widest">Company</text>
+              <layout-stack gap="0.75rem">
+                <a href="#" class="text-subtle text-sm">About Us</a>
+                <a href="#" class="text-subtle text-sm">Contact</a>
+              </layout-stack>
+            </layout-stack>
+
+            <layout-stack gap="1.25rem">
+              <text weight="bold" size="sm" transform="uppercase" tracking="widest">Resources</text>
+              <layout-stack gap="0.75rem">
+                <a href="#" class="text-subtle text-sm">Documentation</a>
+                <a href="#" class="text-subtle text-sm">API Reference</a>
+              </layout-stack>
+            </layout-stack>
+          </grid>
+
+          <box pt="4rem" border-top="1px solid var(--outline-subtle)" mt="5rem">
+            <flex justify="between" align="center" wrap="wrap" gap="2rem">
+              <text size="xs" color="muted">© 2026 Beacon, Inc. All rights reserved.</text>
+              <flex gap="2rem">
+                <a href="#" class="text-muted text-xs">Twitter</a>
+                <a href="#" class="text-muted text-xs">GitHub</a>
+              </flex>
+            </flex>
+          </box>
+        </layout-center>
+      </box>
+    </footer>
+  </layout-page>
+</body>
+
+</html>

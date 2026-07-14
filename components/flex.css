@@ -18,7 +18,7 @@ flex {
   --flex-wrap:        attr(wrap type(*), nowrap);
   --justify-content:  attr(justify type(*), flex-start);
   --align-items:      attr(align type(*), stretch);
-  --gap:              attr(gap type(<length>), 1.5rem);
+  --gap:              attr(gap type(*), 1.5rem);
 
   display: flex;
   flex-direction: var(--flex-direction);
@@ -34,13 +34,13 @@ flex {
    */
   & > * {
     /* --- Individual Item Sizing and Ordering --- */
-    flex-grow:   attr(grow type(<number>), 0);
-    flex-shrink: attr(shrink type(<number>), 1);
-    flex-basis:  attr(basis type(<length-percentage>), auto);
-    order:       attr(order type(<integer>), 0);
+    flex-grow:   attr(grow type(*), 0);
+    flex-shrink: attr(shrink type(*), 1);
+    flex-basis:  attr(basis type(*), auto);
+    order:       attr(order type(*), 0);
 
     /* --- Individual Item Alignment --- */
-    align-self:  attr(align-self type(<custom-ident>), auto);
+    align-self:  attr(align-self type(*), auto);
   }
 
   /*

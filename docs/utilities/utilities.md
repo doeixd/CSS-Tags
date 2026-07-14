@@ -9,7 +9,7 @@ Semantic background colors using surface tokens.
 ### Surface Backgrounds
 - `.bg-surface-muted`: Muted surface background
 - `.bg-surface-subtle`: Subtle surface background  
-- `.bg-surface-default`: Default surface background
+- `.bg-surface`: Default surface background
 - `.bg-surface-overt`: Overt surface background (high contrast)
 
 **CSS:** `background-color: var(--bg);` where `--bg` is set to the appropriate surface token.
@@ -167,38 +167,11 @@ Control positioning relative to anchors:
 - `.scrim`: Semi-transparent dark overlay
 - `.scrim-light`: Light scrim overlay
 
-## Box Model Utilities
-
-Advanced box styling utilities that set multiple CSS custom properties for use with box components.
-
-### Surface Boxes
-- `.box-surface-muted`: Muted surface with subtle border
-- `.box-surface-default`: Default surface with default border
-- `.box-surface-overt`: Overt surface with overt border and text
-
-**Sets Properties:**
-- `--b-bg`: Background color
-- `--b-bc`: Border color
-- `--b-fg`: Text color (overt only)
-
-### Border Radius
-- `.box-rounded`: Medium border radius
-- `.box-rounded-lg`: Large border radius
-
-**Sets Property:** `--b-r`: Border radius value
-
-### Elevation/Shadows
-- `.box-elev-1`: Small shadow
-- `.box-elev-2`: Medium shadow
-- `.box-elev-3`: Large shadow
-
-**Sets Property:** `--b-shadow`: Shadow value
-
 ## Usage Examples
 
 ```html
-<!-- Surface with elevation -->
-<div class="box-surface-default box-rounded box-elev-2">
+<!-- Surface utility -->
+<div class="bg-surface p-md">
   <p class="text-default">Content</p>
 </div>
 
@@ -222,6 +195,12 @@ Advanced box styling utilities that set multiple CSS custom properties for use w
 - Import this file in the utilities layer of `index.css`
 - Combine with component classes for complete styling
 - Use semantic utilities over arbitrary values
+
+## Notes
+
+- the current utility surface classes are `.bg-surface-*`, not `.bg-surface-default`
+- the current utilities file does not ship `box-surface-*` or `box-elev-*` helper classes
+- use utility backgrounds with normal border/radius/shadow utilities or component APIs instead
 ## Related Files
 - `core/tokens.css`: Defines all the tokens used by these utilities
 - `components/box.css`: Box component that uses `--b-*` properties

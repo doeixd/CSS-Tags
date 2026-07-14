@@ -16,7 +16,7 @@
     flex-direction: column;
     background-color: var(--b-bg, oklch(from var(--theme-bg) calc(l + 0.05) c h));
     color: var(--b-fg, inherit);
-    border-radius: var(--b-r, attr(radius type(<length>), 0.75rem));
+    border-radius: var(--b-r, attr(radius type(*), 0.75rem));
     border: var(--b-bw, 0) solid var(--b-bc, transparent);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

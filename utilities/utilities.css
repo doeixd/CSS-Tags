@@ -11,12 +11,12 @@
   /* BACKGROUND COLORS                           */
   /* ============================================ */
 
-  .bg-base { background-color: var(--base); }
-  .bg-bedrock { background-color: var(--bedrock); }
-  .bg-surface-muted { background-color: var(--surface-muted); }
-  .bg-surface-subtle { background-color: var(--surface-subtle); }
-  .bg-surface { background-color: var(--surface); }
-  .bg-surface-overt { background-color: var(--surface-overt); }
+  .bg-base { background-color: var(--base); --bg: var(--base); }
+  .bg-bedrock { background-color: var(--bedrock); --bg: var(--bedrock); }
+  .bg-surface-muted { background-color: var(--surface-muted); --bg: var(--surface-muted); }
+  .bg-surface-subtle { background-color: var(--surface-subtle); --bg: var(--surface-subtle); }
+  .bg-surface { background-color: var(--surface); --bg: var(--surface); }
+  .bg-surface-overt { background-color: var(--surface-overt); --bg: var(--surface-overt); }
 
   /* Legacy framework compatibility */
   .surface-bg { background-color: var(--surface); }
@@ -92,8 +92,40 @@
      color: var(--accent-on-base);
    }
 
-   /* ============================================ */
-   /* OUTLINE/BORDER COLORS                       */
+    /* On secondary background, use appropriate text */
+    .bg-secondary .text,
+    .bg-secondary .text-muted,
+    .bg-secondary .text-subtle,
+    .bg-secondary .text-overt {
+      color: var(--text-on-secondary);
+    }
+
+    .bg-secondary .button {
+      color: var(--text-on-secondary);
+      border-color: var(--secondary-overt);
+    }
+    .bg-secondary .button-secondary {
+      color: var(--text-on-secondary);
+    }
+
+    /* On tertiary background, use appropriate text */
+    .bg-tertiary .text,
+    .bg-tertiary .text-muted,
+    .bg-tertiary .text-subtle,
+    .bg-tertiary .text-overt {
+      color: var(--text-on-tertiary);
+    }
+
+    .bg-tertiary .button {
+      color: var(--text-on-tertiary);
+      border-color: var(--tertiary-overt);
+    }
+    .bg-tertiary .button-secondary {
+      color: var(--text-on-tertiary);
+    }
+
+    /* ============================================ */
+    /* OUTLINE/BORDER COLORS                       */
    /* ============================================ */
 
   .border-muted { border-color: var(--outline-muted); }
@@ -120,12 +152,12 @@
   /* ACCENT COLORS                               */
   /* ============================================ */
 
-  .bg-accent { background-color: var(--accent); }
-  .bg-accent-muted { background-color: var(--accent-muted); }
-  .bg-accent-subtle { background-color: var(--accent-subtle); }
-  .bg-accent-surface { background-color: var(--accent-surface); }
-  .bg-accent-overt { background-color: var(--accent-overt); }
-  .bg-accent-highlight { background-color: var(--accent-highlight); }
+  .bg-accent { background-color: var(--accent); --bg: var(--accent); }
+  .bg-accent-muted { background-color: var(--accent-muted); --bg: var(--accent-muted); }
+  .bg-accent-subtle { background-color: var(--accent-subtle); --bg: var(--accent-subtle); }
+  .bg-accent-surface { background-color: var(--accent-surface); --bg: var(--accent-surface); }
+  .bg-accent-overt { background-color: var(--accent-overt); --bg: var(--accent-overt); }
+  .bg-accent-highlight { background-color: var(--accent-highlight); --bg: var(--accent-highlight); }
 
   .text-accent { color: var(--accent); }
   .text-accent-muted { color: var(--accent-muted); }
@@ -140,38 +172,42 @@
   /* SECONDARY COLORS                            */
   /* ============================================ */
 
-  .bg-secondary { background-color: var(--secondary); }
-  .bg-secondary-muted { background-color: var(--secondary-muted); }
-  .bg-secondary-subtle { background-color: var(--secondary-subtle); }
-  .bg-secondary-overt { background-color: var(--secondary-overt); }
+  .bg-secondary { background-color: var(--secondary); --bg: var(--secondary); }
+  .bg-secondary-muted { background-color: var(--secondary-muted); --bg: var(--secondary-muted); }
+  .bg-secondary-subtle { background-color: var(--secondary-subtle); --bg: var(--secondary-subtle); }
+  .bg-secondary-overt { background-color: var(--secondary-overt); --bg: var(--secondary-overt); }
+  .bg-secondary-highlight { background-color: var(--secondary-highlight); --bg: var(--secondary-highlight); }
 
   .text-secondary { color: var(--secondary); }
   .text-secondary-muted { color: var(--secondary-muted); }
   .text-secondary-subtle { color: var(--secondary-subtle); }
   .text-secondary-overt { color: var(--secondary-overt); }
+  .text-on-secondary { color: var(--text-on-secondary); }
 
   /* ============================================ */
   /* TERTIARY COLORS                             */
   /* ============================================ */
 
-  .bg-tertiary { background-color: var(--tertiary); }
-  .bg-tertiary-muted { background-color: var(--tertiary-muted); }
-  .bg-tertiary-subtle { background-color: var(--tertiary-subtle); }
-  .bg-tertiary-overt { background-color: var(--tertiary-overt); }
+  .bg-tertiary { background-color: var(--tertiary); --bg: var(--tertiary); }
+  .bg-tertiary-muted { background-color: var(--tertiary-muted); --bg: var(--tertiary-muted); }
+  .bg-tertiary-subtle { background-color: var(--tertiary-subtle); --bg: var(--tertiary-subtle); }
+  .bg-tertiary-overt { background-color: var(--tertiary-overt); --bg: var(--tertiary-overt); }
+  .bg-tertiary-highlight { background-color: var(--tertiary-highlight); --bg: var(--tertiary-highlight); }
 
   .text-tertiary { color: var(--tertiary); }
   .text-tertiary-muted { color: var(--tertiary-muted); }
   .text-tertiary-subtle { color: var(--tertiary-subtle); }
   .text-tertiary-overt { color: var(--tertiary-overt); }
+  .text-on-tertiary { color: var(--text-on-tertiary); }
 
   /* ============================================ */
   /* SEMANTIC COLORS                             */
   /* ============================================ */
 
-  .bg-success { background-color: var(--surface-success); }
-  .bg-warning { background-color: var(--surface-warning); }
-  .bg-error { background-color: var(--surface-error); }
-  .bg-info { background-color: var(--surface-info); }
+  .bg-success { background-color: var(--surface-success); --bg: var(--surface-success); }
+  .bg-warning { background-color: var(--surface-warning); --bg: var(--surface-warning); }
+  .bg-error { background-color: var(--surface-error); --bg: var(--surface-error); }
+  .bg-info { background-color: var(--surface-info); --bg: var(--surface-info); }
 
   .text-success { color: var(--text-success); }
   .text-warning { color: var(--text-warning); }
@@ -216,20 +252,20 @@
   .button-primary {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: var(--accent-on-base);
+    color: var(--text-on-accent);
   }
-  .button-primary:hover { background-color: var(--accent-overt); }
-  .button-primary:active { background-color: var(--accent-highlight); }
-  .button-primary:disabled { background-color: var(--accent-muted); }
+  .button-primary:hover { background-color: var(--accent-overt); color: var(--text-on-accent); }
+  .button-primary:active { background-color: var(--accent-highlight); color: var(--text-on-accent); }
+  .button-primary:disabled { background-color: var(--accent-muted); color: var(--text-on-accent); }
 
   .button-secondary {
     background-color: var(--secondary);
     border-color: var(--secondary);
-    color: var(--secondary-on-base);
+    color: var(--text-on-secondary);
   }
-  .button-secondary:hover { background-color: var(--secondary-overt); }
-  .button-secondary:active { background-color: var(--secondary-highlight); }
-  .button-secondary:disabled { background-color: var(--secondary-muted); }
+  .button-secondary:hover { background-color: var(--secondary-overt); color: var(--text-on-secondary); }
+  .button-secondary:active { background-color: var(--secondary-highlight); color: var(--text-on-secondary); }
+  .button-secondary:disabled { background-color: var(--secondary-muted); color: var(--text-on-secondary); }
 
   .button-outline {
     background-color: transparent;

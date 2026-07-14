@@ -47,7 +47,7 @@ See it for yourself in 60 seconds. Copy the code below into an `index.html` file
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale-1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSS Tags Demo</title>
   
   <!-- 1. Add the stylesheet. That's the only setup. -->
@@ -85,6 +85,8 @@ See it for yourself in 60 seconds. Copy the code below into an `index.html` file
 *   **[Utilities Guide](./docs/utilities/)** - Utility classes reference
 *   **[Examples](./examples/)** - Interactive demos and real-world patterns
 *   **[Theming Guide](./docs/theming.md)** - Advanced theming and customization
+*   **[TypeScript Guide](./website/src/content/docs/guides/typescript.md)** - DOM and JSX globals for custom tags
+*   **[Type Declarations](./types/css-tags.d.ts)** - Shipped custom-element attribute types
 
 
 ## 🏛️ The Foundational Pillars of CSS Tags
@@ -727,10 +729,10 @@ For production use, it's best to host the file yourself.
 2.  Place it in your project's CSS directory.
 3.  Link to it in your HTML: `<link rel="stylesheet" href="your-css-folder/index.css">`.
 
-### NPM (Coming Soon)
-```bash
-npm install css-tags
-```
+### Package status
+
+CSS Tags is not currently published to npm. For production, vendor the stylesheet
+or pin a specific Git commit/tag in your jsDelivr URL instead of using `@latest`.
 
 ## 🛠️ Customization Deep Dive
 

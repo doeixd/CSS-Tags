@@ -3,6 +3,8 @@ title: Getting Started
 description: Get your project running with CSS Tags in three simple steps.
 ---
 
+import LiveExample from '../../../components/LiveExample.astro';
+
 Get your project running with CSS Tags in three simple steps.
 
 ## 1. Include the CSS
@@ -22,14 +24,23 @@ For production use, host the file yourself:
 2. Place it in your project's CSS directory
 3. Link to it: `<link rel="stylesheet" href="your-css-folder/index.css">`
 
-### NPM (Coming Soon)
-```bash
-npm install css-tags
+### Pin a version
+
+`@latest` is convenient while experimenting, but production sites should pin a commit or release so an upstream change cannot alter a deployed page unexpectedly:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@COMMIT_OR_TAG/index.css">
+```
+
+There is not currently an npm package. If your build imports local CSS, clone or vendor the repository and import its root entry point:
+
+```css
+@import url("./vendor/css-tags/index.css");
 ```
 
 ## 2. Write Semantic HTML
 
-Use the provided custom elements to structure your content logically. The styles are applied automatically.
+Use semantic HTML first, then add a custom tag, class, or `data-*` host where the component needs one. The styles are applied automatically.
 
 ```html
 <layout-page>
@@ -59,6 +70,25 @@ Create a `<style>` tag or a local CSS file to override the default design tokens
 ## Your First Component
 
 Let's create a complete page to see CSS Tags in action:
+
+<LiveExample title="Your first CSS Tags card" description="This is the rendered result of the HTML below.">
+  <layout-center max-width="70ch">
+    <card>
+      <card-body>
+        <card-header>Hello, CSS Tags!</card-header>
+        <card-content>
+          <p>This card is styled by the shipped stylesheet and responds to its container.</p>
+        </card-content>
+        <card-footer>
+          <layout-cluster gap="var(--space-sm)">
+            <button>Get started</button>
+            <button class="btn-secondary">Learn more</button>
+          </layout-cluster>
+        </card-footer>
+      </card-body>
+    </card>
+  </layout-center>
+</LiveExample>
 
 ```html
 <!DOCTYPE html>
@@ -180,6 +210,16 @@ CSS Tags comes with a complete design token system:
 
 CSS Tags includes powerful layout primitives:
 
+Resize the browser or documentation sidebar to see the grid adapt to the space available.
+
+<LiveExample title="Responsive grid" description="No media query or JavaScript required.">
+  <layout-grid min-item-size="10rem" gap="var(--space-md)">
+    <div class="example-panel"><strong>Analytics</strong><br /><span class="example-muted">12.4k visits</span></div>
+    <div class="example-panel"><strong>Orders</strong><br /><span class="example-muted">318 today</span></div>
+    <div class="example-panel"><strong>Conversion</strong><br /><span class="example-muted">4.8 percent</span></div>
+  </layout-grid>
+</LiveExample>
+
 ### Center Content
 ```html
 <layout-center max-width="60ch">
@@ -223,6 +263,25 @@ CSS Tags includes powerful layout primitives:
 ```
 
 ## UI Components
+
+The previews below use the semantic state attributes that the CSS already understands.
+
+<LiveExample title="Feedback and status" description="Status changes both the surface and contrast text.">
+  <layout-stack gap="var(--space-sm)">
+    <div class="alert" status="success" role="status">
+      <span class="alert__icon" aria-hidden="true">✓</span>
+      <div>
+        <div class="alert__title">Changes saved</div>
+        <div class="alert__body">Your profile is now up to date.</div>
+      </div>
+    </div>
+    <layout-cluster gap="var(--space-sm)">
+      <badge status="success">Ready</badge>
+      <badge status="warning">Needs review</badge>
+      <badge status="info">Draft</badge>
+    </layout-cluster>
+  </layout-stack>
+</LiveExample>
 
 ### Cards
 ```html

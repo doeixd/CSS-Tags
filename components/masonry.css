@@ -12,7 +12,7 @@
 @mixin --masonry(
   --direction type(*): 'column',
   --tracks type(*): 'repeat(auto-fill, auto)',
-  --gap type(<length>): 1.5rem
+  --gap type(*): 1.5rem
 ) {
   display: masonry;
   masonry-direction: var(--direction);
@@ -21,19 +21,28 @@
   @when (var(--direction) = 'row') { grid-template-rows: var(--tracks); }
 }
 
-/* 2. COMPONENT (for use in HTML) */
-masonry-layout {
-  display: masonry;
+/* 2. COMPONENT (for use in HTML)
+ * Standard grid is the baseline. Browsers with masonry support enhance it. */
+:is(masonry-layout, [data-masonry], .masonry-layout) {
+  display: grid;
   masonry-direction: attr(direction type(*), column);
-  gap: attr(gap type(<length>), 1.5rem);
-  item-tolerance: attr(tolerance type(<length>), 0);
-  /* Apply track definitions based on direction */
-  grid-template-columns: attr(cols type(*), 'repeat(auto-fill, auto)');
+  gap: attr(gap type(*), 1.5rem);
+  item-tolerance: attr(tolerance type(*), 0);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  grid-template-columns: attr(cols type(*), repeat(auto-fit, minmax(min(100%, 16rem), 1fr)));
   grid-template-rows: attr(rows type(*), none);
+  grid-auto-flow: dense;
+}
+
+@supports (display: masonry) {
+  :is(masonry-layout, [data-masonry], .masonry-layout) {
+    display: masonry;
+    grid-auto-flow: initial;
+  }
 }
 
 /* Item spanning for the component */
-masonry-layout > * {
+:is(masonry-layout, [data-masonry], .masonry-layout) > * {
   grid-column: attr(col type(*), auto);
   grid-row: attr(row type(*), auto);
 }

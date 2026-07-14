@@ -2,146 +2,188 @@
  * navigation.css
  *
  * Responsive navigation components: navbar and sidebar.
- * ------------------------------------------------------------------------------
- * @feature {@scope} - Isolates navigation styles.
- * @feature {Container Queries} - Mobile-first responsive design.
- * @feature {CSS Nesting} - Organized styles.
+ * Supports the documented custom elements and class aliases.
  */
 
-@scope (.navbar, .sidebar) {
-   /* Navbar styles */
-   .navbar {
-    container-type: inline-size;
-    container-name: navbar-container;
+/* ================= Navbar ================= */
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) {
+  color: var(--text-default);
+  container-type: inline-size;
+  container-name: navbar-container;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md, 1rem);
+  padding: var(--spacing-md, 1rem);
+  background-color: var(--nav-background, var(--bg, var(--surface-default)));
+  border-bottom: var(--border-width, 1px) solid var(--nav-border-color, var(--outline-subtle));
+  position: sticky;
+  top: 0;
+  z-index: var(--nav-z-index, var(--z-index-50, 50));
+}
 
-    display: flex;
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-brand {
+  color: var(--nav-brand-color, var(--text-overt));
+  font-size: var(--nav-brand-font-size, var(--font-size-lg, 1.125rem));
+  font-weight: var(--nav-brand-font-weight, var(--font-weight-bold, 700));
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--nav-links-gap, var(--spacing-sm, 0.5rem));
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links > li {
+  margin: 0;
+  padding: 0;
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--nav-link-color, var(--text-default));
+  text-decoration: none;
+  padding: var(--nav-link-padding-block, var(--spacing-sm, 0.5rem)) var(--nav-link-padding-inline, var(--spacing-md, 1rem));
+  border-radius: var(--nav-link-radius, var(--radius-md, 6px));
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--nav-link-hover-background, var(--highlight-bg-subtle));
+    color: var(--nav-link-hover-color, var(--text-overt));
+    outline: none;
+  }
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle {
+  display: none;
+  min-height: auto;
+  padding: var(--spacing-sm, 0.5rem);
+  border: var(--border-width, 1px) solid var(--nav-toggle-border-color, transparent);
+  background: var(--nav-toggle-background, transparent);
+  color: var(--nav-toggle-color, var(--text-default));
+  box-shadow: none;
+}
+
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle:hover,
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle:focus-visible {
+  background: var(--nav-toggle-hover-background, var(--highlight-bg-subtle));
+  border-color: var(--nav-toggle-hover-border-color, var(--outline-subtle));
+  color: var(--nav-toggle-hover-color, var(--text-overt));
+}
+
+@container navbar-container (max-width: 48rem) {
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) {
+    position: relative;
     align-items: center;
-    justify-content: space-between;
-    padding: var(--spacing-md, 1rem);
-    background-color: var(--bg, var(--surface-default));
-    border-bottom: var(--border-width, 1px) solid var(--outline-subtle);
-    position: sticky;
-    top: 0;
-    z-index: var(--z-index-50, 50);
+    flex-wrap: wrap;
   }
 
-   .navbar .nav-brand {
-    font-size: var(--font-size-lg, 1.125rem);
-    font-weight: var(--font-weight-bold, 700);
-    color: var(--text-overt);
-    text-decoration: none;
-  }
-
-  nav-navbar .nav-links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: var(--spacing-md, 1rem);
-  }
-
-   .navbar .nav-link {
-    color: var(--text-default);
-    text-decoration: none;
-    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-    border-radius: var(--radius-md, 6px);
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: var(--highlight-bg-subtle);
-    }
-  }
-
-     .navbar .nav-toggle {
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links {
     display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: var(--spacing-sm, 0.5rem);
-    color: var(--text-default);
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    position: absolute;
+    top: calc(100% + var(--border-width, 1px));
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: var(--nav-menu-background, var(--surface-default));
+    border: var(--border-width, 1px) solid var(--nav-menu-border-color, var(--outline-subtle));
+    border-radius: 0 0 var(--radius-md, 6px) var(--radius-md, 6px);
+    padding: var(--spacing-md, 1rem);
+    box-shadow: var(--shadow-dropdown, none);
   }
 
-  /* Mobile responsive */
-  @container navbar-container (max-width: 768px) {
-    .navbar .nav-links {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background-color: var(--surface-default);
-      border-top: var(--border-width, 1px) solid var(--outline-subtle);
-      padding: var(--spacing-md, 1rem);
-    }
-
-     .navbar .nav-links.active {
-      display: flex;
-    }
-
-    .navbar .nav-toggle {
-      display: block;
-    }
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-links.active {
+    display: flex;
   }
 
-   /* Sidebar styles */
-   .sidebar {
-    width: var(--width, 250px);
-    background-color: var(--bg, var(--surface-default));
-    border-right: var(--border-width, 1px) solid var(--outline-subtle);
-    padding: var(--spacing-lg, 1.5rem);
-    height: 100vh;
-    position: sticky;
-    top: 0;
-    overflow-y: auto;
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-link {
+    width: 100%;
+    justify-content: flex-start;
   }
 
-   .sidebar .sidebar-nav {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-   .sidebar .sidebar-link {
-    display: block;
-    color: var(--text-default);
-    text-decoration: none;
-    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-    border-radius: var(--radius-md, 6px);
-    margin-bottom: var(--spacing-xs, 0.25rem);
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: var(--highlight-bg-subtle);
-    }
-  }
-
-   .sidebar .sidebar-section {
-    margin-top: var(--spacing-lg, 1.5rem);
-    font-weight: var(--font-weight-semibold, 600);
-    color: var(--text-overt);
+  :where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-toggle {
+    display: inline-flex;
+    margin-inline-start: auto;
   }
 }
 
-/* Sidebar layout */
+/* ================= Sidebar ================= */
+:where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) {
+  width: var(--width, var(--sidebar-width, 250px));
+  height: var(--sidebar-height, 100vh);
+  max-height: var(--sidebar-max-height, none);
+  background-color: var(--nav-sidebar-background, var(--bg, var(--surface-default)));
+  border-right: var(--border-width, 1px) solid var(--nav-sidebar-border-color, var(--outline-subtle));
+  padding: var(--nav-sidebar-padding, var(--spacing-lg, 1.5rem));
+  position: sticky;
+  top: var(--nav-sidebar-top, 0);
+  overflow-y: auto;
+  color: var(--text-default);
+}
+
+:where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) .sidebar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) .sidebar-link {
+  display: block;
+  color: var(--sidebar-link-color, var(--text-default));
+  text-decoration: none;
+  padding: var(--sidebar-link-padding-block, var(--spacing-sm, 0.5rem)) var(--sidebar-link-padding-inline, var(--spacing-md, 1rem));
+  border-radius: var(--sidebar-link-radius, var(--radius-md, 6px));
+  margin-bottom: var(--spacing-xs, 0.25rem);
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--sidebar-link-hover-background, var(--highlight-bg-subtle));
+    color: var(--sidebar-link-hover-color, var(--text-overt));
+    outline: none;
+  }
+}
+
+:where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) .sidebar-section {
+  margin-top: var(--sidebar-section-margin-top, var(--spacing-lg, 1.5rem));
+  margin-bottom: var(--sidebar-section-margin-bottom, var(--spacing-xs, 0.25rem));
+  color: var(--sidebar-section-color, var(--text-overt));
+  font-weight: var(--sidebar-section-font-weight, var(--font-weight-semibold, 600));
+}
+
 .sidebar-layout {
-   display: flex;
-   gap: var(--spacing-lg, 2rem);
-   flex-wrap: wrap;
+  display: flex;
+  gap: var(--spacing-lg, 2rem);
+  flex-wrap: wrap;
 }
 
-.sidebar-layout .sidebar {
-   flex-basis: 200px;
-   flex-grow: 1;
+.sidebar-layout :where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) {
+  flex-basis: 200px;
+  flex-grow: 1;
 }
 
 .sidebar-layout main {
-   flex-grow: 9999;
-   flex-basis: 50%;
+  flex-grow: 9999;
+  flex-basis: 50%;
+  min-width: min(100%, 20rem);
 }
 
-/* Utility classes */
-.nav-link-active {
-   background-color: var(--accent-subtle);
-   color: var(--text-overt);
- }
+.nav-link-active,
+.sidebar-link-active,
+:where(nav-navbar, [data-navbar], .navbar, .nav-navbar) .nav-link[aria-current="page"],
+:where(nav-sidebar, [data-sidebar], .sidebar, .nav-sidebar) .sidebar-link[aria-current="page"] {
+  background-color: var(--accent-subtle);
+  color: var(--text-overt);
+}
