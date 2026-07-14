@@ -1,130 +1,53 @@
 # Image Container (`components/img-container.css`)
 
-A comprehensive image container component with advanced features for modern image handling.
+The image container is a token-driven frame for native images and pictures. It supports `<img-container>`, `[data-img-container]`, and `.img-container` hosts.
 
-## Features
-
-- **Aspect Ratio Control**: Maintain consistent proportions
-- **Object Fit Options**: Cover, contain, fill, none, scale-down
-- **Lazy Loading**: Native lazy loading with JavaScript fallbacks
-- **Responsive Images**: srcset and sizes support
-- **Loading States**: Skeleton loading animations
-- **Error Handling**: Fallback images and error states
-- **Container Queries**: Responsive to container size
-- **Theme Variants**: Pre-built themes for common use cases
-
-## Basic Usage
+## Basic usage
 
 ```html
-<img-container aspect-ratio="16/9">
-  <img src="image.jpg" alt="Description" />
-</img-container>
+<picture data-img-container aspect-ratio="16 / 9" object-fit="cover">
+  <img src="landscape.jpg" alt="Mountain landscape" loading="lazy" />
+</picture>
 ```
 
-## Attributes
+Presentation attributes include `aspect-ratio`, `object-fit`, `object-position`, `radius`, `shadow`, `bg`, `transition`, and `theme`.
 
-### Container Attributes
+## Semantic states
 
-- `aspect-ratio`: CSS aspect-ratio value (e.g., "16/9", "1", "4/3")
-- `object-fit`: How image fits (cover, contain, fill, none, scale-down)
-- `object-position`: Position of image (center, top, bottom, etc.)
-- `radius`: Border radius
-- `shadow`: Box shadow
-- `bg`: Background color
-- `transition`: Transition effects
-- `lazy`: Enable lazy loading
-- `fallback-src`: Fallback image URL
-- `src`: Image source (applied to child img)
-- `srcset`: Responsive image sources
-- `sizes`: Size hints for responsive images
-- `alt`: Alt text for image
-
-### Responsive Attributes
-
-- `mobile-aspect-ratio`: Aspect ratio for small containers
-- `desktop-aspect-ratio`: Aspect ratio for large containers
-- `responsive`: Enable responsive aspect ratios
-
-### Theme Attributes
-
-- `theme`: Pre-built themes (card, hero, thumbnail)
-
-## Examples
-
-### Basic Aspect Ratio
+`aria-busy="true"` is the primary loading-state hook. `data-error` displays the error surface. The optional enhancement manages both states from native image load and error events.
 
 ```html
-<img-container aspect-ratio="16/9">
-  <img src="landscape.jpg" alt="Beautiful landscape" />
-</img-container>
+<div data-img-container aspect-ratio="4 / 3" aria-busy="true">
+  <img data-loading alt="Product preview" />
+</div>
+
+<script type="module" src="/components/img-container.js"></script>
 ```
 
-### Responsive Images
+## Responsive images
+
+Prefer native `srcset`, `sizes`, `<source>`, and `loading="lazy"` attributes. The script also accepts `src`, `srcset`, `sizes`, `alt`, `lazy`, and `fallback-src` on the host as progressive-enhancement shorthands.
 
 ```html
-<img-container aspect-ratio="16/9" srcset="small.jpg 480w, medium.jpg 768w, large.jpg 1024w" sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw">
-  <img src="medium.jpg" alt="Responsive image" />
-</img-container>
+<div
+  data-img-container
+  aspect-ratio="1"
+  fallback-src="/images/placeholder.svg"
+  error-message="Product image unavailable"
+>
+  <img src="/images/product.webp" alt="Blue ceramic mug" />
+</div>
 ```
 
-### Lazy Loading with Fallback
+## Responsive aspect ratios
 
-```html
-<img-container aspect-ratio="1" lazy fallback-src="placeholder.jpg">
-  <img data-src="image.jpg" alt="Lazy loaded image" />
-</img-container>
-```
+With `responsive`, `mobile-aspect-ratio` applies through 480px and `desktop-aspect-ratio` from 768px. These are viewport fallbacks; use a parent query container and custom CSS for contextual container-query behavior.
 
-### Themed Containers
+## Tokens
 
-```html
-<img-container theme="card" aspect-ratio="4/3" radius="0.75rem">
-  <img src="card-image.jpg" alt="Card image" />
-</img-container>
-```
-
-### Object Fit Options
-
-```html
-<img-container aspect-ratio="1" object-fit="contain" object-position="top">
-  <img src="portrait.jpg" alt="Portrait image" />
-</img-container>
-```
-
-## JavaScript Features
-
-The component includes JavaScript enhancements (`img-container.js`) for:
-
-- Loading state detection
-- Error handling with fallbacks
-- Intersection Observer lazy loading (fallback for older browsers)
-- Automatic responsive image application
-- Alt text propagation
-
-## CSS Custom Properties
-
-- `--ic-aspect-ratio`: Aspect ratio
-- `--ic-object-fit`: Object fit value
-- `--ic-object-position`: Object position
-- `--ic-radius`: Border radius
-- `--ic-shadow`: Box shadow
-- `--ic-bg`: Background color
-- `--ic-transition`: Transition
-
-## Browser Support
-
-- Modern browsers with CSS aspect-ratio support
-- Container queries for responsive behavior
-- JavaScript enhancements require ES6+ support
-
-## Integration
-
-Import the CSS in your component layer and include the JavaScript for enhanced functionality.
-
-```css
-@import url('components/img-container.css');
-```
-
-```html
-<script src="components/img-container.js" defer></script>
-```
+- `--ic-aspect-ratio`
+- `--ic-object-fit`, `--ic-object-position`
+- `--ic-radius`, `--ic-shadow`, `--ic-bg`
+- `--ic-loading-start`, `--ic-loading-middle`
+- `--ic-error-bg`, `--ic-error-border`, `--ic-error-color`
+- `--ic-transition`

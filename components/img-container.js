@@ -1,85 +1,75 @@
-/**
- * img-container.js
- *
- * JavaScript enhancements for the img-container component.
- * ------------------------------------------------------------------------------
- * Handles loading states, error recovery, lazy loading fallbacks, and responsive image generation.
- */
+/** Progressive enhancement for image-container loading, fallback, and host shorthands. */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const containers = document.querySelectorAll('img-container');
+function initializeImageContainers(root = document) {
+  const containers = root.querySelectorAll(':is(img-container, [data-img-container], .img-container)');
 
   containers.forEach(container => {
+    if (container.dataset.imgContainerInitialized === 'true') return;
+
     const img = container.querySelector('img');
     if (!img) return;
 
-    // Mark as loading
+    container.dataset.imgContainerInitialized = 'true';
+    container.setAttribute('aria-busy', 'true');
     img.setAttribute('data-loading', '');
 
-    // Handle load event
-    img.addEventListener('load', () => {
+    const markLoaded = () => {
       img.removeAttribute('data-loading');
+      img.removeAttribute('data-error');
+      img.setAttribute('data-loaded', '');
       img.setAttribute('loaded', '');
-    });
+      container.setAttribute('aria-busy', 'false');
+      container.removeAttribute('data-error');
+    };
 
-    // Handle error event
-    img.addEventListener('error', () => {
-      img.setAttribute('data-error', '');
-
-      // Try fallback if provided
+    const markFailed = () => {
       const fallback = container.getAttribute('fallback-src');
-      if (fallback && img.src !== fallback) {
-        img.src = fallback;
+
+      if (fallback && container.dataset.fallbackAttempted !== 'true') {
+        container.dataset.fallbackAttempted = 'true';
         img.removeAttribute('data-error');
         img.setAttribute('data-loading', '');
+        img.src = fallback;
+        return;
       }
-    });
 
-    // Intersection Observer for lazy loading (fallback for browsers without native lazy)
-    if ('IntersectionObserver' in window && !('loading' in HTMLImageElement.prototype)) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            if (img.hasAttribute('data-src')) {
-              img.src = img.getAttribute('data-src');
-              img.removeAttribute('data-src');
-            }
-            if (img.hasAttribute('data-srcset')) {
-              img.srcset = img.getAttribute('data-srcset');
-              img.removeAttribute('data-srcset');
-            }
-            observer.unobserve(img);
-          }
-        });
-      });
+      img.removeAttribute('data-loading');
+      img.setAttribute('data-error', '');
+      container.setAttribute('aria-busy', 'false');
+      container.setAttribute('data-error', '');
+    };
 
-      if (img.hasAttribute('data-src') || img.hasAttribute('data-srcset')) {
-        observer.observe(img);
-      }
+    img.addEventListener('load', markLoaded);
+    img.addEventListener('error', markFailed);
+
+    if (container.hasAttribute('lazy') && !img.hasAttribute('loading')) {
+      img.loading = 'lazy';
     }
 
-    // Generate responsive images if attributes provided
-    const src = container.getAttribute('src');
-    const srcset = container.getAttribute('srcset');
+    const src = container.getAttribute('src') || img.getAttribute('data-src');
+    const srcset = container.getAttribute('srcset') || img.getAttribute('data-srcset');
     const sizes = container.getAttribute('sizes');
-
-    if (src && !img.src) {
-      img.src = src;
-    }
-
-    if (srcset) {
-      img.srcset = srcset;
-    }
-
-    if (sizes) {
-      img.sizes = sizes;
-    }
-
-    // Alt text handling
     const alt = container.getAttribute('alt');
-    if (alt && !img.alt) {
-      img.alt = alt;
+
+    if (srcset) img.srcset = srcset;
+    if (sizes) img.sizes = sizes;
+    if (alt && !img.hasAttribute('alt')) img.alt = alt;
+    if (src && !img.getAttribute('src')) img.src = src;
+
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-srcset');
+
+    if (img.complete && img.currentSrc) {
+      if (img.naturalWidth > 0) markLoaded();
+      else markFailed();
     }
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => initializeImageContainers(), { once: true });
+} else {
+  initializeImageContainers();
+}
+
+export { initializeImageContainers };

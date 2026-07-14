@@ -658,7 +658,7 @@ Pre-built UI components with scoped styling and modern CSS features.
 *   `<container>`: Responsive container with max-widths. [[docs/components/container.md](docs/components/container.md)]
 *   `<flex>`: Flexible layout container. [[docs/components/flex.md](docs/components/flex.md)]
 *   `<grid>`: CSS Grid-based layout component. [[docs/components/grid.md](docs/components/grid.md)]
-*   `<img-container>`: Responsive image containers with aspect ratios. [[docs/components/img-container.md](docs/components/img-container.md)]
+*   Image containers: Token-driven frames available as `<img-container>`, `[data-img-container]`, or `.img-container`. [[docs/components/img-container.md](docs/components/img-container.md)]
 *   `<list>`: Styled lists with variants. [[docs/components/list.md](docs/components/list.md)]
 *   `<masonry>`: Pinterest-style masonry layout. [[docs/components/masonry.md](docs/components/masonry.md)]
 *   `<navigation>`: Navigation components. [[docs/components/navigation.md](docs/components/navigation.md)]
@@ -703,9 +703,9 @@ Pre-built and customizable theme systems.
 ### JavaScript Enhancements
 Interactive components with JavaScript enhancement.
 
-*   **Carousel Component**: Touch/swipe navigation and auto-play. [[carousel.js.md](carousel.js.md)]
-*   **Image Container**: Responsive image handling. [[img-container.js.md](img-container.js.md)]
-*   **View Transitions**: Page transition management. [[view-transition.js.md](view-transition.js.md)]
+*   **Carousel Component**: Touch/swipe navigation and looping. [[carousel.js](carousel.js)]
+*   **Image Container**: Loading, fallback, and responsive-image enhancement. [[components/img-container.js](components/img-container.js)]
+*   **View Transitions**: Page transition management. [[view-transition.js](view-transition.js)]
 
 ## 🎨 Advanced Concepts
 

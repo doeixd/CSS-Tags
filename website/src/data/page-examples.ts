@@ -62,8 +62,8 @@ const examples: Record<string, PageExampleDefinition> = {
     "components/img-container": {
         title: "A cropped, responsive image frame",
         description: "The host owns aspect ratio, fit, radius, loading, and error presentation.",
-        preview: `<img-container aspect-ratio="16 / 7" object-fit="cover" radius="var(--radius-lg)" theme="card"><img loaded src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20800%20350'%3E%3Crect%20width='800'%20height='350'%20fill='%236d5dfc'/%3E%3Ccircle%20cx='650'%20cy='80'%20r='45'%20fill='white'%20opacity='.8'/%3E%3Cpath%20d='M0%20300%20190%20140%20340%20260%20500%20100%20800%20300V350H0Z'%20fill='%2312b8a6'/%3E%3C/svg%3E" alt="Abstract purple and teal landscape" /></img-container>`,
-        code: `<img-container\n  aspect-ratio="16 / 7"\n  object-fit="cover"\n  radius="var(--radius-lg)"\n  theme="card"\n>\n  <img src="landscape.jpg" alt="Mountain landscape" loading="lazy" />\n</img-container>`,
+        preview: `<picture data-img-container aspect-ratio="16 / 7" object-fit="cover" radius="var(--radius-lg)" theme="card"><img data-loaded src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20800%20350'%3E%3Crect%20width='800'%20height='350'%20fill='%236d5dfc'/%3E%3Ccircle%20cx='650'%20cy='80'%20r='45'%20fill='white'%20opacity='.8'/%3E%3Cpath%20d='M0%20300%20190%20140%20340%20260%20500%20100%20800%20300V350H0Z'%20fill='%2312b8a6'/%3E%3C/svg%3E" alt="Abstract purple and teal landscape" /></picture>`,
+        code: `<picture\n  data-img-container\n  aspect-ratio="16 / 7"\n  object-fit="cover"\n  radius="var(--radius-lg)"\n  theme="card"\n>\n  <img src="landscape.jpg" alt="Mountain landscape" loading="lazy" />\n</picture>`,
     },
     "components/list": {
         title: "Semantic lists with custom markers",
