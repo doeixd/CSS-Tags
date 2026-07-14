@@ -4,7 +4,9 @@ description: The `carousel` component provides a responsive, touch-friendly caro
 ---
 
 ## Overview
-The `carousel` component provides a responsive, touch-friendly carousel with smooth animations and navigation controls. It uses scroll snap for progressive enhancement and includes glassmorphism button effects.
+The carousel provides a responsive, touch-friendly scroll-snap experience that JavaScript can progressively enhance with navigation controls.
+
+Use `carousel`, `[data-carousel]`, or `.carousel` for the host. The data-host form pairs naturally with semantic sections, articles, and native buttons.
 
 ## Key Features
 - **Progressive Enhancement**: Works with scroll snap when JavaScript is unavailable
@@ -14,10 +16,10 @@ The `carousel` component provides a responsive, touch-friendly carousel with smo
 - **Accessibility**: Respects `prefers-reduced-motion` and provides proper focus management
 
 ## Structure
-- `carousel`: Main container with overflow hidden
-- `.carousel-slides`: Flex container for slides with scroll snap
-- `carousel-item`: Individual slide items
-- `carousel-trigger`: Navigation buttons (prev/next)
+- Host: `carousel`, `[data-carousel]`, or `.carousel`
+- Slides: `.carousel-slides` or `[data-carousel-slides]`
+- Item: `carousel-item`, `[data-carousel-item]`, or `.carousel-item`
+- Trigger: `carousel-trigger`, `[data-carousel-trigger]`, or `.carousel-trigger`; prefer a native `<button>`
 
 ## Attributes
 
@@ -32,22 +34,22 @@ The `carousel` component provides a responsive, touch-friendly carousel with smo
 
 ## Usage Example
 ```html
-<carousel duration="300ms" radius="1rem">
-  <div class="carousel-slides">
-    <carousel-item>
+<section data-carousel duration="300ms" radius="1rem" aria-label="Featured photos">
+  <div data-carousel-slides>
+    <article data-carousel-item>
       <img src="slide1.jpg" alt="Slide 1">
-    </carousel-item>
-    <carousel-item>
+    </article>
+    <article data-carousel-item>
       <img src="slide2.jpg" alt="Slide 2">
-    </carousel-item>
-    <carousel-item>
+    </article>
+    <article data-carousel-item>
       <img src="slide3.jpg" alt="Slide 3">
-    </carousel-item>
+    </article>
   </div>
 
-  <carousel-trigger direction="prev">‹</carousel-trigger>
-  <carousel-trigger direction="next">›</carousel-trigger>
-</carousel>
+  <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">‹</button>
+  <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">›</button>
+</section>
 ```
 
 ## Styling Details

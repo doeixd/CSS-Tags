@@ -9,16 +9,19 @@
  * - Touch-based swipe navigation for mobile devices.
  * - It overrides scroll-snap behavior for transform-based animations.
  */
-document.addEventListener('DOMContentLoaded', () => {
-  const carousels = document.querySelectorAll('carousel');
+function initializeCarousels(root = document) {
+  const carousels = root.querySelectorAll(':is(carousel, [data-carousel], .carousel)');
 
   carousels.forEach(carousel => {
-    const slidesContainer = carousel.querySelector('.carousel-slides');
-    const items = carousel.querySelectorAll('carousel-item');
-    const prevTrigger = carousel.querySelector('carousel-trigger[direction="prev"]');
-    const nextTrigger = carousel.querySelector('carousel-trigger[direction="next"]');
+    if (carousel.dataset.carouselInitialized === 'true') return;
+
+    const slidesContainer = carousel.querySelector(':is(.carousel-slides, [data-carousel-slides])');
+    const items = carousel.querySelectorAll(':is(carousel-item, [data-carousel-item], .carousel-item)');
+    const prevTrigger = carousel.querySelector(':is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="prev"]');
+    const nextTrigger = carousel.querySelector(':is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"]');
 
     if (!slidesContainer || items.length === 0) return;
+    carousel.dataset.carouselInitialized = 'true';
 
     const totalSlides = items.length;
     const isLooping = carousel.hasAttribute('loop');
@@ -72,4 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCarousel(true); // Initial setup without animation
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => initializeCarousels(), { once: true });
+} else {
+  initializeCarousels();
+}
+
+export { initializeCarousels };

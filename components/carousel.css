@@ -8,15 +8,15 @@
  * @feature {Scroll Snap} (Progressive Enhancement) - Provides a JS-free fallback.
  */
 
-carousel {
-  --slide-duration: attr(duration ms, 500ms);
-  --slide-timing: attr(timing-function type(*), 'cubic-bezier(0.4, 0, 0.2, 1)');
+:is(carousel, [data-carousel], .carousel) {
+  --slide-duration: attr(duration type(*), 500ms);
+  --slide-timing: attr(timing-function type(*), cubic-bezier(0.4, 0, 0.2, 1));
 
   position: relative;
   display: block;
   overflow: hidden;
   border-radius: attr(radius type(*), 0.75rem);
-  width: 300px;
+  width: attr(width type(*), 100%);
   max-inline-size: 100%;
 }
 
@@ -24,7 +24,7 @@ carousel {
  * The slides container can use scroll-snapping as a JS-free enhancement.
  * The JS will override this with transform-based animation if it loads.
  */
-.carousel-slides {
+:is(.carousel-slides, [data-carousel-slides]) {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -38,12 +38,12 @@ carousel {
   &::-webkit-scrollbar { display: none; } /* Hide scrollbar in WebKit */
 }
 
-carousel-item {
+:is(carousel-item, [data-carousel-item], .carousel-item) {
   flex-shrink: 0;
   scroll-snap-align: start;
 }
 
-carousel-trigger {
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger) {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

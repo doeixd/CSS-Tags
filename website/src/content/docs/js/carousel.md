@@ -1,85 +1,54 @@
 ---
 title: Carousel JavaScript
-description: JavaScript implementation for the responsive and touch-friendly carousel component.
+description: Progressively enhance CSS scroll-snap carousels with controls, looping, and touch gestures.
 ---
 
-# carousel.js
+The CSS carousel works as a horizontally scrollable, snap-aligned collection without JavaScript. Import `carousel.js` when you also want previous/next controls, looping, and swipe gestures.
 
-Logic for the responsive and touch-friendly carousel component.
-------------------------------------------------------------------------------
+## Setup
 
-This script initializes all carousels on the page, adding support for:/**
- * carousel.js
- *
- * Logic for the responsive and touch-friendly carousel component.
- * ------------------------------------------------------------------------------
- * This script initializes all carousels on the page, adding support for:
- * - Next/Previous button navigation and state management.
- * - Looping behavior.
- * - Touch-based swipe navigation for mobile devices.
- * - It overrides scroll-snap behavior for transform-based animations.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  const carousels = document.querySelectorAll('carousel');
+```html
+<link rel="stylesheet" href="/components/carousel.css" />
 
-  carousels.forEach(carousel => {
-    const slidesContainer = carousel.querySelector('.carousel-slides');
-    const items = carousel.querySelectorAll('carousel-item');
-    const prevTrigger = carousel.querySelector('carousel-trigger[direction="prev"]');
-    const nextTrigger = carousel.querySelector('carousel-trigger[direction="next"]');
+<section data-carousel aria-label="Featured articles">
+  <div data-carousel-slides>
+    <article data-carousel-item>First article</article>
+    <article data-carousel-item>Second article</article>
+    <article data-carousel-item>Third article</article>
+  </div>
 
-    if (!slidesContainer || items.length === 0) return;
+  <button type="button" data-carousel-trigger direction="prev" aria-label="Previous article">‹</button>
+  <button type="button" data-carousel-trigger direction="next" aria-label="Next article">›</button>
+</section>
 
-    const totalSlides = items.length;
-    const isLooping = carousel.hasAttribute('loop');
+<script type="module" src="/carousel.js"></script>
+```
 
-    // Set the slides container width to accommodate all slides
-    slidesContainer.style.width = `${totalSlides * 100}%`;
+Use native buttons for the triggers. They provide keyboard behavior and disabled semantics without recreating either feature in JavaScript.
 
-    // Set each item width to match the carousel width
-    items.forEach(item => {
-      item.style.width = `${100 / totalSlides}%`;
-    });
+## Supported hosts
 
-    let currentIndex = 0;
+The initializer recognizes the same three host forms as the CSS:
 
-    function updateCarousel(isInstant = false) {
-      if (isInstant) slidesContainer.style.transition = 'none';
+- Carousel: `carousel`, `[data-carousel]`, `.carousel`
+- Slides: `[data-carousel-slides]`, `.carousel-slides`
+- Item: `carousel-item`, `[data-carousel-item]`, `.carousel-item`
+- Trigger: `carousel-trigger`, `[data-carousel-trigger]`, `.carousel-trigger`
 
-      slidesContainer.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
+Add `loop` to the carousel host to wrap from the last slide to the first. Without it, the script disables the previous or next button at the corresponding edge.
 
-      if (isInstant) {
-        // Restore transition after the instant move
-        setTimeout(() => slidesContainer.style.transition = '', 50);
-      }
+## Programmatic initialization
 
-      if (!isLooping) {
-        prevTrigger?.toggleAttribute('disabled', currentIndex === 0);
-        nextTrigger?.toggleAttribute('disabled', currentIndex === totalSlides - 1);
-      }
-    }
+The module initializes document carousels automatically. It also exports the initializer for content added later or rendered inside another root:
 
-    function goToSlide(index) {
-      if (isLooping) {
-        currentIndex = (index + totalSlides) % totalSlides;
-      } else {
-        currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
-      }
-      updateCarousel();
-    }
+```js
+import { initializeCarousels } from "/carousel.js";
 
-    prevTrigger?.addEventListener('click', () => goToSlide(currentIndex - 1));
-    nextTrigger?.addEventListener('click', () => goToSlide(currentIndex + 1));
+initializeCarousels(document.querySelector("#new-content"));
+```
 
-    let touchStartX = 0;
-    carousel.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    carousel.addEventListener('touchend', e => {
-      const touchEndX = e.changedTouches[0].screenX;
-      if (Math.abs(touchEndX - touchStartX) > 50) {
-        goToSlide(touchEndX < touchStartX ? currentIndex + 1 : currentIndex - 1);
-      }
-    });
+Calling the initializer again is safe; initialized carousels are skipped.
 
-    updateCarousel(true); // Initial setup without animation
-  });
-});
+## Progressive enhancement
+
+Keep the slides container horizontally scrollable in the CSS fallback. JavaScript changes the slide widths and transform only after it finds a valid host, slides container, and at least one item. Touch gestures use passive listeners, and the CSS removes transition animation when the user prefers reduced motion.
