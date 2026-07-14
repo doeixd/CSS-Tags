@@ -5,10 +5,13 @@ description: Add CSS Tags custom elements to the DOM and JSX type systems with t
 
 CSS accepts unknown custom tags without registration, but TypeScript needs to know their names and attributes. CSS Tags ships [`types/css-tags.d.ts`](https://github.com/doeixd/CSS-Tags/blob/main/types/css-tags.d.ts) for that purpose.
 
-The declarations provide two things:
+The declarations provide three things:
 
 - `HTMLElementTagNameMap` entries for typed DOM APIs such as `document.createElement("card")`
 - global `JSX.IntrinsicElements` entries for JSX setups that read the global JSX namespace
+- reusable `CSSTags.*Attributes` interfaces for framework adapters and application components
+
+The custom-element form carries the richest declarative typing because it owns its tag name. Class and `data-*` hosts remain ordinary native elements: `<article data-card>` is still an `HTMLElement`, and `<div class="grid">` is still a `div`. This preserves native element props and semantics, but a framework may not accept component-specific attributes such as `columns` on those native tags without a local wrapper or augmentation.
 
 ## Add the declarations
 
@@ -78,6 +81,38 @@ export function ProductGrid() {
 
 Attribute unions catch common mistakes. For example, `badge` status accepts `success`, `warning`, `error`, `info`, `primary`, or `overt`, and `layout-sidebar` limits `side` to `left` or `right`.
 
+The same public primitive can still use semantic markup when that is the better fit:
+
+```tsx
+export function Results() {
+  return (
+    <section data-grid class="results-grid">
+      <article data-card>Semantic native hosts</article>
+    </section>
+  );
+}
+```
+
+Here TypeScript checks the native `section` and `article` APIs. Put component values in CSS custom properties or a typed wrapper when your JSX runtime rejects library-specific attributes on native elements.
+
+## Reuse the component interfaces
+
+Every public custom tag maps to an interface in the global `CSSTags` namespace. Use those interfaces instead of copying attribute unions into application code:
+
+```ts
+const status: CSSTags.BadgeAttributes["status"] = "success";
+const frame: CSSTags.ImageContainerAttributes = {
+  "aspect-ratio": "16 / 9",
+  "object-fit": "cover",
+  radius: "var(--radius-lg)",
+};
+
+const badge = document.createElement("badge");
+badge.setAttribute("status", status);
+```
+
+These are attribute types, not JavaScript component classes. DOM methods still accept strings, so the interfaces are most useful for adapters, props, configuration objects, and authoring completion.
+
 ## React 19 and framework-owned JSX
 
 React, Solid, Preact, and other JSX runtimes may own a module-scoped JSX namespace instead of using the global one. The DOM declarations still work, but framework JSX may need a small adapter in your application.
@@ -88,41 +123,57 @@ For React, create a local `src/types/css-tags-react.d.ts`:
 import type * as React from "react";
 import type {} from "./css-tags";
 
-type CustomTag<Props = object> =
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
-  & Props;
+type NativeCustomTag = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLElement>,
+  HTMLElement
+>;
+
+type CustomTag<Props extends object = CSSTags.GlobalAttributes> =
+  NativeCustomTag & Omit<Props, keyof NativeCustomTag>;
 
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
-      "layout-grid": CustomTag<{
-        "min-item-size"?: string;
-        gap?: string;
-      }>;
-      "layout-stack": CustomTag<{
-        gap?: string;
-        align?: string;
-        center?: boolean;
-      }>;
-      card: CustomTag;
+      "layout-grid": CustomTag<CSSTags.LayoutGridAttributes>;
+      "layout-stack": CustomTag<CSSTags.LayoutAttributes>;
+      card: CustomTag<CSSTags.CardAttributes>;
       "card-body": CustomTag;
       "card-header": CustomTag;
       "card-content": CustomTag;
       "card-footer": CustomTag;
-      badge: CustomTag<{
-        status?: "success" | "warning" | "error" | "info" | "primary" | "overt";
-        size?: "sm" | "md" | "lg";
-      }>;
-      chip: CustomTag<{
-        size?: "sm" | "md" | "lg";
-        removable?: boolean;
-      }>;
+      badge: CustomTag<CSSTags.BadgeAttributes>;
+      chip: CustomTag<CSSTags.ChipAttributes>;
+      "img-container": CustomTag<CSSTags.ImageContainerAttributes>;
+      "view-page": CustomTag<CSSTags.ViewPageAttributes>;
+      "nav-trigger": CustomTag<CSSTags.ViewTriggerAttributes>;
     }
   }
 }
 ```
 
-Extend that adapter with the tags your React project uses. Keeping it local avoids making CSS Tags depend on React or forcing React types into non-React projects.
+Extend that adapter with the tags your React project uses. `Omit` lets React keep ownership of shared attributes such as `style`, while CSS Tags supplies component-specific values. Keeping the adapter local avoids making CSS Tags depend on React or forcing React types into non-React projects.
+
+For a semantic data host, a small typed component is usually clearer than widening every native JSX element:
+
+```tsx
+type GridProps = React.HTMLAttributes<HTMLDivElement> &
+  Pick<CSSTags.GridAttributes, "columns" | "rows" | "gap">;
+
+export function Grid({ columns, rows, gap, ...props }: GridProps) {
+  return (
+    <div
+      data-grid
+      {...props}
+      style={{
+        ...props.style,
+        "--grid-columns": columns,
+        "--grid-rows": rows,
+        "--grid-gap": gap,
+      } as React.CSSProperties}
+    />
+  );
+}
+```
 
 ## Extending the declarations
 

@@ -91,6 +91,37 @@ declare global {
       color?: CSSValue;
     }
 
+    interface CardAttributes extends GlobalAttributes {
+      "data-card-layout"?: "adaptive" | string;
+    }
+
+    interface BoxAttributes extends GlobalAttributes {
+      display?: CSSValue;
+      gap?: CSSValue;
+      p?: CSSValue;
+      px?: CSSValue;
+      py?: CSSValue;
+      m?: CSSValue;
+      mx?: CSSValue;
+      my?: CSSValue;
+      width?: CSSValue;
+      height?: CSSValue;
+      "max-width"?: CSSValue;
+      bg?: CSSValue;
+      color?: CSSValue;
+      border?: CSSValue;
+      radius?: CSSValue;
+      align?: CSSValue;
+    }
+
+    interface ContainerAttributes extends GlobalAttributes {
+      "max-width-sm"?: CSSValue;
+      "max-width-md"?: CSSValue;
+      "max-width-lg"?: CSSValue;
+      "max-width-xl"?: CSSValue;
+      pad?: CSSValue;
+    }
+
     interface BadgeAttributes extends GlobalAttributes {
       size?: "sm" | "md" | "lg";
       role?: "subtle" | "default" | "muted" | "overt" | string;
@@ -123,13 +154,24 @@ declare global {
     interface TooltipAttributes extends GlobalAttributes {
       content?: string;
       place?: "top" | "right" | "bottom" | "left";
+      position?: "top" | "right" | "bottom" | "left";
     }
 
     interface GridAttributes extends LayoutAttributes {
+      display?: CSSValue;
       columns?: CSSValue;
       rows?: CSSValue;
+      areas?: CSSValue;
       lanes?: string | number;
-      flow?: CSSValue;
+      "flow-tolerance"?: CSSValue;
+      "justify-items"?: CSSValue;
+      "align-items"?: CSSValue;
+      "col-rule-width"?: CSSValue;
+      "col-rule-style"?: CSSValue;
+      "col-rule-color"?: CSSValue;
+      "row-rule-width"?: CSSValue;
+      "row-rule-style"?: CSSValue;
+      "row-rule-color"?: CSSValue;
     }
 
     interface FlexAttributes extends LayoutAttributes {
@@ -160,6 +202,8 @@ declare global {
     }
 
     interface ListAttributes extends GlobalAttributes {
+      padding?: CSSValue;
+      margin?: CSSValue;
       gap?: CSSValue;
       indent?: CSSValue;
       inline?: BooleanAttribute;
@@ -190,12 +234,25 @@ declare global {
       open?: BooleanAttribute;
     }
 
+    interface MasonryAttributes extends GlobalAttributes {
+      direction?: CSSValue;
+      cols?: CSSValue;
+      rows?: CSSValue;
+      gap?: CSSValue;
+      tolerance?: CSSValue;
+    }
+
+    interface NavbarAttributes extends GlobalAttributes {
+      sticky?: BooleanAttribute;
+    }
+
     interface ViewPageAttributes extends GlobalAttributes {
       active?: BooleanAttribute;
     }
 
     interface ViewTriggerAttributes extends GlobalAttributes {
       to?: string;
+      href?: string;
     }
 
     interface IntrinsicElements {
@@ -211,17 +268,17 @@ declare global {
       "layout-frame": LayoutFrameAttributes;
       "layout-sidebar": LayoutSidebarAttributes;
       "layout-page": LayoutPageAttributes;
-      card: SurfaceAttributes;
+      card: CardAttributes;
       "card-media": GlobalAttributes;
       "card-body": GlobalAttributes;
       "card-header": GlobalAttributes;
       "card-content": GlobalAttributes;
       "card-footer": GlobalAttributes;
-      box: SurfaceAttributes;
+      box: BoxAttributes;
       badge: BadgeAttributes;
       chip: ChipAttributes;
       text: TextAttributes;
-      container: SurfaceAttributes;
+      container: ContainerAttributes;
       grid: GridAttributes;
       flex: FlexAttributes;
       "img-container": ImageContainerAttributes;
@@ -232,9 +289,10 @@ declare global {
       "carousel-item": GlobalAttributes;
       "carousel-trigger": CarouselTriggerAttributes;
       tooltip: TooltipAttributes;
-      "masonry-layout": GlobalAttributes;
+      "masonry-layout": MasonryAttributes;
       "data-table": GlobalAttributes;
       "modal-dialog": ModalDialogAttributes;
+      "nav-navbar": NavbarAttributes;
       "view-transitions": GlobalAttributes;
       "view-transition": GlobalAttributes;
       "view-page": ViewPageAttributes;
@@ -279,6 +337,7 @@ declare global {
     "masonry-layout": HTMLElement;
     "data-table": HTMLElement;
     "modal-dialog": HTMLElement;
+    "nav-navbar": HTMLElement;
     "view-transitions": HTMLElement;
     "view-transition": HTMLElement;
     "view-page": HTMLElement;

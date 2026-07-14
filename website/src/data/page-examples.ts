@@ -168,10 +168,10 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<section style="--accent-h: 220">\n  <button class="form-button btn-primary">Ocean action</button>\n</section>\n<section style="--accent-h: 25">\n  <button class="form-button btn-primary">Sunset action</button>\n</section>`,
     },
     "guides/typescript": {
-        title: "Custom tags are type-checked in TSX",
-        description: "Import the declaration once, then use CSS Tags elements with attribute completion.",
-        preview: `<layout-cluster><badge status="success">Intrinsic elements loaded</badge><code>&lt;layout-grid min-item-size="12rem" /&gt;</code></layout-cluster>`,
-        code: `// src/env.d.ts\n/// <reference types="css-tags" />\n\n// Component.tsx\nexport function Dashboard() {\n  return (\n    <layout-grid min-item-size="12rem" gap="var(--space-md)">\n      <card>Typed custom element</card>\n    </layout-grid>\n  );\n}`,
+        title: "Use the shipped component attribute types",
+        description: "Custom tags get JSX completion, and the same interfaces can type adapters and configuration objects.",
+        preview: `<layout-stack gap="var(--space-sm)"><layout-cluster><badge status="success">Types loaded</badge><badge status="info">Attributes completed</badge></layout-cluster><div data-box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-md)"><code>CSSTags.BadgeAttributes[&quot;status&quot;]</code></div></layout-stack>`,
+        code: `// src/env.d.ts\n/// <reference path="../../types/css-tags.d.ts" />\n\nconst status: CSSTags.BadgeAttributes["status"] = "success";\nconst frame: CSSTags.ImageContainerAttributes = {\n  "aspect-ratio": "16 / 9",\n  "object-fit": "cover",\n};\n\nexport function Dashboard() {\n  return (\n    <layout-grid min-item-size="12rem" gap="var(--space-md)">\n      <badge status={status}>Typed custom element</badge>\n    </layout-grid>\n  );\n}`,
     },
     "js/carousel": {
         title: "Initialize controls, looping, and swipe behavior",
