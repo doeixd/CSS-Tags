@@ -138,10 +138,24 @@ declare global {
       wrap?: CSSValue;
     }
 
-    interface ImageContainerAttributes extends SurfaceAttributes {
-      ratio?: CSSValue;
-      fit?: CSSValue;
-      position?: CSSValue;
+    interface ImageContainerAttributes extends GlobalAttributes {
+      "aspect-ratio"?: CSSValue;
+      "object-fit"?: CSSValue;
+      "object-position"?: CSSValue;
+      radius?: CSSValue;
+      bg?: CSSValue;
+      shadow?: CSSValue;
+      transition?: CSSValue;
+      lazy?: BooleanAttribute;
+      "fallback-src"?: string;
+      src?: string;
+      srcset?: string;
+      sizes?: string;
+      alt?: string;
+      responsive?: BooleanAttribute;
+      "mobile-aspect-ratio"?: CSSValue;
+      "desktop-aspect-ratio"?: CSSValue;
+      "error-message"?: string;
       theme?: "card" | "hero" | "thumbnail";
     }
 
@@ -160,12 +174,28 @@ declare global {
     }
 
     interface CarouselAttributes extends GlobalAttributes {
-      axis?: "x" | "y";
-      behavior?: CSSValue;
+      duration?: CSSValue;
+      "timing-function"?: CSSValue;
+      radius?: CSSValue;
+      width?: CSSValue;
+      loop?: BooleanAttribute;
+    }
+
+    interface CarouselTriggerAttributes extends GlobalAttributes {
+      direction?: "prev" | "next";
+      disabled?: BooleanAttribute;
     }
 
     interface ModalDialogAttributes extends GlobalAttributes {
       open?: BooleanAttribute;
+    }
+
+    interface ViewPageAttributes extends GlobalAttributes {
+      active?: BooleanAttribute;
+    }
+
+    interface ViewTriggerAttributes extends GlobalAttributes {
+      to?: string;
     }
 
     interface IntrinsicElements {
@@ -200,13 +230,15 @@ declare global {
       "list-divider": GlobalAttributes;
       carousel: CarouselAttributes;
       "carousel-item": GlobalAttributes;
-      "carousel-trigger": GlobalAttributes;
+      "carousel-trigger": CarouselTriggerAttributes;
       tooltip: TooltipAttributes;
       "masonry-layout": GlobalAttributes;
       "data-table": GlobalAttributes;
       "modal-dialog": ModalDialogAttributes;
       "view-transitions": GlobalAttributes;
-      "view-page": GlobalAttributes & { active?: BooleanAttribute };
+      "view-transition": GlobalAttributes;
+      "view-page": ViewPageAttributes;
+      "nav-trigger": ViewTriggerAttributes;
     }
   }
 
@@ -248,7 +280,9 @@ declare global {
     "data-table": HTMLElement;
     "modal-dialog": HTMLElement;
     "view-transitions": HTMLElement;
+    "view-transition": HTMLElement;
     "view-page": HTMLElement;
+    "nav-trigger": HTMLElement;
   }
 
   namespace JSX {

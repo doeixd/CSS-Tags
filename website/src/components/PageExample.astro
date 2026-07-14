@@ -63,7 +63,7 @@ const example = getPageExample(currentPath, pageTitle);
                 demo.querySelectorAll<HTMLButtonElement>("[data-doc-page]").forEach((button) => {
                     button.addEventListener("click", () => {
                         const update = () => {
-                            demo.querySelectorAll<HTMLElement>("view-page").forEach((page) => {
+                            demo.querySelectorAll<HTMLElement>(":is(view-page, [data-view-page], .view-page)").forEach((page) => {
                                 page.toggleAttribute("active", page.id === button.dataset.docPage);
                             });
                         };

@@ -1,171 +1,97 @@
 ---
-title: View Transitions Component
-description: The `view-transition.css` file provides styles for the native View Transitions API, enabling smooth, app-like transitions between page states or full page loads
+title: View Transitions
+description: Progressive same-document and cross-document transitions with semantic hash-link fallbacks.
 ---
 
-## Overview
-The `view-transition.css` file provides styles for the native View Transitions API, enabling smooth, app-like transitions between page states or full page loads. It includes default animations and support for shared element transitions.
+The stylesheet supplies tokenized root animations and an optional view-router presentation layer. Browsers without the View Transitions API still receive immediate state changes.
 
-## Key Features
-- **Page Transitions**: Smooth animations for multi-page apps (MPA)
-- **SPA Support**: Integration with `<view-page>` component
-- **Shared Elements**: "Hero" element transitions with `view-transition-name`
-- **Custom Easing**: Natural motion with `cubic-bezier` functions
-- **JavaScript Integration**: Works with `view-transition.js` for routing
+## Cross-document navigation
 
-## Setup Requirements
+Opt both same-origin documents into navigation transitions with the CSS at-rule:
 
-### Multi-Page Apps (MPA)
-Add to HTML head:
-```html
-<meta name="view-transition" content="same-origin" />
-```
-Standard link clicks will automatically use transitions.
-
-### Single-Page Apps (SPA)
-Use with `view-transition.js`:
-```html
-<view-transition>
-  <view-page active>Home content</view-page>
-  <view-page>About content</view-page>
-</view-transition>
-```
-
-## Transition Types
-
-### Root Transition
-Default animation for entire page content.
-
-#### Old Page (::view-transition-old(root))
-- **Animation**: `slide-to-left-fade-out`
-- **Duration**: 400ms
-- **Easing**: `cubic-bezier(0.45, 0, 0.55, 1)`
-- **Effect**: Slides left while fading out
-
-#### New Page (::view-transition-new(root))
-- **Animation**: `slide-from-right-fade-in`
-- **Duration**: 400ms
-- **Easing**: `cubic-bezier(0.45, 0, 0.55, 1)`
-- **Effect**: Slides in from right while fading in
-
-### Shared Element Transition
-For elements that persist across page changes.
-
-#### Usage
 ```css
-.hero-image {
-  view-transition-name: product-image-123;
+@view-transition {
+  navigation: auto;
 }
 ```
 
-#### Styling (::view-transition-group(hero-element))
-- **Easing**: `cubic-bezier(0.76, 0, 0.24, 1)` (spring-like)
-- **Effect**: Smooth morphing between positions
+Then use ordinary links. No router JavaScript is required.
 
-## SPA-Specific Elements
+```html
+<a href="/products/42">View product</a>
+```
 
-### view-transition
-Container for all virtual pages.
-- **Position**: Relative
-- **Display**: Block
+The root animation uses:
 
-### view-page
-Individual page content.
-- **Display**: None by default
-- **Active State**: `view-page[active]` shows `display: block`
+- `--view-transition-duration`, default `400ms`
+- `--view-transition-easing`
+- `--view-transition-hero-easing`
 
-## Keyframe Definitions
+The animation is removed when the user prefers reduced motion.
 
-### slide-to-left-fade-out
+## Same-document views
+
+Use `view-transitions`, `view-transition`, `[data-view-transitions]`, or `.view-transitions` for the router host. Pages support `view-page`, `[data-view-page]`, and `.view-page`.
+
+The semantic data-host form uses native hash links and sections:
+
+```html
+<div data-view-transitions>
+  <nav aria-label="Dashboard views">
+    <a data-view-trigger href="#summary">Summary</a>
+    <a data-view-trigger href="#activity">Activity</a>
+  </nav>
+
+  <section data-view-page id="summary" active>
+    <h2>Summary</h2>
+    <p>12 open tasks.</p>
+  </section>
+
+  <section data-view-page id="activity">
+    <h2>Activity</h2>
+    <p>Recent project changes.</p>
+  </section>
+</div>
+```
+
+Without JavaScript, the hash target becomes visible through `:target`. Keep one page marked `active` as the server-rendered initial view.
+
+Add the enhancement for animated updates, history synchronization, current-link state, and focus movement:
+
+```html
+<script type="module" src="/view-transition.js"></script>
+```
+
+## Shared elements
+
+Set `view-transition-name` in CSS on an element present in both states:
+
 ```css
-@keyframes slide-to-left-fade-out {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-50px); }
+.profile-avatar {
+  view-transition-name: profile-avatar;
 }
 ```
 
-### slide-from-right-fade-in
+Names must be unique within the rendered state. The property is CSS; `view-transition-name` is not an HTML attribute.
+
+The shipped `hero-element` group receives the shared hero easing:
+
 ```css
-@keyframes slide-from-right-fade-in {
-  from { opacity: 0; transform: translateX(50px); }
-  to { opacity: 1; transform: translateX(0); }
+.product-image {
+  view-transition-name: hero-element;
 }
 ```
 
-## Usage Examples
+For other names, style the matching pseudo-element directly:
 
-### MPA Setup
-```html
-<head>
-  <meta name="view-transition" content="same-origin" />
-   <link rel="stylesheet" href="view-transition.css" />
-</head>
-<body>
-  <!-- Page content -->
-</body>
+```css
+::view-transition-group(profile-avatar) {
+  animation-timing-function: var(--view-transition-hero-easing);
+}
 ```
-
-### SPA Setup
-```html
-<view-transition>
-  <nav-trigger href="/home">Home</nav-trigger>
-  <nav-trigger href="/about">About</nav-trigger>
-
-  <view-page active id="home">
-    <h1>Home Page</h1>
-    <img class="hero" view-transition-name="hero-image" src="home.jpg" />
-  </view-page>
-
-  <view-page id="about">
-    <h2>About Page</h2>
-    <img class="hero" view-transition-name="hero-image" src="about.jpg" />
-  </view-page>
-</view-transition>
-
-<script src="view-transition.js"></script>
-```
-
-## Browser Support
-- **Chrome 111+**: Full support
-- **Edge 111+**: Full support
-- **Firefox**: Behind flag (layout.css.view-transitions.enabled)
-- **Safari**: Not supported
-- **Fallback**: Instant page changes without animation
-
-## JavaScript Integration
-Works with `view-transition.js` for:
-- SPA routing logic
-- `nav-trigger` click handling
-- Page switching with `active` attribute
-- History API integration
-
-## Performance Considerations
-- **GPU Acceleration**: Transforms use GPU for smooth animation
-- **Memory Usage**: Screenshots of old/new pages stored temporarily
-- **Large Pages**: May impact performance on complex layouts
-- **Optimization**: Use `content-visibility` to improve rendering
 
 ## Accessibility
-- **Motion Preferences**: Respects `prefers-reduced-motion`
-- **Screen Readers**: Content changes announced properly
-- **Focus Management**: Maintains focus during transitions
-- **Loading States**: Clear visual feedback during navigation
 
-## Customization
-Override default animations:
-```css
-::view-transition-old(root) {
-  animation-name: custom-slide-out;
-}
+Use native links or buttons for triggers. Hash links provide the strongest no-JavaScript fallback. The enhancement adds `aria-current="page"` to the active trigger and `aria-controls` when it is absent.
 
-::view-transition-new(root) {
-  animation-name: custom-slide-in;
-}
-```
-
-## Use Cases
-- **Page Navigation**: Smooth MPA transitions
-- **App-like SPAs**: Native app feel for web apps
-- **Product Galleries**: Image transitions with shared elements
-- **Content Changes**: Smooth state transitions
-- **Progressive Enhancement**: Enhanced navigation experience
+Give view pages meaningful headings. The script focuses the activated page with `tabindex="-1"` after its DOM update, including after the View Transition callback completes.

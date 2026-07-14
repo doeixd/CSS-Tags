@@ -1,71 +1,111 @@
-/**
- * view-transitions.js
- *
- * A simple router for triggering View Transitions in a Single-Page App (SPA).
- * ------------------------------------------------------------------------------
- * This script provides the logic for the `<view-page>` and `<nav-trigger>`
- * custom elements. It listens for clicks and wraps the DOM updates in
- * `document.startViewTransition()` to create animated transitions.
- *
- * NOTE: This script is ONLY needed for the SPA-style implementation.
- * For standard Multi-Page Apps, remove this script and use the meta tag instead.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  // Find all navigation triggers on the page.
-  const triggers = document.querySelectorAll('nav-trigger[to]');
+/** A scoped, progressively enhanced router for the View Transitions API. */
 
-  // If there are no triggers, there's nothing for this router to do.
-  if (triggers.length === 0) {
-    return;
-  }
+const ROUTER_SELECTOR = ':is(view-transitions, view-transition, [data-view-transitions], .view-transitions)';
+const PAGE_SELECTOR = ':is(view-page, [data-view-page], .view-page)';
+const TRIGGER_SELECTOR = ':is(nav-trigger, [data-view-trigger], .view-trigger)';
 
-  /**
-   * Shows a page with the given ID and hides all others, wrapping the
-   * DOM change in a view transition if the API is supported.
-   *
-   * @param {string} pageId The ID of the `<view-page>` element to display.
-   */
-  const showPage = (pageId) => {
-    // The core function that performs the DOM update.
-    const updateDOM = () => {
-      document.querySelectorAll('view-page').forEach(page => {
-        page.toggleAttribute('active', page.id === pageId);
-      });
+function initializeViewTransitions(root = document) {
+  root.querySelectorAll(ROUTER_SELECTOR).forEach(router => {
+    if (router.dataset.viewTransitionsInitialized === 'true') return;
+
+    const pages = Array.from(router.querySelectorAll(PAGE_SELECTOR));
+    const triggers = Array.from(router.querySelectorAll(TRIGGER_SELECTOR));
+    if (pages.length === 0) return;
+
+    router.dataset.viewTransitionsInitialized = 'true';
+
+    const targetFor = trigger => {
+      const explicitTarget = trigger.getAttribute('to');
+      if (explicitTarget) return explicitTarget.replace(/^#/, '');
+
+      const href = trigger.getAttribute('href');
+      return href?.startsWith('#') ? href.slice(1) : '';
     };
 
-    // Check for View Transitions API support.
-    if (document.startViewTransition) {
-      // Use the API to create a smooth, animated transition.
-      document.startViewTransition(updateDOM);
-    } else {
-      // Fallback for browsers without support: just update the DOM instantly.
-      updateDOM();
-    }
-  };
+    const setActivePage = pageId => {
+      const nextPage = pages.find(page => page.id === pageId);
+      if (!nextPage) return null;
 
-  // Add a single, delegated event listener to the document for efficiency.
-  document.body.addEventListener('click', (event) => {
-    // Check if the clicked element is a <nav-trigger>.
-    const trigger = event.target.closest('nav-trigger[to]');
+      pages.forEach(page => page.toggleAttribute('active', page === nextPage));
+      triggers.forEach(trigger => {
+        const isCurrent = targetFor(trigger) === pageId;
+        if (isCurrent) trigger.setAttribute('aria-current', 'page');
+        else trigger.removeAttribute('aria-current');
+      });
 
-    if (trigger) {
-      event.preventDefault(); // Prevent default action if it's a link
-      const targetId = trigger.getAttribute('to');
-      if (targetId) {
-        showPage(targetId);
+      return nextPage;
+    };
+
+    const showPage = (pageId, options = {}) => {
+      const { updateHistory = true, focus = true } = options;
+      const nextPage = pages.find(page => page.id === pageId);
+      if (!nextPage) return;
+
+      const update = () => setActivePage(pageId);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let transition;
+
+      if (!reduceMotion && typeof document.startViewTransition === 'function') {
+        transition = document.startViewTransition(update);
+      } else {
+        update();
       }
-    }
-  });
 
-  // --- Initial Page Setup ---
-  // On load, find the page that should be active.
-  // This can be one explicitly marked with `active`, or just the first one.
-  const initialPage = document.querySelector('view-page[active]') || document.querySelector('view-page');
+      if (updateHistory && window.location.hash !== `#${pageId}`) {
+        window.history.pushState(null, '', `#${pageId}`);
+      }
 
-  if (initialPage) {
-    // Set the initial state without triggering an animation.
-    document.querySelectorAll('view-page').forEach(page => {
-      page.toggleAttribute('active', page.id === initialPage.id);
+      const focusPage = () => {
+        if (!nextPage.hasAttribute('tabindex')) nextPage.setAttribute('tabindex', '-1');
+        nextPage.focus({ preventScroll: true });
+      };
+
+      if (focus) {
+        if (transition?.updateCallbackDone) transition.updateCallbackDone.then(focusPage);
+        else focusPage();
+      }
+    };
+
+    triggers.forEach(trigger => {
+      const pageId = targetFor(trigger);
+      if (!pageId) return;
+
+      if (!trigger.hasAttribute('aria-controls')) trigger.setAttribute('aria-controls', pageId);
+
+      trigger.addEventListener('click', event => {
+        event.preventDefault();
+        showPage(pageId);
+      });
+
+      if (trigger.matches('nav-trigger')) {
+        trigger.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            showPage(pageId);
+          }
+        });
+      }
     });
-  }
-});
+
+    const syncFromLocation = () => {
+      const hashTarget = window.location.hash.slice(1);
+      const initialPage = pages.find(page => page.id === hashTarget)
+        || pages.find(page => page.hasAttribute('active'))
+        || pages[0];
+
+      if (initialPage) showPage(initialPage.id, { updateHistory: false, focus: false });
+    };
+
+    window.addEventListener('popstate', syncFromLocation);
+    syncFromLocation();
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => initializeViewTransitions(), { once: true });
+} else {
+  initializeViewTransitions();
+}
+
+export { initializeViewTransitions };
