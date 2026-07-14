@@ -5,6 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import PageMeta from "../components/PageMeta.astro";
 import PrevNextNav from "../components/PrevNextNav.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
+import PageExample from "../components/PageExample.astro";
 
 const entry = await getEntry('docs', 'index');
 
@@ -31,6 +32,7 @@ const currentPath = '';
 				<p class="description">{entry.data.description}</p>
 			)
 		}
+		<PageExample currentPath="index" pageTitle={entry.data.title} />
 		<Content />
 	</div>
 	<div

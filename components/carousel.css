@@ -17,6 +17,7 @@ carousel {
   overflow: hidden;
   border-radius: attr(radius type(*), 0.75rem);
   width: 300px;
+  max-inline-size: 100%;
 }
 
 /*

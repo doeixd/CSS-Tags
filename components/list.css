@@ -26,13 +26,16 @@ list {
     }
 
     & > list-item {
+      display: list-item;
       position: relative;
 
       /* Style the native list item marker */
       &::marker {
         color: attr(marker-color type(*), var(--theme-primary));
-        content: attr(type type(*), '•') ' '; /* Default marker is a bullet */
+        content: '• ';
       }
+
+      &[type]::marker { content: attr(type) ' '; }
 
       /* Support for custom icons using modern CSS masks */
       &[icon] {
@@ -51,6 +54,7 @@ list {
           mask-size: contain;
           mask-repeat: no-repeat;
           mask-position: center;
+        }
       }
     }
 
@@ -60,5 +64,4 @@ list {
       margin-block: attr(gap type(*), 0.5rem); /* Logical property */
       border: 0;
     }
-  }
 }

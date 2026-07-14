@@ -1,0 +1,67 @@
+---
+import LiveExample from "./LiveExample.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    preview: string;
+    code: string;
+}
+
+const { title, description, preview, code } = Astro.props;
+---
+
+<section class="quick-example" data-page-quick-example aria-labelledby="quick-example-title">
+    <h2 id="quick-example-title">Quick example</h2>
+    <p>{description}</p>
+    <LiveExample title={title} description="Rendered with the shipped CSS Tags entry point.">
+        <Fragment set:html={preview} />
+    </LiveExample>
+    <div class="quick-example__source">
+        <div class="quick-example__source-label">Copyable source</div>
+        <pre tabindex="0" aria-label={`${title} source code`}><code>{code}</code></pre>
+    </div>
+</section>
+
+<style>
+    .quick-example {
+        margin-block: 1.5rem 2rem;
+    }
+
+    .quick-example > h2 {
+        margin-block: 0 0.5rem;
+    }
+
+    .quick-example > p {
+        margin-block: 0 1rem;
+        color: var(--text-secondary);
+    }
+
+    .quick-example__source {
+        margin-top: 0.75rem;
+        overflow: clip;
+        border: 1px solid var(--border-color);
+        border-radius: 0.625rem;
+        background: var(--bg-secondary);
+    }
+
+    .quick-example__source-label {
+        padding: 0.45rem 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .quick-example__source pre {
+        max-width: 100%;
+        margin: 0;
+        overflow: auto;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+</style>

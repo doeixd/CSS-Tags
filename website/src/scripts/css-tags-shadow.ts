@@ -21,6 +21,48 @@ const exampleHelpers = `
         color: var(--text-subtle, inherit);
     }
 
+    .example-tile,
+    .example-swatch {
+        min-inline-size: 0;
+        padding: var(--space-md, 1rem);
+        border: 1px solid var(--outline-subtle, #d8dee4);
+        border-radius: var(--radius-md, 0.5rem);
+        background: var(--surface-default, #fff);
+    }
+
+    .example-swatch {
+        display: grid;
+        min-block-size: 5rem;
+        place-items: end start;
+        font-size: var(--font-size-sm, 0.875rem);
+        font-weight: var(--font-weight-semibold, 600);
+    }
+
+    .example-slide {
+        display: grid;
+        inline-size: 300px;
+        max-inline-size: 100%;
+        block-size: 12rem;
+        place-items: center;
+        background: linear-gradient(135deg, var(--accent-muted), var(--secondary-muted));
+        color: var(--text-overt, inherit);
+        font-size: var(--font-size-xl, 1.5rem);
+        font-weight: var(--font-weight-bold, 700);
+    }
+
+    .example-scale {
+        display: grid;
+        grid-template-columns: repeat(9, minmax(2rem, 1fr));
+        min-block-size: 6rem;
+        overflow: clip;
+        border: 1px solid var(--outline-subtle, #d8dee4);
+        border-radius: var(--radius-md, 0.5rem);
+    }
+
+    [data-doc-view-transition] view-page {
+        margin-block-start: var(--space-md, 1rem);
+    }
+
     @media (prefers-reduced-motion: reduce) {
         * { scroll-behavior: auto !important; }
     }

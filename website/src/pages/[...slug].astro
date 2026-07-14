@@ -5,6 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import PageMeta from "../components/PageMeta.astro";
 import PrevNextNav from "../components/PrevNextNav.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
+import PageExample from "../components/PageExample.astro";
 
 export async function getStaticPaths() {
     const docs = await getCollection("docs");
@@ -20,6 +21,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const currentPath = entry.id;
+const hasRenderedExample = /<(?:LiveExample|DialogExample|TabsExample|ColorPaletteViewer)\b/.test(entry.body);
 ---
 
 <ScrollToTop containerSelector=".scroll-to-top-container" />
@@ -37,6 +39,9 @@ const currentPath = entry.id;
                 <p class="description">{entry.data.description}</p>
             )
         }
+        {!hasRenderedExample && (
+            <PageExample currentPath={currentPath} pageTitle={entry.data.title} />
+        )}
         <Content />
     </div>
     <div
