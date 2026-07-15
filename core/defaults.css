@@ -435,7 +435,7 @@
     color: var(--text-subtle);
   }
   /* Horizontal Rule styling */
-  hr { border-block-start-color: var(--hr-color); }
+  hr { border-block-start-color: var(--hr-color, var(--divider-color-subtle, var(--outline-subtle))); }
   /* Table styling */
   table { border-color: var(--table-border); }
   th, td { border-bottom-color: var(--table-border); }

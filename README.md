@@ -665,6 +665,7 @@ Pre-built UI components with scoped styling and modern CSS features.
 *   `<table>`: Responsive data tables with proper semantics. [[docs/components/table.md](docs/components/table.md)]
 *   `<carousel>`: Touch-enabled carousel with indicators. [[docs/components/carousel.md](docs/components/carousel.md)]
 *   `<view-transition>`: Smooth page transitions. [[docs/components/view-transition.md](docs/components/view-transition.md)]
+*   Element patterns: Native-first icon/FAB actions, switches, compound inputs, ratings, avatars, toolbars, list navigation, chat/log surfaces, and vertical snap feeds. [[docs/components/element-patterns.md](docs/components/element-patterns.md)]
 
 ### Form Components
 Themed styles for form elements with accessibility and consistency.

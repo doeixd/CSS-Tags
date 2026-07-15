@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A complete SaaS landing page built with CSS Tags and no custom CSS.">
+  <title>Library-Only Landing Page · CSS Tags</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body id="top">
+  <!-- This page intentionally contains no custom CSS or inline styles. -->
+  <layout-page min-height="100vh">
+    <header slot="header">
+      <box py="1rem" bg="var(--surface-subtle)">
+        <layout-center max-width="72rem">
+          <nav class="navbar" aria-label="Primary navigation">
+            <a class="nav-brand" href="#top">Graffiti Cloud</a>
+            <ul class="nav-links">
+              <li><a class="nav-link" href="#features">Features</a></li>
+              <li><a class="nav-link" href="#pricing">Pricing</a></li>
+              <li><a class="nav-link" href="#faq">FAQ</a></li>
+              <li><a class="button button-primary" href="#cta">Start free</a></li>
+            </ul>
+          </nav>
+        </layout-center>
+      </box>
+    </header>
+
+    <main slot="main">
+      <box py="4rem">
+        <layout-center max-width="72rem">
+          <layout-stack gap="6rem">
+            <section aria-labelledby="hero-title">
+              <layout-split fraction="1.1fr 0.9fr" gap="2rem">
+                <layout-stack gap="1.25rem">
+                  <eyebrow class="stack-intrinsic">Ship your next launch faster</eyebrow>
+                  <h1 id="hero-title">Your SaaS landing page, minus the assembly work.</h1>
+                  <p class="lead">Compose a complete product page from the library's layouts, cards, badges, buttons, lists, and native disclosure styles.</p>
+                  <layout-cluster gap="0.75rem">
+                    <a class="button button-primary" href="#pricing">Start 14-day trial</a>
+                    <a class="button" href="#features">Explore features</a>
+                  </layout-cluster>
+                  <layout-cluster gap="0.5rem">
+                    <badge status="success" size="md">No custom CSS</badge>
+                    <badge role="subtle" size="md">Token-first</badge>
+                  </layout-cluster>
+                </layout-stack>
+
+                <card>
+                  <card-body>
+                    <layout-cluster justify="space-between" gap="0.75rem">
+                      <badge status="success" size="sm">Live pipeline</badge>
+                      <small class="text-subtle">graffiti.app</small>
+                    </layout-cluster>
+                    <card-header>Weekly launch score</card-header>
+                    <card-content>
+                      <layout-stack gap="1rem">
+                        <p class="text-subtle">Campaign pages, email capture, and trial routing working from one system.</p>
+                        <layout-grid min-item-size="6rem" gap="0.75rem">
+                          <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                            <strong class="text-xl">42%</strong><br>
+                            <small class="text-subtle">signup lift</small>
+                          </box>
+                          <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                            <strong class="text-xl">3.1×</strong><br>
+                            <small class="text-subtle">faster setup</small>
+                          </box>
+                          <box p="1rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)" align="center">
+                            <strong class="text-xl">18m</strong><br>
+                            <small class="text-subtle">to publish</small>
+                          </box>
+                        </layout-grid>
+                        <layout-grid min-item-size="10rem" gap="0.75rem">
+                          <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)">
+                            <small class="text-subtle">Traffic allocation</small>
+                            <h3>Organic</h3>
+                            <p class="text-subtle">74% reaches the new variant.</p>
+                          </box>
+                          <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)">
+                            <small class="text-subtle">Next release</small>
+                            <h3>Pricing test</h3>
+                            <p class="text-subtle">Ready for stakeholder review.</p>
+                          </box>
+                        </layout-grid>
+                      </layout-stack>
+                    </card-content>
+                  </card-body>
+                </card>
+              </layout-split>
+            </section>
+
+            <section aria-label="Customer logos">
+              <layout-stack gap="1rem" center>
+                <p class="text-subtle">Trusted by launch teams everywhere</p>
+                <layout-grid min-item-size="8rem" gap="1rem">
+                  <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)" align="center"><strong>Northstar</strong></box>
+                  <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)" align="center"><strong>Relay</strong></box>
+                  <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)" align="center"><strong>Fathom</strong></box>
+                  <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)" align="center"><strong>Arcline</strong></box>
+                  <box p="1rem" bg="var(--surface-subtle)" radius="var(--radius-md)" align="center"><strong>Vector</strong></box>
+                </layout-grid>
+              </layout-stack>
+            </section>
+
+            <section id="features" aria-labelledby="features-title">
+              <layout-stack gap="2rem">
+                <layout-center and-text>
+                  <layout-stack gap="0.75rem" center>
+                    <eyebrow class="stack-intrinsic">Everything in one system</eyebrow>
+                    <h2 id="features-title">Build the whole page from a small, consistent API.</h2>
+                    <p class="text-subtle">The same public primitives work as custom elements, classes, and data-attribute hosts.</p>
+                  </layout-stack>
+                </layout-center>
+
+                <layout-grid min-item-size="18rem" gap="1rem">
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">01</badge></layout-cluster>
+                      <card-header>Token-first theming</card-header>
+                      <card-content><p>Change the system's character through semantic variables instead of rewriting every component.</p></card-content>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">02</badge></layout-cluster>
+                      <card-header>Semantic interactions</card-header>
+                      <card-content><p>Start with native links, buttons, details, lists, and ARIA states before adding behavior.</p></card-content>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">03</badge></layout-cluster>
+                      <card-header>Responsive layouts</card-header>
+                      <card-content><p>Grid, split, cluster, and switcher primitives adapt without page-specific media queries.</p></card-content>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">04</badge></layout-cluster>
+                      <card-header>Composable surfaces</card-header>
+                      <card-content><p>Use cards for structured content and boxes for declarative one-off surfaces.</p></card-content>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">05</badge></layout-cluster>
+                      <card-header>Readable defaults</card-header>
+                      <card-content><p>Semantic typography establishes a useful hierarchy before custom art direction is added.</p></card-content>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <layout-cluster><badge role="subtle" size="sm">06</badge></layout-cluster>
+                      <card-header>Progressive enhancement</card-header>
+                      <card-content><p>Modern platform features enhance a page while its core content remains available.</p></card-content>
+                    </card-body>
+                  </card>
+                </layout-grid>
+              </layout-stack>
+            </section>
+
+            <section id="pricing" aria-labelledby="pricing-title">
+              <layout-stack gap="2rem">
+                <layout-center and-text>
+                  <layout-stack gap="0.75rem" center>
+                    <eyebrow class="stack-intrinsic">Simple pricing</eyebrow>
+                    <h2 id="pricing-title">Plans for every stage of the launch.</h2>
+                    <p class="text-subtle">Every plan uses the same card structure and semantic list styling.</p>
+                  </layout-stack>
+                </layout-center>
+
+                <layout-grid min-item-size="16rem" gap="1rem">
+                  <card>
+                    <card-body>
+                      <card-header>Starter</card-header>
+                      <p class="text-subtle">For solo builders validating a product.</p>
+                      <p><strong class="text-2xl">$19</strong> <span class="text-subtle">/ month</span></p>
+                      <card-content>
+                        <ul data-list gap="0.75rem">
+                          <li>One conversion-focused landing page</li>
+                          <li>Email capture and analytics blocks</li>
+                          <li>Theme token overrides</li>
+                        </ul>
+                      </card-content>
+                      <card-footer><a class="button" href="#cta">Choose Starter</a></card-footer>
+                    </card-body>
+                  </card>
+
+                  <card class="border-active">
+                    <card-body>
+                      <layout-cluster><badge status="primary" size="sm">Most popular</badge></layout-cluster>
+                      <card-header>Growth</card-header>
+                      <p class="text-subtle">For teams running experiments every week.</p>
+                      <p><strong class="text-2xl">$59</strong> <span class="text-subtle">/ month</span></p>
+                      <card-content>
+                        <ul data-list gap="0.75rem">
+                          <li>Unlimited sections and variants</li>
+                          <li>Reusable marketing patterns</li>
+                          <li>Team-ready themes</li>
+                        </ul>
+                      </card-content>
+                      <card-footer><a class="button button-primary" href="#cta">Choose Growth</a></card-footer>
+                    </card-body>
+                  </card>
+
+                  <card>
+                    <card-body>
+                      <card-header>Scale</card-header>
+                      <p class="text-subtle">For teams standardizing multiple sites.</p>
+                      <p><strong class="text-2xl">$129</strong> <span class="text-subtle">/ month</span></p>
+                      <card-content>
+                        <ul data-list gap="0.75rem">
+                          <li>Multi-brand themes and playbooks</li>
+                          <li>Priority migration support</li>
+                          <li>Advanced campaign environments</li>
+                        </ul>
+                      </card-content>
+                      <card-footer><a class="button" href="#cta">Talk to sales</a></card-footer>
+                    </card-body>
+                  </card>
+                </layout-grid>
+              </layout-stack>
+            </section>
+
+            <section aria-labelledby="testimonials-title">
+              <layout-stack gap="2rem">
+                <layout-center and-text>
+                  <layout-stack gap="0.75rem" center>
+                    <eyebrow class="stack-intrinsic">Customer stories</eyebrow>
+                    <h2 id="testimonials-title">From rough idea to a launch-ready page.</h2>
+                  </layout-stack>
+                </layout-center>
+
+                <layout-grid min-item-size="18rem" gap="1rem">
+                  <card>
+                    <card-body>
+                      <card-content><blockquote>“We rebuilt our launch page in one afternoon without inventing new design patterns.”</blockquote></card-content>
+                      <card-footer><strong>Mina Patel</strong><br>Head of Growth, Northstar</card-footer>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <card-content><blockquote>“The primitives got us most of the way there, and tokens handled the remaining polish.”</blockquote></card-content>
+                      <card-footer><strong>Jordan Lee</strong><br>Design Engineer, Relay</card-footer>
+                    </card-body>
+                  </card>
+                  <card>
+                    <card-body>
+                      <card-content><blockquote>“Native disclosure and shared card markup kept our marketing codebase much cleaner.”</blockquote></card-content>
+                      <card-footer><strong>Casey Morgan</strong><br>Product Marketing, Arcline</card-footer>
+                    </card-body>
+                  </card>
+                </layout-grid>
+              </layout-stack>
+            </section>
+
+            <section id="faq" aria-labelledby="faq-title">
+              <layout-stack gap="2rem">
+                <layout-center and-text>
+                  <layout-stack gap="0.75rem" center>
+                    <eyebrow class="stack-intrinsic">FAQ</eyebrow>
+                    <h2 id="faq-title">Common questions before you publish.</h2>
+                  </layout-stack>
+                </layout-center>
+
+                <div data-accordion>
+                  <details name="library-only-faq" open>
+                    <summary>Does this example really contain no custom CSS?</summary>
+                    <p>Yes. It loads <code>index.css</code> and uses only public library APIs in its HTML.</p>
+                  </details>
+                  <details name="library-only-faq">
+                    <summary>Does the FAQ require JavaScript?</summary>
+                    <p>No. Native <code>details</code> and <code>summary</code> provide the disclosure behavior.</p>
+                  </details>
+                  <details name="library-only-faq">
+                    <summary>Can these custom tags be replaced?</summary>
+                    <p>Yes. Most primitives also support class and <code>data-*</code> hosts.</p>
+                  </details>
+                  <details name="library-only-faq">
+                    <summary>When should a project add custom CSS?</summary>
+                    <p>Add it when the product needs distinct art direction. This page demonstrates the useful library-only baseline.</p>
+                  </details>
+                </div>
+              </layout-stack>
+            </section>
+
+            <section id="cta" aria-labelledby="cta-title">
+              <box p="2rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+                <layout-switcher threshold="40rem" gap="1.5rem">
+                  <layout-stack gap="0.75rem">
+                    <eyebrow class="stack-intrinsic">Ready to launch?</eyebrow>
+                    <h2 id="cta-title">Start with the library. Add art direction when you need it.</h2>
+                    <p class="text-subtle">Copy this file as a working baseline for a real product page.</p>
+                  </layout-stack>
+                  <layout-cluster justify="center" align="center" gap="0.75rem">
+                    <a class="button button-primary" href="#top">Create account</a>
+                    <a class="button" href="#features">Review components</a>
+                  </layout-cluster>
+                </layout-switcher>
+              </box>
+            </section>
+          </layout-stack>
+        </layout-center>
+      </box>
+    </main>
+
+    <footer slot="footer">
+      <box py="3rem" bg="var(--surface-subtle)">
+        <layout-center max-width="72rem">
+          <layout-stack gap="2rem">
+            <layout-grid min-item-size="10rem" gap="1.5rem">
+              <nav aria-label="Product">
+                <layout-stack gap="0.5rem">
+                  <strong>Product</strong>
+                  <a href="#features">Features</a>
+                  <a href="#pricing">Pricing</a>
+                  <a href="#faq">FAQ</a>
+                </layout-stack>
+              </nav>
+              <nav aria-label="Resources">
+                <layout-stack gap="0.5rem">
+                  <strong>Resources</strong>
+                  <a href="../README.md">Documentation</a>
+                  <a href="../API.md">API reference</a>
+                  <a href="https://github.com/doeixd/CSS-Tags">GitHub</a>
+                </layout-stack>
+              </nav>
+              <nav aria-label="Examples">
+                <layout-stack gap="0.5rem">
+                  <strong>Examples</strong>
+                  <a href="demo-landing.html">Art-directed version</a>
+                  <a href="demo-components.html">Components</a>
+                  <a href="demo-theme.html">Theme controls</a>
+                </layout-stack>
+              </nav>
+            </layout-grid>
+            <hr strength="overt">
+            <layout-cluster justify="space-between" gap="1rem">
+              <small class="text-subtle">© 2026 Graffiti Cloud. Demo content only.</small>
+              <a class="text-subtle" href="#top">Back to top</a>
+            </layout-cluster>
+          </layout-stack>
+        </layout-center>
+      </box>
+    </footer>
+  </layout-page>
+</body>
+</html>

@@ -122,6 +122,8 @@ declare global {
       pad?: CSSValue;
     }
 
+    interface FluidContainerAttributes extends GlobalAttributes {}
+
     interface BadgeAttributes extends GlobalAttributes {
       size?: "sm" | "md" | "lg";
       role?: "subtle" | "default" | "muted" | "overt" | string;
@@ -217,6 +219,12 @@ declare global {
       "icon-color"?: CSSValue;
     }
 
+    interface DividerAttributes extends GlobalAttributes {
+      orientation?: "horizontal" | "vertical";
+      vertical?: BooleanAttribute;
+      strength?: "muted" | "subtle" | "default" | "overt" | "accent";
+    }
+
     interface CarouselAttributes extends GlobalAttributes {
       duration?: CSSValue;
       "timing-function"?: CSSValue;
@@ -255,6 +263,28 @@ declare global {
       href?: string;
     }
 
+    interface SizedComponentAttributes extends GlobalAttributes {
+      size?: "sm" | "md" | "lg";
+      "data-size"?: "sm" | "md" | "lg";
+    }
+
+    interface InputGroupAttributes extends GlobalAttributes {
+      "data-stack"?: "auto" | "true" | "false";
+    }
+
+    interface AvatarAttributes extends SizedComponentAttributes {
+      shape?: "circle" | "square";
+      "data-shape"?: "circle" | "square";
+    }
+
+    interface BubbleAttributes extends GlobalAttributes {
+      "data-sender"?: "self" | "other";
+    }
+
+    interface SnapFeedAttributes extends GlobalAttributes {
+      "aria-label"?: string;
+    }
+
     interface IntrinsicElements {
       "layout-grid": LayoutGridAttributes;
       "layout-split": LayoutSplitAttributes;
@@ -279,12 +309,14 @@ declare global {
       chip: ChipAttributes;
       text: TextAttributes;
       container: ContainerAttributes;
+      "fluid-container": FluidContainerAttributes;
       grid: GridAttributes;
       flex: FlexAttributes;
       "img-container": ImageContainerAttributes;
       list: ListAttributes;
       "list-item": ListItemAttributes;
       "list-divider": GlobalAttributes;
+      divider: DividerAttributes;
       carousel: CarouselAttributes;
       "carousel-item": GlobalAttributes;
       "carousel-trigger": CarouselTriggerAttributes;
@@ -297,6 +329,22 @@ declare global {
       "view-transition": GlobalAttributes;
       "view-page": ViewPageAttributes;
       "nav-trigger": ViewTriggerAttributes;
+      "icon-button": SizedComponentAttributes;
+      "floating-action": SizedComponentAttributes;
+      "input-group": InputGroupAttributes;
+      "search-input": GlobalAttributes;
+      "file-dropzone": GlobalAttributes;
+      "rating-output": GlobalAttributes;
+      "rating-input": GlobalAttributes;
+      "reaction-select": GlobalAttributes;
+      "user-avatar": AvatarAttributes;
+      "avatar-group": GlobalAttributes;
+      "tool-bar": GlobalAttributes;
+      "nav-list": GlobalAttributes;
+      "icon-rail": GlobalAttributes;
+      "message-bubble": BubbleAttributes;
+      "log-card": GlobalAttributes;
+      "snap-feed": SnapFeedAttributes;
     }
   }
 
@@ -324,12 +372,14 @@ declare global {
     chip: HTMLElement;
     text: HTMLElement;
     container: HTMLElement;
+    "fluid-container": HTMLElement;
     grid: HTMLElement;
     flex: HTMLElement;
     "img-container": HTMLElement;
     list: HTMLElement;
     "list-item": HTMLElement;
     "list-divider": HTMLElement;
+    divider: HTMLElement;
     carousel: HTMLElement;
     "carousel-item": HTMLElement;
     "carousel-trigger": HTMLElement;
@@ -342,6 +392,22 @@ declare global {
     "view-transition": HTMLElement;
     "view-page": HTMLElement;
     "nav-trigger": HTMLElement;
+    "icon-button": HTMLElement;
+    "floating-action": HTMLElement;
+    "input-group": HTMLElement;
+    "search-input": HTMLElement;
+    "file-dropzone": HTMLElement;
+    "rating-output": HTMLElement;
+    "rating-input": HTMLElement;
+    "reaction-select": HTMLElement;
+    "user-avatar": HTMLElement;
+    "avatar-group": HTMLElement;
+    "tool-bar": HTMLElement;
+    "nav-list": HTMLElement;
+    "icon-rail": HTMLElement;
+    "message-bubble": HTMLElement;
+    "log-card": HTMLElement;
+    "snap-feed": HTMLElement;
   }
 
   namespace JSX {

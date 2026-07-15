@@ -61,8 +61,8 @@
     }
 
     & > :is(list-divider, [data-list-divider], .list-divider) {
-      height: 1px;
-      background-color: oklch(from var(--theme-text) l c h / 0.1);
+      block-size: var(--list-divider-size, var(--divider-size, 1px));
+      background-color: var(--list-divider-color, var(--divider-color, var(--divider-color-subtle, var(--outline-subtle))));
       margin-block: attr(gap type(*), 0.5rem); /* Logical property */
       border: 0;
     }

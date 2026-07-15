@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Tags — Navigation patterns</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to examples</a>
+
+  <main id="main-content" tabindex="-1">
+    <container>
+      <layout-stack gap="var(--space-2xl)">
+        <header data-prose>
+          <eyebrow>Semantic navigation</eyebrow>
+          <h1>Breadcrumbs and pagination</h1>
+          <p class="lead">Native landmarks and lists, styled without JavaScript.</p>
+        </header>
+
+        <section data-prose>
+          <h2>Breadcrumbs</h2>
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#library">Library</a></li>
+              <li><span aria-current="page">Navigation patterns</span></li>
+            </ol>
+          </nav>
+        </section>
+
+        <section data-prose>
+          <h2>Pagination</h2>
+          <nav data-pagination aria-label="Pagination">
+            <a class="pagination-previous" href="#page-2">Previous</a>
+            <ol>
+              <li><a href="#page-1">1</a></li>
+              <li><a href="#page-2">2</a></li>
+              <li><a href="#page-3" aria-current="page">3</a></li>
+              <li><a href="#page-4">4</a></li>
+              <li><a href="#page-5">5</a></li>
+            </ol>
+            <a class="pagination-next" href="#page-4">Next</a>
+          </nav>
+        </section>
+
+        <section data-prose>
+          <h2>Disabled and compact</h2>
+          <nav class="pagination" data-size="compact" data-surface="footer" aria-label="Pagination">
+            <a class="pagination-previous" aria-disabled="true">Previous</a>
+            <ol><li><a href="#page-1" aria-current="page">1</a></li></ol>
+            <a class="pagination-next" href="#page-2">Next</a>
+          </nav>
+        </section>
+      </layout-stack>
+    </container>
+  </main>
+</body>
+</html>

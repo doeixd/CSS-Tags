@@ -495,36 +495,6 @@ const hasToc = tocHeadings.length > 0;
                 }
             }
 
-            .skip-to-content {
-                position: var(--skip-link-position, absolute);
-                top: var(--skip-link-top, -100px);
-                left: var(--skip-link-left, var(--space-lg));
-                z-index: var(--z-index-skip-link);
-                padding: var(
-                    --skip-link-padding,
-                    var(--space-md) calc(var(--space-lg) * 1.5)
-                );
-                background: var(--accent);
-                color: white;
-                text-decoration: none;
-                border-radius: var(
-                    --skip-link-border-radius,
-                    var(--border-radius-md)
-                );
-                font-weight: var(
-                    --skip-link-font-weight,
-                    var(--font-weight-medium)
-                );
-                transition: var(
-                    --skip-link-transition,
-                    top var(--transition-normal)
-                );
-            }
-
-            .skip-to-content:focus {
-                top: 1rem;
-            }
-
             /* View Transition Animations */
             /* Default: No animations - instant transitions for maximum speed */
             ::view-transition-group(*) {
@@ -1115,7 +1085,9 @@ const hasToc = tocHeadings.length > 0;
         </style>
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Skip to content</a>
         <ClientRouter />
+        <ScrollToTop containerSelector=".scroll-to-top-container" />
         <script>
             import { navigate } from 'astro:transitions/client';
 
@@ -1148,8 +1120,6 @@ const hasToc = tocHeadings.length > 0;
                 the best experience.
             </div>
         </noscript>
-
-        <a href="#main-content" class="skip-to-content">Skip to content</a>
 
         <!-- SITE HEADER (OPTIONAL): Full-width header with logo, search, and actions -->
         <!--
@@ -1277,7 +1247,7 @@ const hasToc = tocHeadings.length > 0;
 
         <div class={`docs-container ${hasToc ? 'has-toc' : 'no-toc'}`}>
             <div class="content-wrapper">
-                <main class="content" id="main-content" data-pagefind-body >
+                <main class="content" id="main-content" tabindex="-1" data-pagefind-body>
                     <slot />
                 </main>
             </div>

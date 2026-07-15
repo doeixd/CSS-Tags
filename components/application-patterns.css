@@ -1,0 +1,122 @@
+/** Application and feed patterns built on semantic content. */
+
+:is(message-bubble, [data-bubble], .bubble) {
+  display: grid;
+  inline-size: fit-content;
+  max-inline-size: var(--bubble-max-width, min(42rem, 85%));
+  gap: var(--bubble-gap, var(--space-xs, 0.5rem));
+  padding: var(--bubble-padding, var(--space-sm, 0.75rem) var(--space-md, 1rem));
+  border: var(--bubble-border-width, var(--border-width, 1px)) solid
+    var(--bubble-border-color, var(--outline-subtle));
+  border-radius: var(--bubble-radius, var(--radius-lg, 0.75rem));
+  background: var(--bubble-background, var(--surface-subtle));
+  color: var(--bubble-color, var(--text-default));
+}
+
+:is(message-bubble, [data-bubble], .bubble):is([data-sender="self"], .bubble-self) {
+  justify-self: end;
+  border-end-end-radius: var(--bubble-tail-radius, var(--radius-xs, 0.25rem));
+  background: var(--bubble-self-background, var(--accent));
+  color: var(--bubble-self-color, var(--text-on-accent));
+}
+
+:is(message-bubble, [data-bubble], .bubble):is([data-sender="other"], .bubble-other) {
+  justify-self: start;
+  border-end-start-radius: var(--bubble-tail-radius, var(--radius-xs, 0.25rem));
+}
+
+:is([data-chat], .chat) {
+  display: grid;
+  gap: var(--chat-gap, var(--space-sm, 0.75rem));
+}
+
+:is([data-bubble-meta], .bubble-meta) {
+  color: inherit;
+  font-size: var(--bubble-meta-size, var(--font-size-xs, 0.75rem));
+  opacity: var(--bubble-meta-opacity, 0.72);
+}
+
+:is(message-bubble, [data-bubble], .bubble)[aria-busy="true"]::after {
+  content: "•••";
+  inline-size: 1.5em;
+  overflow: hidden;
+  animation: bubble-thinking 1.2s steps(4, end) infinite;
+}
+
+@keyframes bubble-thinking {
+  from { inline-size: 0; }
+}
+
+:is(log-card, [data-log-card], .log-card) {
+  display: grid;
+  overflow: hidden;
+  border: var(--log-card-border-width, var(--border-width, 1px)) solid
+    var(--log-card-border-color, var(--outline-subtle));
+  border-radius: var(--log-card-radius, var(--radius-lg, 0.75rem));
+  background: var(--log-card-background, var(--surface-default));
+  color: var(--log-card-color, var(--text-default));
+}
+
+:is([data-log-header], .log-card-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--log-card-gap, var(--space-sm, 0.75rem));
+  padding: var(--log-card-header-padding, var(--space-sm, 0.75rem) var(--space-md, 1rem));
+  border-block-end: var(--border-width, 1px) solid var(--log-card-border-color, var(--outline-subtle));
+  background: var(--log-card-header-background, var(--surface-subtle));
+}
+
+:is([data-log-body], .log-card-body) {
+  max-block-size: var(--log-card-max-height, 24rem);
+  padding: var(--log-card-body-padding, var(--space-sm, 0.75rem));
+  overflow: auto;
+  font-family: var(--font-family-mono, ui-monospace, monospace);
+  font-size: var(--log-card-font-size, var(--font-size-sm, 0.875rem));
+}
+
+:is([data-log-row], .log-row) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--log-row-gap, var(--space-sm, 0.75rem));
+  padding: var(--log-row-padding, var(--space-xs, 0.5rem));
+  border-radius: var(--log-row-radius, var(--radius-sm, 0.25rem));
+}
+
+:is([data-log-row], .log-row)::before {
+  content: "";
+  align-self: center;
+  inline-size: var(--log-marker-size, 0.5rem);
+  block-size: var(--log-marker-size, 0.5rem);
+  border-radius: 50%;
+  background: var(--log-marker-color, var(--text-muted));
+}
+
+:is([data-log-row="success"], .log-row-success) { --log-marker-color: var(--success); }
+:is([data-log-row="warning"], .log-row-warning) { --log-marker-color: var(--warning); }
+:is([data-log-row="error"], .log-row-error) { --log-marker-color: var(--error); }
+:is([data-log-row="running"], .log-row-running) { --log-marker-color: var(--info); }
+
+:is(snap-feed, [data-snap-feed], .snap-feed) {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--snap-feed-height, min(80dvh, 48rem));
+  overflow-y: auto;
+  overscroll-behavior-block: contain;
+  scroll-snap-type: y var(--snap-feed-strictness, mandatory);
+  scrollbar-gutter: stable;
+}
+
+:is(snap-feed, [data-snap-feed], .snap-feed) > * {
+  flex: 0 0 var(--snap-feed-item-min-height, 100%);
+  min-block-size: 0;
+  scroll-snap-align: var(--snap-feed-align, start);
+  scroll-snap-stop: var(--snap-feed-stop, normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(message-bubble, [data-bubble], .bubble)[aria-busy="true"]::after {
+    animation: none;
+    inline-size: auto;
+  }
+}

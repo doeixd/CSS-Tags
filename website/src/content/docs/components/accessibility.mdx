@@ -1,0 +1,44 @@
+---
+title: Accessibility Primitives
+description: Semantic, CSS-only accessibility helpers including a keyboard focus-revealed skip link.
+---
+
+## Skip link
+
+Place the skip link as the first focusable element in `<body>`. Press Tab on this documentation page to see the library component itself.
+
+```html
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header>...</header>
+  <main id="main-content" tabindex="-1">...</main>
+</body>
+```
+
+The data host is equivalent:
+
+```html
+<a data-skip-link href="#main-content">Skip to content</a>
+```
+
+Only anchors are supported because a skip link is navigation. There is intentionally no custom tag. It works without JavaScript and includes logical positioning, a visible focus outline, reduced-motion behavior, and forced-colors support.
+
+## Theme tokens
+
+```css
+:root {
+  --skip-link-inset-block: 1rem;
+  --skip-link-inset-inline: 1rem;
+  --skip-link-background: #111827;
+  --skip-link-color: white;
+  --skip-link-radius: 999px;
+  --skip-link-shadow: none;
+}
+```
+
+Other hooks include `--skip-link-padding`, `--skip-link-border`, `--skip-link-font-weight`, `--skip-link-z-index`, `--skip-link-duration`, `--skip-link-focus-outline`, and `--skip-link-focus-offset`.
+
+## Main target behavior
+
+Use a stable `id` on the main landmark. `tabindex="-1"` makes the target programmatically focusable without adding it to the normal Tab order.

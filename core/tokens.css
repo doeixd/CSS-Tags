@@ -179,12 +179,34 @@
   --font-size-step--2: 0.75rem;
   --font-size-step--1: 0.875rem;
   --font-size-step-0: 1rem;
-  --font-size-step-1: clamp(1.0625rem, 1.02rem + 0.22vw, 1.125rem);
-  --font-size-step-2: clamp(1.1875rem, 1.11rem + 0.4vw, 1.25rem);
-  --font-size-step-3: clamp(1.375rem, 1.22rem + 0.75vw, 1.5rem);
-  --font-size-step-4: clamp(1.625rem, 1.32rem + 1.25vw, 1.875rem);
-  --font-size-step-5: clamp(2rem, 1.5rem + 1.9vw, 2.5rem);
-  --font-size-step-6: clamp(2.5rem, 1.8rem + 2.8vw, 3.25rem);
+  --font-size-step-1-min: 1.0625rem;
+  --font-size-step-1-preferred: calc(1.02rem + 0.22vw);
+  --font-size-step-1-max: 1.125rem;
+  --font-size-step-1: clamp(var(--font-size-step-1-min), var(--font-size-step-1-preferred), var(--font-size-step-1-max));
+  --font-size-step-2-min: 1.1875rem;
+  --font-size-step-2-preferred: calc(1.11rem + 0.4vw);
+  --font-size-step-2-max: 1.25rem;
+  --font-size-step-2: clamp(var(--font-size-step-2-min), var(--font-size-step-2-preferred), var(--font-size-step-2-max));
+  --font-size-step-3-min: 1.375rem;
+  --font-size-step-3-preferred: calc(1.22rem + 0.75vw);
+  --font-size-step-3-max: 1.5rem;
+  --font-size-step-3: clamp(var(--font-size-step-3-min), var(--font-size-step-3-preferred), var(--font-size-step-3-max));
+  --font-size-step-4-min: 1.625rem;
+  --font-size-step-4-preferred: calc(1.32rem + 1.25vw);
+  --font-size-step-4-max: 1.875rem;
+  --font-size-step-4: clamp(var(--font-size-step-4-min), var(--font-size-step-4-preferred), var(--font-size-step-4-max));
+  --font-size-step-5-min: 2rem;
+  --font-size-step-5-preferred: calc(1.5rem + 1.9vw);
+  --font-size-step-5-max: 2.5rem;
+  --font-size-step-5: clamp(var(--font-size-step-5-min), var(--font-size-step-5-preferred), var(--font-size-step-5-max));
+  --font-size-step-6-min: 2.5rem;
+  --font-size-step-6-preferred: calc(1.8rem + 2.8vw);
+  --font-size-step-6-max: 3.25rem;
+  --font-size-step-6: clamp(var(--font-size-step-6-min), var(--font-size-step-6-preferred), var(--font-size-step-6-max));
+  --font-size-step-7-min: 3rem;
+  --font-size-step-7-preferred: calc(2.1rem + 3.6vw);
+  --font-size-step-7-max: 4.25rem;
+  --font-size-step-7: clamp(var(--font-size-step-7-min), var(--font-size-step-7-preferred), var(--font-size-step-7-max));
 
   /* Public Size Aliases */
   --font-size-xs: var(--font-size-step--2);
@@ -196,7 +218,7 @@
   --font-size-3xl: var(--font-size-step-4);
   --font-size-4xl: var(--font-size-step-5);
   --font-size-5xl: var(--font-size-step-6);
-  --font-size-6xl: clamp(3rem, 2.1rem + 3.6vw, 4.25rem);
+  --font-size-6xl: var(--font-size-step-7);
 
   /* Semantic Typography Tokens */
   --font-size-body-sm: var(--font-size-sm);
@@ -268,6 +290,38 @@
   --space-callout-pad-x: 1rem;
   --space-callout-pad-y: 1rem;
   --letter-spacing-eyebrow: var(--letter-spacing-widest);
+
+  /* Dividers */
+  --divider-color-muted: var(--outline-muted);
+  --divider-color-subtle: var(--outline-subtle);
+  --divider-color-default: var(--outline-default, var(--outline));
+  --divider-color-overt: var(--outline-overt);
+  --divider-color-accent: var(--accent);
+  --divider-size: var(--border-width, 1px);
+  --divider-style: solid;
+  --divider-gap: var(--space-md, 1rem);
+  --divider-min-length: 1.5rem;
+  --hr-color: var(--divider-color-subtle);
+
+  /* Breadcrumbs */
+  --breadcrumbs-gap: var(--space-xs, 0.5rem);
+  --breadcrumbs-separator: "/";
+  --breadcrumbs-color: var(--text-subtle);
+  --breadcrumbs-hover-color: var(--text-overt);
+  --breadcrumbs-current-color: var(--text-default);
+  --breadcrumbs-font-size: var(--font-size-sm);
+
+  /* Pagination */
+  --pagination-gap: var(--space-xs, 0.5rem);
+  --pagination-target-size: 2.75rem;
+  --pagination-padding-inline: var(--space-sm, 0.75rem);
+  --pagination-radius: var(--radius-md, 0.5rem);
+  --pagination-color: var(--text-default);
+  --pagination-background: transparent;
+  --pagination-hover-background: var(--surface-subtle);
+  --pagination-current-background: var(--accent);
+  --pagination-current-color: var(--on-accent, white);
+  --pagination-disabled-opacity: 0.5;
 
   /* Text Box Progressive Enhancement */
   --text-box: normal;

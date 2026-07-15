@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Tags — Fluid type</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to demo</a>
+
+  <main id="main-content" tabindex="-1">
+    <container>
+      <layout-stack gap="var(--space-xl)">
+        <header data-prose>
+          <eyebrow>Responsive typography</eyebrow>
+          <h1>Fluid type, bounded by design</h1>
+          <p class="lead">Resize the cards below. Their headings respond to each card's width, not the viewport.</p>
+        </header>
+
+        <layout-grid min-item-size="16rem" gap="var(--space-lg)">
+          <fluid-container>
+            <card>
+              <card-body>
+                <layout-stack gap="var(--space-sm)">
+                  <text size="5xl" weight="bold" measure="heading">A compact container</text>
+                  <p>Custom element host: <code>&lt;fluid-container&gt;</code>.</p>
+                </layout-stack>
+              </card-body>
+            </card>
+          </fluid-container>
+
+          <section class="fluid-container">
+            <card>
+              <card-body>
+                <layout-stack gap="var(--space-sm)">
+                  <text size="5xl" weight="bold" measure="heading">The same bounded scale</text>
+                  <p>Class host: <code>.fluid-container</code> or its short <code>.fc</code> alias.</p>
+                </layout-stack>
+              </card-body>
+            </card>
+          </section>
+        </layout-grid>
+      </layout-stack>
+    </container>
+  </main>
+</body>
+</html>

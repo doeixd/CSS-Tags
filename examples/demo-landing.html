@@ -5,52 +5,198 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSS Tags Landing Page Demo</title>
   <link rel="stylesheet" href="../index.css">
+  <style>
+    :root {
+      --landing-measure: 72rem;
+      --landing-section-gap: clamp(4rem, 8vw, 7rem);
+      --landing-content-gap: clamp(2rem, 4vw, 3rem);
+      --landing-footer-border: var(--outline-subtle);
+      --landing-footer-divider: var(--outline-overt);
+    }
+
+    body {
+      overflow-x: clip;
+      background:
+        radial-gradient(circle at 85% 5%, color-mix(in oklch, var(--accent) 14%, transparent), transparent 28rem),
+        var(--base);
+    }
+
+    .landing-header {
+      border-bottom: 1px solid var(--outline-subtle);
+      background: color-mix(in oklch, var(--base) 88%, transparent);
+      backdrop-filter: blur(1rem);
+    }
+
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-lg);
+      min-block-size: 4.75rem;
+    }
+
+    .landing-brand,
+    .landing-nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .landing-brand {
+      color: var(--text-overt);
+      text-decoration: none;
+    }
+
+    .landing-brand-copy {
+      display: grid;
+      line-height: 1.2;
+    }
+
+    .landing-brand-copy small { color: var(--text-subtle); }
+    .landing-nav-links { flex-wrap: wrap; justify-content: flex-end; }
+
+    .landing-main { padding-block: clamp(3.5rem, 8vw, 7rem); }
+    .landing-sections { gap: var(--landing-section-gap); }
+    .landing-section { scroll-margin-block-start: 2rem; }
+    .landing-content-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--landing-content-gap);
+    }
+
+    .landing-section-heading {
+      --l-gap: 0.8rem;
+    }
+
+    .landing-section-intro {
+      box-sizing: border-box;
+      inline-size: 100%;
+    }
+
+    .landing-section-heading h2 {
+      max-inline-size: 23ch;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    .landing-section-heading > p {
+      max-inline-size: 62ch;
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .landing-hero-copy h1 {
+      max-inline-size: 12ch;
+      font-size: clamp(3rem, 7vw, 5.75rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    .landing-hero-copy > p {
+      max-inline-size: 58ch;
+      font-size: var(--font-size-lg);
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .landing-dashboard {
+      box-shadow: 0 1.5rem 4rem color-mix(in oklch, var(--accent) 12%, transparent);
+    }
+
+    .landing-card-grid > :is(box, [data-box], .box),
+    .landing-price-grid > :is(box, [data-box], .box) {
+      block-size: 100%;
+    }
+
+    .landing-price-grid > :is(box, [data-box], .box) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .landing-price-grid ul { flex: 1; }
+    .landing-price-grid .button { inline-size: 100%; }
+    .landing-price {
+      color: var(--text-overt);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: var(--font-weight-heading, 600);
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+
+    .landing-price span {
+      margin-inline-start: 0.2em;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-normal, 400);
+      letter-spacing: normal;
+    }
+
+    .landing-footer { border-top: 1px solid var(--landing-footer-border); }
+    .landing-footer-divider {
+      border-block-start-color: var(--landing-footer-divider);
+      opacity: 1;
+    }
+
+    @media (max-width: 48rem) {
+      .landing-nav { align-items: flex-start; padding-block: var(--space-md); }
+      .landing-brand-copy small { display: none; }
+      .landing-nav-links .button-ghost { display: none; }
+      .landing-hero-copy h1 { font-size: clamp(2.75rem, 14vw, 4.5rem); }
+    }
+
+    @media (max-width: 32rem) {
+      .landing-nav-links .button { padding-inline: 0.8rem; }
+      .landing-hero-actions { align-items: stretch; }
+      .landing-hero-actions .button { inline-size: 100%; }
+    }
+  </style>
 </head>
-<body>
+<body id="top">
   <layout-page min-height="100vh">
-    <header slot="header">
-      <layout-center max-width="1200px">
-        <box py="1rem">
-          <layout-split fraction="1fr auto" gap="1rem" no-stack>
-            <layout-cluster align="center" gap="0.75rem">
-              <badge status="info" size="lg">G</badge>
-              <layout-stack gap="0.15rem">
-                <strong>Graffiti Cloud</strong>
-                <small class="text-subtle">Landing page demo with library primitives</small>
-              </layout-stack>
-            </layout-cluster>
-            <layout-cluster justify="flex-end" gap="0.75rem">
-              <a href="#features" class="button button-ghost">Features</a>
-              <a href="#pricing" class="button button-ghost">Pricing</a>
-              <a href="#faq" class="button button-ghost">FAQ</a>
-              <a href="#cta" class="button button-primary">Start free</a>
-            </layout-cluster>
-          </layout-split>
-        </box>
-        <hr>
+    <header slot="header" class="landing-header">
+      <layout-center max-width="var(--landing-measure)">
+        <nav class="landing-nav" aria-label="Primary">
+          <a class="landing-brand" href="#top">
+            <badge status="info" size="lg" aria-hidden="true">G</badge>
+            <span class="landing-brand-copy">
+              <strong>Graffiti Cloud</strong>
+              <small>Built with CSS Tags</small>
+            </span>
+          </a>
+          <div class="landing-nav-links">
+            <a href="#features" class="button button-ghost">Features</a>
+            <a href="#pricing" class="button button-ghost">Pricing</a>
+            <a href="#faq" class="button button-ghost">FAQ</a>
+            <a href="#cta" class="button button-primary">Start free</a>
+          </div>
+        </nav>
       </layout-center>
     </header>
 
-    <main slot="main">
-      <layout-center max-width="1200px">
-        <layout-stack gap="5rem">
-          <section>
+    <main slot="main" class="landing-main">
+      <layout-center max-width="var(--landing-measure)">
+        <layout-stack class="landing-sections">
+          <section class="landing-section">
             <layout-split fraction="1.1fr 0.9fr" gap="2rem">
-              <layout-stack gap="1.25rem" center>
+              <layout-stack class="landing-hero-copy" gap="1.25rem">
                 <eyebrow class="stack-intrinsic">Ship your next launch faster</eyebrow>
-                <h1>Your SaaS landing page, minus the assembly work.</h1>
-                <p class="text-subtle">A library-first recreation of the Graffiti landing pattern using `layout-*`, `box`, `badge`, buttons, lists, and native disclosure styles.</p>
-                <layout-cluster gap="0.75rem" justify="center">
+                <h1>Your SaaS landing page, minus the assembly&nbsp;work.</h1>
+                <p class="text-subtle">A library-first landing page composed from <code>layout-*</code>, <code>box</code>, <code>badge</code>, buttons, lists, and native disclosure styles.</p>
+                <layout-cluster class="landing-hero-actions" gap="0.75rem">
                   <a href="#pricing" class="button button-primary">Start 14-day trial</a>
                   <a href="#features" class="button button-outline">See product tour</a>
                 </layout-cluster>
-                <layout-cluster gap="0.65rem" justify="center">
-                  <badge status="success" size="md">No custom demo CSS</badge>
-                  <badge role="subtle" size="md">Built from library primitives</badge>
+                <layout-cluster gap="0.65rem">
+                  <badge status="success" size="md">Progressively enhanced</badge>
+                  <badge role="subtle" size="md">Token-first styling</badge>
                 </layout-cluster>
               </layout-stack>
 
-              <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
+              <box class="landing-dashboard" p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="1rem">
                   <layout-cluster justify="space-between" align="center" gap="0.75rem">
                     <badge status="success" size="sm">Live pipeline</badge>
@@ -93,7 +239,7 @@
             </layout-split>
           </section>
 
-          <section aria-label="Social proof">
+          <section class="landing-section" aria-label="Social proof">
             <layout-stack gap="1rem" center>
               <p class="text-subtle stack-intrinsic">Trusted by launch teams everywhere</p>
               <layout-grid min-item-size="120px" gap="1rem">
@@ -106,54 +252,54 @@
             </layout-stack>
           </section>
 
-          <section id="features">
-            <layout-center and-text>
-              <layout-stack gap="1rem" center>
+          <section class="landing-section landing-content-section" id="features">
+            <layout-center class="landing-section-intro" and-text>
+              <layout-stack class="landing-section-heading" center>
                 <eyebrow class="stack-intrinsic">Everything in one system</eyebrow>
                 <h2>Hero, proof, features, pricing, FAQ, and CTA wired together.</h2>
                 <p class="text-subtle">This version keeps the layout intentionally close to the original template while using the library's public APIs instead of demo-only CSS.</p>
               </layout-stack>
             </layout-center>
 
-            <layout-grid min-item-size="260px" gap="1.25rem">
+            <layout-grid class="landing-card-grid" min-item-size="320px" gap="1.25rem">
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">01</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">01</badge>
                   <h3>Token-first theming</h3>
                   <p class="text-subtle">Adjust page character with semantic tokens instead of rewriting section styles.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">02</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">02</badge>
                   <h3>Semantic interactions</h3>
                   <p class="text-subtle">Use native `details` for FAQ and plain anchors styled as buttons for conversion points.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">03</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">03</badge>
                   <h3>Responsive by default</h3>
                   <p class="text-subtle">Sections collapse cleanly through layout primitives without extra breakpoint CSS.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">04</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">04</badge>
                   <h3>Flexible surfaces</h3>
                   <p class="text-subtle">Cards, pricing plans, and small dashboard panels can all be composed from the same primitives.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">05</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">05</badge>
                   <h3>Readable content rhythm</h3>
                   <p class="text-subtle">The page leans on the library's readable defaults instead of custom type scales.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge role="subtle" size="sm">06</badge>
+                  <badge class="stack-intrinsic" role="subtle" size="sm">06</badge>
                   <h3>Copy-first composition</h3>
                   <p class="text-subtle">This demo is now a cleaner showcase of the library itself rather than extra decorative CSS.</p>
                 </layout-stack>
@@ -161,44 +307,42 @@
             </layout-grid>
           </section>
 
-          <section id="pricing">
-            <layout-center and-text>
-              <layout-stack gap="1rem" center>
+          <section class="landing-section landing-content-section" id="pricing">
+            <layout-center class="landing-section-intro" and-text>
+              <layout-stack class="landing-section-heading" center>
                 <eyebrow class="stack-intrinsic">Pricing</eyebrow>
                 <h2>Three plans for teams from first launch to scale.</h2>
                 <p class="text-subtle">Each pricing block stays vertically stacked because it uses library boxes and lists instead of custom pricing CSS.</p>
               </layout-stack>
             </layout-center>
 
-            <layout-grid min-item-size="240px" gap="1.25rem">
+            <layout-grid class="landing-price-grid" min-item-size="240px" gap="1.25rem">
                 <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                   <layout-stack gap="1rem" center>
                     <h3>Starter</h3>
                     <p class="text-subtle">For solo builders validating a new product.</p>
-                    <h2>$19<span class="text-subtle">/mo</span></h2>
+                    <p class="landing-price">$19<span class="text-subtle">/mo</span></p>
                   </layout-stack>
-                  <list gap="0.75rem">
+                  <ul data-list gap="0.75rem">
                     <li>One conversion-focused landing page</li>
                     <li>Email capture and analytics blocks</li>
                     <li>Basic theme token overrides</li>
-                  </list>
-                  <box py="0.75rem"></box>
+                  </ul>
                   <a href="#cta" class="button button-outline">Choose Starter</a>
                 </box>
 
                 <box p="1.5rem" bg="var(--surface-subtle)" border="1px solid var(--accent)" radius="var(--radius-lg)">
                   <layout-stack gap="1rem" center>
-                    <badge status="info" size="sm">Most popular</badge>
+                    <badge class="stack-intrinsic" status="info" size="sm">Most popular</badge>
                     <h3>Growth</h3>
                     <p class="text-subtle">For SaaS teams running experiments every week.</p>
-                    <h2>$59<span class="text-subtle">/mo</span></h2>
+                    <p class="landing-price">$59<span class="text-subtle">/mo</span></p>
                   </layout-stack>
-                  <list gap="0.75rem">
+                  <ul data-list gap="0.75rem">
                     <li>Unlimited landing sections and A/B variants</li>
                     <li>Reusable feature, testimonial, and pricing blocks</li>
                     <li>Team collaboration with launch-ready themes</li>
-                  </list>
-                  <box py="0.75rem"></box>
+                  </ul>
                   <a href="#cta" class="button button-primary">Choose Growth</a>
                 </box>
 
@@ -206,22 +350,21 @@
                   <layout-stack gap="1rem" center>
                     <h3>Scale</h3>
                     <p class="text-subtle">For larger teams standardizing the whole site surface.</p>
-                    <h2>$129<span class="text-subtle">/mo</span></h2>
+                    <p class="landing-price">$129<span class="text-subtle">/mo</span></p>
                   </layout-stack>
-                  <list gap="0.75rem">
+                  <ul data-list gap="0.75rem">
                     <li>Multi-brand themes and launch playbooks</li>
                     <li>Priority design review and migration support</li>
                     <li>Advanced analytics and campaign environments</li>
-                  </list>
-                  <box py="0.75rem"></box>
+                  </ul>
                   <a href="#cta" class="button button-outline">Talk to sales</a>
                 </box>
               </layout-grid>
           </section>
 
-          <section>
-            <layout-center and-text>
-              <layout-stack gap="1rem" center>
+          <section class="landing-section landing-content-section">
+            <layout-center class="landing-section-intro" and-text>
+              <layout-stack class="landing-section-heading" center>
                 <eyebrow class="stack-intrinsic">Testimonials</eyebrow>
                 <h2>Teams use it to turn rough launch ideas into pages that convert.</h2>
               </layout-stack>
@@ -249,9 +392,9 @@
             </layout-grid>
           </section>
 
-          <section id="faq">
-            <layout-center and-text>
-              <layout-stack gap="1rem" center>
+          <section class="landing-section landing-content-section" id="faq">
+            <layout-center class="landing-section-intro" and-text>
+              <layout-stack class="landing-section-heading" center>
                 <eyebrow class="stack-intrinsic">FAQ</eyebrow>
                 <h2>Common questions before you publish.</h2>
               </layout-stack>
@@ -260,11 +403,11 @@
             <div class="accordion" data-accordion>
               <details name="landing-faq" open>
                 <summary>Is this page built with the existing library, or custom section CSS?</summary>
-                <p>It is now entirely library-first. The dedicated demo stylesheet has been removed so the page showcases primitives, tokens, and utilities directly.</p>
+                <p>The layout and controls use the public library API. A small token-based stylesheet provides the page-level art direction a real product would add.</p>
               </details>
               <details name="landing-faq">
                 <summary>Can I swap the custom tags for classes or `data-*` hosts?</summary>
-                <p>Yes. The library's selector conventions support component tags, classes, and `data-*` hosts for most primitives.</p>
+                <p>Yes. The library's selector conventions support component tags, classes, and <code>data-*</code> hosts for most primitives.</p>
               </details>
               <details name="landing-faq">
                 <summary>Does the FAQ need JavaScript?</summary>
@@ -277,7 +420,7 @@
             </div>
           </section>
 
-          <section id="cta">
+          <section class="landing-section" id="cta">
             <box p="2rem" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
               <layout-switcher threshold="40rem" gap="1rem">
                 <layout-stack gap="0.75rem" center>
@@ -286,7 +429,7 @@
                   <p class="text-subtle">Open `examples/demo-landing.html`, swap the copy, and tune the tokens to match your product.</p>
                 </layout-stack>
                 <layout-cluster justify="center" align="center" gap="0.75rem">
-                  <a href="#" class="button button-primary">Create account</a>
+                  <a href="#top" class="button button-primary">Create account</a>
                   <a href="#features" class="button button-outline">View sections</a>
                 </layout-cluster>
               </layout-switcher>
@@ -296,9 +439,9 @@
       </layout-center>
     </main>
 
-    <footer slot="footer">
-      <box py="4rem 0 3rem">
-        <layout-center max-width="var(--readable-width)">
+    <footer slot="footer" class="landing-footer">
+      <box py="4rem">
+        <layout-center max-width="var(--landing-measure)">
           <layout-stack gap="2rem">
             <layout-grid min-item-size="150px" gap="1.5rem">
               <nav aria-label="Product">
@@ -306,51 +449,51 @@
                   <p><strong>Product</strong></p>
                   <a href="#features">Features</a>
                   <a href="#pricing">Pricing</a>
-                  <a href="#">Changelog</a>
-                  <a href="#">Integrations</a>
-                  <a href="#">Documentation</a>
+                  <a href="#features">Changelog</a>
+                  <a href="#features">Integrations</a>
+                  <a href="../README.md">Documentation</a>
                 </layout-stack>
               </nav>
               <nav aria-label="Company">
                 <layout-stack gap="0.5rem">
                   <p><strong>Company</strong></p>
-                  <a href="#">About</a>
-                  <a href="#">Blog</a>
-                  <a href="#">Careers</a>
-                  <a href="#">Press Kit</a>
-                  <a href="#">Contact</a>
+                  <a href="#top">About</a>
+                  <a href="#features">Blog</a>
+                  <a href="#cta">Careers</a>
+                  <a href="#cta">Press Kit</a>
+                  <a href="#cta">Contact</a>
                 </layout-stack>
               </nav>
               <nav aria-label="Resources">
                 <layout-stack gap="0.5rem">
                   <p><strong>Resources</strong></p>
-                  <a href="#">Guides</a>
-                  <a href="#">API Reference</a>
-                  <a href="#">Status Page</a>
-                  <a href="#">Community</a>
-                  <a href="#">Support</a>
+                  <a href="../docs/guides/introduction.md">Guides</a>
+                  <a href="../API.md">API Reference</a>
+                  <a href="#top">Status Page</a>
+                  <a href="#cta">Community</a>
+                  <a href="#faq">Support</a>
                 </layout-stack>
               </nav>
               <nav aria-label="Legal">
                 <layout-stack gap="0.5rem">
                   <p><strong>Legal</strong></p>
-                  <a href="#">Privacy Policy</a>
-                  <a href="#">Terms of Service</a>
-                  <a href="#">Cookie Policy</a>
-                  <a href="#">GDPR</a>
-                  <a href="#">Security</a>
+                  <a href="#faq">Privacy Policy</a>
+                  <a href="#faq">Terms of Service</a>
+                  <a href="#faq">Cookie Policy</a>
+                  <a href="#faq">GDPR</a>
+                  <a href="#faq">Security</a>
                 </layout-stack>
               </nav>
             </layout-grid>
 
-            <hr>
+            <hr class="landing-footer-divider">
 
-            <layout-split fraction="1fr auto" gap="1rem" no-stack>
-              <p class="text-subtle text-caption">© 2026 Beacon, Inc. All rights reserved.</p>
-              <layout-cluster gap="1rem">
-                <a href="#" class="text-subtle text-caption">Twitter</a>
-                <a href="#" class="text-subtle text-caption">GitHub</a>
-                <a href="#" class="text-subtle text-caption">Discord</a>
+            <layout-split fraction="1fr 12rem" gap="1rem">
+              <p class="text-subtle text-caption">© 2026 Graffiti Cloud. Demo content only.</p>
+              <layout-cluster justify="flex-end" gap="1rem">
+                <a href="#top" class="text-subtle text-caption">Twitter</a>
+                <a href="https://github.com/doeixd/CSS-Tags" class="text-subtle text-caption">GitHub</a>
+                <a href="#top" class="text-subtle text-caption">Discord</a>
               </layout-cluster>
             </layout-split>
           </layout-stack>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Tags Demo</title>
+    <title>CSS Tags Component Demo</title>
     
     <!-- 
       Import the main index file.
@@ -39,15 +39,15 @@
         }
     </style>
 </head>
-<body>
+<body id="demo-top">
 
     <!-- Using <layout-center> to contain the entire demo page -->
     <layout-center max-width="1200px">
         
         <header>
             <layout-stack gap="1rem">
-                <h1>CSS Tags Demo</h1>
-                <p>A comprehensive showcase of the declarative components and features.</p>
+                <h1>CSS Tags Component Demo</h1>
+                <p>A focused showcase of components, overlays, carousels, and view transitions.</p>
                 
                 <!-- THEME SWITCHER -->
                 <flex gap="0.5rem" align="center" wrap="wrap">
@@ -66,7 +66,7 @@
             <!-- SECTION 4: UI COMPONENTS -->
             <!-- ================================================================== -->
             <section>
-                <h2>4. UI Components</h2>
+                <h2>1. UI Components</h2>
                 <p class="section-desc">Common UI patterns built with modern CSS.</p>
 
                  <layout-stack gap="2rem">
@@ -79,7 +79,7 @@
 
                             <div>
                                 <h4>Basic Card Grid</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(300px, 1fr))" gap="1.5rem">
+                                <layout-grid min-item-size="300px" gap="1.5rem">
                                     <card style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
                                         <card-media>
                                             <img src="https://picsum.photos/400/250?random=1" alt="Beautiful landscape">
@@ -151,8 +151,8 @@
 
                             <div>
                                 <h4>Compact Cards</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
-                                    <card radius="0.5rem" style="background: #f0f9ff;">
+                                <layout-grid min-item-size="250px" gap="1rem">
+                                    <card style="--card-radius: 0.5rem; --card-background: #f0f9ff;">
                                         <card-body style="padding: 1rem;">
                                             <card-header style="font-size: 1rem;">Quick Tip</card-header>
                                             <card-content style="font-size: 0.875rem;">
@@ -161,7 +161,7 @@
                                             <card-footer style="font-size: 0.75rem;">Read More →</card-footer>
                                         </card-body>
                                     </card>
-                                    <card radius="0.5rem" style="background: #fef3c7;">
+                                    <card style="--card-radius: 0.5rem; --card-background: #fef3c7;">
                                         <card-body style="padding: 1rem;">
                                             <card-header style="font-size: 1rem;">Daily Inspiration</card-header>
                                             <card-content style="font-size: 0.875rem;">
@@ -170,7 +170,7 @@
                                             <card-footer style="font-size: 0.75rem;">Get Inspired →</card-footer>
                                         </card-body>
                                     </card>
-                                    <card radius="0.5rem" style="background: #e0f2fe;">
+                                    <card style="--card-radius: 0.5rem; --card-background: #e0f2fe;">
                                         <card-body style="padding: 1rem;">
                                             <card-header style="font-size: 1rem;">Tech Update</card-header>
                                             <card-content style="font-size: 0.875rem;">
@@ -184,7 +184,7 @@
 
                             <div>
                                 <h4>Feature Cards with Actions</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(280px, 1fr))" gap="1.5rem">
+                                <layout-grid min-item-size="280px" gap="1.5rem">
                                     <card style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
                                         <card-media style="background: linear-gradient(135deg, var(--hue-blue), var(--hue-purple)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
                                             <span style="font-size: 2rem;">🚀</span>
@@ -244,7 +244,7 @@
 
                             <div>
                                 <h4>Basic Aspect Ratios</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="1rem">
+                                <layout-grid min-item-size="200px" gap="1rem">
                                     <img-container aspect-ratio="16/9" radius="0.5rem">
                                         <img src="https://picsum.photos/400/225?random=10" alt="Landscape image" />
                                     </img-container>
@@ -259,7 +259,7 @@
 
                             <div>
                                 <h4>Object Fit Options</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(150px, 1fr))" gap="1rem">
+                                <layout-grid min-item-size="150px" gap="1rem">
                                     <div>
                                         <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Cover</p>
                                         <img-container aspect-ratio="1" object-fit="cover" radius="0.25rem">
@@ -283,7 +283,7 @@
 
                             <div>
                                 <h4>Themed Containers</h4>
-                                <layout-grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap="1rem">
+                                <layout-grid min-item-size="200px" gap="1rem">
                                     <img-container theme="card" aspect-ratio="3/4">
                                         <img src="https://picsum.photos/300/400?random=14" alt="Card theme" />
                                     </img-container>
@@ -299,7 +299,7 @@
                             <div>
                                 <h4>Lazy Loading</h4>
                                 <p>Scroll down to see images load lazily.</p>
-                                <layout-grid columns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
+                                <layout-grid min-item-size="250px" gap="1rem">
                                     <img-container aspect-ratio="16/9" lazy radius="0.5rem">
                                         <img data-src="https://picsum.photos/400/225?random=17" alt="Lazy loaded 1" />
                                     </img-container>
@@ -322,7 +322,7 @@
              <!-- SECTION 5: NEW COMPONENTS -->
              <!-- ================================================================== -->
              <section>
-                 <h2>5. New Components: Table, Form, Navigation</h2>
+                 <h2>2. Tables, Forms, and Navigation</h2>
                  <p class="section-desc">Recently added components for data display, user input, and site navigation.</p>
 
                  <layout-stack gap="2rem">
@@ -382,22 +382,22 @@
                      <div class="example-block">
                          <h3>Navigation Components</h3>
                          <p>Responsive navbar and sidebar for site navigation.</p>
-                          <nav class="navbar">
+                          <nav class="navbar" data-collapsible>
                               <div class="nav-brand">My Site</div>
-                              <ul class="nav-links">
-                                  <li><a href="#" class="nav-link">Home</a></li>
-                                  <li><a href="#" class="nav-link">About</a></li>
-                                  <li><a href="#" class="nav-link">Contact</a></li>
+                              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="kitchen-sink-nav-links">Menu</button>
+                              <ul class="nav-links" id="kitchen-sink-nav-links">
+                                  <li><a href="#demo-top" class="nav-link" aria-current="page">Home</a></li>
+                                  <li><a href="#interactivity-demo" class="nav-link">About</a></li>
+                                  <li><a href="#carousel-demo" class="nav-link">Contact</a></li>
                               </ul>
-                              <button class="nav-toggle">☰</button>
                           </nav>
                           <div class="sidebar-layout" style="margin-top: 1rem;">
                               <aside class="sidebar">
                                   <div class="sidebar-section">Menu</div>
                                   <ul class="sidebar-nav">
-                                      <li><a href="#" class="sidebar-link">Dashboard</a></li>
-                                      <li><a href="#" class="sidebar-link">Profile</a></li>
-                                      <li><a href="#" class="sidebar-link">Settings</a></li>
+                                      <li><a href="#demo-top" class="sidebar-link" aria-current="page">Dashboard</a></li>
+                                      <li><a href="#interactivity-demo" class="sidebar-link">Profile</a></li>
+                                      <li><a href="#carousel-demo" class="sidebar-link">Settings</a></li>
                                   </ul>
                               </aside>
                               <main>Main content area</main>
@@ -410,8 +410,8 @@
             <!-- ================================================================== -->
             <!-- SECTION 5: MODERN INTERACTIVE -->
             <!-- ================================================================== -->
-            <section>
-                <h2>5. Modern Interactive (Popover API &amp; Anchor Positioning)</h2>
+            <section id="interactivity-demo">
+                <h2>3. Interactivity and Overlays</h2>
                 <p class="section-desc">Using the native Popover API and Anchor Positioning. No JS required for the basic functionality.</p>
 
                 <layout-stack gap="2rem">
@@ -429,7 +429,7 @@
                     <div class="example-block">
                         <h3>Advanced Tooltip</h3>
                         <p>Uses <b>Anchor Positioning</b> to tether to its button, and the <b>Popover API</b> to appear on top.</p>
-                         <flex gap="2rem" wrap="wrap" justify="center" p="3rem">
+                         <flex gap="2rem" wrap="wrap" justify="center" style="padding: 3rem;">
 
                              <button aria-describedby="tt-top" class="button">
                                  Top Tooltip
@@ -471,8 +471,8 @@
             <!-- ================================================================== -->
             <!-- SECTION 6: ADVANCED LAYOUTS -->
             <!-- ================================================================== -->
-            <section>
-                <h2>6. Advanced Layouts</h2>
+            <section id="carousel-demo">
+                <h2>4. Advanced Layouts</h2>
                 <p class="section-desc">Experimental or slightly enhanced layouts.</p>
 
                  <layout-stack gap="2rem">
@@ -490,8 +490,8 @@
                                         <carousel-item><box bg="var(--hue-green)" p="4rem" align="center" color="white">Slide 2</box></carousel-item>
                                         <carousel-item><box bg="var(--hue-red)" p="4rem" align="center" color="white">Slide 3</box></carousel-item>
                                     </div>
-                                    <carousel-trigger direction="prev">←</carousel-trigger>
-                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
+                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
                                 </carousel>
                             </div>
 
@@ -503,8 +503,8 @@
                                         <carousel-item><box bg="var(--hue-orange)" p="4rem" align="center" color="white">Infinite 2</box></carousel-item>
                                         <carousel-item><box bg="var(--hue-cyan)" p="4rem" align="center" color="white">Infinite 3</box></carousel-item>
                                     </div>
-                                    <carousel-trigger direction="prev">←</carousel-trigger>
-                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
+                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
                                 </carousel>
                             </div>
 
@@ -543,8 +543,8 @@
                                             </card>
                                         </carousel-item>
                                     </div>
-                                    <carousel-trigger direction="prev">←</carousel-trigger>
-                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
+                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
                                 </carousel>
                             </div>
 
@@ -556,8 +556,8 @@
                                         <carousel-item><img src="https://picsum.photos/600/300?random=2" alt="Random image 2" style="width: 100%; height: auto; display: block;"></carousel-item>
                                         <carousel-item><img src="https://picsum.photos/600/300?random=3" alt="Random image 3" style="width: 100%; height: auto; display: block;"></carousel-item>
                                     </div>
-                                    <carousel-trigger direction="prev">←</carousel-trigger>
-                                    <carousel-trigger direction="next">→</carousel-trigger>
+                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
+                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
                                 </carousel>
                             </div>
 
@@ -584,7 +584,7 @@
             <!-- SECTION 7: VIEW TRANSITIONS (SPA) -->
             <!-- ================================================================== -->
             <section>
-                <h2>7. View Transitions (SPA Example)</h2>
+                <h2>5. View Transitions (SPA Example)</h2>
                 <p class="section-desc">A simple router using the View Transitions API for app-like state changes. Click the buttons below.</p>
 
                  <div class="example-block" style="min-height: 300px;">
@@ -596,11 +596,9 @@
                              <box p="2rem" bg="var(--surface-subtle)">
                                  <h3>Page One</h3>
                                  <p>This is the first page. Notice the "Hero Element" image below.</p>
-                                 <img src="https://picsum.photos/id/237/100/100" style="view-transition-name: hero-element; border-radius: 50%;">
+                                 <img src="https://picsum.photos/id/237/100/100" alt="Black dog portrait" style="view-transition-name: hero-element; border-radius: 50%;">
                                  <box m="2rem 0">
-                                     <nav-trigger to="page-2">
-                                         <button class="button">Go to Page Two →</button>
-                                     </nav-trigger>
+                                     <button type="button" class="button" data-view-trigger to="page-2" aria-controls="page-2">Go to Page Two →</button>
                                  </box>
                              </box>
                          </view-page>
@@ -610,11 +608,9 @@
                              <box p="2rem" bg="var(--surface-overt)">
                                  <h3>Page Two</h3>
                                  <p>The page slid in, and the "Hero Element" morphed to its new position and size.</p>
-                                  <img src="https://picsum.photos/id/237/300/200" style="view-transition-name: hero-element; border-radius: 12px;">
+                                  <img src="https://picsum.photos/id/237/300/200" alt="Black dog lying down" style="view-transition-name: hero-element; border-radius: 12px;">
                                  <box m="2rem 0">
-                                     <nav-trigger to="page-1">
-                                         <button class="button">← Go Back to Page One</button>
-                                     </nav-trigger>
+                                     <button type="button" class="button" data-view-trigger to="page-1" aria-controls="page-1">← Go Back to Page One</button>
                                  </box>
                              </box>
                          </view-page>
@@ -636,9 +632,10 @@
     </layout-center>
 
       <!-- Import required JavaScript -->
-      <script src="../carousel.js" defer></script>
-       <script src="../view-transition.js" defer></script>
-       <script src="../components/img-container.js" defer></script>
+      <script type="module" src="../carousel.js"></script>
+      <script type="module" src="../view-transition.js"></script>
+      <script type="module" src="../components/img-container.js"></script>
+      <script type="module" src="./demo-navigation.js"></script>
 
     </body>
   </html>

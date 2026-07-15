@@ -485,36 +485,6 @@ const base = normalizeBase(import.meta.env.BASE_URL);
                 }
             }
 
-            .skip-to-content {
-                position: var(--skip-link-position, absolute);
-                top: var(--skip-link-top, -100px);
-                left: var(--skip-link-left, var(--space-lg));
-                z-index: var(--z-index-skip-link);
-                padding: var(
-                    --skip-link-padding,
-                    var(--space-md) calc(var(--space-lg) * 1.5)
-                );
-                background: var(--accent);
-                color: white;
-                text-decoration: none;
-                border-radius: var(
-                    --skip-link-border-radius,
-                    var(--border-radius-md)
-                );
-                font-weight: var(
-                    --skip-link-font-weight,
-                    var(--font-weight-medium)
-                );
-                transition: var(
-                    --skip-link-transition,
-                    top var(--transition-normal)
-                );
-            }
-
-            .skip-to-content:focus {
-                top: 1rem;
-            }
-
             /* View Transition Animations */
             /* Default: No animations - instant transitions for maximum speed */
             ::view-transition-group(*) {
@@ -783,6 +753,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
         </style>
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Skip to content</a>
         <ClientRouter />
         <script>
             import { navigate } from 'astro:transitions/client';
@@ -824,8 +795,6 @@ const base = normalizeBase(import.meta.env.BASE_URL);
             </div>
         </noscript>
 
-        <a href="#main-content" class="skip-to-content">Skip to content</a>
-
         <!-- Header: visible on desktop only -->
         <Header
             currentPath={currentPath}
@@ -841,7 +810,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
         <KeyboardShortcuts />
 
         <div class="landing-container">
-            <main class="landing-content" id="main-content">
+            <main class="landing-content" id="main-content" tabindex="-1">
                 <slot />
             </main>
         </div>

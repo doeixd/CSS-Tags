@@ -94,7 +94,7 @@ A vertical spacer utility for adding space between elements.
 The file includes an example of using the `--box` mixin to create a custom callout component:
 
 ```css
-.callout-info {
+.box-callout-info {
   @apply --box(
     --display: grid,
     --p: var(--space-lg, 2rem),

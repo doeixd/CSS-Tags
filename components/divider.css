@@ -1,0 +1,68 @@
+/**
+ * divider.css
+ *
+ * Semantic horizontal rules and opt-in horizontal or vertical separators.
+ * Native <hr> is the preferred content separator. Other hosts should carry
+ * role="separator" and an aria-orientation when they are meaningful.
+ */
+
+:is(hr, divider, [data-divider], .divider) {
+  --_divider-role-color: var(--divider-color-subtle, var(--outline-subtle));
+  --_divider-color: var(--divider-color, var(--_divider-role-color));
+  --_divider-size: var(--divider-size, var(--border-width, 1px));
+  --_divider-style: var(--divider-style, solid);
+  --_divider-gap: var(--divider-gap, var(--space-md, 1rem));
+  --_divider-length: var(--divider-length, 100%);
+
+  display: block;
+  box-sizing: border-box;
+  flex: none;
+  align-self: stretch;
+  inline-size: var(--_divider-length);
+  block-size: 0;
+  margin-block: var(--_divider-gap);
+  margin-inline: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-block-start: var(--_divider-size) var(--_divider-style) var(--_divider-color);
+  background: none;
+}
+
+:is(hr, divider, [data-divider], .divider)[strength="muted"] {
+  --_divider-role-color: var(--divider-color-muted, var(--outline-muted));
+}
+
+:is(hr, divider, [data-divider], .divider)[strength="default"] {
+  --_divider-role-color: var(--divider-color-default, var(--outline-default, var(--outline)));
+}
+
+:is(hr, divider, [data-divider], .divider)[strength="overt"] {
+  --_divider-role-color: var(--divider-color-overt, var(--outline-overt));
+}
+
+:is(hr, divider, [data-divider], .divider)[strength="accent"] {
+  --_divider-role-color: var(--divider-color-accent, var(--accent));
+}
+
+:is(hr, divider, [data-divider], .divider):is(
+  [orientation="vertical"],
+  [aria-orientation="vertical"],
+  [vertical]
+) {
+  --_divider-length: var(--divider-length, auto);
+
+  inline-size: 0;
+  block-size: var(--_divider-length);
+  min-block-size: var(--divider-min-length, 1.5rem);
+  margin-block: 0;
+  margin-inline: var(--_divider-gap);
+  border-block-start: 0;
+  border-inline-start: var(--_divider-size) var(--_divider-style) var(--_divider-color);
+}
+
+@media (forced-colors: active) {
+  :is(hr, divider, [data-divider], .divider) {
+    --_divider-color: CanvasText;
+  }
+}

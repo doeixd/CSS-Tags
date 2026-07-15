@@ -1,7 +1,9 @@
 ---
 title: Navigation Component
-description: The `navigation` component provides responsive navbar and sidebar components with mobile-first design. It uses container queries for responsive behavior and sco
+description: Responsive navbar, sidebar, breadcrumbs, and pagination patterns built from semantic navigation landmarks.
 ---
+
+import LiveExample from '../../../components/LiveExample.astro';
 
 ## Overview
 The `navigation` component provides responsive navbar and sidebar components with mobile-first design. It uses container queries for responsive behavior and scoped styling to prevent conflicts.
@@ -142,3 +144,60 @@ Only the opt-in `data-collapsible` mobile menu requires JavaScript. Without that
 - **Dashboard Layouts**: Admin panels and data apps
 - **Mobile Apps**: Responsive web app navigation
 - **Documentation Sites**: Section-based navigation
+
+## Breadcrumbs
+
+Use a native navigation landmark; `nav.breadcrumbs` and `nav[data-breadcrumbs]` are equivalent.
+
+<LiveExample title="Wrapping breadcrumbs">
+  <nav data-breadcrumbs aria-label="Breadcrumb">
+    <ol>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#components">Components</a></li>
+      <li><span aria-current="page">Navigation patterns</span></li>
+    </ol>
+  </nav>
+</LiveExample>
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/components/">Components</a></li>
+    <li><span aria-current="page">Navigation</span></li>
+  </ol>
+</nav>
+```
+
+Separators are decorative generated content, so assistive technology announces only the labels. Theme the pattern with `--breadcrumbs-gap`, `--breadcrumbs-separator`, `--breadcrumbs-color`, `--breadcrumbs-hover-color`, `--breadcrumbs-current-color`, and `--breadcrumbs-font-size`.
+
+## Pagination
+
+Use anchors for location-changing pages. Buttons are appropriate for client-side data grids that keep the same URL.
+
+<LiveExample title="Responsive pagination">
+  <nav class="pagination" aria-label="Pagination">
+    <a class="pagination-previous" href="#page-2">Previous</a>
+    <ol>
+      <li><a href="#page-1">1</a></li>
+      <li><a href="#page-2">2</a></li>
+      <li><a href="#page-3" aria-current="page">3</a></li>
+      <li><a href="#page-4">4</a></li>
+    </ol>
+    <a class="pagination-next" href="#page-4">Next</a>
+  </nav>
+</LiveExample>
+
+```html
+<nav data-pagination aria-label="Pagination">
+  <a class="pagination-previous" href="?page=2">Previous</a>
+  <ol>
+    <li><a href="?page=2">2</a></li>
+    <li><a href="?page=3" aria-current="page">3</a></li>
+    <li><a href="?page=4">4</a></li>
+  </ol>
+  <a class="pagination-next" href="?page=4">Next</a>
+</nav>
+```
+
+Add `data-size="compact"` for dense interfaces or `data-surface="footer"` for an opt-in divider. A disabled anchor must omit `href` and use `aria-disabled="true"`.

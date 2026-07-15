@@ -29,6 +29,7 @@ Core step tokens:
 - `--font-size-step-4`
 - `--font-size-step-5`
 - `--font-size-step-6`
+- `--font-size-step-7`
 
 Convenience aliases:
 - `--font-size-xs`
@@ -250,18 +251,28 @@ Forward-looking mixins are available for teams experimenting with native CSS mix
 ```
 
 ## Container-Relative Typography
-Container-relative scaling is supported as an opt-in pattern rather than a global default. Use an inline-size container and override semantic tokens locally.
+Container-relative scaling is an opt-in public primitive. Wrap a region in any supported host and its descendants use the same bounded type scale with `cqi` preferred values:
+
+```html
+<fluid-container>
+  <h2>Custom element host</h2>
+  <p class="lead">This type responds to the container's inline size.</p>
+</fluid-container>
+
+<section data-fluid-container>Data-attribute host</section>
+<section class="fluid-container">Class host</section>
+<section class="fc">Short class alias</section>
+```
+
+The min and max bounds stay identical to the viewport scale. Only each step's preferred value changes from `vw` to `cqi`, so components cannot grow outside the designed range.
+
+Each fluid step exposes three editable parts:
 
 ```css
-.cq,
-.cq-container {
-  container-type: inline-size;
-}
-
-.cq[data-type-scale="compact"] {
-  --font-size-h1: clamp(1.75rem, 1.1rem + 3cqi, 2.5rem);
-  --font-size-h2: clamp(1.5rem, 1rem + 2.2cqi, 2rem);
-  --font-size-lead: clamp(1rem, 0.92rem + 0.8cqi, 1.125rem);
+.marketing-card {
+  --font-size-step-5-min: 1.8rem;
+  --font-size-step-5-preferred: calc(1.3rem + 2.4cqi);
+  --font-size-step-5-max: 2.75rem;
 }
 ```
 

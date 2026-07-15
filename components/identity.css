@@ -1,0 +1,59 @@
+/** Identity primitives. */
+
+:is(user-avatar, [data-avatar], .avatar) {
+  --_avatar-size: var(--avatar-size, 2.75rem);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: var(--_avatar-size);
+  block-size: var(--_avatar-size);
+  overflow: hidden;
+  border: var(--avatar-border-width, var(--border-width, 1px)) solid
+    var(--avatar-border-color, var(--outline-subtle));
+  border-radius: var(--avatar-radius, var(--radius-full, 9999px));
+  background: var(--avatar-background, var(--surface-overt));
+  color: var(--avatar-color, var(--text-overt));
+  font-size: calc(var(--_avatar-size) * 0.36);
+  font-weight: var(--avatar-font-weight, var(--font-weight-semibold, 600));
+  line-height: 1;
+  text-transform: uppercase;
+  isolation: isolate;
+}
+
+:is(user-avatar, [data-avatar], .avatar) > :is(img, picture) {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--avatar-image-fit, cover);
+}
+
+:is(user-avatar, [data-avatar], .avatar):is([size="sm"], [data-size="sm"]) {
+  --avatar-size: 2rem;
+}
+
+:is(user-avatar, [data-avatar], .avatar):is([size="lg"], [data-size="lg"]) {
+  --avatar-size: 4rem;
+}
+
+:is(user-avatar, [data-avatar], .avatar):is([shape="square"], [data-shape="square"]) {
+  --avatar-radius: var(--radius-md, 0.5rem);
+}
+
+:is(avatar-group, [data-avatar-group], .avatar-group) {
+  display: flex;
+  align-items: center;
+  inline-size: max-content;
+  padding-inline-start: var(--avatar-group-overlap, 0.625rem);
+}
+
+:is(avatar-group, [data-avatar-group], .avatar-group)
+  > :is(user-avatar, [data-avatar], .avatar) {
+  margin-inline-start: calc(-1 * var(--avatar-group-overlap, 0.625rem));
+  box-shadow: 0 0 0 var(--avatar-group-ring-width, 2px)
+    var(--avatar-group-ring-color, var(--surface-default));
+}
+

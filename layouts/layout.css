@@ -145,6 +145,10 @@
   align-self: var(--stack-intrinsic-align, flex-start);
 }
 
+:is(layout-stack, [data-layout-stack], .layout-stack)[center] > .stack-intrinsic {
+  --stack-intrinsic-align: center;
+}
+
 /**
  * <layout-cluster>
  * For grouping items that wrap onto new lines.
@@ -235,7 +239,7 @@
   --_max-width: attr(max-width type(*), var(--l-max-width, 65ch));
   --_gutters: attr(gutters type(*), var(--l-gutters, var(--space-md, 1.5rem)));
 
-  box-sizing: content-box;
+  box-sizing: border-box;
   margin-inline: auto;
   max-width: var(--_max-width);
   padding-inline: var(--_gutters);
@@ -251,7 +255,7 @@
 :is(layout-inline-center, [data-layout-inline-center], .layout-inline-center) {
   --_gutters: attr(gutters type(*), var(--l-gutters, var(--space-md, 1.5rem)));
 
-  box-sizing: content-box;
+  box-sizing: border-box;
   margin-inline: auto;
   padding-inline: var(--_gutters);
   &[and-text] { text-align: center; }

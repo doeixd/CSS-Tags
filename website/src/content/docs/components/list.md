@@ -41,6 +41,10 @@ Start with native `<ul>` or `<ol>` semantics. Add `data-list` or `.list` to the 
 ### Divider Attributes
 - `gap`: Margin around the divider (default: `0.5rem`)
 
+### Divider Tokens
+- `--list-divider-color`: Divider color (defaults to the shared divider color system)
+- `--list-divider-size`: Divider thickness (defaults to `--divider-size`)
+
 ## Usage Examples
 
 ### Basic Vertical List
@@ -112,8 +116,8 @@ Start with native `<ul>` or `<ol>` semantics. Add `data-list` or `.list` to the 
 
 ### Dividers
 - **Appearance**: Thin horizontal line
-- **Color**: Semi-transparent text color
-- **Height**: 1px
+- **Color**: `--list-divider-color`, falling back to `--divider-color-subtle`
+- **Height**: `--list-divider-size`, falling back to `--divider-size`
 - **Margins**: Configurable via `gap` attribute
 
 ## CSS Implementation

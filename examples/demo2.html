@@ -24,7 +24,7 @@
         .demo-swatch { width: 50px; height: 50px; border-radius: var(--radius-md); border: 1px solid var(--outline-default); }
     </style>
 </head>
-<body>
+<body id="demo2-top">
 
     <!-- 
       GLOBAL BREAKPOINT STATE 
@@ -32,7 +32,7 @@
       <container> elements will react to the body's --breakpoint-active state.
     -->
 
-    <layout-center max-width="1200px" padding-y="3rem">
+    <layout-center max-width="1200px" style="padding-block: 3rem;">
         <header>
             <layout-stack gap="1rem">
                 <h1>CSS Tags <badge status="info" size="lg">v1.0.0</badge></h1>
@@ -106,9 +106,9 @@
                         <flex justify="space-between" align="center" gap="1rem">
                             <strong>Logo</strong>
                             <flex gap="1rem">
-                                <a href="#">Home</a>
-                                <a href="#">About</a>
-                                <a href="#">Contact</a>
+                                <a href="#demo2-top">Home</a>
+                                <a href="#components-demo">About</a>
+                                <a href="#interactivity-demo">Contact</a>
                             </flex>
                             <button>Sign In</button>
                         </flex>
@@ -132,7 +132,7 @@
                  <!-- ================================================================== -->
                 <!-- 3. THE EVERY LAYOUT SYSTEM -->
                 <!-- ================================================================== -->
-                <section>
+                <section id="layout-demo">
                     <h2>3. The Layout System</h2>
                     <p>Composable layout patterns as custom elements.</p>
 
@@ -198,7 +198,7 @@
                 <!-- ================================================================== -->
                 <!-- 4. UI COMPONENTS -->
                 <!-- ================================================================== -->
-                <section>
+                <section id="components-demo">
                     <h2>4. UI Components</h2>
                     
                      <h3><code>&lt;card&gt;</code> (with Container Queries)</h3>
@@ -207,17 +207,17 @@
                         <!-- Narrow Container -->
                         <div style="max-width: 350px;">
                             <card>
-                                <card-media><img src="https://picsum.photos/id/10/600/400" alt=""></card-media>
+                                <card-media><img src="https://picsum.photos/id/10/600/400" alt="Misty forest landscape"></card-media>
                                 <card-body>
                                     <card-header>Narrow Container</card-header>
-                                    <card-content>I am stacked vertically because my container is < 400px.</card-content>
+                                    <card-content>I am stacked vertically because my container is &lt; 400px.</card-content>
                                 </card-body>
                             </card>
                         </div>
                         <!-- Wide Container -->
                         <div>
                             <card>
-                                <card-media><img src="https://picsum.photos/id/11/600/400" alt=""></card-media>
+                                <card-media><img src="https://picsum.photos/id/11/600/400" alt="Mountain landscape"></card-media>
                                 <card-body>
                                     <card-header>Wide Container</card-header>
                                     <card-content>I switched to a horizontal layout because I have enough space.</card-content>
@@ -289,13 +289,13 @@
                     <h3>Carousel</h3>
                     <!-- Requires carousel.js -->
                     <carousel loop style="max-width: 600px; margin: auto;">
-                         <carousel-trigger direction="prev">←</carousel-trigger>
+                         <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
                          <div class="carousel-slides">
                              <carousel-item>
-                                 <img src="https://picsum.photos/id/20/800/400" alt="" style="width: 100%; display: block;">
+                                 <img src="https://picsum.photos/id/20/800/400" alt="Forest road beside a lake" style="width: 100%; display: block;">
                              </carousel-item>
                              <carousel-item>
-                                 <img src="https://picsum.photos/id/25/800/400" alt="" style="width: 100%; display: block;">
+                                 <img src="https://picsum.photos/id/25/800/400" alt="Sunlit landscape" style="width: 100%; display: block;">
                              </carousel-item>
                              <carousel-item>
                                   <box bg="var(--surface-info)" p="3rem" height="100%" display="grid" align="center" style="place-content: center;">
@@ -303,7 +303,7 @@
                                   </box>
                              </carousel-item>
                          </div>
-                         <carousel-trigger direction="next">→</carousel-trigger>
+                         <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
                     </carousel>
 
                 </section>
@@ -311,7 +311,7 @@
                 <!-- ================================================================== -->
                 <!-- 5. INTERACTIVITY (Popover, Tooltip, Modal) -->
                 <!-- ================================================================== -->
-                <section>
+                <section id="interactivity-demo">
                     <h2>5. Interactivity & Overlays</h2>
 
                     <h3>Native Popover API</h3>
@@ -384,9 +384,7 @@
                                 <box bg="var(--surface-subtle)" p="2rem" height="300px">
                                     <h2>Page 1</h2>
                                     <p>This is the first page.</p>
-                                    <nav-trigger to="page-2">
-                                        <button>Go to Page 2 ➡️</button>
-                                    </nav-trigger>
+                                    <button type="button" data-view-trigger to="page-2" aria-controls="page-2">Go to Page 2 ➡️</button>
                                 </box>
                             </view-page>
 
@@ -395,9 +393,7 @@
                                 <box bg="var(--surface-default)" p="2rem" height="300px">
                                     <h2>Page 2</h2>
                                     <p>This is the second page. Notice the cross-fade and slide.</p>
-                                     <nav-trigger to="page-1">
-                                        <button>⬅️ Back to Page 1</button>
-                                    </nav-trigger>
+                                    <button type="button" data-view-trigger to="page-1" aria-controls="page-1">⬅️ Back to Page 1</button>
                                 </box>
                             </view-page>
 
@@ -479,9 +475,9 @@
          Required JavaScript files 
          Assuming these are in the same ../ directory
      -->
-      <script src="../carousel.js" defer></script>
-      <script src="../view-transition.js" defer></script>
-      <script src="../components/img-container.js" defer></script>
+      <script type="module" src="../carousel.js"></script>
+      <script type="module" src="../view-transition.js"></script>
+      <script type="module" src="../components/img-container.js"></script>
     
     <!-- Simple Theme Switcher Script -->
     <script>

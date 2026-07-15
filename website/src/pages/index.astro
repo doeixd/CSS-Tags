@@ -4,7 +4,6 @@ import DocsLayout from '../layouts/DocsLayout.astro';
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import PageMeta from "../components/PageMeta.astro";
 import PrevNextNav from "../components/PrevNextNav.astro";
-import ScrollToTop from "../components/ScrollToTop.astro";
 import PageExample from "../components/PageExample.astro";
 
 const entry = await getEntry('docs', 'index');
@@ -17,7 +16,6 @@ const { Content, headings } = await render(entry);
 const currentPath = '';
 ---
 
-<ScrollToTop containerSelector=".scroll-to-top-container" />
 <DocsLayout
 	title={entry.data.title}
 	description={entry.data.description}

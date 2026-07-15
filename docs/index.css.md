@@ -51,6 +51,7 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 
 ### Components
 ```css
+@import url('components/accessibility.css') layer(components);
 @import url('components/container.css') layer(components);
 @import url('components/grid.css') layer(components);
 @import url('components/flex.css') layer(components);
@@ -64,12 +65,18 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 @import url('components/tooltip.css') layer(components);
 @import url('components/tooltips.css') layer(components);
 @import url('components/list.css') layer(components);
+@import url('components/divider.css') layer(components);
 @import url('components/carousel.css') layer(components);
 @import url('components/popover.css') layer(components);
 @import url('components/view-transition.css') layer(components);
 @import url('components/table.css') layer(components);
 @import url('components/form.css') layer(components);
+@import url('components/actions.css') layer(components);
+@import url('components/form-patterns.css') layer(components);
+@import url('components/identity.css') layer(components);
 @import url('components/navigation.css') layer(components);
+@import url('components/navigation-patterns.css') layer(components);
+@import url('components/application-patterns.css') layer(components);
 @import url('components/masonry.css') layer(components);
 ```
 

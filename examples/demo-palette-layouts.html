@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Palette, Layouts & Container Queries Demo</title>
   <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="./demo-controls.css">
    <style>
      /* Custom styles for demo */
      .demo-section { margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--outline-subtle); border-radius: var(--radius-md); }
-     .customizer { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+     .customizer { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; }
      .customizer label { display: block; margin-bottom: 0.5rem; }
      .customizer input { width: 100%; accent-color: var(--accent); }
      .var-display { background: var(--surface-subtle); padding: 1rem; border-radius: var(--radius-md); font-family: monospace; }
      .var-display dt { font-weight: bold; margin-top: 1rem; }
      .var-display dd { margin: 0; color: var(--text-subtle); }
-      .var-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+      .var-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
       .var-category h3 { margin-bottom: 1rem; color: var(--text-overt); }
-      .scale-customizers { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1rem; }
+      .scale-customizers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 1rem; }
       .scale-group { border: 1px solid var(--outline-subtle); padding: 1rem; border-radius: var(--radius-md); }
       .scale-group h3 { margin-top: 0; color: var(--text-overt); }
      .palette-grid { margin-top: 1rem; display: block; }
@@ -437,6 +438,7 @@
     </section>
   </div>
 
+  <script type="module" src="./demo-controls.js"></script>
   <script>
     function updateVar(name, value) {
       document.documentElement.style.setProperty(name, value);

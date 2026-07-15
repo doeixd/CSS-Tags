@@ -44,6 +44,7 @@ Core step tokens:
 - `--font-size-step-4`
 - `--font-size-step-5`
 - `--font-size-step-6`
+- `--font-size-step-7`
 
 Convenience aliases:
 - `--font-size-xs`
@@ -251,6 +252,48 @@ Forward-looking mixins are available for teams experimenting with native CSS mix
   --typography-code-bg: var(--surface-overt);
   --typography-blockquote-border: var(--secondary);
   --callout-info-border: var(--info);
+}
+```
+
+## Container-relative fluid type
+
+Use `fluid-container`, `[data-fluid-container]`, `.fluid-container`, or the short `.fc` alias when type should respond to a component's width rather than the viewport. The min and max bounds remain the same; only each scale step's preferred value switches from `vw` to `cqi`.
+
+<LiveExample title="Container-relative type">
+  <layout-grid min-item-size="13rem" gap="var(--space-md)">
+    <fluid-container>
+      <card>
+        <card-body>
+          <text size="5xl" weight="bold" measure="heading">A narrow fluid heading</text>
+          <p>Its size follows this card.</p>
+        </card-body>
+      </card>
+    </fluid-container>
+    <section data-fluid-container>
+      <card>
+        <card-body>
+          <text size="5xl" weight="bold" measure="heading">The same bounded scale</text>
+          <p>The data host has identical behavior.</p>
+        </card-body>
+      </card>
+    </section>
+  </layout-grid>
+</LiveExample>
+
+```html
+<fluid-container>...</fluid-container>
+<section data-fluid-container>...</section>
+<section class="fluid-container">...</section>
+<section class="fc">...</section>
+```
+
+Tune individual scale steps without replacing the whole scale:
+
+```css
+.marketing-card {
+  --font-size-step-5-min: 1.8rem;
+  --font-size-step-5-preferred: calc(1.3rem + 2.4cqi);
+  --font-size-step-5-max: 2.75rem;
 }
 ```
 

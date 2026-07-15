@@ -1,0 +1,245 @@
+/** Compact and rich navigation/control groups. */
+
+:is(tool-bar, [data-toolbar], .toolbar) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--toolbar-gap, var(--space-xs, 0.5rem));
+  min-inline-size: 0;
+  padding: var(--toolbar-padding, var(--space-xs, 0.5rem));
+  border: var(--toolbar-border-width, var(--border-width, 1px)) solid
+    var(--toolbar-border-color, var(--outline-subtle));
+  border-radius: var(--toolbar-radius, var(--radius-md, 0.5rem));
+  background: var(--toolbar-background, var(--surface-default));
+}
+
+:is([data-toolbar-group], .toolbar-group) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--toolbar-group-gap, var(--space-2xs, 0.25rem));
+}
+
+:is([data-toolbar-spacer], .toolbar-spacer) {
+  flex: 1 1 auto;
+}
+
+:is(tool-bar, [data-toolbar], .toolbar)
+  > :is(divider, [data-divider], .divider, hr)[orientation="vertical"],
+:is(tool-bar, [data-toolbar], .toolbar) > :is([data-toolbar-separator], .toolbar-separator) {
+  align-self: stretch;
+  min-block-size: var(--toolbar-separator-min-height, 1.5rem);
+}
+
+:is(nav-list, [data-list-navigation], .list-navigation) {
+  display: grid;
+  gap: var(--list-navigation-gap, var(--space-xs, 0.5rem));
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:is(nav-list, [data-list-navigation], .list-navigation)
+  :is(a, button, [data-list-navigation-item], .list-navigation-item) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--list-navigation-item-gap, var(--space-sm, 0.75rem));
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--list-navigation-item-padding, var(--space-sm, 0.75rem));
+  border: var(--list-navigation-border-width, var(--border-width, 1px)) solid
+    var(--list-navigation-border-color, var(--outline-subtle));
+  border-radius: var(--list-navigation-radius, var(--radius-md, 0.5rem));
+  background: var(--list-navigation-background, var(--surface-default));
+  color: var(--list-navigation-color, var(--text-default));
+  text-align: start;
+  text-decoration: none;
+}
+
+:is(nav-list, [data-list-navigation], .list-navigation)
+  :is(a, button, [data-list-navigation-item], .list-navigation-item):is(:hover, :focus-visible) {
+  border-color: var(--list-navigation-hover-border-color, var(--outline-overt));
+  background: var(--list-navigation-hover-background, var(--surface-subtle));
+}
+
+:is(nav-list, [data-list-navigation], .list-navigation)
+  :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {
+  border-color: var(--list-navigation-current-border-color, var(--accent));
+  background: var(--list-navigation-current-background, var(--accent-subtle));
+  color: var(--list-navigation-current-color, var(--text-overt));
+}
+
+:is([data-list-navigation-label], .list-navigation-label) {
+  display: grid;
+  min-inline-size: 0;
+}
+
+:is([data-list-navigation-description], .list-navigation-description) {
+  color: var(--list-navigation-description-color, var(--text-muted));
+  font-size: var(--list-navigation-description-size, var(--font-size-sm, 0.875rem));
+}
+
+:is(icon-rail, [data-icon-rail], .icon-rail) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--icon-rail-gap, var(--space-xs, 0.5rem));
+  inline-size: var(--icon-rail-width, 4rem);
+  padding: var(--icon-rail-padding, var(--space-sm, 0.75rem));
+  border: var(--icon-rail-border-width, var(--border-width, 1px)) solid
+    var(--icon-rail-border-color, var(--outline-subtle));
+  border-radius: var(--icon-rail-radius, var(--radius-lg, 0.75rem));
+  background: var(--icon-rail-background, var(--surface-default));
+}
+
+:is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button) {
+  display: grid;
+  place-items: center;
+  inline-size: var(--icon-rail-item-size, 2.75rem);
+  block-size: var(--icon-rail-item-size, 2.75rem);
+  padding: var(--icon-rail-item-padding, 0.625rem);
+  border: 0;
+  border-radius: var(--icon-rail-item-radius, var(--radius-md, 0.5rem));
+  background: transparent;
+  color: var(--icon-rail-color, var(--text-subtle));
+}
+
+:is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button):is(:hover, :focus-visible),
+:is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button)[aria-current="page"] {
+  background: var(--icon-rail-active-background, var(--accent-subtle));
+  color: var(--icon-rail-active-color, var(--text-overt));
+}
+
+@media (max-width: 36rem) {
+  :is(icon-rail, [data-icon-rail], .icon-rail)[data-responsive="true"] {
+    flex-direction: row;
+    inline-size: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* Breadcrumb navigation remains a native landmark. */
+:is(nav[data-breadcrumbs], nav.breadcrumbs) {
+  color: var(--breadcrumbs-color, var(--text-subtle));
+  font-size: var(--breadcrumbs-font-size, var(--font-size-sm, 0.875rem));
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) :is(ol, ul) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--breadcrumbs-gap, var(--space-xs, 0.5rem));
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) li {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) li + li::before {
+  margin-inline-end: var(--breadcrumbs-gap, var(--space-xs, 0.5rem));
+  color: var(--breadcrumbs-separator-color, var(--outline-overt, currentColor));
+  content: var(--breadcrumbs-separator, "/");
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) a:is(:hover, :focus-visible) {
+  color: var(--breadcrumbs-hover-color, var(--text-overt));
+}
+
+:is(nav[data-breadcrumbs], nav.breadcrumbs) :is([aria-current="page"], [data-current]) {
+  color: var(--breadcrumbs-current-color, var(--text-default));
+  font-weight: var(--breadcrumbs-current-weight, var(--font-weight-semibold, 600));
+  text-decoration: none;
+}
+
+/* General pagination; sequential previous/next documentation links stay separate. */
+:is(nav[data-pagination], nav.pagination) {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--pagination-gap, var(--space-xs, 0.5rem));
+  min-inline-size: 0;
+}
+
+:is(nav[data-pagination], nav.pagination) :is(ol, ul) {
+  display: flex;
+  justify-content: center;
+  gap: var(--pagination-gap, var(--space-xs, 0.5rem));
+  min-inline-size: 0;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  list-style: none;
+}
+
+:is(nav[data-pagination], nav.pagination) :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--pagination-target-size, 2.75rem);
+  min-block-size: var(--pagination-target-size, 2.75rem);
+  padding-inline: var(--pagination-padding-inline, var(--space-sm, 0.75rem));
+  border: var(--pagination-border, 1px solid var(--outline-subtle));
+  border-radius: var(--pagination-radius, var(--radius-md, 0.5rem));
+  background: var(--pagination-background, transparent);
+  color: var(--pagination-color, var(--text-default));
+  font: inherit;
+  font-weight: var(--pagination-font-weight, var(--font-weight-medium, 500));
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+:is(nav[data-pagination], nav.pagination) :is(a, button):is(:hover, :focus-visible) {
+  border-color: var(--pagination-hover-border-color, var(--outline-overt));
+  background: var(--pagination-hover-background, var(--surface-subtle));
+}
+
+:is(nav[data-pagination], nav.pagination) :is(a, button)[aria-current="page"] {
+  border-color: var(--pagination-current-border-color, var(--pagination-current-background, var(--accent)));
+  background: var(--pagination-current-background, var(--accent));
+  color: var(--pagination-current-color, var(--on-accent, white));
+}
+
+:is(nav[data-pagination], nav.pagination) :is(a, button)[aria-disabled="true"],
+:is(nav[data-pagination], nav.pagination) button:disabled {
+  opacity: var(--pagination-disabled-opacity, 0.5);
+  pointer-events: none;
+}
+
+:is(nav[data-pagination], nav.pagination)[data-size="compact"] {
+  --pagination-target-size: 2.25rem;
+  --pagination-padding-inline: var(--space-xs, 0.5rem);
+}
+
+:is(nav[data-pagination], nav.pagination)[data-surface="footer"] {
+  padding-block-start: var(--pagination-footer-padding, var(--space-md, 1rem));
+  border-block-start: var(--pagination-footer-border, 1px solid var(--outline-subtle));
+}
+
+@media (max-width: 32rem) {
+  :is(nav[data-pagination], nav.pagination) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  :is(nav[data-pagination], nav.pagination) :is(ol, ul) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: start;
+  }
+
+  :is(nav[data-pagination], nav.pagination) > :is(.pagination-next, [data-pagination-next]) {
+    justify-self: end;
+  }
+}

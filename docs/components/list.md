@@ -36,6 +36,10 @@ The `list` component provides flexible, styleable list layouts with support for 
 ### Divider Attributes
 - `gap`: Margin around the divider (default: `0.5rem`)
 
+### Divider Tokens
+- `--list-divider-color`: Divider color (defaults to the shared divider color system)
+- `--list-divider-size`: Divider thickness (defaults to `--divider-size`)
+
 ## Usage Examples
 
 ### Basic Vertical List
@@ -107,8 +111,8 @@ The `list` component provides flexible, styleable list layouts with support for 
 
 ### Dividers
 - **Appearance**: Thin horizontal line
-- **Color**: Semi-transparent text color
-- **Height**: 1px
+- **Color**: `--list-divider-color`, falling back to `--divider-color-subtle`
+- **Height**: `--list-divider-size`, falling back to `--divider-size`
 - **Margins**: Configurable via `gap` attribute
 
 ## CSS Implementation

@@ -190,7 +190,9 @@ Adds consistent padding to content.
 
 ### `<layout-center>`
 
-Centers content horizontally with max-width for readability.
+Centers content horizontally with max-width for readability. The maximum width
+includes the component's gutters, so it remains overflow-safe as a full-width
+child of `layout-stack`, grid, or flex layouts.
 
 **CSS Properties:**
 - `--l-max-width`: Maximum width (default: 65ch)
@@ -210,7 +212,7 @@ Centers content horizontally with max-width for readability.
 
 ### `<layout-inline-center>`
 
-Centers content horizontally without a max-width constraint, useful for full-width centering.
+Centers content horizontally without a max-width constraint, useful for full-width centering. Its gutters are included in its rendered width.
 
 **CSS Properties:**
 - `--l-gutters`: Side padding (default: var(--space-md, 1.5rem))

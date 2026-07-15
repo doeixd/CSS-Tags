@@ -193,7 +193,7 @@
  * This example shows how you could use the --box mixin to quickly build a new,
  * fully-styled custom component from a semantic element.
  */
-.callout-info {
+.box-callout-info {
   display: grid;
   padding: var(--space-lg, 2rem);
   background-color: var(--surface-info);

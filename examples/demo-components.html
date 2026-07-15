@@ -38,7 +38,7 @@
     }
   </style>
 </head>
-<body>
+<body id="components-top">
   <div class="container">
     <h1>Components Demo</h1>
     <button onclick="toggleTheme()" id="theme-toggle">Switch to Dark Mode</button>
@@ -51,33 +51,34 @@
         <div class="component-example">
           <h3>Basic Form</h3>
           <form>
-            <label for="name">Name:</label>
-            <form-input><input type="text" id="name" placeholder="Enter your name"></form-input>
-            <label for="email">Email:</label>
-            <form-input><input type="email" id="email" placeholder="Enter your email"></form-input>
-            <label for="message">Message:</label>
-            <form-textarea><textarea id="message" placeholder="Enter your message"></textarea></form-textarea>
-            <form-button><button type="submit">Submit</button></form-button>
+            <layout-stack gap="var(--space-md)">
+              <label>Name <input class="form-input" type="text" name="name" autocomplete="name" placeholder="Ada Lovelace"></label>
+              <label>Email <input class="form-input" type="email" name="email" autocomplete="email" placeholder="ada@example.com"></label>
+              <label>Message <textarea class="form-textarea" name="message" placeholder="How can we help?"></textarea></label>
+              <button class="form-button btn-primary stack-intrinsic" type="submit">Submit</button>
+            </layout-stack>
           </form>
         </div>
         <div class="component-example">
           <h3>Button Variants</h3>
-          <form-button><button class="btn-primary">Primary</button></form-button>
-          <form-button><button class="btn-secondary">Secondary</button></form-button>
-          <form-button><button class="btn-success">Success</button></form-button>
-          <form-button><button class="btn-warning">Warning</button></form-button>
-          <form-button><button class="btn-error">Error</button></form-button>
+          <layout-cluster>
+            <button class="form-button btn-primary" type="button">Primary</button>
+            <button class="form-button btn-secondary" type="button">Secondary</button>
+            <button class="form-button btn-success" type="button">Success</button>
+            <button class="form-button btn-warning" type="button">Warning</button>
+            <button class="form-button btn-error" type="button">Error</button>
+          </layout-cluster>
         </div>
       </div>
     </section>
 
     <!-- Cards Section -->
-    <section class="demo-section">
+    <section class="demo-section" id="cards">
       <h2>Cards</h2>
       <p>Card components with responsive layouts.</p>
       <div class="component-grid">
         <card>
-          <card-media><img src="https://via.placeholder.com/400x225" alt="Placeholder"></card-media>
+          <card-media><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%236d5dfc'/%3E%3Ccircle cx='650' cy='90' r='52' fill='%23fff' opacity='.8'/%3E%3Cpath d='M0 390 190 190 350 320 510 130 800 390V450H0Z' fill='%2312b8a6'/%3E%3C/svg%3E" alt="Abstract purple and teal landscape"></card-media>
           <card-body>
             <card-header>Card Title</card-header>
             <card-content>This is the card content. It adapts its layout based on the card's width.</card-content>
@@ -95,28 +96,28 @@
     </section>
 
     <!-- Navigation Section -->
-    <section class="demo-section">
+    <section class="demo-section" id="navigation">
       <h2>Navigation</h2>
       <p>Navbar and sidebar navigation components.</p>
-      <nav-navbar>
-        <a href="#" class="nav-brand">Brand</a>
-        <ul class="nav-links">
-          <li><a href="#" class="nav-link">Home</a></li>
-          <li><a href="#" class="nav-link nav-link-active">About</a></li>
-          <li><a href="#" class="nav-link">Services</a></li>
-          <li><a href="#" class="nav-link">Contact</a></li>
+      <nav-navbar data-collapsible>
+        <a href="#components-top" class="nav-brand">Brand</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="component-nav-links">Menu</button>
+        <ul class="nav-links" id="component-nav-links">
+          <li><a href="#components-top" class="nav-link">Home</a></li>
+          <li><a href="#cards" class="nav-link" aria-current="page">About</a></li>
+          <li><a href="#navigation" class="nav-link">Services</a></li>
+          <li><a href="#other-components" class="nav-link">Contact</a></li>
         </ul>
-        <button class="nav-toggle">☰</button>
       </nav-navbar>
       <div style="display: flex; margin-top: 2rem;">
         <nav-sidebar>
           <ul class="sidebar-nav">
             <li class="sidebar-section">Main</li>
-            <li><a href="#" class="sidebar-link">Dashboard</a></li>
-            <li><a href="#" class="sidebar-link sidebar-link-active">Projects</a></li>
+            <li><a href="#components-top" class="sidebar-link">Dashboard</a></li>
+            <li><a href="#cards" class="sidebar-link" aria-current="page">Projects</a></li>
             <li class="sidebar-section">Account</li>
-            <li><a href="#" class="sidebar-link">Settings</a></li>
-            <li><a href="#" class="sidebar-link">Logout</a></li>
+            <li><a href="#navigation" class="sidebar-link">Settings</a></li>
+            <li><a href="#components-top" class="sidebar-link">Logout</a></li>
           </ul>
         </nav-sidebar>
         <div style="flex: 1; padding: 1rem;">
@@ -127,25 +128,31 @@
     </section>
 
     <!-- Other Components -->
-    <section class="demo-section">
+    <section class="demo-section" id="other-components">
       <h2>Other Components</h2>
       <p>Additional component examples.</p>
       <div class="component-grid">
         <div class="component-example">
           <h3>Alerts</h3>
-          <div style="background: var(--success); color: var(--text-on-success); padding: 1rem; border-radius: var(--radius-md);">Success Alert</div>
-          <div style="background: var(--warning); color: var(--text-on-warning); padding: 1rem; border-radius: var(--radius-md);">Warning Alert</div>
-          <div style="background: var(--error); color: var(--text-on-error); padding: 1rem; border-radius: var(--radius-md);">Error Alert</div>
+          <layout-stack gap="var(--space-sm)">
+            <div class="alert" status="success" role="status"><strong>Success:</strong> Your changes were saved.</div>
+            <div class="alert" status="warning" role="status"><strong>Warning:</strong> Review this setting.</div>
+            <div class="alert" status="error" role="alert"><strong>Error:</strong> The request failed.</div>
+          </layout-stack>
         </div>
         <div class="component-example">
           <h3>Badges</h3>
-          <span style="background: var(--accent); color: var(--text-on-accent); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem;">New</span>
-          <span style="background: var(--secondary); color: var(--text-on-secondary); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.75rem;">Beta</span>
+          <layout-cluster>
+            <badge status="primary">New</badge>
+            <badge status="info">Beta</badge>
+            <badge status="success">Stable</badge>
+          </layout-cluster>
         </div>
       </div>
     </section>
   </div>
 
+  <script type="module" src="./demo-navigation.js"></script>
   <script>
     function toggleTheme() {
       const html = document.documentElement;

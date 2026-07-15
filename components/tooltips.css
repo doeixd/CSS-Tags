@@ -12,7 +12,7 @@
 :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip) {
   position: absolute;
   z-index: var(--tooltip-z-index, 1000);
-  display: block;
+  display: none;
   inline-size: max-content;
   max-inline-size: min(var(--tooltip-max-width, 32ch), 80vw);
   padding: var(--tooltip-padding, 0.5rem 0.7rem);
@@ -33,6 +33,7 @@
 
 :where(:has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))):is(:hover, :focus-visible, :focus-within)
   > :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip) {
+  display: block;
   opacity: 1;
   visibility: visible;
   transition-delay: var(--tooltip-delay, 150ms), var(--tooltip-delay, 150ms), 0s;

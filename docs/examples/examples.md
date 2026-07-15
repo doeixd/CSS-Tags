@@ -105,6 +105,14 @@ Text file containing older CSS implementations for reference.
 
 ## Running the Demos
 
+`demo-element-patterns.html` demonstrates icon and floating actions, switches,
+compound inputs, ratings, reactions, avatars, navigation patterns, messages,
+logs, and the vertical snap feed using only the shipped library CSS.
+
+`demo-fluid-type.html` shows the custom, data, and class fluid-container APIs
+alongside the skip-link primitive. `demo-navigation-patterns.html` is a focused,
+JavaScript-free breadcrumbs and pagination reference.
+
 1. Ensure the framework files are properly linked
 2. Open any `.html` file in a modern browser
 3. Interact with components to see responsive behavior

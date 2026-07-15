@@ -10,28 +10,28 @@
   <link rel="stylesheet" href="../index.css">
 </head>
 
-<body>
+<body id="top">
   <layout-page gap="0" min-height="100vh">
     <!-- ╔══════════════════════════════════════════════════════════════════════════╗
          ║  NAVIGATION                                                          ║
          ╚══════════════════════════════════════════════════════════════════════════╝ -->
     <header slot="header">
       <layout-center max-width="1200px">
-        <nav-navbar class="border-none" style="padding-block: 0.5rem;">
+        <nav-navbar data-collapsible class="border-none" style="padding-block: 0.5rem;">
           <div class="nav-brand">
             <flex align="center" gap="0.75rem">
               <badge status="primary" size="lg">B</badge>
               <text weight="bold" size="lg" display="inline">Beacon</text>
             </flex>
           </div>
-          <ul class="nav-links">
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="beacon-nav-links">Menu</button>
+          <ul class="nav-links" id="beacon-nav-links">
             <li><a href="#features" class="nav-link">Features</a></li>
             <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
             <li><a href="#pricing" class="nav-link">Pricing</a></li>
             <li><a href="#faq" class="nav-link">FAQ</a></li>
             <li><a href="#cta" class="button button-primary" style="margin-left: 1rem;">Start Free Trial</a></li>
           </ul>
-          <button class="nav-toggle">☰</button>
         </nav-navbar>
       </layout-center>
     </header>
@@ -110,7 +110,7 @@
         </box>
 
         <!-- ── Features (Stripe) ── -->
-        <box py="6rem">
+        <box py="6rem" id="features">
           <layout-center max-width="1200px">
             <layout-stack gap="4rem">
               <layout-stack gap="1rem" center>
@@ -187,7 +187,7 @@
         </box>
 
         <!-- ── How It Works (Tabs) ── -->
-        <box py="6rem">
+        <box py="6rem" id="how-it-works">
           <layout-center max-width="1200px">
             <layout-stack gap="4rem">
               <layout-stack gap="1rem" center>
@@ -250,7 +250,7 @@
         </box>
 
         <!-- ── Pricing Section (Stripe) ── -->
-        <box py="6rem" bg="var(--surface-subtle)">
+        <box py="6rem" bg="var(--surface-subtle)" id="pricing">
           <layout-center max-width="1200px">
             <layout-stack gap="4rem">
               <layout-stack gap="1rem" center>
@@ -281,7 +281,7 @@
                             bandwidth</text></flex>
                       </list-item>
                     </list>
-                    </list>
+                  </layout-stack>
                 </box>
                 <!-- Pro -->
                 <box p="2.5rem" bg="var(--base)" border="2px solid var(--accent)" radius="var(--radius-lg)"
@@ -304,7 +304,7 @@
                             weight="semibold">Unlimited projects</text></flex>
                       </list-item>
                     </list>
-                    </list>
+                  </layout-stack>
                 </box>
                 <!-- Enterprise -->
                 <box p="2.5rem" bg="var(--base)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
@@ -321,7 +321,7 @@
                             SAML</text></flex>
                       </list-item>
                     </list>
-                    </list>
+                  </layout-stack>
                 </box>
               </layout-grid>
             </layout-stack>
@@ -407,7 +407,7 @@
                   <a href="#pricing" class="button button-primary"
                     style="padding: 1rem 2.5rem; font-size: 1.25rem;">Get
                     Started Free</a>
-                  <a href="#" class="button button-outline"
+                  <a href="#features" class="button button-outline"
                     style="padding: 1rem 2.5rem; font-size: 1.25rem;">Talk
                     to Sales</a>
                 </flex>
@@ -447,16 +447,16 @@
             <layout-stack gap="1.25rem">
               <text weight="bold" size="sm" transform="uppercase" tracking="widest">Company</text>
               <layout-stack gap="0.75rem">
-                <a href="#" class="text-subtle text-sm">About Us</a>
-                <a href="#" class="text-subtle text-sm">Contact</a>
+                <a href="#top" class="text-subtle text-sm">About Us</a>
+                <a href="#cta" class="text-subtle text-sm">Contact</a>
               </layout-stack>
             </layout-stack>
 
             <layout-stack gap="1.25rem">
               <text weight="bold" size="sm" transform="uppercase" tracking="widest">Resources</text>
               <layout-stack gap="0.75rem">
-                <a href="#" class="text-subtle text-sm">Documentation</a>
-                <a href="#" class="text-subtle text-sm">API Reference</a>
+                <a href="../README.md" class="text-subtle text-sm">Documentation</a>
+                <a href="../API.md" class="text-subtle text-sm">API Reference</a>
               </layout-stack>
             </layout-stack>
           </grid>
@@ -465,8 +465,8 @@
             <flex justify="between" align="center" wrap="wrap" gap="2rem">
               <text size="xs" color="muted">© 2026 Beacon, Inc. All rights reserved.</text>
               <flex gap="2rem">
-                <a href="#" class="text-muted text-xs">Twitter</a>
-                <a href="#" class="text-muted text-xs">GitHub</a>
+                <a href="#top" class="text-muted text-xs">Twitter</a>
+                <a href="https://github.com/doeixd/CSS-Tags" class="text-muted text-xs">GitHub</a>
               </flex>
             </flex>
           </box>
@@ -474,6 +474,7 @@
       </box>
     </footer>
   </layout-page>
+  <script type="module" src="./demo-navigation.js"></script>
 </body>
 
 </html>

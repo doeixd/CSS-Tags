@@ -1,0 +1,223 @@
+---
+title: Element Patterns
+description: Native-first action, form, identity, navigation, feed, and application primitives.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+These patterns fill the gaps identified in the Graffiti UI comparison. They
+ship through `index.css`, use semantic state as their contract, and work
+without JavaScript unless an enhancement is explicitly described.
+
+## Icon buttons and switches
+
+Use a real labelled button for icon-only actions. A switch is a native checkbox
+whose `role="switch"` provides the visual contract.
+
+<LiveExample title="Compact native controls" compact>
+  <layout-cluster gap="var(--space-md)" align="center">
+    <button class="icon-button" aria-label="Close" type="button">×</button>
+    <button class="icon-button" data-size="sm" aria-label="Add item" type="button">+</button>
+    <label class="stack-intrinsic">
+      <span>Automatic updates</span>
+      <input type="checkbox" role="switch" checked />
+    </label>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<button class="icon-button" aria-label="Close">×</button>
+
+<label>
+  <span>Automatic updates</span>
+  <input type="checkbox" role="switch" checked>
+</label>
+```
+
+`[data-icon-button]` is equivalent to `.icon-button`. `<icon-button>` is only a
+visual host and does not gain native button behavior, keyboard support, or form
+semantics automatically. Floating actions use `.fab` or `[data-fab]`, include
+safe-area-aware logical offsets, and should represent the page's primary action.
+
+## Input group and search
+
+<LiveExample title="Connected controls">
+  <layout-stack gap="var(--space-md)">
+    <label>
+      <span>Project address</span>
+      <input-group data-stack="auto">
+        <span class="input-affix">https://</span>
+        <input class="form-input" aria-label="Project subdomain" value="atlas" />
+        <span class="input-affix">.example.com</span>
+        <button class="form-button" type="button">Save</button>
+      </input-group>
+    </label>
+    <search-input>
+      <span aria-hidden="true">⌕</span>
+      <input type="search" aria-label="Search projects" placeholder="Search projects" />
+    </search-input>
+  </layout-stack>
+</LiveExample>
+
+```html
+<input-group data-stack="auto">
+  <span class="input-affix">https://</span>
+  <input class="form-input" aria-label="Project subdomain">
+  <button class="form-button">Save</button>
+</input-group>
+
+<search-input>
+  <span aria-hidden="true">⌕</span>
+  <input type="search" aria-label="Search projects">
+</search-input>
+```
+
+Input groups connect adjacent controls. Search input provides leading and
+trailing content slots around a native `input type="search"`.
+
+## File dropzone
+
+<LiveExample title="Native file input drop target">
+  <file-dropzone>
+    <strong>Drop files here or choose files</strong>
+    <small>PNG, JPG, or WebP up to 10 MB</small>
+    <input type="file" multiple accept="image/png,image/jpeg,image/webp" aria-label="Upload images" />
+  </file-dropzone>
+</LiveExample>
+
+The transparent native file input covers the surface, preserving click,
+keyboard, and browser drop behavior. JavaScript may set `data-dragover="true"`
+and render selected filenames, but neither is required for the control to work.
+
+## Rating and reactions
+
+<LiveExample title="Read-only and interactive ratings">
+  <layout-stack gap="var(--space-md)">
+    <rating-output style="--rating-value: 80%" aria-label="4 out of 5 stars">★★★★★</rating-output>
+    <fieldset>
+      <legend>Rate this example</legend>
+      <rating-input>
+        <label aria-label="5 stars"><input type="radio" name="docs-rating" value="5" />★</label>
+        <label aria-label="4 stars"><input type="radio" name="docs-rating" value="4" checked />★</label>
+        <label aria-label="3 stars"><input type="radio" name="docs-rating" value="3" />★</label>
+        <label aria-label="2 stars"><input type="radio" name="docs-rating" value="2" />★</label>
+        <label aria-label="1 star"><input type="radio" name="docs-rating" value="1" />★</label>
+      </rating-input>
+    </fieldset>
+    <reaction-select>
+      <select class="form-select" aria-label="Add reaction">
+        <option value="">Add reaction</option>
+        <option value="like">👍 Like</option>
+        <option value="love">❤️ Love</option>
+        <option value="celebrate">🎉 Celebrate</option>
+      </select>
+    </reaction-select>
+  </layout-stack>
+</LiveExample>
+
+Interactive ratings use native radios. Put labels in descending value order,
+as shown. Reactions remain an ordinary select and use customizable select only
+where `appearance: base-select` is supported.
+
+## Avatars
+
+<LiveExample title="Initial, image, and group avatars" compact>
+  <layout-cluster gap="var(--space-lg)" align="center">
+    <user-avatar aria-label="Ada Lovelace">AL</user-avatar>
+    <user-avatar shape="square" size="lg" aria-label="Grace Hopper">GH</user-avatar>
+    <avatar-group aria-label="Project members">
+      <user-avatar aria-label="Ada Lovelace">AL</user-avatar>
+      <user-avatar aria-label="Grace Hopper">GH</user-avatar>
+      <user-avatar aria-label="Katherine Johnson">KJ</user-avatar>
+    </avatar-group>
+  </layout-cluster>
+</LiveExample>
+
+An `img` child fills the avatar when present; text initials remain the fallback.
+Size values are `sm`, the default, and `lg`. Use `shape="square"` when needed.
+
+## Toolbar and navigation
+
+<LiveExample title="Editor toolbar and rich navigation">
+  <layout-stack gap="var(--space-lg)">
+    <div class="toolbar" role="toolbar" aria-label="Editor actions">
+      <div class="toolbar-group">
+        <button class="icon-button" data-size="sm" aria-label="Undo" type="button">↶</button>
+        <button class="icon-button" data-size="sm" aria-label="Redo" type="button">↷</button>
+      </div>
+      <span class="toolbar-spacer"></span>
+      <button class="form-button" type="button">Publish</button>
+    </div>
+    <nav aria-label="Projects">
+      <ul class="list-navigation">
+        <li><a href="#atlas" aria-current="page"><span aria-hidden="true">◆</span><span class="list-navigation-label"><strong>Atlas</strong><small class="list-navigation-description">Production</small></span><span aria-hidden="true">›</span></a></li>
+        <li><a href="#beacon"><span aria-hidden="true">◇</span><span class="list-navigation-label"><strong>Beacon</strong><small class="list-navigation-description">Preview</small></span><badge>3</badge></a></li>
+      </ul>
+    </nav>
+  </layout-stack>
+</LiveExample>
+
+Use `role="toolbar"` for a related control group. List navigation expects real
+links or buttons and uses `aria-current="page"` for selection. `icon-rail`,
+`[data-icon-rail]`, and `.icon-rail` provide the compact vertical equivalent;
+every icon-only destination still needs an accessible name.
+
+## Messages and logs
+
+<LiveExample title="Application feedback surfaces">
+  <layout-stack gap="var(--space-lg)">
+    <div class="chat" aria-label="Conversation">
+      <message-bubble data-sender="other">Can you review this deploy?</message-bubble>
+      <message-bubble data-sender="self">Yes. The checks are passing now.</message-bubble>
+    </div>
+    <log-card>
+      <div class="log-card-header"><strong>Production deploy</strong><badge status="success">Passed</badge></div>
+      <div class="log-card-body" role="log" aria-live="polite">
+        <div class="log-row log-row-success"><span>Dependencies installed</span><time>12:03</time></div>
+        <div class="log-row log-row-success"><span>Site built</span><time>12:04</time></div>
+        <div class="log-row log-row-running"><span>Publishing assets</span><time>Now</time></div>
+      </div>
+    </log-card>
+  </layout-stack>
+</LiveExample>
+
+`aria-busy="true"` adds a visual thinking indicator to a bubble. It does not
+announce updates by itself. Use `role="log"` and an appropriate live-region
+strategy only when rows are appended dynamically.
+
+## Vertical snap feed
+
+`snap-feed`, `[data-snap-feed]`, and `.snap-feed` provide a vertical scroll-snap
+container. Its direct children snap to the block-start edge. This is separate
+from the existing horizontal `layout-reel` and from `carousel`.
+
+```html
+<snap-feed aria-label="Updates">
+  <article>First full-height item</article>
+  <article>Second full-height item</article>
+</snap-feed>
+```
+
+Set `--snap-feed-height`, `--snap-feed-item-min-height`, and
+`--snap-feed-strictness` to adapt the viewport. Avoid mandatory snapping for
+items taller than the feed viewport.
+
+## Public host forms
+
+Surface and layout patterns support custom, `data-*`, and class hosts. Native
+interaction remains canonical:
+
+- `input-group`, `[data-input-group]`, `.input-group`
+- `search-input`, `[data-search-input]`, `.search-input`
+- `file-dropzone`, `[data-file-dropzone]`, `.file-dropzone`
+- `rating-output`, `[data-rating-output]`, `.rating-output`
+- `rating-input`, `[data-rating-input]`, `.rating-input`
+- `reaction-select`, `[data-reaction-select]`, `.reaction-select`
+- `user-avatar`, `[data-avatar]`, `.avatar`
+- `tool-bar`, `[data-toolbar]`, `.toolbar`
+- `nav-list`, `[data-list-navigation]`, `.list-navigation`
+- `icon-rail`, `[data-icon-rail]`, `.icon-rail`
+- `message-bubble`, `[data-bubble]`, `.bubble`
+- `log-card`, `[data-log-card]`, `.log-card`
+- `snap-feed`, `[data-snap-feed]`, `.snap-feed`
+

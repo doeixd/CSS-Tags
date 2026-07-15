@@ -1,0 +1,51 @@
+/**
+ * Accessibility primitives
+ *
+ * Skip links intentionally enhance anchors only: the navigation semantics and
+ * keyboard behavior belong in HTML, while CSS controls their presentation.
+ */
+
+:is(a.skip-link, a[data-skip-link]) {
+  position: fixed;
+  inset-block-start: var(--skip-link-inset-block, var(--space-sm, 0.5rem));
+  inset-inline-start: var(--skip-link-inset-inline, var(--space-sm, 0.5rem));
+  z-index: var(--skip-link-z-index, var(--z-index-skip-link, 10001));
+  padding: var(--skip-link-padding, var(--space-sm, 0.5rem) var(--space-md, 1rem));
+  border: var(--skip-link-border, 1px solid currentColor);
+  border-radius: var(--skip-link-radius, var(--border-radius-md, 0.5rem));
+  background: var(--skip-link-background, var(--accent, CanvasText));
+  color: var(--skip-link-color, var(--on-accent, Canvas));
+  box-shadow: var(--skip-link-shadow, var(--shadow-md, 0 0.25rem 0.75rem rgb(0 0 0 / 0.2)));
+  font-weight: var(--skip-link-font-weight, var(--font-weight-semibold, 600));
+  line-height: var(--line-height-tight, 1.25);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(calc(-100% - var(--skip-link-inset-block, var(--space-sm, 0.5rem))));
+  transition:
+    transform var(--skip-link-duration, var(--transition-fast, 150ms)) ease,
+    opacity var(--skip-link-duration, var(--transition-fast, 150ms)) ease;
+}
+
+:is(a.skip-link, a[data-skip-link]):is(:focus, :focus-visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+:is(a.skip-link, a[data-skip-link]):focus-visible {
+  outline: var(--skip-link-focus-outline, 3px solid var(--focus-ring-color, currentColor));
+  outline-offset: var(--skip-link-focus-offset, 3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(a.skip-link, a[data-skip-link]) {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :is(a.skip-link, a[data-skip-link]) {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+}

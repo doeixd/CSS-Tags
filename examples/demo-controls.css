@@ -1,0 +1,32 @@
+@layer examples {
+  .demo-section input[type="range"] {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 8rem;
+    margin-block-start: 0.35rem;
+    accent-color: var(--accent);
+    touch-action: pan-y;
+  }
+
+  .demo-range-output {
+    float: inline-end;
+    min-inline-size: 4.5ch;
+    margin-inline-start: var(--space-sm);
+    color: var(--text-subtle);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .demo-section fieldset {
+    min-inline-size: 0;
+    padding: var(--space-md);
+    border: 1px solid var(--outline-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .demo-section legend {
+    padding-inline: var(--space-xs);
+    color: var(--text-overt);
+    font-weight: var(--font-weight-semibold);
+  }
+}

@@ -4,6 +4,45 @@
  * Semantic typography, long-form prose rhythm, and callout surfaces.
  */
 
+/*
+ * Opt into container-relative fluid type. Descendants keep the same bounded
+ * scale, but their preferred sizes respond to this container instead of the
+ * viewport. The short `.fc` alias is provided for composition-heavy markup.
+ */
+:is(fluid-container, [data-fluid-container], .fluid-container, .fc) {
+  display: block;
+  container-type: inline-size;
+  --font-size-step-1-preferred: calc(1.02rem + 0.22cqi);
+  --font-size-step-2-preferred: calc(1.11rem + 0.4cqi);
+  --font-size-step-3-preferred: calc(1.22rem + 0.75cqi);
+  --font-size-step-4-preferred: calc(1.32rem + 1.25cqi);
+  --font-size-step-5-preferred: calc(1.5rem + 1.9cqi);
+  --font-size-step-6-preferred: calc(1.8rem + 2.8cqi);
+  --font-size-step-7-preferred: calc(2.1rem + 3.6cqi);
+  --font-size-step-1: clamp(var(--font-size-step-1-min), var(--font-size-step-1-preferred), var(--font-size-step-1-max));
+  --font-size-step-2: clamp(var(--font-size-step-2-min), var(--font-size-step-2-preferred), var(--font-size-step-2-max));
+  --font-size-step-3: clamp(var(--font-size-step-3-min), var(--font-size-step-3-preferred), var(--font-size-step-3-max));
+  --font-size-step-4: clamp(var(--font-size-step-4-min), var(--font-size-step-4-preferred), var(--font-size-step-4-max));
+  --font-size-step-5: clamp(var(--font-size-step-5-min), var(--font-size-step-5-preferred), var(--font-size-step-5-max));
+  --font-size-step-6: clamp(var(--font-size-step-6-min), var(--font-size-step-6-preferred), var(--font-size-step-6-max));
+  --font-size-step-7: clamp(var(--font-size-step-7-min), var(--font-size-step-7-preferred), var(--font-size-step-7-max));
+  --font-size-lg: var(--font-size-step-1);
+  --font-size-xl: var(--font-size-step-2);
+  --font-size-2xl: var(--font-size-step-3);
+  --font-size-3xl: var(--font-size-step-4);
+  --font-size-4xl: var(--font-size-step-5);
+  --font-size-5xl: var(--font-size-step-6);
+  --font-size-6xl: var(--font-size-step-7);
+  --font-size-body-lg: var(--font-size-lg);
+  --font-size-lead: var(--font-size-xl);
+  --font-size-h1: var(--font-size-6xl);
+  --font-size-h2: var(--font-size-5xl);
+  --font-size-h3: var(--font-size-4xl);
+  --font-size-h4: var(--font-size-3xl);
+  --font-size-h5: var(--font-size-2xl);
+  --font-size-h6: var(--font-size-lg);
+}
+
 :is(.lead, [data-lead], text[variant="lead"]) {
   --_fs: var(--font-size-lead);
   --_lh: var(--line-height-lead);

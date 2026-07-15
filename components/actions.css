@@ -1,0 +1,76 @@
+/** Compact action controls. Native buttons remain the canonical API. */
+
+:is(button[data-icon-button], button.icon-button, icon-button,
+    button[data-fab], button.fab, floating-action) {
+  --_icon-button-size: var(--icon-button-size, 2.75rem);
+
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: var(--_icon-button-size);
+  block-size: var(--_icon-button-size);
+  min-inline-size: var(--_icon-button-size);
+  padding: var(--icon-button-padding, 0.625rem);
+  border: var(--icon-button-border-width, var(--border-width, 1px)) solid
+    var(--icon-button-border-color, var(--outline-default));
+  border-radius: var(--icon-button-radius, var(--radius-md, 0.5rem));
+  background: var(--icon-button-background, var(--surface-default));
+  color: var(--icon-button-color, var(--text-default));
+  line-height: 1;
+}
+
+:is(button[data-icon-button], button.icon-button, icon-button,
+    button[data-fab], button.fab, floating-action)
+  > :is(svg, img, [data-icon]) {
+  inline-size: var(--icon-button-icon-size, 1.25rem);
+  block-size: var(--icon-button-icon-size, 1.25rem);
+  object-fit: contain;
+}
+
+:is(button[data-icon-button], button.icon-button, icon-button,
+    button[data-fab], button.fab, floating-action):is(:hover, :focus-visible) {
+  background: var(--icon-button-hover-background, var(--surface-subtle));
+  border-color: var(--icon-button-hover-border-color, var(--outline-overt));
+}
+
+:is(button[data-icon-button], button.icon-button, icon-button,
+    button[data-fab], button.fab, floating-action):focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+:is(button[data-icon-button], button.icon-button, icon-button):is([data-size="sm"], [size="sm"]) {
+  --icon-button-size: 2.25rem;
+  --icon-button-icon-size: 1rem;
+}
+
+:is(button[data-icon-button], button.icon-button, icon-button):is([data-size="lg"], [size="lg"]) {
+  --icon-button-size: 3.25rem;
+  --icon-button-icon-size: 1.5rem;
+}
+
+:is(button[data-fab], button.fab, floating-action) {
+  --icon-button-size: var(--fab-size, 3.5rem);
+  --icon-button-radius: var(--fab-radius, var(--radius-full, 9999px));
+  --icon-button-background: var(--fab-background, var(--accent));
+  --icon-button-color: var(--fab-color, var(--text-on-accent));
+  --icon-button-border-color: var(--fab-border-color, transparent);
+
+  position: fixed;
+  z-index: var(--fab-z-index, var(--z-index-50, 50));
+  inset-inline-end: max(var(--fab-inset-inline, 1.25rem), env(safe-area-inset-right));
+  inset-block-end: max(var(--fab-inset-block, 1.25rem), env(safe-area-inset-bottom));
+  box-shadow: var(--fab-shadow, var(--shadow-lg));
+}
+
+:is(button[data-fab], button.fab, floating-action):is(:hover, :focus-visible) {
+  --icon-button-hover-background: var(--fab-hover-background, var(--accent-overt));
+}
+
+@media (forced-colors: active) {
+  :is(button[data-icon-button], button.icon-button, icon-button,
+      button[data-fab], button.fab, floating-action) {
+    border-color: ButtonText;
+  }
+}

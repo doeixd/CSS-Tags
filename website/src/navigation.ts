@@ -20,12 +20,14 @@ export const navigation: NavItem[] = [
 			label: 'Guides',
 			items: [
 				{ label: 'Color System', slug: 'guides/color-system' },
+				{ label: 'Graffiti UI Gap Analysis', slug: 'guides/graffiti-ui-elements-gap-analysis' },
 				{ label: 'Theming', slug: 'guides/theming' },
 			],
 		},
 	{
 		label: 'Components',
 		items: [
+			{ label: 'Accessibility', slug: 'components/accessibility' },
 			{ label: 'Alert', slug: 'components/alert' },
 			{ label: 'Badge', slug: 'components/badge' },
 			{ label: 'Box', slug: 'components/box' },
@@ -36,6 +38,8 @@ export const navigation: NavItem[] = [
 			{ label: 'Chip', slug: 'components/chip' },
 			{ label: 'Container', slug: 'components/container' },
 			{ label: 'Disclosure', slug: 'components/disclosure' },
+			{ label: 'Divider', slug: 'components/divider' },
+			{ label: 'Element Patterns', slug: 'components/element-patterns' },
 			{ label: 'Flex', slug: 'components/flex' },
 			{ label: 'Form', slug: 'components/form' },
 			{ label: 'Grid', slug: 'components/grid' },

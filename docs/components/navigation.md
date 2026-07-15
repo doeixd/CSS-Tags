@@ -139,3 +139,42 @@ The mobile menu requires JavaScript to:
 - **Dashboard Layouts**: Admin panels and data apps
 - **Mobile Apps**: Responsive web app navigation
 - **Documentation Sites**: Section-based navigation
+
+## Breadcrumbs
+
+Breadcrumbs use a native `nav` landmark and ordered list. Both public host forms are equivalent:
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/components/">Components</a></li>
+    <li><span aria-current="page">Navigation</span></li>
+  </ol>
+</nav>
+
+<nav data-breadcrumbs aria-label="Breadcrumb">...</nav>
+```
+
+The list wraps on narrow screens. Separators are decorative generated content, so screen readers announce only the link labels. Customize `--breadcrumbs-gap`, `--breadcrumbs-separator`, `--breadcrumbs-color`, `--breadcrumbs-hover-color`, `--breadcrumbs-current-color`, and `--breadcrumbs-font-size`.
+
+## Pagination
+
+Use anchors for location-changing pages. Use buttons only when paging client-side data without changing the URL.
+
+```html
+<nav data-pagination aria-label="Pagination">
+  <a class="pagination-previous" href="?page=2">Previous</a>
+  <ol>
+    <li><a href="?page=1">1</a></li>
+    <li><a href="?page=2">2</a></li>
+    <li><a href="?page=3" aria-current="page">3</a></li>
+    <li><a href="?page=4">4</a></li>
+  </ol>
+  <a class="pagination-next" href="?page=4">Next</a>
+</nav>
+```
+
+`nav.pagination` is the class-host equivalent. Add `data-size="compact"` for dense interfaces or `data-surface="footer"` for an opt-in top divider. A disabled anchor should omit `href` and set `aria-disabled="true"`; do not rely on its appearance alone.
+
+Pagination hooks include `--pagination-gap`, `--pagination-target-size`, `--pagination-padding-inline`, `--pagination-radius`, `--pagination-background`, `--pagination-hover-background`, `--pagination-current-background`, `--pagination-current-color`, and `--pagination-disabled-opacity`.
