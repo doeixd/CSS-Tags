@@ -384,3 +384,42 @@ they can be removed.
   full-width slide contract, enhancement flag, inert inactive slides, and
   inherited preview theme inputs; browser QA confirms search, outline depth,
   carousel controls, and page navigation at desktop and mobile widths.
+
+## FB-024 — Theme surfaces and button interaction needed coherent public knobs
+
+- Status: `verified`
+- Exposed by: using the documentation theme creator to tune neutral hierarchy
+  and comparing native, utility, and form-button interaction feedback.
+- Reproduction: surface chroma was editable but tonal depth was hardcoded, and
+  button implementations repeated state timing, transforms, and focus details
+  instead of deriving from one interaction contract.
+- Library solution: `--surface-lightness-shift` safely lifts or dims both color
+  schemes, while `--surface-contrast` controls separation between semantic
+  surface tiers. Shared button tokens now cover base, hover, active, disabled,
+  transition, transform, and shadow behavior; native and ARIA-disabled states
+  retain semantic markup and reduced-motion support.
+- Documentation solution: the live creator exposes both surface inputs,
+  persists them, includes them in presets, and exports them in the generated
+  theme layer. Theme and defaults references document the public contracts.
+- Removal condition: source and generated-site audits require the new theme
+  controls and button tokens; browser QA proves live updates in light and dark
+  schemes plus distinct hover, pressed, and keyboard-focus states.
+
+## FB-025 — Data surfaces were narrower and louder than their containers
+
+- Status: `verified`
+- Exposed by: comparing documentation tables and active navigation treatments
+  against the surrounding neutral documentation shell.
+- Reproduction: prose and responsive table paths could visually shrink inside
+  their wrappers, table colors reused stronger general-purpose highlights, and
+  flush navigation marked the active item with an accent-colored edge.
+- Library solution: native, prose, and responsive tables explicitly fill their
+  containers and use dedicated low-contrast surface, border, divider, stripe,
+  heading, and hover tokens. Flush navigation keeps current-item background and
+  text feedback without a decorative accent edge; forced-colors retains a
+  system-colored structural edge for accessibility.
+- Documentation solution: the table reference explains global theme tokens and
+  per-table aliases using the real wrapper-based overflow API.
+- Removal condition: build audits require the full-width table contract and
+  dedicated table tokens; browser QA confirms container fill and restrained
+  light/dark table contrast.

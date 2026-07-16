@@ -234,16 +234,32 @@
     background-color: var(--surface);
     color: var(--text-on-surface);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                border-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                box-shadow var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
     text-decoration: none;
   }
 
-  .button:hover { background-color: var(--highlight-subtle); }
-  .button:active { background-color: var(--highlight-overt); }
-  .button:disabled {
+  .button:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-hover-background, var(--highlight-subtle));
+    border-color: var(--button-hover-border-color, var(--outline-overt));
+    color: var(--button-hover-color, var(--text-overt));
+    transform: var(--transform-button-hover, translateY(-1px));
+    box-shadow: var(--shadow-button-hover, none);
+  }
+  .button:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-active-background, var(--highlight-overt));
+    border-color: var(--button-active-border-color, var(--outline-active));
+    color: var(--button-active-color, var(--text-overt));
+    transform: var(--transform-button-active, translateY(0) scale(0.98));
+    box-shadow: var(--shadow-button-active, var(--shadow-inner));
+  }
+  .button:is(:disabled, [aria-disabled="true"]) {
     background-color: var(--surface-muted);
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: var(--button-disabled-opacity, 0.5);
   }
 
   .button-primary {
@@ -251,8 +267,8 @@
     border-color: var(--accent);
     color: var(--text-on-accent);
   }
-  .button-primary:hover { background-color: var(--accent-overt); color: var(--text-on-accent); }
-  .button-primary:active { background-color: var(--accent-highlight); color: var(--text-on-accent); }
+  .button-primary:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-overt); color: var(--text-on-accent); }
+  .button-primary:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-highlight); color: var(--text-on-accent); }
   .button-primary:disabled { background-color: var(--accent-muted); color: var(--text-on-accent); }
 
   .button-secondary {
@@ -260,8 +276,8 @@
     border-color: var(--secondary);
     color: var(--text-on-secondary);
   }
-  .button-secondary:hover { background-color: var(--secondary-overt); color: var(--text-on-secondary); }
-  .button-secondary:active { background-color: var(--secondary-highlight); color: var(--text-on-secondary); }
+  .button-secondary:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-overt); color: var(--text-on-secondary); }
+  .button-secondary:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-highlight); color: var(--text-on-secondary); }
   .button-secondary:disabled { background-color: var(--secondary-muted); color: var(--text-on-secondary); }
 
   .button-outline {
@@ -269,8 +285,8 @@
     border-color: var(--outline);
     color: var(--text);
   }
-  .button-outline:hover { background-color: var(--highlight-subtle); }
-  .button-outline:active { background-color: var(--highlight-overt); }
+  .button-outline:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
+  .button-outline:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
   .button-outline:disabled { background-color: transparent; }
 
   .button-ghost {
@@ -278,8 +294,8 @@
     border-color: transparent;
     color: var(--text);
   }
-  .button-ghost:hover { background-color: var(--highlight-subtle); }
-  .button-ghost:active { background-color: var(--highlight-overt); }
+  .button-ghost:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
+  .button-ghost:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
   .button-ghost:disabled { background-color: transparent; }
 
   .button-text {
@@ -288,8 +304,8 @@
     color: var(--accent);
     padding: 0.5rem 1rem;
   }
-  .button-text:hover { color: var(--accent-overt); }
-  .button-text:active { color: var(--accent-highlight); }
+  .button-text:hover:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-overt); }
+  .button-text:active:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-highlight); }
   .button-text:disabled { color: var(--text-muted); }
 
   /* ============================================ */

@@ -91,24 +91,31 @@
   font-weight: var(--font-weight-medium, 500);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 150ms ease-out, transform 100ms ease-out, box-shadow 150ms ease-out;
+  transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+              border-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+              color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+              transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+              box-shadow var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
 }
 
-.form-button:hover:not(:disabled) {
+.form-button:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--form-button-hover-background, oklch(from var(--bg, var(--accent)) calc(l - 0.08) c h));
+  transform: var(--transform-button-hover, translateY(-1px));
+  box-shadow: var(--shadow-button-hover, none);
 }
 
-.form-button:active:not(:disabled) {
-  transform: scale(0.98);
+.form-button:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: var(--transform-button-active, translateY(0) scale(0.98));
   background: var(--form-button-active-background, oklch(from var(--bg, var(--accent)) calc(l - 0.14) c h));
+  box-shadow: var(--shadow-button-active, var(--shadow-inner));
 }
 
 .form-button:focus-visible {
-  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--outline-focus));
   outline-offset: var(--focus-ring-offset, 2px);
 }
 
-:is(.form-input, .form-select, .form-textarea, .form-button):disabled {
+:is(.form-input, .form-select, .form-textarea, .form-button):is(:disabled, [aria-disabled="true"]) {
   opacity: var(--opacity-disabled, 0.5);
   cursor: not-allowed;
 }

@@ -36,6 +36,8 @@ const colorScheme: CSSTags.ColorScheme = "dark";
 const eyebrow = document.createElement("eyebrow");
 const themeOverrides: CSSTags.ThemeOverrides = {
   "--accent-h": "210",
+  "--surface-lightness-shift": "1%",
+  "--surface-contrast": "72%",
   "--font-size-prose": "1.0625rem",
   "--measure-prose": "64ch",
 };

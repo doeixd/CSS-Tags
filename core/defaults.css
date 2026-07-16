@@ -175,29 +175,33 @@
     letter-spacing: var(--letter-spacing-ui, 0);
     border-width: var(--border-width-button, 1px);
     border-style: solid;
-    transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
-                border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
-                color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
-                box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
-                transform calc(var(--transition-duration, 150ms) / 2) var(--transition-timing, ease-out);
+    border-color: var(--button-border-color, var(--outline-default));
+    background-color: var(--button-background, var(--surface-default));
+    color: var(--button-color, var(--text-default));
+    cursor: pointer;
+    transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                border-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                box-shadow var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
     line-height: var(--line-height-button, var(--line-height-ui, 1.375));
     box-shadow: var(--shadow-button, none); /* Keep shadows if defined elsewhere */
     /* Colors/borders applied via utility classes */
   }
   /* Hover/Active structure - styles may be overridden by utilities */
-  button:hover:not([disabled]),
-  input[type="button"]:hover:not([disabled]),
-  input[type="submit"]:hover:not([disabled]),
-  input[type="reset"]:hover:not([disabled]) {
+  :is(button, input[type="button"], input[type="submit"], input[type="reset"]):hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: var(--button-hover-border-color, var(--outline-overt));
+    background-color: var(--button-hover-background, var(--surface-subtle));
+    color: var(--button-hover-color, var(--text-overt));
     transform: var(--transform-button-hover, translateY(-1px));
-    box-shadow: var(--shadow-button-hover, 0 2px 4px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1)); /* Example subtle shadow */
+    box-shadow: var(--shadow-button-hover, none);
   }
-  button:active:not([disabled]),
-  input[type="button"]:active:not([disabled]),
-  input[type="submit"]:active:not([disabled]),
-  input[type="reset"]:active:not([disabled]) {
-    transform: var(--transform-button-active, translateY(0px));
-    box-shadow: var(--shadow-button-active, none);
+  :is(button, input[type="button"], input[type="submit"], input[type="reset"]):active:not(:disabled):not([aria-disabled="true"]) {
+    border-color: var(--button-active-border-color, var(--outline-active));
+    background-color: var(--button-active-background, var(--surface-muted));
+    color: var(--button-active-color, var(--text-overt));
+    transform: var(--transform-button-active, translateY(0) scale(0.98));
+    box-shadow: var(--shadow-button-active, var(--shadow-inner));
   }
 
   /* Select element structure - Arrow appearance handled in @components */
@@ -230,11 +234,16 @@
   button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
     opacity: var(--opacity-disabled, 0.5);
   }
+  :is(button, input[type="button"], input[type="submit"], input[type="reset"])[aria-disabled="true"] {
+    opacity: var(--button-disabled-opacity, var(--opacity-disabled, 0.5));
+    cursor: not-allowed;
+  }
   fieldset[disabled] * { cursor: not-allowed; }
 
   /* --- Table Defaults - Structure only, colors in @components --- */
   table {
-    width: 100%;
+    inline-size: 100%;
+    max-inline-size: 100%;
     border-width: var(--border-width, 1px);
     border-style: solid;
     border-radius: var(--radius-lg, 8px);
@@ -315,26 +324,40 @@
   .button {
     display: inline-flex; align-items: center; justify-content: center;
     padding: 0.6em 1.2em; border-radius: var(--radius-md);
-    border: var(--border-width) solid var(--outline-default); /* Default outline */
-    background-color: var(--surface-default); /* Default surface */
-    color: var(--text-default); /* Use default text */
+    border: var(--border-width) solid var(--button-border-color, var(--outline-default));
+    background-color: var(--button-background, var(--surface-default));
+    color: var(--button-color, var(--text-default));
     font-family: var(--font-family-ui, inherit);
     font-size: var(--font-size-control, 1rem);
     font-weight: var(--font-weight-ui, 500); text-align: center; cursor: pointer;
-    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+    transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                border-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                box-shadow var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
+                transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
     user-select: none; line-height: var(--line-height-ui, 1.375);
   }
-   .button:hover:not([disabled]) {
-     border-color: var(--outline-overt);
-     background-color: var(--highlight-bg-subtle); /* Subtle highlight on hover */
+   .button:hover:not([disabled]):not([aria-disabled="true"]) {
+     border-color: var(--button-hover-border-color, var(--outline-overt));
+     background-color: var(--button-hover-background, var(--surface-subtle));
+     color: var(--button-hover-color, var(--text-overt));
+     transform: var(--transform-button-hover, translateY(-1px));
+     box-shadow: var(--shadow-button-hover, none);
    }
+  .button:active:not([disabled]):not([aria-disabled="true"]) {
+    border-color: var(--button-active-border-color, var(--outline-active));
+    background-color: var(--button-active-background, var(--surface-muted));
+    color: var(--button-active-color, var(--text-overt));
+    transform: var(--transform-button-active, translateY(0) scale(0.98));
+    box-shadow: var(--shadow-button-active, var(--shadow-inner));
+  }
   .button:focus-visible {
      outline: var(--border-width-thick) solid var(--outline-focus);
      outline-offset: 2px;
      border-color: transparent; /* Hide border when outline is visible */
   }
-  .button[disabled] {
-    opacity: 0.5; cursor: not-allowed;
+  .button:is([disabled], [aria-disabled="true"]) {
+    opacity: var(--button-disabled-opacity, 0.5); cursor: not-allowed;
     background-color: var(--highlight-bg-muted);
     border-color: var(--outline-muted);
   }
@@ -475,14 +498,17 @@
   /* Horizontal Rule styling */
   hr { border-block-start-color: var(--hr-color, var(--divider-color-subtle, var(--outline-subtle))); }
   /* Table styling */
-  table { border-color: var(--table-border); }
-  th, td { border-bottom-color: var(--table-border); }
+  table {
+    border-color: var(--table-border-color);
+    background-color: var(--table-background);
+  }
+  th, td { border-bottom-color: var(--table-divider-color); }
   thead th {
-    background-color: var(--table-header-bg);
+    background-color: var(--table-heading-background);
     color: var(--text-overt); /* Use overt text for header */
    }
   tbody tr:hover {
-    --bg: var(--table-row-hover-bg); /* Set local --bg */
+    --bg: var(--table-hover-background); /* Set local --bg */
     background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
      color: var(--auto-contrast-text, oklch(from var(--bg, currentColor) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h)); /* Auto contrast on hover */
   }

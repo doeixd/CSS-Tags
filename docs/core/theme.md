@@ -24,6 +24,8 @@ The theme system starts with a minimal set of customizable variables that define
 
   /* Theme Configuration */
   --surface-saturation: 0.015;  /* Surface chroma multiplier */
+  --surface-lightness-shift: 0%; /* Lift/dim surfaces in either scheme */
+  --surface-contrast: 65%;       /* Separation between surface tiers */
   --contrast-factor: 1.0;       /* Overall contrast multiplier */
   --border-width: 1px;          /* Default border width */
   --density-factor: 1;          /* Shared spacing scale */
@@ -37,6 +39,13 @@ The theme system starts with a minimal set of customizable variables that define
 ```
 
 These inputs control the entire visual identity of your application.
+
+`--surface-lightness-shift` is deliberately relative rather than an absolute
+lightness. A value such as `2%` lifts both light and dark schemes without
+forcing either scheme to use the other's palette. `--surface-contrast` is
+a percentage: lower values compress the hierarchy toward the base, while
+higher values increase the distinction between muted, subtle, default, and
+overt surfaces.
 
 ### Density and radius scales
 
@@ -270,9 +279,11 @@ Text colors automatically adjust for readability:
 
 ### Tables
 ```css
---table-border: var(--outline-default);
---table-header-bg: var(--surface-subtle);
---table-row-hover-bg: var(--highlight-bg-subtle);
+--table-background: color-mix(in oklch, var(--surface-default) 45%, var(--base));
+--table-border-color: color-mix(in oklch, var(--outline-subtle) 65%, transparent);
+--table-divider-color: color-mix(in oklch, var(--outline-subtle) 55%, transparent);
+--table-heading-background: color-mix(in oklch, var(--surface-subtle) 55%, var(--base));
+--table-hover-background: color-mix(in oklch, var(--surface-subtle) 75%, var(--base));
 ```
 
 ## Native Accent And Highlight Styling

@@ -7,6 +7,11 @@ import LiveExample from '../../../components/LiveExample.astro';
 
 CSS Tags enhances native tables instead of replacing their accessibility model. Add `data-table` or `.data-table` to a `<table>`. For narrow containers, wrap it in `<data-table>`, `[data-table-scroll]`, or `.table-scroll`.
 
+Tables and their optional scroll wrappers fill the available inline size by
+default. The shipped surface, header, stripe, divider, and hover colors are
+intentionally quiet; increase them through table tokens only when the dataset
+needs stronger separation.
+
 <LiveExample title="Responsive data table" description="On narrow screens, the table scrolls horizontally without turning cells into unrelated blocks.">
   <data-table tabindex="0" aria-label="Scrollable deployment table">
     <table data-table class="table-hover">
@@ -71,11 +76,16 @@ For a table used directly without a wrapper, CSS Tags provides a small-screen ov
   --table-min-width: 44rem;
   --table-cell-padding-block: 0.75rem;
   --table-cell-padding-inline: 1rem;
-  --table-heading-bg: var(--surface-subtle);
-  --table-stripe-bg: var(--surface-muted);
-  --table-row-hover-bg: var(--highlight-bg-subtle);
+  --table-heading-bg: var(--table-heading-background);
+  --table-stripe-bg: var(--table-stripe-background);
+  --table-row-hover-bg: var(--table-hover-background);
 }
 ```
+
+The global defaults are `--table-background`, `--table-border-color`,
+`--table-divider-color`, `--table-heading-background`,
+`--table-stripe-background`, and `--table-hover-background`. The shorter
+component aliases shown above are useful for styling one table.
 
 ## Accessibility checklist
 

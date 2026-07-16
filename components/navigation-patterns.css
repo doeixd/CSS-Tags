@@ -83,11 +83,6 @@
   --list-navigation-radius: var(--radius-sm, 0.25rem);
 }
 
-:is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush)
-  :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {
-  box-shadow: inset 0.125rem 0 0 var(--list-navigation-current-indicator, var(--accent));
-}
-
 @media (forced-colors: active) {
   :is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush)
     :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {

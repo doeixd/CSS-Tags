@@ -184,7 +184,6 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 .next-docs__outline a[aria-current="location"] {
   background: color-mix(in oklch, var(--accent) 10%, var(--base));
   color: var(--text-overt);
-  box-shadow: inset 0.125rem 0 0 var(--accent);
 }
 
 .next-docs__outline > nav > strong {

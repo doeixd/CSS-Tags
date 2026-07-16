@@ -170,6 +170,18 @@
   --shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 5%);
 
   /* Semantic shadow assignments */
+  --button-background: var(--surface-default);
+  --button-border-color: var(--outline-default);
+  --button-color: var(--text-default);
+  --button-hover-background: var(--surface-subtle);
+  --button-hover-border-color: var(--outline-overt);
+  --button-hover-color: var(--text-overt);
+  --button-active-background: var(--surface-muted);
+  --button-active-border-color: var(--outline-active);
+  --button-active-color: var(--text-overt);
+  --button-transition-duration: 140ms;
+  --button-transition-timing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --button-disabled-opacity: 0.5;
   --shadow-button: none;
   --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
@@ -178,8 +190,16 @@
   --card-hover-shadow: none;
   --shadow-dropdown: var(--shadow-lg);
   --shadow-modal: var(--shadow-xl);
-  --transform-button-hover: none;
-  --transform-button-active: none;
+  --transform-button-hover: translateY(-1px);
+  --transform-button-active: translateY(0) scale(0.98);
+
+  /* Tables */
+  --table-background: color-mix(in oklch, var(--surface-default) 45%, var(--base));
+  --table-border-color: color-mix(in oklch, var(--outline-subtle) 65%, transparent);
+  --table-divider-color: color-mix(in oklch, var(--outline-subtle) 55%, transparent);
+  --table-heading-background: color-mix(in oklch, var(--surface-subtle) 55%, var(--base));
+  --table-stripe-background: color-mix(in oklch, var(--surface-muted) 40%, var(--base));
+  --table-hover-background: color-mix(in oklch, var(--surface-subtle) 75%, var(--base));
 
   /* Carousel */
   --carousel-radius: var(--radius-lg, 0.75rem);

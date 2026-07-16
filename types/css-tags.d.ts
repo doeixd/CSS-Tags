@@ -20,6 +20,8 @@ declare global {
       "--accent-c"?: CSSValue;
       "--accent-l"?: CSSValue;
       "--surface-saturation"?: CSSValue;
+      "--surface-lightness-shift"?: CSSValue;
+      "--surface-contrast"?: CSSValue;
       "--secondary-hue-shift"?: CSSValue;
       "--tertiary-hue-shift"?: CSSValue;
       "--contrast-factor"?: CSSValue;

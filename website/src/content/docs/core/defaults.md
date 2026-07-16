@@ -86,9 +86,16 @@ h6 { font-size: var(--font-size-h6, 1.0rem); }
 
 ### Button Component
 - **Base Styling**: Surface background with outline border
-- **Hover States**: Subtle highlight background
+- **Hover States**: Semantic background/border change with a small lift
+- **Active States**: Press transform, active outline, and inset feedback
 - **Focus States**: Thick outline with offset
 - **Disabled States**: Reduced opacity and muted colors
+
+Native buttons, input buttons, `.button`, and `.form-button` share the same
+interaction inputs: `--button-*-background`, `--button-*-border-color`,
+`--button-*-color`, `--button-transition-*`, `--transform-button-*`, and
+`--shadow-button-*`. Color variants can replace state colors without replacing
+the motion or focus contract.
 
 ### Input Field Component
 - **Background**: Subtle surface

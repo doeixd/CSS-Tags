@@ -13,6 +13,8 @@ const exampleHelpers = `
         --accent-c: inherit;
         --accent-l: inherit;
         --surface-saturation: inherit;
+        --surface-lightness-shift: inherit;
+        --surface-contrast: inherit;
         --contrast-factor: inherit;
         --density-factor: inherit;
         --radius-factor: inherit;

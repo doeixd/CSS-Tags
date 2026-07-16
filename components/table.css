@@ -8,6 +8,7 @@
 
 :is(data-table, [data-table-scroll], .table-scroll) {
   display: block;
+  inline-size: 100%;
   max-width: 100%;
   overflow-x: auto;
   border-radius: var(--table-radius, var(--radius-md, 0.5rem));
@@ -16,13 +17,13 @@
 }
 
 :is(table[data-table], table.data-table, data-table > table) {
-  width: 100%;
-  min-width: var(--table-min-width, 36rem);
+  inline-size: 100%;
+  min-inline-size: max(100%, var(--table-min-width, 36rem));
   border-spacing: 0;
   border-collapse: separate;
   overflow: hidden;
   color: var(--table-text, var(--text-default, inherit));
-  background: var(--table-bg, var(--surface-default, Canvas));
+  background: var(--table-bg, var(--table-background, var(--surface-default, Canvas)));
   border: var(--table-border-width, 1px) solid
     var(--table-border-color, var(--outline-subtle, currentColor));
   border-radius: var(--table-radius, var(--radius-md, 0.5rem));
@@ -47,7 +48,7 @@
 
 :is(table[data-table], table.data-table, data-table > table) th {
   color: var(--table-heading-color, var(--text-overt, inherit));
-  background: var(--table-heading-bg, var(--surface-subtle, transparent));
+  background: var(--table-heading-bg, var(--table-heading-background, var(--surface-subtle, transparent)));
   font-weight: var(--font-weight-semibold, 600);
 }
 
@@ -57,12 +58,12 @@
 
 :is(table[data-table], table.data-table, data-table > table, .table-striped)
   tbody tr:nth-child(even) {
-  background: var(--table-stripe-bg, var(--surface-muted, transparent));
+  background: var(--table-stripe-bg, var(--table-stripe-background, var(--surface-muted, transparent)));
 }
 
 :is(table[data-table], table.data-table, data-table > table, .table-hover)
   tbody tr:hover {
-  background: var(--table-row-hover-bg, var(--surface-subtle, transparent));
+  background: var(--table-row-hover-bg, var(--table-hover-background, var(--surface-subtle, transparent)));
 }
 
 :is(table[data-table], table.data-table, data-table > table) :is(a, button):focus-visible {

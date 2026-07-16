@@ -154,6 +154,8 @@
 /* Markdown and CMS output cannot always add the preferred data-table wrapper. */
 :is(.prose, [data-prose]) > table {
   display: block;
+  inline-size: 100%;
+  min-inline-size: 100%;
   max-inline-size: 100%;
   overflow-x: auto;
   overscroll-behavior-inline: contain;

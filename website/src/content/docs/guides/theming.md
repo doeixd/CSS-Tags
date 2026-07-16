@@ -104,6 +104,8 @@ Applies semantic meaning to colors and defines component roles:
 
   /* Surface configuration */
   --surface-c: 0.015;              /* Surface chroma */
+  --surface-lightness-shift: 0%;   /* Relative lift/dimming */
+  --surface-contrast: 65%;         /* Surface tier separation */
   --contrast-factor: 1.0;          /* Contrast multiplier */
 }
 ```

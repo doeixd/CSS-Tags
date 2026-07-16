@@ -37,12 +37,12 @@ The `data-table` component provides responsive, accessible table styling with de
 ### Table Container
 - **Width**: 100% of parent
 - **Collapse**: Border collapse for clean borders
-- **Background**: Surface default
-- **Border**: Outline default with medium radius
+- **Background**: Quiet table surface mixed toward the page base
+- **Border**: Subtle table-specific outline with medium radius
 - **Overflow**: Hidden for rounded corners
 
 ### Headers (th)
-- **Background**: Surface subtle
+- **Background**: Subtle table heading surface
 - **Font Weight**: Semibold
 - **Text Color**: Overt
 - **Padding**: Consistent spacing
@@ -104,6 +104,11 @@ The `data-table` component provides responsive, accessible table styling with de
 ```
 
 ## CSS Custom Properties Used
+- `--table-background`: Global default table surface
+- `--table-border-color`, `--table-divider-color`: Quiet outer and row rules
+- `--table-heading-background`: Header surface
+- `--table-stripe-background`: Alternating row surface
+- `--table-hover-background`: Hovered row surface
 - `--bg`: Background colors
 - `--fg`: Foreground colors
 - `--surface-default`: Default surface color

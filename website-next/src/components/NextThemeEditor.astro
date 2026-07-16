@@ -9,6 +9,8 @@ const controls: ThemeControl[] = [
   { group: "Color", name: "--accent-c", label: "Accent chroma", description: "Brand color intensity in OKLCH.", kind: "number", min: 0, max: 0.35, step: 0.005, defaultValue: "0.055" },
   { group: "Color", name: "--accent-l", label: "Accent lightness", description: "Brand color lightness.", kind: "percentage", min: 35, max: 85, step: 1, unit: "%", defaultValue: "50%" },
   { group: "Color", name: "--surface-saturation", label: "Surface tint", description: "Accent hue carried into neutral surfaces.", kind: "number", min: 0, max: 0.06, step: 0.0025, defaultValue: "0" },
+  { group: "Color", name: "--surface-lightness-shift", label: "Surface lightness", description: "Lifts or dims the surface hierarchy safely in either color scheme.", kind: "percentage", min: -6, max: 6, step: 0.5, unit: "%", defaultValue: "0%" },
+  { group: "Color", name: "--surface-contrast", label: "Surface contrast", description: "Changes the tonal separation between surface levels.", kind: "percentage", min: 25, max: 100, step: 1, unit: "%", defaultValue: "65%" },
   { group: "Color", name: "--secondary-hue-shift", label: "Secondary shift", description: "Secondary relationship to the accent.", kind: "number", min: -180, max: 180, step: 1, defaultValue: "60" },
   { group: "Color", name: "--tertiary-hue-shift", label: "Tertiary shift", description: "Tertiary relationship to the accent.", kind: "number", min: -180, max: 180, step: 1, defaultValue: "-90" },
   { group: "Color", name: "--contrast-factor", label: "Contrast", description: "Chromatic separation in semantic text.", kind: "number", min: 0.5, max: 1.5, step: 0.05, defaultValue: "1" },

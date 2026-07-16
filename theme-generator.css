@@ -31,6 +31,8 @@
 
   /* Theme Configuration */
   --surface-saturation: 0.015;  /* Surface chroma multiplier (0-1) */
+  --surface-lightness-shift: 0%; /* Scheme-safe lift/dimming */
+  --surface-contrast: 65%;       /* Tonal separation between surfaces */
   --contrast-factor: 1.0;       /* Overall contrast multiplier (0.5-2.0) */
   --outline-width: 1px;         /* Default outline width */
   --outline-width-thick: 2px;   /* Thick outline width */
@@ -73,7 +75,8 @@
   --info-h: 245;     /* Blue */
 
   /* Base & Bedrock Colors */
-  --base: oklch(97.5% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+  --base-lightness: clamp(88%, calc(97.5% + var(--surface-lightness-shift)), 100%);
+  --base: oklch(var(--base-lightness) calc(var(--surface-saturation) * 0.9) var(--accent-h));
   --bedrock: oklch(
     var(--bedrock-mode, complementary) = complementary ?
       calc(100% - oklch(from var(--base) l)) :
@@ -82,10 +85,14 @@
   );
 
   /* Surface Hierarchy (content containers) */
-  --surface-muted: oklch(95% calc(var(--surface-saturation) * 0.8) var(--accent-h));
-  --surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--accent-h));
-  --surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--accent-h));
-  --surface-overt: oklch(77.5% calc(var(--surface-saturation) * 2.25) var(--accent-h));
+  --surface-muted-target: oklch(calc(var(--base-lightness) - 4%) calc(var(--surface-saturation) * 0.8) var(--accent-h));
+  --surface-subtle-target: oklch(calc(var(--base-lightness) - 2.5%) calc(var(--surface-saturation) * 1.05) var(--accent-h));
+  --surface-target: oklch(calc(var(--base-lightness) - 5.5%) calc(var(--surface-saturation) * 1.2) var(--accent-h));
+  --surface-overt-target: oklch(calc(var(--base-lightness) - 31%) calc(var(--surface-saturation) * 2.25) var(--accent-h));
+  --surface-muted: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-muted-target) var(--surface-contrast));
+  --surface-subtle: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-subtle-target) var(--surface-contrast));
+  --surface: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-target) var(--surface-contrast));
+  --surface-overt: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-overt-target) var(--surface-contrast));
 
   /* ============================================ */
   /* TEXT COLORS - Auto-contrast calculation     */
@@ -332,13 +339,14 @@ module.exports = {
     --surface-saturation: 0.02;
 
     /* Invert surface hierarchy for dark backgrounds */
-    --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+    --base-lightness: clamp(10%, calc(22% + var(--surface-lightness-shift)), 35%);
+    --base: oklch(var(--base-lightness) calc(var(--surface-saturation) * 0.9) var(--accent-h));
     --bedrock: oklch(95% calc(var(--surface-saturation) * 0.7) var(--accent-h));
 
-    --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--accent-h));
-    --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--accent-h));
-    --surface: oklch(25% var(--surface-saturation) var(--accent-h));
-    --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--accent-h));
+    --surface-muted-target: oklch(calc(var(--base-lightness) - 3%) calc(var(--surface-saturation) * 0.5) var(--accent-h));
+    --surface-subtle-target: oklch(calc(var(--base-lightness) - 1.5%) calc(var(--surface-saturation) * 0.7) var(--accent-h));
+    --surface-target: oklch(calc(var(--base-lightness) + 4.5%) var(--surface-saturation) var(--accent-h));
+    --surface-overt-target: oklch(calc(var(--base-lightness) + 12.5%) calc(var(--surface-saturation) * 1.2) var(--accent-h));
 
     /* Adjust text for dark backgrounds */
     --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--accent-h));
@@ -423,6 +431,8 @@ Customization:
 
   /* Theme Configuration */
   --surface-saturation: 0.015;  /* Surface chroma multiplier (0-1) */
+  --surface-lightness-shift: 0%; /* Scheme-safe lift/dimming */
+  --surface-contrast: 65%;       /* Tonal separation between surfaces */
   --contrast-factor: 1.0;       /* Overall contrast multiplier (0.5-2.0) */
   --outline-width: 1px;         /* Default outline width */
   --outline-width-thick: 2px;   /* Thick outline width */
@@ -465,7 +475,8 @@ Customization:
   --info-h: 245;     /* Blue */
 
   /* Base & Bedrock Colors */
-  --base: oklch(97.5% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+  --base-lightness: clamp(88%, calc(97.5% + var(--surface-lightness-shift)), 100%);
+  --base: oklch(var(--base-lightness) calc(var(--surface-saturation) * 0.9) var(--accent-h));
   --bedrock: oklch(
     var(--bedrock-mode, complementary) = complementary ?
       calc(100% - oklch(from var(--base) l)) :
@@ -474,10 +485,14 @@ Customization:
   );
 
   /* Surface Hierarchy (content containers) */
-  --surface-muted: oklch(95% calc(var(--surface-saturation) * 0.8) var(--accent-h));
-  --surface-subtle: oklch(96% calc(var(--surface-saturation) * 1.05) var(--accent-h));
-  --surface: oklch(94% calc(var(--surface-saturation) * 1.2) var(--accent-h));
-  --surface-overt: oklch(77.5% calc(var(--surface-saturation) * 2.25) var(--accent-h));
+  --surface-muted-target: oklch(calc(var(--base-lightness) - 4%) calc(var(--surface-saturation) * 0.8) var(--accent-h));
+  --surface-subtle-target: oklch(calc(var(--base-lightness) - 2.5%) calc(var(--surface-saturation) * 1.05) var(--accent-h));
+  --surface-target: oklch(calc(var(--base-lightness) - 5.5%) calc(var(--surface-saturation) * 1.2) var(--accent-h));
+  --surface-overt-target: oklch(calc(var(--base-lightness) - 31%) calc(var(--surface-saturation) * 2.25) var(--accent-h));
+  --surface-muted: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-muted-target) var(--surface-contrast));
+  --surface-subtle: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-subtle-target) var(--surface-contrast));
+  --surface: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-target) var(--surface-contrast));
+  --surface-overt: color-mix(in oklch, var(--base) calc(100% - var(--surface-contrast)), var(--surface-overt-target) var(--surface-contrast));
 
   /* ============================================ */
   /* TEXT COLORS - Auto-contrast calculation     */
@@ -896,13 +911,14 @@ module.exports = {
     --surface-saturation: 0.02;
 
     /* Invert surface hierarchy for dark backgrounds */
-    --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--accent-h));
+    --base-lightness: clamp(10%, calc(22% + var(--surface-lightness-shift)), 35%);
+    --base: oklch(var(--base-lightness) calc(var(--surface-saturation) * 0.9) var(--accent-h));
     --bedrock: oklch(95% calc(var(--surface-saturation) * 0.7) var(--accent-h));
 
-    --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--accent-h));
-    --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--accent-h));
-    --surface: oklch(25% var(--surface-saturation) var(--accent-h));
-    --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--accent-h));
+    --surface-muted-target: oklch(calc(var(--base-lightness) - 3%) calc(var(--surface-saturation) * 0.5) var(--accent-h));
+    --surface-subtle-target: oklch(calc(var(--base-lightness) - 1.5%) calc(var(--surface-saturation) * 0.7) var(--accent-h));
+    --surface-target: oklch(calc(var(--base-lightness) + 4.5%) var(--surface-saturation) var(--accent-h));
+    --surface-overt-target: oklch(calc(var(--base-lightness) + 12.5%) calc(var(--surface-saturation) * 1.2) var(--accent-h));
 
     /* Adjust text for dark backgrounds */
     --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--accent-h));
