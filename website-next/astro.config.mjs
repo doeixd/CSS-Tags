@@ -50,7 +50,10 @@ export default defineConfig({
 	},
 	prefetch: {
 		prefetchAll: true,
-		defaultStrategy: 'viewport',
+		// The docs sidebar can expose dozens of links at once. Intent-based
+		// prefetching avoids downloading every visible page while still warming
+		// the route before a click.
+		defaultStrategy: 'hover',
 	},
 	experimental: {
 		clientPrerender: true,

@@ -119,6 +119,18 @@ Use `size="sm|lg"`, `shape="square"`, or the equivalent `data-*` attributes.
 </nav>
 ```
 
+For a quieter sidebar or table of contents, use the flush variant in the host
+form that matches your markup:
+
+```html
+<nav-list variant="flush">...</nav-list>
+<ul data-list-navigation data-variant="flush">...</ul>
+<ul class="list-navigation is-flush">...</ul>
+```
+
+The flush variant removes boxed rows, keeps a subtle hover surface, and marks
+`aria-current="page"` with a restrained inset accent indicator.
+
 Use `role="toolbar"` only for a related control group. List navigation expects
 native links or buttons, supports descriptions and trailing metadata, and
 styles `aria-current="page"`. Icon rail similarly expects labelled native
@@ -167,4 +179,3 @@ Surface/layout patterns support custom, data, and class hosts:
 - `message-bubble`, `[data-bubble]`, `.bubble`
 - `log-card`, `[data-log-card]`, `.log-card`
 - `snap-feed`, `[data-snap-feed]`, `.snap-feed`
-

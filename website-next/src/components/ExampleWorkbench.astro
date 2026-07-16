@@ -10,11 +10,14 @@ const {
   title,
   description,
   markup,
+  markupSource,
   css,
   variables = [],
   canvas = "default",
   compact = false,
 } = Astro.props;
+
+const displayedMarkup = (markupSource ?? markup).trim();
 
 const titleId = `${id}-title`;
 const descriptionId = `${id}-description`;
@@ -90,7 +93,7 @@ const codePanelId = `${id}-code-panel`;
       hidden
     >
       <div class="example-workbench__code" data-workbench-source="html">
-        <Code code={markup.trim()} lang="html" theme="github-dark" />
+        <Code code={displayedMarkup} lang="html" theme="github-dark" />
       </div>
       {css && (
         <div class="example-workbench__code" data-workbench-source="css">

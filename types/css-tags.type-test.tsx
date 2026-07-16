@@ -84,6 +84,7 @@ const newElementsExample = (
     <media-object aria-label="Account activity" />
     <empty-state role="status">No projects</empty-state>
     <alert-message status="success" density="compact" role="status">Saved</alert-message>
+    <nav-list variant="flush" aria-label="Documentation" />
     <chip variant="overt" size="sm">Typed chip</chip>
   </layout-stack>
 );
@@ -100,6 +101,9 @@ const invalidBadgeVariant = <badge variant="loud" />;
 // @ts-expect-error chip surfaces use the documented finite variant set.
 const invalidChipVariant = <chip variant="loud" />;
 
+// @ts-expect-error list navigation exposes only the documented flush variant.
+const invalidListNavigationVariant = <nav-list variant="boxed" />;
+
 // @ts-expect-error divider orientation is intentionally finite.
 const invalidDivider = <divider orientation="diagonal" />;
 
@@ -114,6 +118,7 @@ void invalidSidebar;
 void invalidBadge;
 void invalidBadgeVariant;
 void invalidChipVariant;
+void invalidListNavigationVariant;
 void invalidDivider;
 void colorScheme;
 void eyebrow;

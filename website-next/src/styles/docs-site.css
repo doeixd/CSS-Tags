@@ -1,7 +1,50 @@
 /* Documentation-only shell behavior. Public component visuals come from index.css. */
 
+/* Keep the documentation neutral so examples, code, and palette colors carry
+   the emphasis. These are public CSS Tags authoring inputs. */
+:root {
+  --accent-h: 250;
+  --accent-c: 0.055;
+  --accent-l: 50%;
+  --surface-saturation: 0;
+  --body-hyphens: none;
+  --density-factor: 0.9;
+  --radius-factor: 0.75;
+  --font-size-h1: clamp(2.25rem, 4vw, 3rem);
+  --font-size-h2: clamp(1.75rem, 3vw, 2.25rem);
+  --font-size-h3: clamp(1.35rem, 2vw, 1.65rem);
+  --site-header-background: var(--base);
+  --site-footer-background: var(--base);
+  --docs-safe-max-width: 96rem;
+  --docs-safe-padding-inline: var(--space-md);
+  --docs-shell-gap: var(--space-lg);
+  --docs-content-gap: var(--space-lg);
+  --site-header-padding-inline: var(--docs-safe-padding-inline);
+  --site-footer-padding-inline: var(--docs-safe-padding-inline);
+  --view-transition-duration: 160ms;
+  --transition-duration-page: 160ms;
+  --view-transition-old: fade-out;
+  --view-transition-new: fade-in;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-color-scheme="light"]) {
+    --accent-h: 250;
+    --accent-c: 0.045;
+    --accent-l: 68%;
+    --surface-saturation: 0;
+  }
+}
+
+:root[data-color-scheme="dark"] {
+  --accent-h: 250;
+  --accent-c: 0.045;
+  --accent-l: 68%;
+  --surface-saturation: 0;
+}
+
 .next-docs__shell {
-  padding-block: var(--space-xl);
+  padding-block: var(--space-md) var(--space-xl);
 }
 
 /* Documentation navigation remains visible while reading long API pages. */
@@ -20,6 +63,55 @@
   --list-navigation-item-padding: var(--space-xs) var(--space-sm);
 }
 
+.next-docs__sidebar > details,
+.next-docs__sidebar nav > layout-stack > details {
+  --disclosure-summary-color: var(--text-subtle);
+  --disclosure-summary-hover-color: var(--text-overt);
+}
+
+.next-docs__sidebar details[data-disclosure="flush"] > summary {
+  color: var(--text-subtle);
+}
+
+.next-docs__sidebar details[data-disclosure="flush"] > summary:is(:hover, :focus-visible) {
+  color: var(--text-overt);
+}
+
+.next-docs__sidebar nav > layout-stack {
+  gap: var(--space-xs);
+}
+
+.next-docs__outline {
+  --list-navigation-gap: 0;
+  --list-navigation-item-padding: var(--space-2xs) var(--space-xs);
+  --list-navigation-color: var(--text-subtle);
+}
+
+.next-docs__outline [data-list-navigation] {
+  row-gap: 0;
+}
+
+.next-docs__outline [data-list-navigation] > li {
+  min-block-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.next-docs__outline [data-list-navigation] a {
+  min-block-size: 0;
+  padding: 0.2rem var(--space-xs);
+  line-height: 1.3;
+}
+
+.next-docs__outline > nav > strong {
+  display: block;
+  margin-block-end: var(--space-xs);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
 /* Long code and preview content must shrink inside the nested sidebar layout. */
 .next-docs__content {
   min-inline-size: 0;
@@ -33,13 +125,52 @@
 }
 
 .next-docs__navigation-disclosure > summary {
-  margin-block-end: var(--space-sm);
+  margin-block-end: var(--space-xs);
   font-weight: var(--font-weight-semibold);
+}
+
+.site-header {
+  --site-header-border: 1px solid var(--outline-muted);
+}
+
+.site-header > container,
+.site-header [data-header-navigation] > layout-cluster,
+.site-header [data-header-actions] {
+  align-items: center;
+}
+
+.site-header :is([data-site-brand], [data-header-navigation] a, [data-header-actions] > a),
+.site-header :is(.next-docs-search, .next-theme-editor) > summary {
+  display: inline-flex;
+  min-block-size: 2.25rem;
+  align-items: center;
+}
+
+.site-header :is(.next-docs-search, .next-theme-editor) {
+  margin: 0;
+}
+
+.site-header :is([data-header-navigation], [data-header-actions]) a {
+  color: var(--text-subtle);
+  text-decoration: none;
+}
+
+.site-header :is([data-header-navigation], [data-header-actions]) a:is(:hover, :focus-visible),
+.site-header :is([data-header-navigation], [data-header-actions]) a[aria-current="page"] {
+  color: var(--text-overt);
 }
 
 /* Pagefind is site tooling; the surrounding disclosure uses library controls. */
 .next-docs-search > summary {
+  padding: var(--space-xs) var(--space-sm);
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-default);
   white-space: nowrap;
+}
+
+.next-docs-search > summary:is(:hover, :focus-visible) {
+  background: var(--surface-muted);
 }
 
 .next-docs-search > summary kbd {
@@ -92,10 +223,14 @@
 
 .next-theme-editor > summary {
   --_padding: var(--space-xs) var(--space-sm);
-  border: 1px solid var(--outline-subtle);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  background: var(--surface-default);
+  background: transparent;
   white-space: nowrap;
+}
+
+.next-theme-editor > summary:is(:hover, :focus-visible) {
+  background: var(--surface-muted);
 }
 
 .next-theme-editor > summary::after {
@@ -254,6 +389,11 @@
 
 /* Stacked sidebars should stop behaving like sticky desktop panes. */
 @media (max-width: 64rem) {
+  :root {
+    --docs-shell-gap: var(--space-sm);
+    --docs-content-gap: var(--space-sm);
+  }
+
   .next-docs__sidebar,
   .next-docs__outline {
     position: static;
@@ -266,6 +406,14 @@
   --card-padding: var(--space-md);
   --card-gap: var(--space-sm);
   margin-block: var(--space-lg);
+  background: var(--base);
+  box-shadow: none;
+  transform: none;
+}
+
+.example-workbench:is(:hover, :focus-within) {
+  box-shadow: none;
+  transform: none;
 }
 
 .example-workbench card-header h2 {
@@ -283,11 +431,19 @@
   padding: var(--space-xs) var(--space-sm);
 }
 
+.example-workbench [data-workbench-copy] {
+  display: inline-flex;
+  inline-size: auto;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 .example-workbench__canvas {
   min-block-size: 12rem;
   padding: clamp(var(--space-md), 4cqi, var(--space-xl));
   overflow: auto;
-  background: var(--surface-subtle);
+  background: var(--surface-muted);
 }
 
 .example-workbench[data-canvas="transparent"] .example-workbench__canvas {
@@ -308,10 +464,20 @@
 }
 
 .example-workbench__code pre {
+  max-inline-size: none;
   margin: 0;
+  overflow: visible;
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  white-space: pre;
+}
+
+.example-workbench__code pre > code {
+  display: block;
+  min-inline-size: max-content;
+  padding: var(--space-md);
+  tab-size: 2;
 }
 
 /* Variable controls are documentation tooling, arranged with native form elements. */
@@ -329,7 +495,7 @@
   padding: var(--space-sm);
   border: 1px solid var(--outline-subtle);
   border-radius: var(--radius-md);
-  background: var(--surface-subtle);
+  background: var(--base);
 }
 
 [data-variable-control] > label,

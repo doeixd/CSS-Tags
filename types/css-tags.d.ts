@@ -337,6 +337,11 @@ declare global {
       "data-density"?: "compact" | "spacious";
     }
 
+    interface ListNavigationAttributes extends GlobalAttributes {
+      variant?: "flush";
+      "data-variant"?: "flush";
+    }
+
     interface IntrinsicElements {
       "layout-grid": LayoutGridAttributes;
       "layout-split": LayoutSplitAttributes;
@@ -395,7 +400,7 @@ declare global {
       "user-avatar": AvatarAttributes;
       "avatar-group": GlobalAttributes;
       "tool-bar": GlobalAttributes;
-      "nav-list": GlobalAttributes;
+      "nav-list": ListNavigationAttributes;
       "icon-rail": GlobalAttributes;
       "message-bubble": BubbleAttributes;
       "log-card": GlobalAttributes;

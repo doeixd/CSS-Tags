@@ -1,7 +1,7 @@
 // CSS Tags Documentation - Service Worker
 // Optimized caching strategy for fast, offline-capable documentation
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const STATIC_CACHE = `css-tags-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `css-tags-dynamic-${CACHE_VERSION}`;
 const SEARCH_CACHE = `css-tags-search-${CACHE_VERSION}`;
@@ -83,11 +83,11 @@ self.addEventListener('fetch', (event) => {
     // Search index: Stale-while-revalidate
     event.respondWith(staleWhileRevalidate(request, SEARCH_CACHE));
   } else if (CACHE_STRATEGIES.navigation.test(url.pathname)) {
-    // Navigation pages: Stale-while-revalidate for instant perceived load
-    event.respondWith(staleWhileRevalidate(request, NAVIGATION_CACHE));
+    // Documentation changes should appear immediately after a deploy.
+    event.respondWith(networkFirst(request, NAVIGATION_CACHE));
   } else if (CACHE_STRATEGIES.pages.test(url.pathname) || url.pathname.endsWith('/')) {
-    // HTML pages: Stale-while-revalidate for instant perceived load
-    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    // Prefer fresh HTML while retaining an offline fallback.
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
   } else {
     // Everything else: Network first with cache fallback
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));

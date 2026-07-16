@@ -38,6 +38,10 @@
   list-style: none;
 }
 
+:is(nav-list, [data-list-navigation], .list-navigation) > li {
+  margin: 0;
+}
+
 :is(nav-list, [data-list-navigation], .list-navigation)
   :is(a, button, [data-list-navigation-item], .list-navigation-item) {
   display: grid;
@@ -67,6 +71,29 @@
   border-color: var(--list-navigation-current-border-color, var(--accent));
   background: var(--list-navigation-current-background, var(--accent-subtle));
   color: var(--list-navigation-current-color, var(--text-overt));
+}
+
+/* Flat navigation for documentation, settings, and application sidebars. */
+:is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush) {
+  --list-navigation-gap: var(--space-2xs, 0.25rem);
+  --list-navigation-border-width: 0;
+  --list-navigation-background: transparent;
+  --list-navigation-hover-background: var(--surface-muted);
+  --list-navigation-current-background: var(--surface-subtle);
+  --list-navigation-radius: var(--radius-sm, 0.25rem);
+}
+
+:is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush)
+  :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {
+  box-shadow: inset 0.125rem 0 0 var(--list-navigation-current-indicator, var(--accent));
+}
+
+@media (forced-colors: active) {
+  :is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush)
+    :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {
+    border-inline-start: 0.125rem solid CanvasText;
+    box-shadow: none;
+  }
 }
 
 :is([data-list-navigation-label], .list-navigation-label) {

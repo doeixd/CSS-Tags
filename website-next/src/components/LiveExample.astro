@@ -16,6 +16,29 @@ const {
 /* Compatibility adapter: the rendered slot becomes the one source used by
  * both the isolated preview and the copyable code panel. */
 const markup = (await Astro.slots.render("default")).trim();
+const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+
+function formatMarkup(value: string) {
+    const tokens = value
+        .replace(/>\s+</g, "><")
+        .replace(/></g, ">\n<")
+        .split("\n")
+        .map((token) => token.trim())
+        .filter(Boolean);
+    let depth = 0;
+
+    return tokens.map((token) => {
+        if (/^<\//.test(token)) depth = Math.max(0, depth - 1);
+        const line = `${"  ".repeat(depth)}${token}`;
+        const opening = token.match(/^<([a-z][\w-]*)\b/i);
+        const closesOnLine = opening && new RegExp(`<\\/${opening[1]}>\\s*$`, "i").test(token);
+        const selfClosing = /\/>$/.test(token) || (opening && voidElements.has(opening[1].toLowerCase()));
+        if (opening && !closesOnLine && !selfClosing) depth += 1;
+        return line;
+    }).join("\n");
+}
+
+const markupSource = formatMarkup(markup);
 const pathPart = Astro.url.pathname.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
 const titlePart = title.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase();
 const id = `live-${pathPart}-${titlePart}`;
@@ -26,5 +49,6 @@ const id = `live-${pathPart}-${titlePart}`;
     title={title}
     description={description}
     markup={markup}
+    markupSource={markupSource}
     compact={compact}
 />

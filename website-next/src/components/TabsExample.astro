@@ -24,7 +24,7 @@ import LiveExample from './LiveExample.astro';
 <script>
     function setupTabsExample() {
         const exampleRoots = Array.from(
-            document.querySelectorAll<HTMLElement>('.live-example__stage'),
+            document.querySelectorAll<HTMLElement>('css-tags-example'),
         ).flatMap((host) => host.shadowRoot ? [host.shadowRoot] : []);
 
         exampleRoots.forEach((exampleRoot) => {

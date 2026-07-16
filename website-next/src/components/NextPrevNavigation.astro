@@ -19,9 +19,9 @@ const next = index >= 0 && index < pages.length - 1 ? pages[index + 1] : undefin
   <nav aria-label="Previous and next documentation pages">
     <layout-cluster justify="space-between" align="center" gap="var(--space-md)">
       {previous
-        ? <a rel="prev" href={buildHref(base, previous.slug)}><small>Previous</small><br />{previous.label}</a>
+        ? <a rel="prev" href={buildHref(base, previous.slug)} data-astro-prefetch="viewport"><small>Previous</small><br />{previous.label}</a>
         : <span aria-hidden="true"></span>}
-      {next && <a rel="next" href={buildHref(base, next.slug)}><small>Next</small><br />{next.label}</a>}
+      {next && <a rel="next" href={buildHref(base, next.slug)} data-astro-prefetch="viewport"><small>Next</small><br />{next.label}</a>}
     </layout-cluster>
   </nav>
 )}

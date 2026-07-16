@@ -23,7 +23,7 @@ Then use ordinary links. No router JavaScript is required.
 
 The root animation uses:
 
-- `--view-transition-duration`, default `400ms`
+- `--view-transition-duration`, default `180ms`
 - `--view-transition-easing`
 - `--view-transition-hero-easing`
 

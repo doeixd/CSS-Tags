@@ -107,6 +107,13 @@
   :not(pre) > code, kbd, samp {
     padding: var(--space-code-inline-y, 0.2em) var(--space-code-inline-x, 0.4em);
     border-radius: var(--radius-sm, 3px);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  :not(pre) > code {
+    border: 0;
+  }
+  kbd, samp {
     border-width: var(--border-width, 1px);
     border-style: solid;
     /* background/border color: handled in @components */
@@ -330,6 +337,29 @@
     opacity: 0.5; cursor: not-allowed;
     background-color: var(--highlight-bg-muted);
     border-color: var(--outline-muted);
+  }
+
+  /* Quiet, theme-aware scrollbars. Native behavior remains intact. */
+  :where(*) {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: var(--scrollbar-width);
+  }
+  :where(*::-webkit-scrollbar) {
+    inline-size: var(--scrollbar-size);
+    block-size: var(--scrollbar-size);
+  }
+  :where(*::-webkit-scrollbar-track) {
+    background: var(--scrollbar-track);
+  }
+  :where(*::-webkit-scrollbar-thumb) {
+    border: 3px solid transparent;
+    border-radius: var(--scrollbar-radius);
+    background: var(--scrollbar-thumb);
+    background-clip: padding-box;
+  }
+  :where(*::-webkit-scrollbar-thumb:hover) {
+    background: var(--scrollbar-thumb-hover);
+    background-clip: padding-box;
   }
 
   @supports (text-box: trim-both cap alphabetic) {

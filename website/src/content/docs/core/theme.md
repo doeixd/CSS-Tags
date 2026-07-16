@@ -277,7 +277,19 @@ Text colors automatically adjust for readability:
 ```css
 --code-block-bg: var(--surface-subtle);
 --code-inline-bg: var(--surface-muted);
+--code-inline-border: transparent;
 ```
+
+Inline `code` uses the faint surface background without a border by default.
+Wrapped inline code uses cloned box decoration so its padding and background are
+not clipped at line edges. `kbd` and `samp` retain their bordered treatment.
+
+### Scrollbars
+
+Scrollable regions inherit quiet, theme-aware scrollbars without hiding native
+scroll behavior. Customize `--scrollbar-size`, `--scrollbar-width`,
+`--scrollbar-track`, `--scrollbar-thumb`, `--scrollbar-thumb-hover`, and
+`--scrollbar-radius`.
 
 ### Anchor Positioning
 ```css

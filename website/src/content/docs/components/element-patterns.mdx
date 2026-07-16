@@ -157,6 +157,17 @@ Size values are `sm`, the default, and `lg`. Use `shape="square"` when needed.
   </layout-stack>
 </LiveExample>
 
+Use `variant="flush"`, `data-variant="flush"`, or `.is-flush` for a quieter
+sidebar or table of contents. It removes boxed rows while retaining hover,
+focus, and an `aria-current="page"` indicator.
+
+```html
+<ul data-list-navigation data-variant="flush">
+  <li><a href="/overview" aria-current="page">Overview</a></li>
+  <li><a href="/settings">Settings</a></li>
+</ul>
+```
+
 Use `role="toolbar"` for a related control group. List navigation expects real
 links or buttons and uses `aria-current="page"` for selection. `icon-rail`,
 `[data-icon-rail]`, and `.icon-rail` provide the compact vertical equivalent;
@@ -220,4 +231,3 @@ interaction remains canonical:
 - `message-bubble`, `[data-bubble]`, `.bubble`
 - `log-card`, `[data-log-card]`, `.log-card`
 - `snap-feed`, `[data-snap-feed]`, `.snap-feed`
-

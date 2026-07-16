@@ -67,6 +67,12 @@ const sourceContracts = [
   ["types/css-tags.d.ts", "interface ThemeOverrides", "typed theme override contract"],
   ["core/tokens.css", "--font-size-prose", "contextual prose typography input"],
   ["core/tokens.css", "--font-size-ui", "contextual UI typography input"],
+  ["core/tokens.css", "--scrollbar-thumb-hover", "semantic scrollbar tokens"],
+  ["core/tokens.css", "--code-inline-border: transparent", "borderless inline code default"],
+  ["components/navigation-patterns.css", "[data-variant=\"flush\"]", "flush list-navigation variant"],
+  ["components/view-transition.css", "view-fade-in", "fade-only view transition"],
+  ["website-next/src/layouts/NextDocsLayout.astro", "ClientRouter", "Astro client routing"],
+  ["website-next/src/layouts/NextDocsLayout.astro", "serviceWorker.register", "documentation offline cache"],
   ["website-next/src/scripts/theme-editor.ts", "@layer css-tags-theme", "layered theme export"],
   ["website-next/src/scripts/theme-editor.ts", "data-theme", "named theme export"],
 ];

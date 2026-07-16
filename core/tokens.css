@@ -105,6 +105,20 @@
   --alpha-7: 0.9;
   --alpha-8: 1;
 
+  /* Scrollbars */
+  --scrollbar-size: 0.75rem;
+  --scrollbar-width: thin;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: color-mix(in oklch, var(--text-muted) 38%, transparent);
+  --scrollbar-thumb-hover: color-mix(in oklch, var(--text-muted) 58%, transparent);
+  --scrollbar-radius: 999px;
+
+  /* Code */
+  --code-block-bg: var(--surface-subtle);
+  --code-block-border: var(--outline-subtle);
+  --code-inline-bg: var(--surface-muted);
+  --code-inline-border: transparent;
+
   /* Contrast Ratios */
   --contrast-ratio-low: 3;
   --contrast-ratio-medium: 4.5;
@@ -160,6 +174,8 @@
   --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
   --shadow-card: none;
+  --card-hover-transform: none;
+  --card-hover-shadow: none;
   --shadow-dropdown: var(--shadow-lg);
   --shadow-modal: var(--shadow-xl);
   --transform-button-hover: none;

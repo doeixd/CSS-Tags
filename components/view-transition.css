@@ -6,17 +6,17 @@
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: var(--view-transition-duration, 400ms);
+  animation-duration: var(--view-transition-duration, 180ms);
   animation-timing-function: var(--view-transition-easing, cubic-bezier(0.45, 0, 0.55, 1));
   animation-fill-mode: both;
 }
 
 ::view-transition-old(root) {
-  animation-name: view-slide-to-left-fade-out;
+  animation-name: view-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation-name: view-slide-from-right-fade-in;
+  animation-name: view-fade-in;
 }
 
 ::view-transition-group(hero-element) {
@@ -54,14 +54,14 @@
   display: none;
 }
 
-@keyframes view-slide-to-left-fade-out {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-3rem); }
+@keyframes view-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
-@keyframes view-slide-from-right-fade-in {
-  from { opacity: 0; transform: translateX(3rem); }
-  to { opacity: 1; transform: translateX(0); }
+@keyframes view-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

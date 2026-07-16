@@ -4,9 +4,12 @@ const storageKey = "css-tags-theme-overrides";
 
 const presets: Record<string, Record<string, string>> = {
   clean: {
-    "--surface-saturation": "0.008",
+    "--accent-h": "250",
+    "--accent-c": "0.055",
+    "--accent-l": "50%",
+    "--surface-saturation": "0",
     "--density-factor": "0.9",
-    "--radius-factor": "0.8",
+    "--radius-factor": "0.75",
     "--font-size-prose": "1rem",
     "--line-height-prose": "1.6",
     "--measure-prose": "68ch",
@@ -96,7 +99,7 @@ function setupThemeEditor() {
     if (output) output.textContent = css;
     if (status) status.textContent = message ?? (overrides.size
       ? `${overrides.size} ${overrides.size === 1 ? "override" : "overrides"} applied.`
-      : "Using library defaults.");
+      : "Using documentation defaults.");
     return css;
   };
 
@@ -157,7 +160,7 @@ function setupThemeEditor() {
   });
 
   reset?.addEventListener("click", () => {
-    applyOverrides({}, "Theme reset to library defaults.");
+    applyOverrides({}, "Theme reset to documentation defaults.");
     reset.focus();
   });
 

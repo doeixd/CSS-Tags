@@ -86,7 +86,8 @@ so padding is never doubled.
 
 ## Hover Effects
 - **Transform**: Moves up 2px by default
-- **Elevation**: Uses `--card-hover-shadow`, falling back to `--shadow-sm`
+- **Elevation**: Flat by default; opt in with `--card-hover-shadow` and
+  `--card-hover-transform`
 
 ## Technical Implementation
 

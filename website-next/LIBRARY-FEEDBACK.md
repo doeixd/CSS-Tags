@@ -342,3 +342,22 @@ they can be removed.
 - Removal condition: desktop and mobile browser QA proves live contextual type
   updates, named scoping, generated-layer copying, download behavior, panel
   scrolling, and persistence without page overflow.
+
+## FB-022 — Dense documentation exposed noisy defaults and weak overflow polish
+
+- Status: `verified`
+- Exposed by: rebuilding the documentation shell with the shipped library and
+  testing code-heavy pages at desktop and mobile widths.
+- Reproduction: list navigation only had a boxed treatment, cards moved on
+  hover, inline code inherited a visible border, scrollbars had no shared
+  theme contract, and the root view transition slid slowly between pages.
+- Library solution: list navigation now has a public `flush` variant; cards are
+  flat by default; inline code uses a faint background with cloned wrapping;
+  scrollbars use semantic tokens; and root navigation uses a quick cross-fade.
+- Documentation solution: the shell uses the flush navigation form, a neutral
+  palette, shared safe-width and inset variables, tighter vertical rhythm, and
+  bounded, line-preserving highlighted source panels.
+- Removal condition: build and type audits pass, ARIA tab examples operate in
+  their isolated preview roots, and browser QA confirms alignment, wrapping,
+  copy controls, syntax highlighting, and page scrolling at desktop and mobile
+  sizes.
