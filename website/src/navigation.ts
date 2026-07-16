@@ -59,7 +59,6 @@ export const navigation: NavItem[] = [
 			{ label: 'Table', slug: 'components/table' },
 			{ label: 'Tabs', slug: 'components/tabs' },
 			{ label: 'Tooltip', slug: 'components/tooltip' },
-			{ label: 'Tooltips', slug: 'components/tooltips' },
 			{ label: 'View Transition', slug: 'components/view-transition' },
 			{ label: 'View Transition JS', slug: 'js/view-transition' },
 		],

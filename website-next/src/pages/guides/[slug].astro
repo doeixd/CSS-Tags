@@ -29,7 +29,7 @@ if (!entry) {
 
 const { Content, headings } = await render(entry);
 const currentPath = entry.id;
-const hasRenderedExample = /<(?:LiveExample|DialogExample|TabsExample|ColorPaletteViewer)\b/.test(entry.body);
+const renderedExampleCount = (entry.body.match(/<(?:LiveExample|DialogExample|TabsExample|ColorPaletteViewer)\b/g) ?? []).length;
 ---
 
 <NextDocsLayout
@@ -42,7 +42,7 @@ const hasRenderedExample = /<(?:LiveExample|DialogExample|TabsExample|ColorPalet
   <article data-prose>
     <h1>{entry.data.title}</h1>
     {entry.data.description && <p class="lead">{entry.data.description}</p>}
-    {!hasRenderedExample && <PageExample currentPath={currentPath} pageTitle={entry.data.title} />}
+    {renderedExampleCount < 2 && <PageExample currentPath={currentPath} pageTitle={entry.data.title} />}
     <Content />
     <NextPrevNavigation currentPath={currentPath} />
   </article>

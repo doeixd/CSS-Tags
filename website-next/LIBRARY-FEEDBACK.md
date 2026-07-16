@@ -423,3 +423,35 @@ they can be removed.
 - Removal condition: build audits require the full-width table contract and
   dedicated table tokens; browser QA confirms container fill and restrained
   light/dark table contrast.
+
+## FB-026 — Centered stacks omitted the library's own text primitives
+
+- Status: `verified`
+- Exposed by: the semantic type hierarchy preview on the typography page.
+- Reproduction: `layout-stack[center]` centered native headings and paragraphs,
+  but custom `<eyebrow>` and `<text>` children stayed start-aligned because the
+  text-alignment selector did not include their custom, class, or data hosts.
+- Library solution: centered stacks now apply the same alignment contract to
+  native typography and every public semantic text host.
+- Documentation solution: the typography hierarchy remains a real library demo
+  and now visually verifies one shared center line for eyebrow, heading, lead,
+  body, and caption roles.
+- Removal condition: the source audit requires semantic text hosts in the
+  centered-stack selector and browser QA verifies the complete hierarchy.
+
+## FB-027 — Example isolation and inline CSS made route changes expensive
+
+- Status: `verified`
+- Exposed by: timing repeated documentation navigation across example-heavy
+  pages.
+- Reproduction: every page embedded roughly 293 KB of shared CSS, every preview
+  parsed another full stylesheet in its shadow root, and the service worker
+  waited for the network even when a prefetched HTML response was cached.
+- Library solution: no public API change was required; the existing stylesheet
+  remains the single source used by previews.
+- Documentation solution: CSS is emitted as a cacheable shared asset, previews
+  reuse constructable stylesheets with a graceful `<style>` fallback, route
+  caches use stale-while-revalidate, and the fade duration is reduced to 100ms.
+- Removal condition: build audits require external shared CSS, adopted preview
+  stylesheets, and cached navigation; generated page-size checks and browser QA
+  confirm the improvement.

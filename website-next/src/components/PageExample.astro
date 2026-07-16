@@ -10,6 +10,47 @@ interface Props {
 const { currentPath, pageTitle } = Astro.props;
 const example = getPageExample(currentPath, pageTitle);
 const id = `page-example-${(currentPath || "home").replace(/[^a-z0-9]+/gi, "-")}`;
+const voidElements = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+
+function formatMarkup(value: string) {
+    const tokens = value
+        .replace(/>\s+</g, "><")
+        .replace(/></g, ">\n<")
+        .split("\n")
+        .map((token) => token.trim())
+        .filter(Boolean);
+    let depth = 0;
+
+    return tokens.map((token) => {
+        if (/^<\//.test(token)) depth = Math.max(0, depth - 1);
+        const line = `${"  ".repeat(depth)}${token}`;
+        const opening = token.match(/^<([a-z][\w-]*)\b/i);
+        const closesOnLine = opening && new RegExp(`<\\/${opening[1]}>\\s*$`, "i").test(token);
+        const selfClosing = /\/>$/.test(token) || (opening && voidElements.has(opening[1].toLowerCase()));
+        if (opening && !closesOnLine && !selfClosing) depth += 1;
+        return line;
+    }).join("\n");
+}
+
+function scopeMarkup(value: string, suffix: string) {
+    const ids = Array.from(value.matchAll(/\bid="([^"]+)"/g), (match) => match[1]);
+    return ids.reduce((source, oldId) => {
+        const nextId = `${oldId}-${suffix}`;
+        return source
+            .replaceAll(`id="${oldId}"`, `id="${nextId}"`)
+            .replaceAll(`aria-controls="${oldId}"`, `aria-controls="${nextId}"`)
+            .replaceAll(`aria-describedby="${oldId}"`, `aria-describedby="${nextId}"`)
+            .replaceAll(`aria-labelledby="${oldId}"`, `aria-labelledby="${nextId}"`)
+            .replaceAll(`for="${oldId}"`, `for="${nextId}"`)
+            .replaceAll(`popovertarget="${oldId}"`, `popovertarget="${nextId}"`)
+            .replaceAll(`href="#${oldId}"`, `href="#${nextId}"`);
+    }, value);
+}
+
+function wrapSource(wrapper: string, source: string) {
+    const closing = wrapper.startsWith("<section") ? "</section>" : "</div>";
+    return `${wrapper}\n${formatMarkup(source).split("\n").map((line) => `  ${line}`).join("\n")}\n${closing}`;
+}
 
 function inferSourceLanguage(source: string) {
     const trimmed = source.trim();
@@ -24,6 +65,8 @@ function inferSourceLanguage(source: string) {
 }
 
 const sourceType = inferSourceLanguage(example.code);
+const compactMarkup = scopeMarkup(example.preview, "compact");
+const themedMarkup = scopeMarkup(example.preview, "themed");
 ---
 
 <section aria-label="Quick example">
@@ -35,6 +78,31 @@ const sourceType = inferSourceLanguage(example.code);
         markupSource={example.code}
         markupLanguage={sourceType.language}
         markupLabel={sourceType.label}
+    />
+
+    <h2>More examples</h2>
+    <p>These use the same component API under different inherited theme inputs.</p>
+
+    <ExampleWorkbench
+        id={`${id}-compact`}
+        title="Compact composition"
+        description="Lower the density input for a tighter application surface without rewriting component spacing."
+        markup={`<div style="--density-factor: 0.72">${compactMarkup}</div>`}
+        markupSource={wrapSource('<div style="--density-factor: 0.72">', compactMarkup)}
+        markupLanguage="html"
+        markupLabel="HTML"
+        compact
+    />
+
+    <ExampleWorkbench
+        id={`${id}-themed`}
+        title="Locally themed composition"
+        description="Theme variables inherit through the example subtree while its markup and semantics stay unchanged."
+        markup={`<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">${themedMarkup}</section>`}
+        markupSource={wrapSource('<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">', themedMarkup)}
+        markupLanguage="html"
+        markupLabel="HTML"
+        compact
     />
 </section>
 

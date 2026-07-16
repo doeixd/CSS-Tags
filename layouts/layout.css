@@ -140,7 +140,10 @@
     align-items: center;
   }
 
-  &[center] > :is(h1, h2, h3, h4, h5, h6, p, small, span, blockquote, pre, a, button, label, summary, details) {
+  &[center] > :is(
+    h1, h2, h3, h4, h5, h6, p, small, span, blockquote, pre, a, button, label, summary, details,
+    eyebrow, text, [data-eyebrow], [data-text], .eyebrow, .text, .lead, .caption
+  ) {
     text-align: center;
   }
 }

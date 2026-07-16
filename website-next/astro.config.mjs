@@ -9,12 +9,17 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import { h } from 'hastscript';
 
+const docsBase = process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/';
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://doeixd.github.io',
-	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
+	base: docsBase,
+	redirects: {
+		'/components/tooltips': `${docsBase}components/tooltip/`,
+	},
 	build: {
-		inlineStylesheets: 'always',
+		inlineStylesheets: 'never',
 		assets: '_astro'
 	},
 	vite: {
@@ -61,7 +66,7 @@ export default defineConfig({
 	markdown: {
 		remarkPlugins: [
 			// @ts-ignore
-			[remarkBasePath, { base: process.env.NODE_ENV === 'production' ? '/CSS-Tags' : '' }],
+			[remarkBasePath, { base: docsBase === '/' ? '' : docsBase.replace(/\/$/, '') }],
 		],
 		rehypePlugins: [
 			rehypeSlug,

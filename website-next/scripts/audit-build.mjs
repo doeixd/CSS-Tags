@@ -61,7 +61,7 @@ const sourceContracts = [
   ["components/badge.css", ".badge-success", "badge status class alias"],
   ["components/badge.css", "[data-variant=\"subtle\"]", "badge data-variant alias"],
   ["components/chip.css", "[variant=\"overt\"]", "chip variant attribute"],
-  ["components/tooltips.css", "[data-tooltip-host]", "explicit rich-tooltip parent fallback"],
+  ["components/tooltip.css", "[data-tooltip-host]", "explicit rich-tooltip parent fallback"],
   ["layouts/layout.css", "[data-no-stack]", "layout-split data no-stack alias"],
   ["types/css-tags.d.ts", "eyebrow: GlobalAttributes", "eyebrow JSX typing"],
   ["types/css-tags.d.ts", "interface ThemeOverrides", "typed theme override contract"],
@@ -83,7 +83,12 @@ const sourceContracts = [
   ["carousel.js", "toggleAttribute('inert'", "inactive carousel slide focus management"],
   ["website-next/src/components/PageExample.astro", "initializeCarousels(root)", "shipped carousel demo behavior"],
   ["website-next/src/components/PageExample.astro", "markupSource={example.code}", "formatted page-example source"],
+  ["website-next/src/components/PageExample.astro", "Compact composition", "systematic compact example"],
   ["website-next/src/components/ExampleWorkbench.astro", "example-workbench__source-toolbar", "labeled source toolbar"],
+  ["website-next/src/scripts/css-tags-shadow.ts", "adoptedStyleSheets", "shared preview stylesheet parsing"],
+  ["website-next/public/sw.js", "staleWhileRevalidate(request, NAVIGATION_CACHE)", "cached documentation navigation"],
+  ["website-next/astro.config.mjs", "inlineStylesheets: 'never'", "cacheable shared stylesheets"],
+  ["layouts/layout.css", "eyebrow, text, [data-eyebrow]", "centered semantic text primitives"],
   ["website-next/src/scripts/css-tags-shadow.ts", "--accent-h: inherit", "example theme inheritance"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-lightness-shift", "surface lightness theme control"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-contrast", "surface contrast theme control"],
@@ -102,6 +107,9 @@ for (const [file, needle, label] of sourceContracts) {
 for (const page of pages) {
   const html = await readFile(page, "utf8");
   const route = routeForPage(page);
+  const htmlKilobytes = Buffer.byteLength(html) / 1024;
+  if (htmlKilobytes > 300) failures.push(`${route}: HTML payload is ${htmlKilobytes.toFixed(1)} KB; expected at most 300 KB.`);
+  if (/http-equiv=["']refresh["']/i.test(html)) continue;
   const requireText = (needle, label) => {
     if (!html.includes(needle)) failures.push(`${route}: missing ${label}.`);
   };
@@ -118,6 +126,10 @@ for (const page of pages) {
 
   if (!html.includes("data-example-workbench") && !html.includes("data-palette-viewer")) {
     failures.push(`${route}: missing a rendered example or interactive palette.`);
+  }
+  const exampleCount = (html.match(/data-example-workbench/g) ?? []).length;
+  if (!html.includes("data-palette-viewer") && exampleCount < 2) {
+    failures.push(`${route}: expected at least two rendered examples; found ${exampleCount}.`);
   }
 
   if (route === "/guides/cms-markdown/") {

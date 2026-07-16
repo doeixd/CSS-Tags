@@ -84,16 +84,10 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<nav class="navbar" data-collapsible aria-label="Primary">\n  <a class="nav-brand" href="/">Acme</a>\n  <button class="nav-toggle" aria-expanded="false" aria-controls="primary-links">Menu</button>\n  <ul class="nav-links" id="primary-links">\n    <li><a class="nav-link" aria-current="page" href="/overview">Overview</a></li>\n    <li><a class="nav-link" href="/settings">Settings</a></li>\n  </ul>\n</nav>`,
     },
     "components/tooltip": {
-        title: "Declarative tooltip placement",
-        description: "Compare top and bottom placement around ordinary button controls.",
-        preview: `<layout-cluster justify="center" style="padding-block:2rem"><tooltip content="Saved to your workspace" place="top"><button type="button">Save</button></tooltip><tooltip content="Removes this draft" place="bottom"><button type="button">Delete</button></tooltip></layout-cluster>`,
-        code: `<tooltip content="Saved to your workspace" place="top">\n  <button type="button">Save</button>\n</tooltip>\n\n<tooltip content="Removes this draft" place="bottom">\n  <button type="button">Delete</button>\n</tooltip>`,
-    },
-    "components/tooltips": {
-        title: "Rich tooltip content",
-        description: "The tooltip element supports structured content while the button remains the trigger.",
-        preview: `<layout-cluster justify="center" style="padding-block:2rem"><button type="button" aria-describedby="billing-tip">Billing info<tooltip id="billing-tip" role="tooltip" position="top"><strong>Next invoice</strong><br><small>Due on August 1</small></tooltip></button></layout-cluster>`,
-        code: `<button aria-describedby="billing-tip">\n  Billing info\n  <tooltip id="billing-tip" role="tooltip" position="top">\n    <strong>Next invoice</strong>\n    <small>Due on August 1</small>\n  </tooltip>\n</button>`,
+        title: "Text and structured tooltips",
+        description: "Use generated text for short hints and real DOM content when aria-describedby needs a reference.",
+        preview: `<layout-cluster justify="center" gap="var(--space-lg)" style="padding-block:2rem"><tooltip content="Saved to your workspace" place="top"><button type="button">Save</button></tooltip><tooltip content="Removes this draft" place="bottom"><button type="button">Delete</button></tooltip><button type="button" data-tooltip-host aria-describedby="billing-tip">Billing info<tooltip id="billing-tip" role="tooltip" position="top"><strong>Next invoice</strong><br><small>Due on August 1</small></tooltip></button></layout-cluster>`,
+        code: `<tooltip content="Saved to your workspace" place="top">\n  <button type="button">Save</button>\n</tooltip>\n\n<tooltip content="Removes this draft" place="bottom">\n  <button type="button">Delete</button>\n</tooltip>\n\n<button type="button" data-tooltip-host aria-describedby="billing-tip">\n  Billing info\n  <tooltip id="billing-tip" role="tooltip" position="top">\n    <strong>Next invoice</strong><br>\n    <small>Due on August 1</small>\n  </tooltip>\n</button>`,
     },
     "components/view-transition": {
         title: "Name the elements that should persist",

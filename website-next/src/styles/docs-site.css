@@ -22,8 +22,8 @@
   --docs-content-gap: var(--space-xl);
   --site-header-padding-inline: var(--docs-safe-padding-inline);
   --site-footer-padding-inline: var(--docs-safe-padding-inline);
-  --view-transition-duration: 160ms;
-  --transition-duration-page: 160ms;
+  --view-transition-duration: 100ms;
+  --transition-duration-page: 100ms;
   --view-transition-old: fade-out;
   --view-transition-new: fade-in;
 }
@@ -93,7 +93,10 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 
 .next-docs__sidebar {
   --list-navigation-gap: var(--space-2xs);
-  --list-navigation-item-padding: 0.35rem var(--space-sm);
+  --list-navigation-item-padding: 0.4rem var(--space-md);
+  --list-navigation-hover-background: var(--surface-muted);
+  --list-navigation-current-background: color-mix(in oklch, var(--accent) 11%, var(--base));
+  --list-navigation-current-color: var(--accent-overt);
 }
 
 .next-docs__sidebar > details,
@@ -111,7 +114,7 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 }
 
 .next-docs__sidebar nav > layout-stack {
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
 .next-docs__sidebar nav > layout-stack > details {
@@ -121,9 +124,10 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 
 .next-docs__sidebar nav > layout-stack > details > summary {
   min-block-size: 0;
-  padding-block: 0.35rem;
-  color: var(--text-muted);
+  padding-block: 0.4rem;
+  color: var(--text-subtle);
   font-size: 0.9375rem;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: -0.00625rem;
 }
 
@@ -133,7 +137,13 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 
 .next-docs__sidebar [data-list-navigation] a {
   min-block-size: 0;
+  font-size: var(--font-size-body);
   line-height: 1.35;
+}
+
+.next-docs__sidebar [data-list-navigation] a[aria-current="page"] {
+  color: var(--accent-overt);
+  font-weight: var(--font-weight-medium);
 }
 
 .next-docs__outline {
@@ -182,8 +192,9 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 }
 
 .next-docs__outline a[aria-current="location"] {
-  background: color-mix(in oklch, var(--accent) 10%, var(--base));
-  color: var(--text-overt);
+  background: color-mix(in oklch, var(--accent) 11%, var(--base));
+  color: var(--accent-overt);
+  font-weight: var(--font-weight-medium);
 }
 
 .next-docs__outline > nav > strong {

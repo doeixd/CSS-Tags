@@ -17,7 +17,7 @@ The simple tooltip wraps an ordinary trigger and generates a short text bubble f
 </span>
 ```
 
-The public host forms are:
+Short text tooltips support all three public host forms:
 
 - `<tooltip content="…">`
 - `[data-tooltip="…"]`
@@ -26,6 +26,29 @@ The public host forms are:
 ## Placement
 
 Set `place` to `top`, `right`, `bottom`, or `left`. Top is the default. Placement is absolute relative to the tooltip host and does not depend on experimental anchor positioning.
+
+## Structured content
+
+Use the same tooltip component with real DOM content when assistive technology
+needs to reference the description or when the hint needs simple formatting:
+
+```html
+<button type="button" data-tooltip-host aria-describedby="billing-tip">
+  Billing info
+  <tooltip id="billing-tip" role="tooltip" position="top">
+    <strong>Next invoice</strong><br>
+    <small>Due on August 1</small>
+  </tooltip>
+</button>
+```
+
+The structured content host can be `<tooltip role="tooltip">`,
+`[data-rich-tooltip]`, or `.rich-tooltip`. Keep it as a direct child of the
+trigger or wrapper. `data-tooltip-host` and `.tooltip-host` provide the explicit
+positioning contract; `:has()` can infer the parent in supporting browsers.
+
+Structured content accepts `position="top"`, `data-position="top"`, or
+`.tooltip-top`, with equivalent `bottom`, `left`, and `right` forms.
 
 ## Theme tokens
 
@@ -42,4 +65,4 @@ Set `place` to `top`, `right`, `bottom`, or `left`. Top is the default. Placemen
 
 ## Accessibility
 
-Generated tooltip text is supplemental. The trigger must still have an accessible name, especially when it contains only an icon. Keep essential instructions in visible content or connect a real element with `aria-describedby`. Use the structured tooltip pattern when assistive technology needs access to the tooltip content.
+Generated tooltip text is supplemental. The trigger must still have an accessible name, especially when it contains only an icon. Keep essential instructions in visible content. For structured content, add `role="tooltip"`, connect it with `aria-describedby`, and do not put interactive controls inside it.

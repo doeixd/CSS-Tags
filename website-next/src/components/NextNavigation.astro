@@ -40,3 +40,22 @@ const base = normalizeBase(import.meta.env.BASE_URL);
     ))}
   </layout-stack>
 </nav>
+
+<script>
+  function revealCurrentNavigationItem() {
+    const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
+    const current = sidebar?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!sidebar || !current) return;
+
+    requestAnimationFrame(() => {
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const currentRect = current.getBoundingClientRect();
+      if (currentRect.top < sidebarRect.top || currentRect.bottom > sidebarRect.bottom) {
+        sidebar.scrollTop += currentRect.top - sidebarRect.top - sidebar.clientHeight / 3;
+      }
+    });
+  }
+
+  revealCurrentNavigationItem();
+  document.addEventListener("astro:page-load", revealCurrentNavigationItem);
+</script>

@@ -1,92 +1,56 @@
-# Tooltip Component Documentation
+# Tooltip
 
-## Overview
-The `tooltip` component provides simple CSS-only tooltips that appear on hover or focus. It uses the `content` attribute to display tooltip text and supports multiple placement positions.
+The tooltip component provides short generated hints and structured,
+ARIA-referenceable content through one stylesheet and one token API.
 
-## Key Features
-- **CSS-Only**: No JavaScript required for basic functionality
-- **Attribute-Driven**: Uses `content` attribute for tooltip text
-- **Multiple Positions**: Top, right, bottom, left placements
-- **Motion Preferences**: Respects `prefers-reduced-motion`
-- **Inline Display**: Doesn't disrupt document flow
+## Short text
 
-## Attributes
-- `content`: Tooltip text content
-- `place`: Position of tooltip (default: `top`)
-  - `top`: Above the element
-  - `right`: To the right of the element
-  - `bottom`: Below the element
-  - `left`: To the left of the element
-
-## Styling Details
-
-### Base Tooltip
-- **Position**: Relative container
-- **Display**: Inline-block to maintain flow
-- **Pseudo-element**: `::after` for tooltip content
-- **Positioning**: Absolute with transforms for centering
-
-### Tooltip Bubble
-- **Content**: From `content` attribute
-- **Background**: Surface role with border
-- **Text Color**: Auto-contrast for readability
-- **Border Radius**: Small radius
-- **Padding**: Minimal padding
-- **Max Width**: 60ch for readability
-- **White Space**: No-wrap to prevent breaking
-
-### Positioning
-- **Top**: Above element, centered horizontally
-- **Right**: Right of element, centered vertically
-- **Bottom**: Below element, centered horizontally
-- **Left**: Left of element, centered vertically
-
-## Usage Example
 ```html
-<button tooltip content="Save your changes" place="top">
-  Save
-</button>
+<tooltip content="Saved to your workspace" place="top">
+  <button type="button">Save</button>
+</tooltip>
 
-<span tooltip content="This field is required" place="right">
-  Name *
+<span data-tooltip="Required before publishing" place="right">
+  <button type="button">Status</button>
 </span>
 ```
 
-## CSS Custom Properties Used
-- `--role`: Surface role (default: `overt`)
-- `--bg`: Background color
-- `--border`: Border color
-- `--radius-sm`: Border radius
-- `--l-padding`: Padding (default: `0.25em 0.5em`)
+Use `<tooltip content="…">`, `[data-tooltip="…"]`, or
+`.tooltip[data-tooltip="…"]`. `place` accepts `top`, `right`, `bottom`, and
+`left`.
 
-## Accessibility
-- **Hover/Focus**: Appears on both hover and keyboard focus
-- **Motion**: Disabled when `prefers-reduced-motion: reduce`
-- **Screen Readers**: May need ARIA attributes for full accessibility
-- **Timing**: No delay (immediate appearance)
+## Structured content
 
-## Limitations
-- **CSS-Only**: No advanced features like delays or animations
-- **Positioning**: Fixed offsets, no collision detection
-- **Styling**: Limited customization options
-- **Advanced Features**: For complex tooltips, see `tooltips.css`
+```html
+<button type="button" data-tooltip-host aria-describedby="billing-tip">
+  Billing info
+  <tooltip id="billing-tip" role="tooltip" position="top">
+    <strong>Next invoice</strong><br>
+    <small>Due on August 1</small>
+  </tooltip>
+</button>
+```
 
-## Browser Support
-- All modern browsers
-- CSS pseudo-elements and attribute selectors
-- Fallback: No tooltip display in very old browsers
+Structured hosts can use `<tooltip role="tooltip">`, `[data-rich-tooltip]`, or
+`.rich-tooltip`. Keep the tooltip as a direct child of a parent carrying
+`data-tooltip-host` or `.tooltip-host`. `position`, `data-position`, and the
+placement classes support the same four directions.
 
-## Use Cases
-- **Form Labels**: Field help text
-- **Button Tooltips**: Action explanations
-- **Icon Buttons**: Clarify icon meanings
-- **Abbreviations**: Expand acronyms
-- **Status Indicators**: Explain status icons
+## Tokens
 
-## Related Components
-For more advanced tooltip functionality, see `tooltips.css` which includes:
-- Anchor positioning
-- Popover API integration
-- Animation and transitions
-- Collision detection
-- Customizable styling
+- `--tooltip-background`
+- `--tooltip-color`
+- `--tooltip-border-color`
+- `--tooltip-padding`
+- `--tooltip-radius`
+- `--tooltip-offset`
+- `--tooltip-max-width`
+- `--tooltip-delay`
+- `--tooltip-z-index`
+
+Generated text is supplemental; the trigger still needs an accessible name.
+Structured content should use `role="tooltip"` and `aria-describedby`. Do not put
+interactive controls inside a tooltip.
+
+`components/tooltips.css` remains as a compatibility import. New direct imports
+should use `components/tooltip.css`.

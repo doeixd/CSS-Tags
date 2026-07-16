@@ -1,7 +1,7 @@
 // CSS Tags Documentation - Service Worker
 // Optimized caching strategy for fast, offline-capable documentation
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `css-tags-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `css-tags-dynamic-${CACHE_VERSION}`;
 const SEARCH_CACHE = `css-tags-search-${CACHE_VERSION}`;
@@ -23,7 +23,7 @@ const CACHE_STRATEGIES = {
   pages: /\.html?$/,
 
   // Navigation pages: Cache with frequent revalidation
-  navigation: /\/(guides|api|examples|reference)\//,
+  navigation: /\/(components|core|guides|js|layouts|themes|utilities|examples|reference)\//,
 };
 
 // Install event - precache critical assets
@@ -83,11 +83,11 @@ self.addEventListener('fetch', (event) => {
     // Search index: Stale-while-revalidate
     event.respondWith(staleWhileRevalidate(request, SEARCH_CACHE));
   } else if (CACHE_STRATEGIES.navigation.test(url.pathname)) {
-    // Documentation changes should appear immediately after a deploy.
-    event.respondWith(networkFirst(request, NAVIGATION_CACHE));
+    // Prefetches warm this cache; navigation can then render immediately while
+    // a fresh response updates the next visit in the background.
+    event.respondWith(staleWhileRevalidate(request, NAVIGATION_CACHE));
   } else if (CACHE_STRATEGIES.pages.test(url.pathname) || url.pathname.endsWith('/')) {
-    // Prefer fresh HTML while retaining an offline fallback.
-    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
   } else {
     // Everything else: Network first with cache fallback
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));

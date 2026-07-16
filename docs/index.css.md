@@ -63,7 +63,6 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 @import url('components/alert.css') layer(components);
 @import url('components/modal.css') layer(components);
 @import url('components/tooltip.css') layer(components);
-@import url('components/tooltips.css') layer(components);
 @import url('components/list.css') layer(components);
 @import url('components/divider.css') layer(components);
 @import url('components/carousel.css') layer(components);

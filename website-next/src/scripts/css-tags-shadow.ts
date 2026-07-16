@@ -92,13 +92,34 @@ function createLibraryStyle(extra = "") {
     return style;
 }
 
+const supportsConstructableStylesheets =
+    typeof CSSStyleSheet !== "undefined" &&
+    "replaceSync" in CSSStyleSheet.prototype &&
+    "adoptedStyleSheets" in ShadowRoot.prototype;
+
+function createLibrarySheet(extra = "") {
+    if (!supportsConstructableStylesheets) return null;
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(`${shadowLibraryCss}\n${extra}`);
+    return sheet;
+}
+
+const exampleSheet = createLibrarySheet(exampleHelpers);
+const tokenSheet = createLibrarySheet(":host { display: block; }");
+
+function applyLibraryStyles(root: ShadowRoot, sheet: CSSStyleSheet | null, fallbackExtra: string) {
+    if (sheet) root.adoptedStyleSheets = [...root.adoptedStyleSheets, sheet];
+    else root.append(createLibraryStyle(fallbackExtra));
+}
+
 class CssTagsExample extends HTMLElement {
     connectedCallback() {
         if (this.shadowRoot) return;
 
         const content = Array.from(this.childNodes);
         const root = this.attachShadow({ mode: "open" });
-        root.append(createLibraryStyle(exampleHelpers), ...content);
+        applyLibraryStyles(root, exampleSheet, exampleHelpers);
+        root.append(...content);
     }
 }
 
@@ -108,7 +129,8 @@ class CssTagsTokens extends HTMLElement {
 
         const root = this.attachShadow({ mode: "open" });
         const slot = document.createElement("slot");
-        root.append(createLibraryStyle(":host { display: block; }"), slot);
+        applyLibraryStyles(root, tokenSheet, ":host { display: block; }");
+        root.append(slot);
     }
 }
 
