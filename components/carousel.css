@@ -9,15 +9,16 @@
  */
 
 :is(carousel, [data-carousel], .carousel) {
-  --slide-duration: attr(duration type(*), 500ms);
+  --slide-duration: attr(duration type(*), 300ms);
   --slide-timing: attr(timing-function type(*), cubic-bezier(0.4, 0, 0.2, 1));
 
   position: relative;
   display: block;
   overflow: hidden;
-  border-radius: attr(radius type(*), 0.75rem);
+  border-radius: attr(radius type(*), var(--carousel-radius, 0.75rem));
   width: attr(width type(*), 100%);
   max-inline-size: 100%;
+  isolation: isolate;
 }
 
 /*
@@ -26,51 +27,93 @@
  */
 :is(.carousel-slides, [data-carousel-slides]) {
   display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  touch-action: pan-x pan-y;
   scrollbar-width: none; /* Hide scrollbar in Firefox */
   -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
   transition: transform var(--slide-duration) var(--slide-timing);
-@media (prefers-reduced-motion: reduce) {
-  transition: none;
 }
 
-  &::-webkit-scrollbar { display: none; } /* Hide scrollbar in WebKit */
+:is(.carousel-slides, [data-carousel-slides])::-webkit-scrollbar {
+  display: none;
 }
 
 :is(carousel-item, [data-carousel-item], .carousel-item) {
-  flex-shrink: 0;
+  display: block;
+  flex: 0 0 100%;
+  min-inline-size: 0;
   scroll-snap-align: start;
 }
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger) {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background-color: oklch(from var(--theme-bg) l c h / 0.5);
-  backdrop-filter: blur(5px);
-  color: var(--theme-text);
-  border: 1px solid transparent;
-  border-radius: 50%;
-  width: 2.75rem;
-  height: 2.75rem;
+  z-index: 2;
+  inset-block-start: 50%;
   display: grid;
+  inline-size: var(--carousel-trigger-size, 2.75rem);
+  block-size: var(--carousel-trigger-size, 2.75rem);
+  padding: 0;
   place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid var(--carousel-trigger-border-color, var(--outline-subtle));
+  border-radius: 50%;
+  background: var(--carousel-trigger-background, var(--surface-default));
+  color: var(--carousel-trigger-color, var(--text-overt));
+  box-shadow: var(--carousel-trigger-shadow, var(--shadow-sm));
+  font: inherit;
+  font-size: var(--carousel-trigger-icon-size, 1.75rem);
+  line-height: 1;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, opacity 150ms ease-out;
+}
 
-  &:hover {
-    background-color: oklch(from var(--theme-bg) l c h / 0.8);
-    border-color: var(--theme-primary);
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="prev"] {
+  inset-inline-start: var(--carousel-trigger-inset, 0.75rem);
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"] {
+  inset-inline-end: var(--carousel-trigger-inset, 0.75rem);
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):is(:hover, :focus-visible) {
+  border-color: var(--carousel-trigger-hover-border-color, var(--outline-overt));
+  background: var(--carousel-trigger-hover-background, var(--base));
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--outline-focus));
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):disabled,
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[disabled] {
+  opacity: var(--carousel-trigger-disabled-opacity, 0.35);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Scroll snap remains the no-JS control; only show buttons after enhancement. */
+:is(carousel, [data-carousel], .carousel):not([data-carousel-initialized="true"])
+  :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.carousel-slides, [data-carousel-slides]) {
+    scroll-behavior: auto;
+    transition: none;
   }
+}
 
-  &[direction="prev"] { inset-inline-start: 1rem; }
-  &[direction="next"] { inset-inline-end: 1rem; }
-
-  &[disabled] {
-    opacity: 0.3;
-    cursor: not-allowed;
-    pointer-events: none;
+@media (forced-colors: active) {
+  :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger) {
+    border-color: ButtonText;
   }
 }

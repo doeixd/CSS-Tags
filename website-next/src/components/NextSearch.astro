@@ -5,7 +5,14 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <details class="next-docs-search" data-docs-search data-disclosure="flush" data-base={base}>
-  <summary>Search <kbd aria-hidden="true">Ctrl K</kbd></summary>
+  <summary>
+    <svg class="next-docs-search__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5" />
+      <path d="m12.5 12.5 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    </svg>
+    <span>Search</span>
+    <kbd aria-hidden="true">Ctrl K</kbd>
+  </summary>
   <div data-docs-search-panel>
     <div id="next-docs-search"></div>
     <p class="caption" data-docs-search-status aria-live="polite"></p>
@@ -27,8 +34,8 @@ const base = import.meta.env.BASE_URL;
       new PagefindUI({
         element: "#next-docs-search",
         showImages: false,
-        showSubResults: true,
-        excerptLength: 18,
+        showSubResults: false,
+        excerptLength: 24,
         baseUrl: base,
         bundlePath: `${base.replace(/\/$/, "")}/pagefind/`,
         processResult: (result) => {
@@ -45,24 +52,49 @@ const base = import.meta.env.BASE_URL;
       if (status) status.textContent = "Search is unavailable. Use the documentation menu instead.";
     }
 
-    const focusSearch = () => {
-      details.open = true;
-      requestAnimationFrame(() => details.querySelector<HTMLInputElement>("input")?.focus());
-    };
-
     details.addEventListener("toggle", () => {
       if (details.open) requestAnimationFrame(() => details.querySelector<HTMLInputElement>("input")?.focus());
     });
 
-    document.addEventListener("keydown", (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        focusSearch();
-      } else if (event.key === "Escape" && details.open) {
+    const input = details.querySelector<HTMLInputElement>("input");
+    const initialQuery = new URL(location.href).searchParams.get("q");
+    if (input && initialQuery) {
+      input.value = initialQuery;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    input?.addEventListener("input", () => {
+      const url = new URL(location.href);
+      const query = input.value.trim();
+      if (query) url.searchParams.set("q", query);
+      else url.searchParams.delete("q");
+      history.replaceState(history.state, "", url);
+    });
+
+    details.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest(".pagefind-ui__result-link")) {
         details.open = false;
-        details.querySelector<HTMLElement>("summary")?.focus();
       }
     });
+
+    if (document.documentElement.dataset.docsSearchGlobalReady !== "true") {
+      document.documentElement.dataset.docsSearchGlobalReady = "true";
+      document.addEventListener("keydown", (event) => {
+        const current = document.querySelector<HTMLDetailsElement>("[data-docs-search]");
+        if (!current) return;
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          current.open = true;
+          requestAnimationFrame(() => current.querySelector<HTMLInputElement>("input")?.focus());
+        } else if (event.key === "Escape" && current.open) {
+          current.open = false;
+          current.querySelector<HTMLElement>("summary")?.focus();
+        }
+      });
+      document.addEventListener("pointerdown", (event) => {
+        const current = document.querySelector<HTMLDetailsElement>("[data-docs-search]");
+        if (current?.open && event.target instanceof Node && !current.contains(event.target)) current.open = false;
+      });
+    }
   };
 
   setupDocsSearch();

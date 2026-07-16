@@ -13,6 +13,7 @@
   --font-size-h1: clamp(2.25rem, 4vw, 3rem);
   --font-size-h2: clamp(1.75rem, 3vw, 2.25rem);
   --font-size-h3: clamp(1.35rem, 2vw, 1.65rem);
+  --measure-heading: 26ch;
   --site-header-background: var(--base);
   --site-footer-background: var(--base);
   --docs-safe-max-width: 96rem;
@@ -103,6 +104,12 @@
   line-height: 1.3;
 }
 
+.next-docs__outline li[data-depth="3"] a {
+  padding-inline-start: var(--space-lg);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
 .next-docs__outline > nav > strong {
   display: block;
   margin-block-end: var(--space-xs);
@@ -131,6 +138,10 @@
 
 .site-header {
   --site-header-border: 1px solid var(--outline-muted);
+}
+
+.site-header [data-header-navigation] {
+  margin-inline-start: var(--space-sm);
 }
 
 .site-header > container,
@@ -162,15 +173,31 @@
 
 /* Pagefind is site tooling; the surrounding disclosure uses library controls. */
 .next-docs-search > summary {
+  gap: var(--space-xs);
   padding: var(--space-xs) var(--space-sm);
-  border-color: transparent;
-  background: transparent;
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
   color: var(--text-default);
   white-space: nowrap;
 }
 
 .next-docs-search > summary:is(:hover, :focus-visible) {
-  background: var(--surface-muted);
+  border-color: var(--outline-overt);
+  background: var(--surface-default);
+}
+
+.next-docs-search {
+  position: relative;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.next-docs-search__icon {
+  inline-size: 1rem;
+  block-size: 1rem;
+  color: var(--text-muted);
 }
 
 .next-docs-search > summary kbd {
@@ -181,19 +208,20 @@
 .next-docs-search > [data-docs-search-panel] {
   position: absolute;
   z-index: calc(var(--site-header-z-index) + 1);
-  inset-block-start: 100%;
-  inset-inline-end: max(var(--site-header-padding-inline), env(safe-area-inset-right));
+  inset-block-start: calc(100% + var(--space-xs));
+  inset-inline-end: 0;
   inline-size: min(38rem, calc(100vw - 2 * var(--space-md)));
   max-block-size: calc(100dvh - var(--site-header-min-height) - var(--space-md));
   padding: var(--space-md);
   overflow: auto;
   border: 1px solid var(--outline-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--surface-default);
+  box-shadow: var(--shadow-lg);
 }
 
 .next-docs-search .pagefind-ui {
-  --pagefind-ui-scale: 0.65;
+  --pagefind-ui-scale: 0.85;
   --pagefind-ui-primary: var(--accent);
   --pagefind-ui-text: var(--text-default);
   --pagefind-ui-background: var(--surface-default);
@@ -203,7 +231,98 @@
 }
 
 .next-docs-search .pagefind-ui__result {
+  margin: 0;
+  padding: var(--space-sm);
+  border-block-start: 1px solid var(--outline-subtle);
+}
+
+.next-docs-search .pagefind-ui__search-input {
   padding-block: var(--space-sm);
+  padding-inline: 2.5rem var(--space-md);
+  border-color: var(--outline-subtle);
+  background: var(--base);
+  box-shadow: none;
+}
+
+.next-docs-search .pagefind-ui__result-link {
+  color: var(--text-overt);
+  text-decoration: none;
+}
+
+.next-docs-search .pagefind-ui__result-link:is(:hover, :focus-visible) {
+  color: var(--accent-overt);
+}
+
+.next-docs-search .pagefind-ui__results {
+  display: grid;
+  gap: 0;
+  margin-block-start: var(--space-sm);
+  padding: 0;
+}
+
+.next-docs-search .pagefind-ui__result-title {
+  margin-block-end: var(--space-xs);
+  font-size: var(--font-size-ui);
+  line-height: var(--line-height-snug);
+}
+
+.next-docs-search .pagefind-ui__result-excerpt {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+
+.next-docs-search .pagefind-ui__message {
+  margin-block: var(--space-sm);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Sequential navigation keeps the old site's two-card scan pattern. */
+.next-docs__prev-next {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin-block-start: var(--space-2xl);
+  padding-block-start: var(--space-lg);
+  border-block-start: 1px solid var(--outline-subtle);
+}
+
+.next-docs__prev-next-link {
+  display: grid;
+  gap: var(--space-xs);
+  min-inline-size: 0;
+  padding: var(--space-md);
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-default);
+  color: var(--text-default);
+  text-decoration: none;
+}
+
+.next-docs__prev-next-link:is(:hover, :focus-visible) {
+  border-color: var(--outline-overt);
+  background: var(--surface-muted);
+}
+
+.next-docs__prev-next-link[data-direction="next"] {
+  grid-column: 2;
+  text-align: end;
+}
+
+.next-docs__prev-next-label {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.next-docs__prev-next-title {
+  color: var(--text-overt);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
 }
 
 [data-color-scheme-control] {
@@ -373,6 +492,21 @@
 }
 
 @media (max-width: 40rem) {
+  .next-docs-search > [data-docs-search-panel] {
+    position: fixed;
+    inset: var(--space-md);
+    inline-size: auto;
+    max-block-size: calc(100dvh - 2 * var(--space-md));
+  }
+
+  .next-docs__prev-next {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .next-docs__prev-next-link[data-direction="next"] {
+    grid-column: 1;
+  }
+
   .next-theme-editor > [data-theme-editor-panel] {
     position: fixed;
     inset-block-start: calc(var(--site-header-min-height) + var(--space-sm));

@@ -7,6 +7,22 @@ const shadowLibraryCss = libraryCss
 const exampleHelpers = `
     :host {
         display: block;
+        /* Preserve DOM/style isolation while inheriting the documentation's
+           live theme inputs instead of restoring the library defaults. */
+        --accent-h: inherit;
+        --accent-c: inherit;
+        --accent-l: inherit;
+        --surface-saturation: inherit;
+        --contrast-factor: inherit;
+        --density-factor: inherit;
+        --radius-factor: inherit;
+        --font-size-prose: inherit;
+        --line-height-prose: inherit;
+        --measure-prose: inherit;
+        --font-size-ui: inherit;
+        --font-size-control: inherit;
+        --font-weight-heading: inherit;
+        --letter-spacing-heading: inherit;
         color: var(--text-default, inherit);
     }
 
@@ -40,7 +56,7 @@ const exampleHelpers = `
 
     .example-slide {
         display: grid;
-        inline-size: 300px;
+        inline-size: 100%;
         max-inline-size: 100%;
         block-size: 12rem;
         place-items: center;

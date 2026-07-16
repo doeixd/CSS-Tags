@@ -16,12 +16,18 @@ const next = index >= 0 && index < pages.length - 1 ? pages[index + 1] : undefin
 ---
 
 {(previous || next) && (
-  <nav aria-label="Previous and next documentation pages">
-    <layout-cluster justify="space-between" align="center" gap="var(--space-md)">
-      {previous
-        ? <a rel="prev" href={buildHref(base, previous.slug)} data-astro-prefetch="viewport"><small>Previous</small><br />{previous.label}</a>
-        : <span aria-hidden="true"></span>}
-      {next && <a rel="next" href={buildHref(base, next.slug)} data-astro-prefetch="viewport"><small>Next</small><br />{next.label}</a>}
-    </layout-cluster>
+  <nav class="next-docs__prev-next" aria-label="Previous and next documentation pages">
+    {previous && (
+      <a class="next-docs__prev-next-link" data-direction="previous" rel="prev" href={buildHref(base, previous.slug)} data-astro-prefetch="viewport">
+        <span class="next-docs__prev-next-label">← Previous</span>
+        <span class="next-docs__prev-next-title">{previous.label}</span>
+      </a>
+    )}
+    {next && (
+      <a class="next-docs__prev-next-link" data-direction="next" rel="next" href={buildHref(base, next.slug)} data-astro-prefetch="viewport">
+        <span class="next-docs__prev-next-label">Next →</span>
+        <span class="next-docs__prev-next-title">{next.label}</span>
+      </a>
+    )}
   </nav>
 )}

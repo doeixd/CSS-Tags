@@ -361,3 +361,25 @@ they can be removed.
   their isolated preview roots, and browser QA confirms alignment, wrapping,
   copy controls, syntax highlighting, and page scrolling at desktop and mobile
   sizes.
+
+## FB-023 — Isolated examples exposed theme and carousel contract drift
+
+- Status: `verified`
+- Exposed by: rendering the shipped components inside the documentation's live
+  preview roots at desktop and mobile widths.
+- Reproduction: preview roots restored default theme inputs instead of the
+  documentation theme, heading measure wrapped titles prematurely, and the
+  carousel demo duplicated behavior while its fixed-width slides overflowed
+  narrow previews and its controls could appear before enhancement.
+- Library solution: heading measure is a wider semantic token; carousel slides
+  occupy the host width; navigation uses themeable component tokens; controls
+  appear only after successful enhancement; and inactive slides are hidden
+  from assistive technology and made inert.
+- Documentation solution: preview roots retain DOM and selector isolation while
+  inheriting live theme inputs, and the carousel example initializes through
+  the shipped JavaScript module. Search, outline nesting, and sequential page
+  navigation now use compact, readable patterns from the previous site.
+- Removal condition: the build audit requires the shared carousel initializer,
+  full-width slide contract, enhancement flag, inert inactive slides, and
+  inherited preview theme inputs; browser QA confirms search, outline depth,
+  carousel controls, and page navigation at desktop and mobile widths.

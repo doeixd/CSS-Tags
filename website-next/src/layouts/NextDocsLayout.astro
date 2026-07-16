@@ -122,7 +122,7 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
                     <strong>On this page</strong>
                     <ul data-list-navigation data-variant="flush">
                       {outline.map((heading) => (
-                        <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+                        <li data-depth={heading.depth}><a href={`#${heading.slug}`}>{heading.text}</a></li>
                       ))}
                     </ul>
                   </nav>

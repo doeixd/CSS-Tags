@@ -1,6 +1,6 @@
 ---
 title: Carousel Component
-description: The `carousel` component provides a responsive, touch-friendly carousel with smooth animations and navigation controls. It uses scroll snap for progressive enha
+description: The `carousel` component provides a responsive, touch-friendly carousel with smooth animations and navigation controls. It uses scroll snap for progressive enhancement.
 ---
 
 ## Overview
@@ -24,7 +24,7 @@ Use `carousel`, `[data-carousel]`, or `.carousel` for the host. The data-host fo
 ## Attributes
 
 ### Carousel Attributes
-- `duration`: Animation duration in milliseconds (default: `500ms`)
+- `duration`: Animation duration in milliseconds (default: `300ms`)
 - `timing-function`: CSS timing function (default: `'cubic-bezier(0.4, 0, 0.2, 1)'`)
 - `radius`: Border radius for the carousel container
 
@@ -80,13 +80,22 @@ Use `carousel`, `[data-carousel]`, or `.carousel` for the host. The data-host fo
 ## CSS Custom Properties
 - `--slide-duration`: Animation duration (from `duration` attribute)
 - `--slide-timing`: Animation timing function (from `timing-function` attribute)
+- `--carousel-radius`
+- `--carousel-trigger-size`, `--carousel-trigger-inset`
+- `--carousel-trigger-background`, `--carousel-trigger-hover-background`
+- `--carousel-trigger-border-color`, `--carousel-trigger-hover-border-color`
+- `--carousel-trigger-color`, `--carousel-trigger-shadow`
 
 ## Progressive Enhancement
 The carousel works without JavaScript using native scroll snap behavior. When JavaScript loads (from `carousel.js`), it enhances with:
 - Transform-based animations instead of scrolling
 - Programmatic navigation
 - Touch gesture support
-- Keyboard navigation
+- Left/Right keyboard navigation while focus is inside the carousel
+
+Navigation buttons remain hidden until JavaScript initializes. Without
+JavaScript, full-width slides remain usable through native scrolling and
+scroll snap instead of presenting controls that cannot act.
 
 ## Accessibility
 - **Motion Preferences**: Transitions disabled when `prefers-reduced-motion: reduce`

@@ -181,6 +181,16 @@
   --transform-button-hover: none;
   --transform-button-active: none;
 
+  /* Carousel */
+  --carousel-radius: var(--radius-lg, 0.75rem);
+  --carousel-trigger-size: 2.75rem;
+  --carousel-trigger-inset: var(--space-sm, 0.75rem);
+  --carousel-trigger-background: color-mix(in oklch, var(--base) 88%, transparent);
+  --carousel-trigger-hover-background: var(--base);
+  --carousel-trigger-border-color: var(--outline-subtle);
+  --carousel-trigger-hover-border-color: var(--outline-overt);
+  --carousel-trigger-color: var(--text-overt);
+
   /* ========== SPACING SYSTEM ========== */
   /* Spacing Scale */
   --spacing-0: 0;
@@ -319,7 +329,7 @@
 
   /* Typography Measure Tokens */
   --measure-body: 68ch;
-  --measure-heading: 18ch;
+  --measure-heading: 26ch;
   --measure-code: 80ch;
   --measure-wide: 80ch;
 
