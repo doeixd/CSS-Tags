@@ -50,9 +50,8 @@ const base = normalizeBase(import.meta.env.BASE_URL);
     requestAnimationFrame(() => {
       const sidebarRect = sidebar.getBoundingClientRect();
       const currentRect = current.getBoundingClientRect();
-      if (currentRect.top < sidebarRect.top || currentRect.bottom > sidebarRect.bottom) {
-        sidebar.scrollTop += currentRect.top - sidebarRect.top - sidebar.clientHeight / 3;
-      }
+      const targetOffset = Math.min(sidebar.clientHeight / 3, 12 * 16);
+      sidebar.scrollTop += currentRect.top - sidebarRect.top - targetOffset;
     });
   }
 
