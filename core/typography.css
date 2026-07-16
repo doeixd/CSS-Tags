@@ -50,15 +50,15 @@
   color: var(--text-subtle);
   font-size: var(--font-size-lead);
   line-height: var(--line-height-lead);
-  max-inline-size: var(--measure-body);
+  max-inline-size: var(--measure-prose, var(--measure-body));
 }
 
 :is(.caption, [data-caption], text[variant="caption"]) {
   --_fs: var(--font-size-caption);
   display: block;
   color: var(--text-muted);
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-normal);
+  font-size: var(--font-size-meta, var(--font-size-caption));
+  line-height: var(--line-height-meta, var(--line-height-normal));
 }
 
 :is(eyebrow, .eyebrow, [data-eyebrow], text[variant="eyebrow"]) {
@@ -76,9 +76,25 @@
 }
 
 :is(.prose, [data-prose]) {
-  max-inline-size: var(--measure-body);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
+  max-inline-size: var(--measure-prose, var(--measure-body));
+  font-family: var(--font-family-body, inherit);
+  font-size: var(--font-size-prose, var(--font-size-body));
+  line-height: var(--line-height-prose, var(--line-height-body));
+  overflow-wrap: break-word;
+}
+
+:is(.prose-compact, [data-prose="compact"]) {
+  --space-flow: 0.75em;
+  --space-heading-top: 1.4em;
+  --space-rich-block: 1.1em;
+}
+
+:is(.prose-wide, [data-prose="wide"], [data-prose-width="wide"]) {
+  max-inline-size: var(--measure-wide);
+}
+
+:is(.prose-unbounded, [data-prose="unbounded"], [data-prose-width="none"]) {
+  max-inline-size: none;
 }
 
 :is(.prose, [data-prose]) > * {
@@ -102,6 +118,15 @@
   padding-inline-start: var(--space-list-indent, 1.5em);
 }
 
+:is(.prose, [data-prose]) :is(li > ul, li > ol) {
+  margin-block-start: var(--space-list-item, 0.5em);
+  margin-block-end: 0;
+}
+
+:is(.prose, [data-prose]) a {
+  overflow-wrap: var(--prose-link-wrap, anywhere);
+}
+
 :is(.prose, [data-prose]) :is(pre, figure, blockquote, hr, .callout, [data-callout]) {
   margin-block: var(--space-rich-block, 1.5em);
 }
@@ -111,10 +136,152 @@
   block-size: auto;
 }
 
+:is(.prose, [data-prose]) :is(video, iframe, svg) {
+  max-inline-size: 100%;
+}
+
+:is(.prose, [data-prose]) iframe {
+  inline-size: 100%;
+  min-block-size: var(--prose-embed-min-height, 18rem);
+  border: 0;
+}
+
+:is(.prose, [data-prose]) figure > :is(img, picture, video, iframe) {
+  display: block;
+  margin-inline: auto;
+}
+
+/* Markdown and CMS output cannot always add the preferred data-table wrapper. */
+:is(.prose, [data-prose]) > table {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: var(--prose-table-scrollbar-gutter, stable);
+  scrollbar-width: var(--prose-table-scrollbar-width, thin);
+}
+
+:is(.prose, [data-prose]) :not(pre) > code {
+  overflow-wrap: var(--prose-inline-code-wrap, anywhere);
+  word-break: var(--prose-inline-code-word-break, normal);
+}
+
 :is(.prose, [data-prose]) figcaption {
   margin-block-start: var(--space-figure-caption-top, 0.5rem);
   color: var(--text-muted);
   font-size: var(--font-size-caption);
+}
+
+:is(.prose, [data-prose]) table > caption {
+  padding-block: var(--prose-table-caption-padding, 0 0.75em);
+  color: var(--prose-table-caption-color, var(--text-muted));
+  font-size: var(--prose-table-caption-font-size, var(--font-size-caption));
+  text-align: start;
+}
+
+:is(.prose, [data-prose]) :is(dt, dd) {
+  min-inline-size: 0;
+}
+
+:is(.prose, [data-prose]) dt:not(:first-child) {
+  margin-block-start: var(--prose-definition-term-gap, 1em);
+}
+
+:is(.prose, [data-prose]) dd {
+  margin-block-start: var(--prose-definition-gap, 0.35em);
+}
+
+:is(.prose, [data-prose]) blockquote > :is(footer, cite) {
+  display: block;
+  margin-block-start: var(--prose-quote-cite-gap, 0.75em);
+  color: var(--prose-quote-cite-color, var(--text-muted));
+  font-size: var(--prose-quote-cite-font-size, var(--font-size-sm));
+  font-style: normal;
+}
+
+:is(.prose, [data-prose]) blockquote > footer::before {
+  content: var(--prose-quote-cite-prefix, "— ");
+}
+
+/* GitHub, CommonMark, and many CMS renderers use these task-list hooks. */
+:is(.prose, [data-prose]) :is(.contains-task-list, [data-task-list]) {
+  list-style: none;
+}
+
+:is(.prose, [data-prose]) :is(.task-list-item, [data-task-list-item]) {
+  list-style: none;
+}
+
+:is(.prose, [data-prose]) :is(.task-list-item, [data-task-list-item])
+  > input[type="checkbox"]:first-child {
+  inline-size: 1em;
+  block-size: 1em;
+  margin-inline-start: calc(-1 * var(--prose-task-marker-offset, 1.5em));
+  margin-inline-end: var(--prose-task-gap, 0.6em);
+  opacity: 1;
+  vertical-align: -0.1em;
+}
+
+/* Footnote output used by remark/rehype, GitHub, and compatible CMS engines. */
+:is(.prose, [data-prose]) :is([data-footnotes], .footnotes) {
+  display: grid;
+  gap: var(--prose-footnotes-gap, 0.75em);
+  margin-block-start: var(--space-rich-block, 1.5em);
+  padding-block-start: var(--prose-footnotes-padding-block-start, 1.5em);
+  border-block-start: var(--prose-footnotes-border, 1px solid var(--outline-subtle));
+  color: var(--prose-footnotes-color, var(--text-subtle));
+  font-size: var(--prose-footnotes-font-size, var(--font-size-sm));
+}
+
+:is(.prose, [data-prose]) :is([data-footnotes], .footnotes) > * {
+  margin-block: 0;
+}
+
+:is(.prose, [data-prose]) :is([data-footnotes], .footnotes) li:target {
+  border-radius: var(--radius-sm);
+  background: var(--prose-footnote-target-background, var(--highlight-bg-subtle));
+}
+
+:is(.prose, [data-prose]) :is([data-footnote-ref], [data-footnote-backref]) {
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+:is(.prose, [data-prose]) [data-footnote-backref] {
+  margin-inline-start: var(--prose-footnote-backref-gap, 0.25em);
+}
+
+:is(.prose, [data-prose]) :is(h1, h2, h3, h4, h5, h6, [id]) {
+  scroll-margin-block-start: var(--prose-heading-scroll-margin, 2rem);
+}
+
+:is(.prose, [data-prose]) :is(h1, h2, h3, h4, h5, h6)
+  > :is(.heading-anchor__link, [data-heading-anchor]) {
+  display: inline-flex;
+  margin-inline-start: var(--prose-heading-anchor-gap, 0.35em);
+  color: var(--prose-heading-anchor-color, var(--accent));
+  font-size: 0.55em;
+  line-height: 1;
+  opacity: var(--prose-heading-anchor-opacity, 0);
+  vertical-align: middle;
+  transition: opacity var(--transition-duration, 150ms) var(--transition-timing, ease-out);
+}
+
+:is(.prose, [data-prose]) :is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within)
+  > :is(.heading-anchor__link, [data-heading-anchor]),
+:is(.prose, [data-prose]) :is(.heading-anchor__link, [data-heading-anchor]):focus-visible {
+  opacity: var(--prose-heading-anchor-visible-opacity, 0.75);
+}
+
+:is(.prose, [data-prose]) > details {
+  margin-block: var(--prose-details-margin, var(--space-rich-block, 1.5em));
+}
+
+@media (hover: none) {
+  :is(.prose, [data-prose]) :is(h1, h2, h3, h4, h5, h6)
+    > :is(.heading-anchor__link, [data-heading-anchor]) {
+    opacity: var(--prose-heading-anchor-touch-opacity, 0.55);
+  }
 }
 
 :is(.prose, [data-prose]) mark {

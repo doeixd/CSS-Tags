@@ -35,6 +35,9 @@ body, h1, h2, h3, h4, p { margin: 0; }
   color-scheme: light dark;
 }
 
+:root[data-color-scheme="light"] { color-scheme: light; }
+:root[data-color-scheme="dark"] { color-scheme: dark; }
+
 body {
   /*
    * 3. Set up the global breakpoint state machine.
@@ -46,8 +49,8 @@ body {
   /* Apply base theme colors */
   background-color: var(--theme-bg);
   color: var(--theme-text);
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
+  font-family: var(--font-family-body, system-ui, sans-serif);
+  line-height: var(--line-height-body, 1.6);
 }
 
 
@@ -57,12 +60,3 @@ body {
 @media (max-width: var(--bp-xl)) { body { --breakpoint-active: lg; } }
 @media (max-width: var(--bp-lg)) { body { --breakpoint-active: md; } }
 @media (max-width: var(--bp-md)) { body { --breakpoint-active: sm; } }
-
-/* Automatic Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --theme-bg: oklch(20% 0.02 240);
-    --theme-text: oklch(98% 0.01 240);
-    --theme-primary: oklch(65% 0.18 240);
-  }
-}

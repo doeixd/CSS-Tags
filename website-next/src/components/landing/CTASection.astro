@@ -1,0 +1,138 @@
+---
+interface Props {
+    title: string;
+    description?: string;
+    variant?: 'default' | 'accent' | 'minimal';
+    align?: 'left' | 'center';
+    class?: string;
+}
+
+const {
+    title,
+    description,
+    variant = 'default',
+    align = 'center',
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<section
+    class={`cta-section cta-section--${variant} cta-section--${align} ${className || ''}`}
+    {...rest}
+>
+    <div class="cta-section__content">
+        <h2 class="cta-section__title">{title}</h2>
+        {description && (
+            <p class="cta-section__description">{description}</p>
+        )}
+        <div class="cta-section__actions">
+            <slot />
+        </div>
+    </div>
+</section>
+
+<style>
+    .cta-section {
+        width: 100%;
+        padding: var(--cta-section-padding-y, var(--space-2xl)) var(--cta-section-padding-x, var(--space-2xl));
+        border-radius: var(--cta-section-border-radius, var(--border-radius-lg));
+    }
+
+    .cta-section--default {
+        background: var(--cta-section-bg, var(--bg-secondary));
+        border: var(--cta-section-border, 1px solid var(--border-color));
+    }
+
+    .cta-section--accent {
+        background: var(--cta-section-accent-bg, linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%));
+        border: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .cta-section--accent {
+            background: var(--cta-section-accent-bg-dark, linear-gradient(135deg, var(--accent-dark) 0%, var(--bg-secondary) 100%));
+        }
+    }
+
+    :root.dark-mode .cta-section--accent {
+        background: var(--cta-section-accent-bg-dark, linear-gradient(135deg, var(--accent-dark) 0%, var(--bg-secondary) 100%));
+    }
+
+    .cta-section--minimal {
+        background: transparent;
+        border: none;
+        padding: var(--cta-section-minimal-padding-y, var(--space-xl)) var(--cta-section-minimal-padding-x, 0);
+    }
+
+    .cta-section__content {
+        max-width: var(--cta-section-content-max-width, 700px);
+    }
+
+    .cta-section--center .cta-section__content {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .cta-section--left .cta-section__content {
+        text-align: left;
+    }
+
+    .cta-section__title {
+        font-size: var(--cta-section-title-size, var(--font-size-3xl));
+        font-weight: var(--cta-section-title-weight, var(--font-weight-bold));
+        color: var(--text-primary);
+        margin: 0 0 var(--cta-section-title-margin-bottom, var(--space-lg)) 0;
+        line-height: 1.2;
+    }
+
+    .cta-section__description {
+        font-size: var(--cta-section-description-size, var(--font-size-lg));
+        color: var(--text-secondary);
+        margin: 0 0 var(--cta-section-description-margin-bottom, var(--space-xl)) 0;
+        line-height: 1.6;
+    }
+
+    .cta-section__actions {
+        display: flex;
+        gap: var(--cta-section-actions-gap, var(--space-lg));
+        flex-wrap: wrap;
+    }
+
+    .cta-section--center .cta-section__actions {
+        justify-content: center;
+    }
+
+    .cta-section--left .cta-section__actions {
+        justify-content: flex-start;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .cta-section {
+            padding: var(--cta-section-padding-y-mobile, var(--space-xl)) var(--cta-section-padding-x-mobile, var(--space-lg));
+        }
+
+        .cta-section--minimal {
+            padding: var(--cta-section-minimal-padding-y-mobile, var(--space-lg)) var(--cta-section-minimal-padding-x-mobile, 0);
+        }
+
+        .cta-section__title {
+            font-size: var(--cta-section-title-size-mobile, var(--font-size-2xl));
+        }
+
+        .cta-section__description {
+            font-size: var(--cta-section-description-size-mobile, var(--font-size-base));
+        }
+
+        .cta-section__actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .cta-section__actions :global(a),
+        .cta-section__actions :global(button) {
+            width: 100%;
+        }
+    }
+</style>

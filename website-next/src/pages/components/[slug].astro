@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from "astro:content";
+import NextDocsLayout from "../../layouts/NextDocsLayout.astro";
+import NextBreadcrumbs from "../../components/NextBreadcrumbs.astro";
+import NextPrevNavigation from "../../components/NextPrevNavigation.astro";
+import PageExample from "../../components/PageExample.astro";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  return docs
+    .filter((entry) => entry.id.startsWith("components/") && entry.id !== "components/site-shell")
+    .map((entry) => ({
+      params: { slug: entry.id.slice("components/".length) },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const currentPath = entry.id;
+const hasRenderedExample = /<(?:LiveExample|DialogExample|TabsExample|ColorPaletteViewer)\b/.test(entry.body);
+---
+
+<NextDocsLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  currentPath={currentPath}
+  headings={headings}
+>
+  <NextBreadcrumbs currentPath={currentPath} title={entry.data.title} />
+  <article data-prose>
+    <h1>{entry.data.title}</h1>
+    {entry.data.description && <p class="lead">{entry.data.description}</p>}
+    {!hasRenderedExample && <PageExample currentPath={currentPath} pageTitle={entry.data.title} />}
+    <Content />
+    <NextPrevNavigation currentPath={currentPath} />
+  </article>
+</NextDocsLayout>

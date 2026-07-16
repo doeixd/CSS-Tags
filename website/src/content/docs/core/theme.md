@@ -28,18 +28,42 @@ The theme system starts with a minimal set of customizable variables that define
   /* Theme Configuration */
   --surface-saturation: 0.015;  /* Surface chroma multiplier */
   --contrast-factor: 1.0;       /* Overall contrast multiplier */
-  --outline-width: 1px;         /* Default outline width */
+  --border-width: 1px;          /* Default border width */
+  --density-factor: 1;          /* Shared spacing scale */
+  --radius-factor: 1;           /* Shared corner-radius scale */
 
   /* Color Relationships */
   --secondary-hue-shift: 60;    /* Degrees to shift for secondary color */
   --tertiary-hue-shift: -90;    /* Degrees to shift for tertiary color */
 
-  /* Bedrock Mode */
-  --bedrock-mode: complementary; /* 'complementary' or 'dark' */
 }
 ```
 
 These inputs control the entire visual identity of your application.
+
+### Density and radius scales
+
+Two unitless factors provide coherent global knobs without replacing individual
+tokens:
+
+```css
+:root {
+  --density-factor: 0.85; /* Scales --space-xs through --space-xl. */
+  --radius-factor: 1.25;  /* Scales the non-pill radius hierarchy. */
+}
+```
+
+Both default to `1`. The preferred radius names are `--radius-xs`,
+`--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, and
+`--radius-full`; the longer `--border-radius-*` names remain compatible
+aliases.
+
+The documentation header's collapsed **Theme** panel edits the important root
+inputs live, persists explicit overrides locally, and generates copyable
+`:root` CSS. Reset removes inline overrides and returns control to the active
+theme pack and color scheme.
+
+
 
 ## Automatic Palette Generation
 
@@ -142,6 +166,31 @@ overt > default > subtle > muted
 --text-link: oklch(from var(--accent) calc(l + var(--l-delta-1-down)) ...);
 --highlight-bg-subtle: oklch(from var(--base) calc(l + var(--l-delta-3-down)) ...);
 ```
+
++## Explicit Light, Dark, And System Modes
+
+Automatic mode is the default. Set `data-color-scheme` on the root element when
+an application offers its own theme control:
+
+```html
+<html data-color-scheme="dark">
+```
+
+The accepted values are `light` and `dark`. Remove the attribute to return to
+`prefers-color-scheme`:
+
+```js
+const root = document.documentElement;
+
+root.dataset.colorScheme = "light";
+root.dataset.colorScheme = "dark";
+delete root.dataset.colorScheme; // System preference
+```
+
+This is separate from `data-theme`: color scheme chooses light or dark
+contrast, while `data-theme="ocean"` (or another brand) chooses the palette.
+Set the attribute before first paint when persisting the user's choice so
+native controls do not flash in the wrong mode.
 
 ## Dark Mode Theme
 
@@ -341,3 +390,9 @@ Components consume theme variables:
 - **Version Control**: Track theme changes
 - **User Feedback**: Monitor accessibility issues
 - **Browser Updates**: Leverage new color features
+
+## Export from the Theme creator
+
+The replacement documentation Theme creator exports authored color, spacing,
+shape, and typography inputs inside a trailing `css-tags-theme` layer. Load the
+downloaded file after the library to apply it without `!important`.

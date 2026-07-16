@@ -1,0 +1,111 @@
+---
+title: Disclosure
+description: Native details/summary defaults, accordions, and no-JS disclosure-based tabs.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+## Overview
+The disclosure layer provides better defaults for native `details` and `summary`, plus accordion and no-JS details-based tab patterns.
+
+## Basic Disclosure
+
+<LiveExample title="Native disclosure" description="Click the summary or focus it and press Enter.">
+  <details open>
+    <summary>More information</summary>
+    <p>Native behavior provides keyboard access and exposes the open state to assistive technology.</p>
+  </details>
+</LiveExample>
+
+```html
+<details>
+  <summary>More information</summary>
+  <p>Native disclosure content.</p>
+</details>
+```
+
+## Accordion
+
+The class and `data-*` forms are aliases; choose one. The shared `name` makes the native disclosures mutually exclusive in supporting browsers.
+
+<LiveExample title="FAQ accordion">
+  <div data-accordion>
+    <details name="docs-faq" open>
+      <summary>Does it require JavaScript?</summary>
+      <p>No. This interaction belongs to the browser.</p>
+    </details>
+    <details name="docs-faq">
+      <summary>Can I keep several answers open?</summary>
+      <p>Yes. Omit the shared <code>name</code> attribute.</p>
+    </details>
+  </div>
+</LiveExample>
+
+```html
+<div data-accordion>
+  <details name="faq" open>
+    <summary>Question one</summary>
+    <p>Answer one.</p>
+  </details>
+  <details name="faq">
+    <summary>Question two</summary>
+    <p>Answer two.</p>
+  </details>
+</div>
+```
+
+## Details Tabs
+
+This is a disclosure-driven, no-JavaScript alternative—not a substitute for formal ARIA tab semantics. Set `--tab-count` on the host and `--n` on each item so the summaries occupy the correct columns.
+
+<LiveExample title="Disclosure-driven tabs" description="Uses native details with a shared name.">
+  <div data-tabs-details style="--tab-count: 3">
+    <details name="docs-product-tabs" open style="--n: 1">
+      <summary>Overview</summary>
+      <p>A CSS-only panel switcher for progressively enhanced content.</p>
+    </details>
+    <details name="docs-product-tabs" style="--n: 2">
+      <summary>Tokens</summary>
+      <p>Customize the border, padding, surface, and active color.</p>
+    </details>
+    <details name="docs-product-tabs" style="--n: 3">
+      <summary>Support</summary>
+      <p>It falls back to ordinary disclosure widgets.</p>
+    </details>
+  </div>
+</LiveExample>
+
+```html
+<div data-tabs-details style="--tab-count: 2">
+  <details name="product-tabs" open style="--n: 1">
+    <summary>Overview</summary>
+    <p>Works without JavaScript.</p>
+  </details>
+  <details name="product-tabs" style="--n: 2">
+    <summary>API</summary>
+    <p>Exclusive panels in supporting browsers.</p>
+  </details>
+</div>
+```
+
+## Tokens
+- `--disclosure-border-color`
+- `--disclosure-border-width`
+- `--disclosure-bg`
+- `--disclosure-summary-bg`
+- `--disclosure-summary-color`
+- `--disclosure-summary-hover-bg`
+- `--disclosure-summary-hover-color`
+- `--disclosure-content-bg`
+- `--disclosure-radius`
+- `--disclosure-padding`
+- `--disclosure-gap`
+- `--accordion-gap`
+- `--tab-count`
+- `--tabs-active-color`
+- `--tabs-panel-padding`
+
+## Notes
+- `details`/`summary` are the recommended no-JS disclosure path.
+- `details` with shared `name` is useful for accordions and disclosure-driven tab-like interfaces.
+- ARIA tabs remain the better choice when you need formal tab semantics and keyboard-controlled panel activation.

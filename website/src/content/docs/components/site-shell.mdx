@@ -1,0 +1,98 @@
+---
+title: Site Header and Footer
+description: Native-first, responsive page shell surfaces with sticky, compact, bordered, and centered variants.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+## Header
+
+The native `header` is canonical. It composes the existing container,
+navigation, actions, and layout primitives.
+
+<LiveExample title="Responsive site header" description="Narrow the preview to see navigation wrap without losing its semantics.">
+  <header data-site-header>
+    <container pad="var(--space-sm)">
+      <a data-site-brand href="#home">CSS Tags</a>
+      <nav data-header-navigation aria-label="Example primary navigation">
+        <layout-cluster gap="var(--space-md)">
+          <a href="#docs">Docs</a>
+          <a href="#examples">Examples</a>
+        </layout-cluster>
+      </nav>
+      <div data-header-actions>
+        <button type="button">Theme</button>
+      </div>
+    </container>
+  </header>
+</LiveExample>
+
+```html
+<header class="site-header" data-sticky>
+  <container>
+    <a data-site-brand href="/">CSS Tags</a>
+    <nav data-header-navigation aria-label="Primary">...</nav>
+    <div data-header-actions>...</div>
+  </container>
+</header>
+```
+
+Equivalent hosts are `header.site-header`, `header[data-site-header]`, and
+`site-header`. A custom host needs `role="banner"`.
+
+- Sticky: `data-sticky`, `sticky`, or `.is-sticky`
+- Elevated: `data-elevated`, `elevated`, or `.is-elevated`
+- Compact: `data-size="compact"`, `compact`, or `.is-compact`
+
+Elevation is opt-in; the default header remains a flat bordered surface.
+
+## Footer
+
+<LiveExample title="Responsive site footer">
+  <footer data-site-footer data-bordered>
+    <container pad="var(--space-sm)">
+      <div data-footer-grid>
+        <section>
+          <h3>Product</h3>
+          <nav aria-label="Example product links"><a href="#docs">Documentation</a></nav>
+        </section>
+        <section>
+          <h3>Community</h3>
+          <nav aria-label="Example community links"><a href="#github">GitHub</a></nav>
+        </section>
+      </div>
+      <div data-footer-meta>
+        <span>CSS Tags</span>
+        <span>Built with semantic CSS</span>
+      </div>
+    </container>
+  </footer>
+</LiveExample>
+
+```html
+<footer class="site-footer" data-bordered>
+  <container>
+    <div data-footer-grid>...</div>
+    <div data-footer-meta>...</div>
+  </container>
+</footer>
+```
+
+Equivalent hosts are `footer.site-footer`, `footer[data-site-footer]`, and
+`site-footer`. A custom host needs `role="contentinfo"`.
+
+- Border: `data-bordered`, `bordered`, or `.is-bordered`
+- Compact: `data-size="compact"`, `compact`, or `.is-compact`
+- Centered: `data-align="center"`, `centered`, or `.is-centered`
+
+## Important tokens
+
+Header customization starts with `--site-header-background`,
+`--site-header-color`, `--site-header-border`, `--site-header-min-height`,
+`--site-header-padding-inline`, `--site-header-gap`, and
+`--site-header-actions-gap`.
+
+Footer customization starts with `--site-footer-background`,
+`--site-footer-color`, `--site-footer-padding-block`, `--site-footer-gap`,
+`--site-footer-grid-gap`, `--site-footer-column-min`, and
+`--site-footer-meta-border`.

@@ -1,0 +1,69 @@
+---
+title: Dialog and Modal
+description: Style native dialogs with accessible browser behavior, plus a compatibility surface for application-managed overlays.
+---
+
+import DialogExample from '../../../components/DialogExample.astro';
+
+Use a native `<dialog>` whenever the user must respond to content in an overlay. CSS Tags styles `dialog[data-modal]` and `dialog.modal`; the browser provides the top layer, Escape handling, focus placement, and return focus when `showModal()` is used.
+
+<DialogExample />
+
+## Recommended markup
+
+```html
+<button type="button" id="open-publish">Review changes</button>
+
+<dialog data-modal aria-labelledby="publish-title" id="publish-dialog">
+  <h2 id="publish-title">Publish these changes?</h2>
+  <p>The updated documentation will be visible to everyone.</p>
+
+  <form method="dialog">
+    <button value="cancel">Keep editing</button>
+    <button value="confirm">Publish</button>
+  </form>
+</dialog>
+
+<script>
+  const dialog = document.querySelector('#publish-dialog');
+  document.querySelector('#open-publish').addEventListener('click', () => {
+    dialog.showModal();
+  });
+</script>
+```
+
+`method="dialog"` closes the dialog without requiring a custom close handler. Read `dialog.returnValue` from the `close` event when the selected action matters.
+
+## Supported hosts
+
+| Host | Use |
+| --- | --- |
+| `<dialog data-modal>` | Recommended semantic API |
+| `<dialog class="modal">` | Class-based native dialog |
+| `<modal-dialog>` | Visual host only; behavior and semantics are your responsibility |
+| `[data-modal-overlay]` / `.modal-overlay` | Compatibility hook for an application-managed overlay |
+
+The compatibility overlay expects a child with `[data-modal-panel]` or `.modal__panel`. Prefer native `<dialog>` for new work.
+
+## Theme tokens
+
+```css
+:root {
+  --modal-width: 42rem;
+  --modal-padding: var(--space-xl);
+  --modal-bg: var(--surface-default);
+  --modal-text: var(--text-default);
+  --modal-border-color: var(--outline-subtle);
+  --modal-radius: var(--radius-lg);
+  --modal-backdrop: rgb(8 12 20 / 0.68);
+  --modal-backdrop-blur: 4px;
+}
+```
+
+## Accessibility checklist
+
+- Give the dialog an accessible name with `aria-labelledby` or `aria-label`.
+- Call `showModal()`, not only `show()`, when background content must be inert.
+- Put the least destructive action first and avoid focusing a destructive action automatically.
+- Do not add `role="dialog"` to native `<dialog>`; it already has the correct semantics.
+- Keep essential instructions in visible text rather than relying on the backdrop.

@@ -71,6 +71,73 @@ Calculates black or white for optimal contrast against a background.
 
 ## Mixins
 
+### Fallback-first usage
+
+Custom CSS mixins are an enhancement, not a dependency of CSS Tags. Keep the
+ordinary declarations first, then apply the helper as a forward-looking
+single-source recipe. A browser that ignores the experimental invocation still
+receives the complete layout:
+
+```css
+.action-row {
+  /* Browser-compatible contract. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem);
+
+  /* Optional experimental equivalent. */
+  @apply --cluster(var(--space-sm), center, flex-start);
+}
+```
+
+Do not remove the explicit declarations from a public component until custom
+mixins are a reliable cross-browser baseline. The helpers are currently most
+useful for experimentation, generators, and projects that deliberately target
+supporting engines.
+
+### Composition recipe mixins
+
+- `--stack(--gap, --align)` creates a min-width-safe one-dimensional block
+  layout.
+- `--cluster(--gap, --align, --justify)` creates a wrapping inline group for
+  actions, tags, and metadata.
+- `--surface-frame(--background, --color, --border-color, --radius,
+  --padding, --shadow)` applies the shared surface/border/radius recipe.
+- `--content-region-rhythm(--gap)` gives headings, paragraphs, and lists a
+  compact local rhythm inside cards, media objects, and similar UI blocks.
+- `--focus-ring(--color, --width, --offset)` applies the library's visible
+  keyboard-focus treatment.
+
+The arguments accept raw CSS values and semantic tokens. They are intentionally
+recipes rather than component APIs: component-specific public variables remain
+the stable theming surface.
+
+```css
+.result-card {
+  /* Complete fallback. */
+  display: grid;
+  gap: var(--space-md);
+  min-inline-size: 0;
+  padding: var(--space-md);
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-default);
+  color: var(--text-default);
+
+  /* Optional recipe form. */
+  @apply --stack(var(--space-md));
+  @apply --surface-frame(
+    var(--surface-default),
+    var(--text-default),
+    var(--outline-subtle),
+    var(--radius-lg),
+    var(--space-md),
+    none
+  );
+}
+```
+
 ### --center-grid Mixin
 Centers content using CSS Grid.
 

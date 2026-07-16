@@ -7,10 +7,10 @@
 
 :is(.form-input, .form-button, .form-select, .form-textarea) {
   box-sizing: border-box;
-  font-family: inherit;
-  font-size: var(--font-size-base, 1rem);
+  font-family: var(--font-family-ui, inherit);
+  font-size: var(--font-size-control, var(--font-size-base, 1rem));
   font-weight: var(--form-control-weight, var(--font-weight-normal, 400));
-  line-height: var(--line-height-normal, 1.5);
+  line-height: var(--line-height-control, var(--line-height-normal, 1.5));
 }
 
 :is(.form-input, .form-select, .form-textarea) {
@@ -55,6 +55,22 @@
 
 .form-select {
   cursor: pointer;
+}
+
+/* `appearance: base-select` turns the control into a customizable button.
+ * Preserve the inline selected-content/picker-icon arrangement instead of
+ * inheriting the generic block layout used by text fields. */
+@supports (appearance: base-select) {
+  .form-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .form-select::picker-icon {
+    flex: 0 0 auto;
+    margin-inline-start: var(--form-select-icon-gap, var(--space-xs, 0.5rem));
+  }
 }
 
 .form-textarea {

@@ -1,0 +1,253 @@
+---
+// Checkbox.astro - Accessible checkbox component
+interface Props {
+  checked?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  indeterminate?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  label?: string;
+  helpText?: string;
+  errorText?: string;
+}
+
+const {
+  checked = false,
+  disabled = false,
+  required = false,
+  indeterminate = false,
+  size = 'md',
+  class: className,
+  label,
+  helpText,
+  errorText,
+  ...rest
+} = Astro.props;
+---
+
+<div class={`form-field ${className || ''}`}>
+  <label class="checkbox-wrapper">
+    <input
+      type="checkbox"
+      class={`checkbox-input checkbox-input--${size}`}
+      checked={checked}
+      disabled={disabled}
+      required={required}
+      aria-describedby={helpText ? `${rest.id}-help` : errorText ? `${rest.id}-error` : undefined}
+      {...rest}
+    />
+    <span class={`checkbox-checkmark checkbox-checkmark--${size} ${indeterminate ? 'checkbox-checkmark--indeterminate' : ''}`} aria-hidden="true">
+      {indeterminate ? (
+        <svg width="10" height="2" viewBox="0 0 10 2" fill="none">
+          <path d="M1 1h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      ) : (
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path d="M1 4l2.5 2.5L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      )}
+    </span>
+    {label && (
+      <span class="checkbox-label">
+        {label}
+        {required && <span class="form-required" aria-label="required">*</span>}
+      </span>
+    )}
+  </label>
+
+  {helpText && (
+    <div class="form-help" id={`${rest.id}-help`}>
+      {helpText}
+    </div>
+  )}
+
+  {errorText && (
+    <div class="form-error" id={`${rest.id}-error`} role="alert">
+      {errorText}
+    </div>
+  )}
+</div>
+
+<style>
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-wrapper:has(.checkbox-input:disabled) {
+    cursor: not-allowed;
+  }
+
+  .checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .checkbox-checkmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-primary);
+    color: transparent;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .checkbox-input:focus-visible + .checkbox-checkmark {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .checkbox-input:checked + .checkbox-checkmark {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .checkbox-input:checked + .checkbox-checkmark.checkbox-checkmark--indeterminate {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .checkbox-input:disabled + .checkbox-checkmark {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    opacity: 0.6;
+  }
+
+  .checkbox-input:disabled:checked + .checkbox-checkmark {
+    background: var(--text-secondary);
+    border-color: var(--text-secondary);
+  }
+
+  /* Size variants */
+  .checkbox-checkmark--sm {
+    width: var(--checkbox-size-sm, 1rem);
+    height: var(--checkbox-size-sm, 1rem);
+  }
+
+  .checkbox-checkmark--md {
+    width: var(--checkbox-size-md, 1.25rem);
+    height: var(--checkbox-size-md, 1.25rem);
+  }
+
+  .checkbox-checkmark--lg {
+    width: var(--checkbox-size-lg, 1.5rem);
+    height: var(--checkbox-size-lg, 1.5rem);
+  }
+
+  .checkbox-label {
+    color: var(--text-primary);
+    font-size: var(--checkbox-label-font-size, var(--font-size-base));
+    line-height: var(--line-height-body);
+    margin-top: 2px; /* Align with checkmark */
+  }
+
+  .form-required {
+    color: var(--form-required-color, #dc3545);
+    margin-left: var(--space-xs);
+  }
+
+  .form-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-left: calc(var(--checkbox-size-md, 1.25rem) + var(--space-sm));
+  }
+
+  .form-error {
+    font-size: var(--font-size-sm);
+    color: var(--form-error-color, #dc3545);
+    margin-left: calc(var(--checkbox-size-md, 1.25rem) + var(--space-sm));
+  }
+
+  /* Hover states */
+  .checkbox-wrapper:hover .checkbox-checkmark:not(.checkbox-input:disabled + &) {
+    border-color: var(--accent);
+  }
+
+  .checkbox-wrapper:hover .checkbox-input:checked + .checkbox-checkmark {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .checkbox-input:focus-visible + .checkbox-checkmark {
+      outline-color: var(--accent-light);
+    }
+
+    :root:not(.light-mode) .checkbox-wrapper:hover .checkbox-checkmark:not(.checkbox-input:disabled + &) {
+      border-color: var(--accent-light);
+    }
+
+    :root:not(.light-mode) .checkbox-wrapper:hover .checkbox-input:checked + .checkbox-checkmark {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+  }
+
+  :root.dark-mode .checkbox-input:focus-visible + .checkbox-checkmark {
+    outline-color: var(--accent-light);
+  }
+
+  :root.dark-mode .checkbox-wrapper:hover .checkbox-checkmark:not(.checkbox-input:disabled + &) {
+    border-color: var(--accent-light);
+  }
+
+  :root.dark-mode .checkbox-wrapper:hover .checkbox-input:checked + .checkbox-checkmark {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .checkbox-checkmark--lg {
+      width: var(--checkbox-size-md, 1.25rem);
+      height: var(--checkbox-size-md, 1.25rem);
+    }
+
+    .form-help,
+    .form-error {
+      margin-left: calc(var(--checkbox-size-md, 1.25rem) + var(--space-sm));
+    }
+  }
+</style>
+
+<script>
+  function setupCheckboxes() {
+    const checkboxes = document.querySelectorAll('.checkbox-input');
+
+    checkboxes.forEach(checkbox => {
+      // Handle indeterminate state
+      if (checkbox.hasAttribute('data-indeterminate')) {
+        checkbox.indeterminate = true;
+      }
+
+      // Update checkmark on change
+      checkbox.addEventListener('change', () => {
+        const checkmark = checkbox.nextElementSibling;
+        if (checkmark) {
+          checkmark.classList.toggle('checkbox-checkmark--indeterminate', checkbox.indeterminate);
+        }
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', setupCheckboxes);
+  document.addEventListener('astro:after-swap', setupCheckboxes);
+</script>

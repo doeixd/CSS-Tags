@@ -76,7 +76,9 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 @import url('components/identity.css') layer(components);
 @import url('components/navigation.css') layer(components);
 @import url('components/navigation-patterns.css') layer(components);
+@import url('components/site-shell.css') layer(components);
 @import url('components/application-patterns.css') layer(components);
+@import url('components/content-patterns.css') layer(components);
 @import url('components/masonry.css') layer(components);
 ```
 

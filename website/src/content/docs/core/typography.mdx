@@ -158,6 +158,32 @@ What prose does:
 - keeps headings tighter than body copy
 - gives figures, code blocks, blockquotes, and callouts consistent spacing
 - improves link readability inside rich content
+- bounds direct Markdown/CMS tables in their own horizontal scroll region
+
+Prose table scrollbars use `--prose-table-scrollbar-gutter` and `--prose-table-scrollbar-width`. For application data tables where you control the markup, prefer the richer `data-table` API and its overflow wrapper.
+
+Long inline code wraps with `--prose-inline-code-wrap: anywhere` so API names cannot widen a narrow article. Set it to `normal` in a scope that prefers unbroken identifiers; fenced/preformatted code keeps its horizontal scroller.
+
+## CMS and Markdown Output
+
+Prose scopes support common renderer output without requiring custom
+components:
+
+- task lists through `.contains-task-list` / `.task-list-item` or matching
+  data hooks;
+- footnotes through `[data-footnotes]`, `[data-footnote-ref]`, and
+  `[data-footnote-backref]`;
+- direct heading permalink hooks;
+- native definition lists, quote citations, table captions, figures, details,
+  and bounded embeds.
+
+Use `data-prose="compact"` for tighter editorial rhythm,
+`data-prose="wide"` for `--measure-wide`, or
+`.prose-unbounded` when layout owns the width. See the **CMS and Markdown**
+guide for complete rendered examples, accessibility requirements, integration
+footguns, and the full token list.
+
+
 
 ## Text Primitive
 The `text` primitive now supports semantic variants in addition to size/weight/color:
@@ -301,3 +327,20 @@ Tune individual scale steps without replacing the whole scale:
 - Use semantic HTML first; use the `text` primitive when you want attribute-driven control.
 - Prefer `.prose` or `[data-prose]` around longform docs/article content.
 - Tune the semantic typography tokens before overriding element selectors directly.
+
+## Contextual typography knobs
+
+Use `--font-size-prose`, `--line-height-prose`, and `--measure-prose` for
+long-form content; `--font-size-ui` and `--font-size-control` for application
+chrome; and `--font-weight-heading` plus `--letter-spacing-heading` for heading
+character. Font families have body, heading, UI, and code inputs.
+
+```css
+@layer css-tags-theme {
+  :root[data-theme="editorial"] {
+    --font-size-prose: 1.0625rem;
+    --line-height-prose: 1.725;
+    --measure-prose: 62ch;
+  }
+}
+```

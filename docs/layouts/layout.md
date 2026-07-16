@@ -7,7 +7,7 @@ This file provides a comprehensive library of declarative, property-driven layou
 - **Declarative & Semantic**: Use `<layout-grid>` instead of classes like `.l-grid`
 - **Property-Driven**: Core logic controlled by CSS Custom Properties (e.g., `--l-gap`) that can be overridden via HTML attributes
 - **Token-Integrated**: Default values pulled from global design tokens defined in `core/base.css`
-- **Composable & Context-Aware**: Designed for nesting and use container queries for responsive adaptation
+- **Composable & Context-Aware**: Designed for nesting, with opt-in container-query hosts when descendants need them
 
 ## Global Defaults
 
@@ -28,8 +28,20 @@ These can be overridden globally or per-component.
 All layout components (`[class^="layout-"]`) share these base styles:
 
 - `display: block`
-- `container-type: inline-size` with `container-name: layout-container`
 - Prevent child overflow with `min-width: 0` on direct children
+
+Layouts size from their children by default, including when nested inside flex
+and grid containers. Add `container-query`, `data-container-query`, or the
+`.layout-container` class when descendants use the named container helpers:
+
+```html
+<layout-stack container-query>
+  <div class="hide-on-narrow">Hidden below 30rem</div>
+</layout-stack>
+```
+
+This opts into `container-type: inline-size` and names the container
+`layout-container`. Override the name with `--layout-container-name`.
 
 ## Grid-Based Layouts
 
@@ -264,11 +276,15 @@ Sidebar layout that stacks on small screens.
 - `side`: Sidebar position ("left" or "right")
 - `gap`: Override gap
 
+Mark the supporting region with `slot="aside"`,
+`data-layout-sidebar-aside`, or `.layout-sidebar__aside`. The data/class forms
+are useful in template systems that reserve or consume `slot`.
+
 **Usage:**
 ```html
 <layout-sidebar side="right" side-width="15rem">
   <main>Main content</main>
-  <aside slot="aside">Sidebar</aside>
+  <aside data-layout-sidebar-aside>Sidebar</aside>
 </layout-sidebar>
 ```
 

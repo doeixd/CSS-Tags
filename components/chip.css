@@ -33,9 +33,9 @@
   }
 }
 
-:is(chip, [data-chip], .chip):is([size="sm"], [data-size="sm"]) { --b-py: 0.25em; --b-px: 0.6em; font-size: 0.85em; }
-:is(chip, [data-chip], .chip):is([size="md"], [data-size="md"]) { --b-py: 0.35em; --b-px: 0.75em; font-size: 0.9em; }
-:is(chip, [data-chip], .chip):is([size="lg"], [data-size="lg"]) { --b-py: 0.5em; --b-px: 0.9em; font-size: 1em; }
+:is(chip, [data-chip], .chip):is([size="sm"], [data-size="sm"], .chip-sm) { --b-py: 0.25em; --b-px: 0.6em; font-size: 0.85em; }
+:is(chip, [data-chip], .chip):is([size="md"], [data-size="md"], .chip-md) { --b-py: 0.35em; --b-px: 0.75em; font-size: 0.9em; }
+:is(chip, [data-chip], .chip):is([size="lg"], [data-size="lg"], .chip-lg) { --b-py: 0.5em; --b-px: 0.9em; font-size: 1em; }
 
 :is(chip, [data-chip], .chip):is([removable], [data-removable]):focus-visible {
   outline: var(--focus-ring-width, 2px) var(--focus-ring-style, solid) var(--focus-ring-color, currentColor);
@@ -52,19 +52,19 @@
   opacity: 0.7;
 }
 
-:is(chip, [data-chip], .chip):is([role="default"], [data-variant="default"]) {
+:is(chip, [data-chip], .chip):is([variant="default"], [data-variant="default"], .chip-default, [role="default"]) {
   --b-bg: var(--chip-bg, var(--surface-default));
   --b-bc: var(--chip-border-color, var(--outline-default));
   --b-fg: var(--chip-color, var(--text-default));
 }
 
-:is(chip, [data-chip], .chip):is([role="overt"], [data-variant="overt"]) {
+:is(chip, [data-chip], .chip):is([variant="overt"], [data-variant="overt"], .chip-overt, [role="overt"]) {
   --b-bg: var(--chip-bg, var(--surface-overt));
   --b-bc: var(--chip-border-color, var(--outline-overt));
   --b-fg: var(--chip-color, var(--text-on-surface-overt, var(--text-overt)));
 }
 
-:is(chip, [data-chip], .chip):is([role="muted"], [data-variant="muted"]) {
+:is(chip, [data-chip], .chip):is([variant="muted"], [data-variant="muted"], .chip-muted, [role="muted"]) {
   --b-bg: var(--chip-bg, var(--surface-muted));
   --b-bc: var(--chip-border-color, var(--outline-muted, var(--outline-subtle)));
   --b-fg: var(--chip-color, var(--text-subtle));

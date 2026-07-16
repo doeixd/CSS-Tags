@@ -1,26 +1,122 @@
-/* alert.css */
+/** Native-first feedback surfaces with optional icon, body, and actions. */
 
-.alert {
-  @apply --feedback-role(info);
-  background-color: var(--bg);
-  border: var(--border-width, 1px) solid var(--border);
-   border-radius: var(--border-radius-md, 6px);
-  padding: var(--l-padding, var(--spacing-md));
+:is(alert-message, [data-alert], .alert) {
+  --_alert-background: var(--alert-background, var(--surface-info, var(--surface-subtle)));
+  --_alert-border-color: var(--alert-border-color, var(--outline-info, var(--outline-subtle)));
+  --_alert-color: var(--alert-color, var(--text-info, var(--text-default)));
+
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--l-gap, var(--spacing-md));
+  min-inline-size: 0;
+  gap: var(--alert-gap, var(--space-md, var(--spacing-md, 1rem)));
   align-items: start;
-  @apply --contrast-text-for-bg;
+  padding: var(--alert-padding, var(--space-md, var(--spacing-md, 1rem)));
+  border: var(--alert-border-width, var(--border-width, 1px)) solid var(--_alert-border-color);
+  border-radius: var(--alert-radius, var(--radius-md, var(--border-radius-md, 0.5rem)));
+  background: var(--_alert-background);
+  color: var(--_alert-color);
 }
-.alert__icon { align-self: start; }
-.alert__title { font-weight: 600; }
-.alert__body { }
-.alert__actions { display: inline-flex; gap: var(--l-gap, 0.5rem); }
 
-.alert[density="compact"] { --l-gap: var(--spacing-sm); --l-padding: var(--spacing-sm); }
-.alert[density="spacious"] { --l-gap: var(--spacing-lg); --l-padding: var(--spacing-lg); }
+:is(alert-message, [data-alert], .alert)
+  :is([slot="icon"], [data-alert-icon], .alert__icon) {
+  align-self: start;
+}
 
-.alert[status="success"] { @apply --feedback-role(success); --bg: oklch(from var(--success) calc(l + 0.9) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
-.alert[status="warning"] { @apply --feedback-role(warning); --bg: oklch(from var(--warning) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
-.alert[status="error"]   { @apply --feedback-role(error);   --bg: oklch(from var(--error) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
-.alert[status="info"]    { @apply --feedback-role(info);    --bg: oklch(from var(--info) calc(l + 0.8) calc(c - 0.1) h); background-color: var(--bg); border-color: var(--border); }
+:is(alert-message, [data-alert], .alert)
+  :is([slot="title"], [data-alert-title], .alert__title) {
+  font-weight: var(--alert-title-weight, var(--font-weight-semibold, 600));
+}
+
+:is(alert-message, [data-alert], .alert)
+  :is([slot="body"], [data-alert-body], .alert__body) {
+  min-inline-size: 0;
+}
+
+:is(alert-message, [data-alert], .alert)
+  > :is([slot="actions"], [data-alert-actions], .alert__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--alert-actions-gap, var(--space-sm, 0.5rem));
+  min-inline-size: 0;
+}
+
+:is(alert-message, [data-alert], .alert):is([density="compact"], [data-density="compact"], .alert-compact) {
+  --alert-gap: var(--alert-compact-gap, var(--space-sm, var(--spacing-sm, 0.75rem)));
+  --alert-padding: var(--alert-compact-padding, var(--space-sm, var(--spacing-sm, 0.75rem)));
+}
+
+:is(alert-message, [data-alert], .alert):is([density="spacious"], [data-density="spacious"], .alert-spacious) {
+  --alert-gap: var(--alert-spacious-gap, var(--space-lg, var(--spacing-lg, 1.5rem)));
+  --alert-padding: var(--alert-spacious-padding, var(--space-lg, var(--spacing-lg, 1.5rem)));
+}
+
+:is(alert-message, [data-alert], .alert):is([status="success"], [data-status="success"], .alert-success) {
+  --_alert-background: var(--alert-background, var(--alert-success-background, var(--surface-success)));
+  --_alert-border-color: var(--alert-border-color, var(--alert-success-border-color, var(--outline-success)));
+  --_alert-color: var(--alert-color, var(--alert-success-color, var(--text-success)));
+}
+
+:is(alert-message, [data-alert], .alert):is([status="warning"], [data-status="warning"], .alert-warning) {
+  --_alert-background: var(--alert-background, var(--alert-warning-background, var(--surface-warning)));
+  --_alert-border-color: var(--alert-border-color, var(--alert-warning-border-color, var(--outline-warning)));
+  --_alert-color: var(--alert-color, var(--alert-warning-color, var(--text-warning)));
+}
+
+:is(alert-message, [data-alert], .alert):is([status="error"], [data-status="error"], .alert-error) {
+  --_alert-background: var(--alert-background, var(--alert-error-background, var(--surface-error)));
+  --_alert-border-color: var(--alert-border-color, var(--alert-error-border-color, var(--outline-error)));
+  --_alert-color: var(--alert-color, var(--alert-error-color, var(--text-error)));
+}
+
+:is(alert-message, [data-alert], .alert):is([status="info"], [data-status="info"], .alert-info) {
+  --_alert-background: var(--alert-background, var(--alert-info-background, var(--surface-info)));
+  --_alert-border-color: var(--alert-border-color, var(--alert-info-border-color, var(--outline-info)));
+  --_alert-color: var(--alert-color, var(--alert-info-color, var(--text-info)));
+}
+
+/* The single-column layout above is the fallback when :has() is unavailable. */
+@supports selector(:has(*)) {
+  :is(alert-message, [data-alert], .alert):has(
+      > :is([slot="icon"], [data-alert-icon], .alert__icon)
+    ) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  :is(alert-message, [data-alert], .alert):has(
+      > :is([slot="actions"], [data-alert-actions], .alert__actions)
+    ) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  :is(alert-message, [data-alert], .alert):has(
+      > :is([slot="icon"], [data-alert-icon], .alert__icon)
+    ):has(
+      > :is([slot="actions"], [data-alert-actions], .alert__actions)
+    ) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 30rem) {
+  @supports selector(:has(*)) {
+    :is(alert-message, [data-alert], .alert):has(
+        > :is([slot="icon"], [data-alert-icon], .alert__icon)
+      ):has(
+        > :is([slot="actions"], [data-alert-actions], .alert__actions)
+      ) {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    :is(alert-message, [data-alert], .alert):has(
+        > :is([slot="icon"], [data-alert-icon], .alert__icon)
+      )
+      > :is([slot="actions"], [data-alert-actions], .alert__actions) {
+      grid-column: 2;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  :is(alert-message, [data-alert], .alert) {
+    border-color: CanvasText;
+  }
+}

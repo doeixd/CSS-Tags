@@ -1,0 +1,85 @@
+---
+import type { CssVariableControl } from "../data/examples";
+
+interface Props {
+  exampleId: string;
+  variables: CssVariableControl[];
+}
+
+const { exampleId, variables } = Astro.props;
+---
+
+<details data-css-variable-editor>
+  <summary>Customize CSS variables</summary>
+  <layout-stack gap="var(--space-md)">
+    <p class="caption">Changes are scoped to this preview and update immediately.</p>
+
+    <div data-variable-controls>
+      {variables.map((variable) => (
+        <div
+          data-variable-control
+          data-variable-name={variable.name}
+          data-variable-kind={variable.kind}
+          data-variable-unit={variable.unit}
+          data-variable-default={variable.defaultValue}
+        >
+          <label>
+            <span>{variable.label}</span>
+            {variable.kind === "select" ? (
+              <select data-variable-input>
+                {variable.options?.map((option) => <option value={option.value}>{option.label}</option>)}
+              </select>
+            ) : variable.kind === "color" ? (
+              <span data-variable-color-inputs>
+                <input type="color" data-variable-color aria-label={`${variable.label} color picker`} />
+                <input type="text" data-variable-input value={variable.defaultValue} spellcheck="false" />
+              </span>
+            ) : ["length", "number", "percentage", "angle"].includes(variable.kind) ? (
+              <span data-variable-number-inputs>
+                <input
+                  type="range"
+                  min={variable.min}
+                  max={variable.max}
+                  step={variable.step}
+                  data-variable-range
+                  aria-label={`${variable.label} slider`}
+                />
+                <input
+                  type="number"
+                  min={variable.min}
+                  max={variable.max}
+                  step={variable.step}
+                  data-variable-input
+                  aria-label={`${variable.label} numeric value`}
+                />
+                {variable.unit && <span aria-hidden="true">{variable.unit}</span>}
+              </span>
+            ) : (
+              <input type="text" data-variable-input value={variable.defaultValue} spellcheck="false" />
+            )}
+          </label>
+          {variable.description && <small>{variable.description}</small>}
+          <layout-cluster gap="var(--space-xs)">
+            <code>{variable.name}</code>
+            <output data-variable-resolved aria-label={`${variable.label} current value`}>{variable.defaultValue}</output>
+            <button type="button" data-variable-reset>Reset</button>
+          </layout-cluster>
+        </div>
+      ))}
+    </div>
+
+    <layout-cluster gap="var(--space-sm)">
+      <button type="button" data-variable-reset-all>Reset all</button>
+      <button type="button" class="form-button btn-primary" data-variable-copy>Copy overrides</button>
+      <span class="caption" data-variable-status aria-live="polite">No overrides applied.</span>
+    </layout-cluster>
+
+    <pre tabindex="0" data-variable-output aria-label={`${exampleId} CSS overrides`}><code>.example-scope {
+  /* Edit a variable to generate an override. */
+}</code></pre>
+  </layout-stack>
+</details>
+
+<script>
+  import "../scripts/css-variable-editor";
+</script>

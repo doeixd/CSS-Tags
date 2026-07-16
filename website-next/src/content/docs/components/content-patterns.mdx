@@ -1,0 +1,106 @@
+---
+title: Content Patterns
+description: Slot-aware content headers, media objects, and empty states with parent-aware optional regions.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+CSS Tags provides common content blocks that adapt to optional children. Every
+host supports custom-element, data, and class forms; every region supports a
+light-DOM `slot` label plus data and class alternatives.
+
+> Here, `slot` is a CSS region label. It does not create Shadow DOM or
+> distribute content. Use the data or class hook when your renderer reserves
+> or consumes slot attributes.
+
+## Content header
+
+<LiveExample title="Header with optional regions" description="Remove the media or actions in copied markup and the parent layout adapts without an empty column.">
+  <content-header>
+    <user-avatar slot="media" size="lg">CT</user-avatar>
+    <div slot="body">
+      <eyebrow>Workspace</eyebrow>
+      <h2>Design system</h2>
+      <p>Tokens, components, and documentation.</p>
+    </div>
+    <div slot="meta"><span>Updated today</span><badge status="success">Ready</badge></div>
+    <div slot="actions"><button type="button">Share</button><button type="button">New page</button></div>
+  </content-header>
+</LiveExample>
+
+```html
+<content-header>
+  <user-avatar slot="media">CT</user-avatar>
+  <div slot="body">...</div>
+  <div slot="meta">...</div>
+  <div slot="actions">...</div>
+</content-header>
+```
+
+Hosts are `content-header`, `[data-content-header]`, and
+`.content-header`. Regions are `media`, `body`, `eyebrow`, `meta`,
+and `actions`, using `slot="…"`, `data-content-header-…`, or
+`.content-header__…`.
+
+## Media object
+
+Use this for comments, results, notifications, profiles, or activity rows.
+
+<LiveExample title="Media object host variants">
+  <layout-stack>
+    <article data-media-object>
+      <user-avatar data-media-object-media>AM</user-avatar>
+      <div data-media-object-body><h3>Alex Morgan</h3><p>Published the release notes.</p></div>
+      <div data-media-object-actions><button type="button">View</button></div>
+    </article>
+    <article class="media-object">
+      <div class="media-object__body"><h3>System update</h3><p>This row has no media or action region.</p></div>
+    </article>
+  </layout-stack>
+</LiveExample>
+
+The host forms are `media-object`, `[data-media-object]`, and
+`.media-object`. Its `media`, `body`, and `actions` regions use the
+same slot/data/class convention.
+
+## Empty state
+
+<LiveExample title="Labelled empty state">
+  <section class="empty-state" aria-labelledby="example-empty-title">
+    <span class="empty-state__media" aria-hidden="true">◇</span>
+    <div class="empty-state__body">
+      <h2 id="example-empty-title">No projects yet</h2>
+      <p>Create a project to collect your work.</p>
+    </div>
+    <div class="empty-state__actions"><button type="button">Create project</button></div>
+  </section>
+</LiveExample>
+
+An empty state is visual structure, not an automatic live region. Add
+`role="status"` only when a newly rendered state should be announced.
+Otherwise, a labelled `section` is usually the right semantic host.
+
+## How optional children work
+
+The browser-compatible baseline is a complete stacked grid. Within
+`@supports selector(:has(*))`, each parent checks for direct media and action
+regions and upgrades only the columns and spacing it needs. Unsupported
+browsers remain readable and functional.
+
+Regions must be direct children. Put arbitrary nested content inside the body
+region rather than wrapping the region itself.
+
+## Useful variables
+
+- Content header: `--content-header-gap`, `--content-header-padding`,
+  `--content-header-media-size`, and `--content-header-region-gap`.
+- Media object: `--media-object-gap`, `--media-object-align`,
+  `--media-object-padding`, `--media-object-border`,
+  `--media-object-radius`, and `--media-object-background`.
+- Empty state: `--empty-state-max-width`, `--empty-state-padding`,
+  `--empty-state-border-*`, `--empty-state-radius`, and
+  `--empty-state-background`.
+
+See the standalone `examples/demo-content-patterns.html` page for all three
+patterns composed together without custom CSS.
+

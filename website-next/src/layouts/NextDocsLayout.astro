@@ -1,0 +1,158 @@
+---
+import "../../../index.css";
+import "../styles/docs-site.css";
+import NextNavigation from "../components/NextNavigation.astro";
+import NextSearch from "../components/NextSearch.astro";
+import NextThemeEditor from "../components/NextThemeEditor.astro";
+import { normalizeBase, buildHref } from "../utils/url";
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  currentPath: string;
+  headings?: Heading[];
+}
+
+const { title, description, currentPath, headings = [] } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+const pageTitle = `${title} | CSS Tags`;
+const outline = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description ?? "CSS Tags documentation"} />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      try {
+        const mode = localStorage.getItem("css-tags-color-scheme");
+        const resolved = mode === "light" || mode === "dark"
+          ? mode
+          : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (mode === "light" || mode === "dark") document.documentElement.dataset.colorScheme = mode;
+        document.documentElement.dataset.resolvedColorScheme = resolved;
+        const allowedThemeVariables = new Set([
+          "--accent-h",
+          "--accent-c",
+          "--accent-l",
+          "--surface-saturation",
+          "--secondary-hue-shift",
+          "--tertiary-hue-shift",
+          "--contrast-factor",
+          "--success-h",
+          "--warning-h",
+          "--error-h",
+          "--info-h",
+          "--density-factor",
+          "--radius-factor",
+          "--font-size-prose",
+          "--line-height-prose",
+          "--measure-prose",
+          "--font-size-ui",
+          "--font-size-control",
+          "--font-weight-heading",
+          "--letter-spacing-heading",
+        ]);
+        const themeOverrides = JSON.parse(localStorage.getItem("css-tags-theme-overrides") ?? "{}");
+        let overrideCount = 0;
+        if (themeOverrides && typeof themeOverrides === "object" && !Array.isArray(themeOverrides)) {
+          Object.entries(themeOverrides).forEach(([name, value]) => {
+            if (allowedThemeVariables.has(name) && typeof value === "string") {
+              document.documentElement.style.setProperty(name, value);
+              overrideCount += 1;
+            }
+          });
+        }
+        document.documentElement.dataset.themeOverrides = String(overrideCount);
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <layout-page min-height="100dvh">
+      <header class="site-header" data-sticky data-size="compact" slot="header">
+        <container>
+          <a data-site-brand href={buildHref(base)}>CSS Tags</a>
+          <nav data-header-navigation aria-label="Primary">
+            <layout-cluster gap="var(--space-md)">
+              <a href={buildHref(base, "guides/getting-started")}>Get started</a>
+              <a href={buildHref(base, "components/site-shell")} aria-current={currentPath === "components/site-shell" ? "page" : undefined}>Components</a>
+              <a href={buildHref(base, "examples/examples")}>Examples</a>
+            </layout-cluster>
+          </nav>
+          <div data-header-actions>
+            <NextSearch />
+            <NextThemeEditor />
+            <a href="https://github.com/doeixd/CSS-Tags">GitHub</a>
+          </div>
+        </container>
+      </header>
+
+      <div slot="main" class="next-docs__shell">
+        <container max-width-xl="96rem">
+          <layout-sidebar side-width="17rem" content-min-width="min(100%, 38rem)" gap="var(--space-xl)">
+            <aside data-layout-sidebar-aside class="next-docs__sidebar">
+              <details class="next-docs__navigation-disclosure" data-disclosure="compact" open>
+                <summary>Documentation menu</summary>
+                <NextNavigation currentPath={currentPath} />
+              </details>
+            </aside>
+
+            <layout-sidebar side="right" side-width="14rem" content-min-width="min(100%, 36rem)" gap="var(--space-xl)">
+              {outline.length > 0 && (
+                <aside data-layout-sidebar-aside class="next-docs__outline">
+                  <nav aria-label="On this page">
+                    <strong>On this page</strong>
+                    <ul data-list-navigation>
+                      {outline.map((heading) => (
+                        <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+                      ))}
+                    </ul>
+                  </nav>
+                </aside>
+              )}
+
+              <main id="main-content" tabindex="-1" data-pagefind-body class="next-docs__content">
+                <slot />
+              </main>
+            </layout-sidebar>
+          </layout-sidebar>
+        </container>
+      </div>
+
+      <footer class="site-footer" data-bordered data-size="compact" slot="footer">
+        <container>
+          <div data-footer-meta>
+            <span>CSS Tags documentation</span>
+            <span>Built with the shipped CSS Tags library</span>
+          </div>
+        </container>
+      </footer>
+    </layout-page>
+  </body>
+</html>
+
+<script>
+  const setupNavigationDisclosure = () => {
+    const disclosure = document.querySelector<HTMLDetailsElement>(".next-docs__navigation-disclosure");
+    if (!disclosure || disclosure.dataset.ready === "true") return;
+    disclosure.dataset.ready = "true";
+    const wide = window.matchMedia("(min-width: 64.001rem)");
+    const sync = () => { disclosure.open = wide.matches; };
+    sync();
+    wide.addEventListener("change", sync);
+  };
+
+  setupNavigationDisclosure();
+  document.addEventListener("astro:page-load", setupNavigationDisclosure);
+</script>

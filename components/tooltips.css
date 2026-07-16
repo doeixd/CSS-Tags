@@ -5,7 +5,7 @@
  * positioning can enhance this later without being required for correctness.
  */
 
-:where(:has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))) {
+:where([data-tooltip-host], .tooltip-host, :has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))) {
   position: relative;
 }
 
@@ -31,7 +31,7 @@
   transition: opacity 120ms ease-out, transform 120ms ease-out, visibility 0s linear 120ms;
 }
 
-:where(:has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))):is(:hover, :focus-visible, :focus-within)
+:where([data-tooltip-host], .tooltip-host, :has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))):is(:hover, :focus-visible, :focus-within)
   > :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip) {
   display: block;
   opacity: 1;
@@ -39,30 +39,30 @@
   transition-delay: var(--tooltip-delay, 150ms), var(--tooltip-delay, 150ms), 0s;
 }
 
-:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is(:not([position]), [position="top"]) {
+:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is(:not([position], [data-position]), [position="top"], [data-position="top"], .tooltip-top) {
   inset-block-end: calc(100% + var(--tooltip-offset, 0.5rem));
   inset-inline-start: 50%;
   transform: translate(-50%, 0.25rem);
 }
 
-:where(:has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))):is(:hover, :focus-visible, :focus-within)
-  > :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is(:not([position]), [position="top"]) {
+:where([data-tooltip-host], .tooltip-host, :has(> :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip))):is(:hover, :focus-visible, :focus-within)
+  > :is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is(:not([position], [data-position]), [position="top"], [data-position="top"], .tooltip-top) {
   transform: translate(-50%, 0);
 }
 
-:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip)[position="bottom"] {
+:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is([position="bottom"], [data-position="bottom"], .tooltip-bottom) {
   inset-block-start: calc(100% + var(--tooltip-offset, 0.5rem));
   inset-inline-start: 50%;
   transform: translate(-50%, -0.25rem);
 }
 
-:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip)[position="left"] {
+:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is([position="left"], [data-position="left"], .tooltip-left) {
   inset-block-start: 50%;
   inset-inline-end: calc(100% + var(--tooltip-offset, 0.5rem));
   transform: translate(0.25rem, -50%);
 }
 
-:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip)[position="right"] {
+:is(tooltip:not([content]), [data-rich-tooltip], .rich-tooltip):is([position="right"], [data-position="right"], .tooltip-right) {
   inset-block-start: 50%;
   inset-inline-start: calc(100% + var(--tooltip-offset, 0.5rem));
   transform: translate(-0.25rem, -50%);

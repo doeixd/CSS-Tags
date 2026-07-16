@@ -1,0 +1,89 @@
+---
+import ExampleWorkbench from "./ExampleWorkbench.astro";
+import { getPageExample } from "../data/page-examples";
+
+interface Props {
+    currentPath: string;
+    pageTitle: string;
+}
+
+const { currentPath, pageTitle } = Astro.props;
+const example = getPageExample(currentPath, pageTitle);
+const id = `page-example-${(currentPath || "home").replace(/[^a-z0-9]+/gi, "-")}`;
+---
+
+<section aria-label="Quick example">
+    <ExampleWorkbench
+        id={id}
+        title={example.title}
+        description={example.description}
+        markup={example.preview}
+    />
+</section>
+
+<script>
+    function setupQuickExamples() {
+        document.querySelectorAll<HTMLElement>("css-tags-example").forEach((host) => {
+            const root = host.shadowRoot;
+            if (!root) return;
+
+            root.querySelectorAll<HTMLElement>("[data-doc-carousel]").forEach((carousel) => {
+                if (carousel.dataset.ready === "true") return;
+                carousel.dataset.ready = "true";
+
+                const slides = carousel.querySelector<HTMLElement>(":is(.carousel-slides, [data-carousel-slides])");
+                const items = Array.from(carousel.querySelectorAll<HTMLElement>(":is(carousel-item, [data-carousel-item], .carousel-item)"));
+                const previous = carousel.querySelector<HTMLElement>(':is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="prev"]');
+                const next = carousel.querySelector<HTMLElement>(':is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"]');
+                if (!slides || items.length === 0) return;
+
+                let index = 0;
+                slides.style.width = `${items.length * 100}%`;
+                items.forEach((item) => item.style.width = `${100 / items.length}%`);
+
+                const update = () => {
+                    slides.style.transform = `translateX(-${index * (100 / items.length)}%)`;
+                };
+                const move = (delta: number) => {
+                    index = (index + delta + items.length) % items.length;
+                    update();
+                };
+                previous?.addEventListener("click", () => move(-1));
+                next?.addEventListener("click", () => move(1));
+                update();
+            });
+
+            root.querySelectorAll<HTMLElement>("[data-doc-nav]").forEach((nav) => {
+                if (nav.dataset.ready === "true") return;
+                nav.dataset.ready = "true";
+                const toggle = nav.querySelector<HTMLButtonElement>(".nav-toggle");
+                const links = nav.querySelector<HTMLElement>(".nav-links");
+                toggle?.addEventListener("click", () => {
+                    const expanded = toggle.getAttribute("aria-expanded") === "true";
+                    toggle.setAttribute("aria-expanded", String(!expanded));
+                    links?.classList.toggle("active", !expanded);
+                });
+            });
+
+            root.querySelectorAll<HTMLElement>("[data-doc-view-transition]").forEach((demo) => {
+                if (demo.dataset.ready === "true") return;
+                demo.dataset.ready = "true";
+                demo.querySelectorAll<HTMLButtonElement>("[data-doc-page]").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const update = () => {
+                            demo.querySelectorAll<HTMLElement>(":is(view-page, [data-view-page], .view-page)").forEach((page) => {
+                                page.toggleAttribute("active", page.id === button.dataset.docPage);
+                            });
+                        };
+                        if (document.startViewTransition) document.startViewTransition(update);
+                        else update();
+                    });
+                });
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", setupQuickExamples);
+    document.addEventListener("astro:page-load", setupQuickExamples);
+    document.addEventListener("workbench:preview-reset", setupQuickExamples);
+</script>

@@ -1,0 +1,180 @@
+/**
+ * Page-level header and footer surfaces.
+ *
+ * Native header/footer elements are canonical. Custom hosts are available for
+ * composition systems, but should carry role="banner" or role="contentinfo".
+ */
+
+:is(header[data-site-header], header.site-header, site-header) {
+  display: block;
+  container: site-header / inline-size;
+  min-block-size: var(--site-header-min-height);
+  padding-block: var(--site-header-padding-block);
+  border-block-end: var(--site-header-border);
+  background: var(--site-header-background);
+  color: var(--site-header-color);
+  font-family: var(--font-family-ui, inherit);
+  font-size: var(--font-size-navigation, var(--font-size-sm, 0.875rem));
+  line-height: var(--line-height-navigation, var(--line-height-snug, 1.375));
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  > :is(container, [data-container], .container, [data-site-header-inner], .site-header__inner) {
+  display: flex;
+  align-items: center;
+  gap: var(--site-header-gap);
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: inherit;
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  > :is(container, [data-container], .container) {
+  --container-padding-inline: max(
+    var(--site-header-padding-inline),
+    env(safe-area-inset-left),
+    env(safe-area-inset-right)
+  );
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  > :is([data-site-header-inner], .site-header__inner) {
+  padding-inline-start: max(var(--site-header-padding-inline), env(safe-area-inset-left));
+  padding-inline-end: max(var(--site-header-padding-inline), env(safe-area-inset-right));
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  :is([data-site-brand], .site-brand) {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--site-header-brand-gap);
+  color: var(--site-header-brand-color);
+  font-size: var(--site-header-brand-font-size);
+  font-weight: var(--site-header-brand-font-weight);
+  line-height: var(--line-height-tight, 1.25);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  :is(nav, [data-header-navigation], .site-header__navigation) {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+:is(header[data-site-header], header.site-header, site-header)
+  :is([data-header-actions], .site-header__actions) {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--site-header-actions-gap);
+  margin-inline-start: auto;
+}
+
+:is(header[data-site-header], header.site-header, site-header):is([data-sticky], [sticky], .is-sticky) {
+  position: sticky;
+  inset-block-start: var(--site-header-sticky-offset);
+  z-index: var(--site-header-z-index);
+}
+
+:is(header[data-site-header], header.site-header, site-header):is([data-elevated], [elevated], .is-elevated) {
+  box-shadow: var(--site-header-shadow);
+}
+
+:is(header[data-site-header], header.site-header, site-header):is([data-size="compact"], [compact], .is-compact) {
+  --site-header-min-height: var(--site-header-compact-min-height);
+  --site-header-padding-block: var(--site-header-compact-padding-block);
+  --site-header-gap: var(--site-header-compact-gap);
+}
+
+@container site-header (max-width: 42rem) {
+  :is(header[data-site-header], header.site-header, site-header)
+    > :is(container, [data-container], .container, [data-site-header-inner], .site-header__inner) {
+    flex-wrap: wrap;
+  }
+
+  :is(header[data-site-header], header.site-header, site-header)
+    :is(nav, [data-header-navigation], .site-header__navigation) {
+    order: 3;
+    flex-basis: 100%;
+    inline-size: 100%;
+  }
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer) {
+  display: block;
+  padding-block: var(--site-footer-padding-block);
+  background: var(--site-footer-background);
+  color: var(--site-footer-color);
+  font-family: var(--font-family-ui, inherit);
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer)
+  > :is(container, [data-container], .container, [data-site-footer-inner], .site-footer__inner) {
+  display: grid;
+  gap: var(--site-footer-gap);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer)
+  > :is(container, [data-container], .container) {
+  --container-padding-inline: max(
+    var(--site-footer-padding-inline),
+    env(safe-area-inset-left),
+    env(safe-area-inset-right)
+  );
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer)
+  > :is([data-site-footer-inner], .site-footer__inner) {
+  padding-inline-start: max(var(--site-footer-padding-inline), env(safe-area-inset-left));
+  padding-inline-end: max(var(--site-footer-padding-inline), env(safe-area-inset-right));
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer)
+  :is([data-footer-grid], .site-footer__grid) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--site-footer-column-min)), 1fr));
+  gap: var(--site-footer-grid-gap);
+  min-inline-size: 0;
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer)
+  :is([data-footer-meta], .site-footer__meta) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--site-footer-meta-gap);
+  padding-block-start: var(--site-footer-meta-padding-block-start);
+  border-block-start: var(--site-footer-meta-border);
+  color: var(--site-footer-meta-color);
+  font-size: var(--site-footer-meta-font-size);
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer):is([data-bordered], [bordered], .is-bordered) {
+  border-block-start: var(--site-footer-border);
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer):is([data-size="compact"], [compact], .is-compact) {
+  --site-footer-padding-block: var(--site-footer-compact-padding-block);
+  --site-footer-gap: var(--site-footer-compact-gap);
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer):is([data-align="center"], [centered], .is-centered) {
+  text-align: center;
+}
+
+:is(footer[data-site-footer], footer.site-footer, site-footer):is([data-align="center"], [centered], .is-centered)
+  :is([data-footer-meta], .site-footer__meta) {
+  justify-content: center;
+}
+
+@media (forced-colors: active) {
+  :is(header[data-site-header], header.site-header, site-header),
+  :is(footer[data-site-footer], footer.site-footer, site-footer) {
+    border-color: CanvasText;
+  }
+}

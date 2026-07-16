@@ -96,6 +96,10 @@ The `form` component provides accessible, styled form elements with design token
 ```
 
 ## CSS Custom Properties Used
+
+Customizable selects keep their selected value and picker icon on one line.
+Use `--form-select-icon-gap` to adjust the space between them when
+`appearance: base-select` is supported.
 - `--font-size-base`: Base font size
 - `--line-height-normal`: Normal line height
 - `--spacing-sm`, `--spacing-md`, `--spacing-lg`: Spacing values

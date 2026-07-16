@@ -1,0 +1,136 @@
+---
+interface Feature {
+    title: string;
+    description: string;
+    icon?: string;
+    href?: string;
+}
+
+interface Props {
+    features: Feature[];
+    columns?: 2 | 3 | 4;
+    variant?: 'cards' | 'minimal';
+    class?: string;
+}
+
+const {
+    features,
+    columns = 3,
+    variant = 'cards',
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<section class={`features features--${variant} ${className || ''}`} {...rest}>
+    <div class="features__grid" style={`--features-columns: ${columns}`}>
+        {features.map((feature) => (
+            <div class="feature">
+                {feature.icon && (
+                    <div class="feature__icon" set:html={feature.icon} />
+                )}
+                <h3 class="feature__title">
+                    {feature.href ? (
+                        <a href={feature.href} class="feature__link">
+                            {feature.title}
+                        </a>
+                    ) : (
+                        feature.title
+                    )}
+                </h3>
+                <p class="feature__description">
+                    {feature.description}
+                </p>
+            </div>
+        ))}
+    </div>
+</section>
+
+<style>
+    .features {
+        width: 100%;
+        padding: var(--features-padding, var(--space-2xl) 0);
+    }
+
+    .features__grid {
+        display: grid;
+        grid-template-columns: repeat(var(--features-columns, 3), 1fr);
+        gap: var(--features-gap, var(--space-2xl));
+    }
+
+    .feature {
+        display: flex;
+        flex-direction: column;
+        gap: var(--feature-gap, var(--space-md));
+    }
+
+    .features--cards .feature {
+        padding: var(--feature-padding, var(--space-xl));
+        background: var(--feature-bg, var(--bg-secondary));
+        border: var(--feature-border, 1px solid var(--border-color));
+        border-radius: var(--feature-border-radius, var(--border-radius-lg));
+        transition: var(--feature-transition, transform var(--transition-normal), box-shadow var(--transition-normal));
+    }
+
+    .features--cards .feature:hover {
+        transform: var(--feature-hover-transform, translateY(-2px));
+        box-shadow: var(--feature-hover-shadow, var(--shadow-sm));
+    }
+
+    .feature__icon {
+        width: var(--feature-icon-size, 3rem);
+        height: var(--feature-icon-size, 3rem);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+    }
+
+    .feature__icon :global(svg) {
+        width: 100%;
+        height: 100%;
+    }
+
+    .feature__title {
+        font-size: var(--feature-title-font-size, var(--font-size-xl));
+        font-weight: var(--feature-title-font-weight, var(--font-weight-semibold));
+        margin: 0;
+        color: var(--text-primary);
+    }
+
+    .feature__link {
+        color: inherit;
+        text-decoration: none;
+        transition: color var(--transition-normal);
+    }
+
+    .feature__link:hover {
+        color: var(--accent);
+        text-decoration: underline;
+    }
+
+    .feature__description {
+        font-size: var(--feature-description-font-size, var(--font-size-base));
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: var(--feature-description-line-height, 1.6);
+    }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px) {
+        .features__grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .features__grid {
+            grid-template-columns: 1fr;
+            gap: var(--features-gap-mobile, var(--space-lg));
+        }
+
+        .features--cards .feature {
+            padding: var(--feature-padding-mobile, var(--space-lg));
+        }
+    }
+</style>

@@ -218,6 +218,70 @@
     text-shadow: none;
   }
 }
+
+/** @mixin --stack: A one-dimensional block layout with adjustable rhythm. */
+@mixin --stack(
+  --gap type(*): var(--space-md, 1rem),
+  --align type(*): stretch
+) {
+  display: grid;
+  gap: var(--gap);
+  align-items: var(--align);
+  min-inline-size: 0;
+}
+
+/** @mixin --cluster: A wrapping inline group for actions, tags, and metadata. */
+@mixin --cluster(
+  --gap type(*): var(--space-sm, 0.75rem),
+  --align type(*): center,
+  --justify type(*): flex-start
+) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: var(--align);
+  justify-content: var(--justify);
+  gap: var(--gap);
+  min-inline-size: 0;
+}
+
+/** @mixin --surface-frame: A token-driven bordered surface recipe. */
+@mixin --surface-frame(
+  --background type(*): var(--surface-default),
+  --color type(*): var(--text-default),
+  --border-color type(*): var(--outline-subtle),
+  --radius type(*): var(--radius-lg, 0.75rem),
+  --padding type(*): var(--space-md, 1rem),
+  --shadow type(*): none
+) {
+  padding: var(--padding);
+  border: var(--border-width, 1px) solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--color);
+  box-shadow: var(--shadow);
+  min-inline-size: 0;
+}
+
+/** @mixin --content-region-rhythm: Compact rhythm inside composed UI regions. */
+@mixin --content-region-rhythm(--gap type(*): var(--space-xs, 0.5rem)) {
+  display: grid;
+  gap: var(--gap);
+  min-inline-size: 0;
+
+  & > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl) {
+    margin-block: 0;
+  }
+}
+
+/** @mixin --focus-ring: The library's visible keyboard-focus contract. */
+@mixin --focus-ring(
+  --color type(*): var(--outline-focus),
+  --width type(*): var(--border-width-thick, 2px),
+  --offset type(*): 2px
+) {
+  outline: var(--width) solid var(--color);
+  outline-offset: var(--offset);
+}
 /* Theme mixins: property-driven role system */
 
 @mixin --surface-role(--role type(*)) {

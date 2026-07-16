@@ -156,12 +156,14 @@
   --shadow-inner: inset 0 2px 4px 0 oklch(from hsl(var(--shadow-color-base)) l c h / 5%);
 
   /* Semantic shadow assignments */
-  --shadow-button: var(--shadow-sm);
-  --shadow-button-hover: var(--shadow-md);
+  --shadow-button: none;
+  --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
-  --shadow-card: var(--shadow-md);
+  --shadow-card: none;
   --shadow-dropdown: var(--shadow-lg);
   --shadow-modal: var(--shadow-xl);
+  --transform-button-hover: none;
+  --transform-button-active: none;
 
   /* ========== SPACING SYSTEM ========== */
   /* Spacing Scale */
@@ -175,6 +177,12 @@
   --spacing-3xl: 3rem;
 
   /* ========== TYPOGRAPHY SYSTEM ========== */
+  /* Contextual font families */
+  --font-family-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-heading: var(--font-family-body);
+  --font-family-ui: var(--font-family-body);
+  --font-family-code: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+
   /* Step Scale: stable body sizes, fluid display sizes */
   --font-size-step--2: 0.75rem;
   --font-size-step--1: 0.875rem;
@@ -228,6 +236,25 @@
   --font-size-small: var(--font-size-sm);
   --font-size-caption: var(--font-size-sm);
   --font-size-code: 0.9em;
+
+  /* Contextual typography inputs. These can be themed independently. */
+  --font-size-prose: 1rem;
+  --line-height-prose: 1.6;
+  --measure-prose: 68ch;
+  --font-size-ui: 0.875rem;
+  --line-height-ui: 1.375;
+  --font-weight-ui: 500;
+  --letter-spacing-ui: 0;
+  --font-size-control: 1rem;
+  --line-height-control: 1.5;
+  --font-size-navigation: 0.875rem;
+  --line-height-navigation: 1.375;
+  --font-size-card-title: 1.25rem;
+  --line-height-card-title: 1.2;
+  --font-size-meta: 0.875rem;
+  --line-height-meta: 1.375;
+  --font-weight-heading: 600;
+  --letter-spacing-heading: -0.015em;
 
   --font-size-h1: var(--font-size-6xl);
   --font-size-h2: var(--font-size-5xl);
@@ -290,6 +317,21 @@
   --space-callout-pad-x: 1rem;
   --space-callout-pad-y: 1rem;
   --letter-spacing-eyebrow: var(--letter-spacing-widest);
+  --prose-heading-scroll-margin: calc(var(--site-header-min-height, 0px) + var(--space-lg, 2rem));
+  --prose-link-wrap: anywhere;
+  --prose-task-gap: 0.6em;
+  --prose-task-marker-offset: 1.5em;
+  --prose-definition-gap: 0.35em;
+  --prose-footnotes-gap: 0.75em;
+  --prose-footnotes-padding-block-start: 1.5em;
+  --prose-footnotes-border: var(--border-width, 1px) solid var(--outline-subtle);
+  --prose-footnotes-font-size: var(--font-size-sm);
+  --prose-footnote-target-background: var(--highlight-bg-subtle);
+  --prose-heading-anchor-gap: 0.35em;
+  --prose-heading-anchor-opacity: 0;
+  --prose-heading-anchor-visible-opacity: 0.75;
+  --prose-quote-cite-gap: 0.75em;
+  --prose-embed-min-height: 18rem;
 
   /* Dividers */
   --divider-color-muted: var(--outline-muted);
@@ -309,7 +351,7 @@
   --breadcrumbs-color: var(--text-subtle);
   --breadcrumbs-hover-color: var(--text-overt);
   --breadcrumbs-current-color: var(--text-default);
-  --breadcrumbs-font-size: var(--font-size-sm);
+  --breadcrumbs-font-size: var(--font-size-navigation, var(--font-size-sm));
 
   /* Pagination */
   --pagination-gap: var(--space-xs, 0.5rem);
@@ -322,6 +364,42 @@
   --pagination-current-background: var(--accent);
   --pagination-current-color: var(--on-accent, white);
   --pagination-disabled-opacity: 0.5;
+
+  /* Site shell */
+  --site-header-min-height: 4rem;
+  --site-header-compact-min-height: 3rem;
+  --site-header-padding-block: var(--space-sm, 0.75rem);
+  --site-header-padding-inline: var(--space-md, 1rem);
+  --site-header-compact-padding-block: var(--space-xs, 0.5rem);
+  --site-header-gap: var(--space-lg, 1.5rem);
+  --site-header-compact-gap: var(--space-sm, 0.75rem);
+  --site-header-actions-gap: var(--space-xs, 0.5rem);
+  --site-header-brand-gap: var(--space-sm, 0.75rem);
+  --site-header-brand-font-size: var(--font-size-lg, 1.125rem);
+  --site-header-brand-font-weight: var(--font-weight-bold, 700);
+  --site-header-background: var(--surface-default);
+  --site-header-color: var(--text-default);
+  --site-header-brand-color: var(--text-overt);
+  --site-header-border: 1px solid var(--outline-subtle);
+  --site-header-shadow: var(--shadow-md, 0 0.25rem 0.75rem rgb(0 0 0 / 0.12));
+  --site-header-sticky-offset: 0;
+  --site-header-z-index: var(--z-index-50, 50);
+
+  --site-footer-padding-block: var(--space-2xl, 2.5rem);
+  --site-footer-compact-padding-block: var(--space-lg, 1.5rem);
+  --site-footer-padding-inline: var(--space-md, 1rem);
+  --site-footer-gap: var(--space-xl, 2rem);
+  --site-footer-compact-gap: var(--space-md, 1rem);
+  --site-footer-grid-gap: var(--space-xl, 2rem);
+  --site-footer-column-min: 12rem;
+  --site-footer-meta-gap: var(--space-md, 1rem);
+  --site-footer-meta-padding-block-start: var(--space-lg, 1.5rem);
+  --site-footer-background: var(--surface-subtle);
+  --site-footer-color: var(--text-default);
+  --site-footer-meta-color: var(--text-subtle);
+  --site-footer-meta-font-size: var(--font-size-meta, var(--font-size-sm, 0.875rem));
+  --site-footer-border: 1px solid var(--outline-subtle);
+  --site-footer-meta-border: 1px solid var(--outline-subtle);
 
   /* Text Box Progressive Enhancement */
   --text-box: normal;
@@ -364,11 +442,12 @@
   --inset-md: 1rem;
 
   /* Space Scale */
-  --space-xs: 0.5rem;
-  --space-sm: 0.75rem;
-  --space-md: 1.5rem;
-  --space-lg: 2rem;
-  --space-xl: 3rem;
+  --density-factor: 1;
+  --space-xs: calc(0.5rem * var(--density-factor));
+  --space-sm: calc(0.75rem * var(--density-factor));
+  --space-md: calc(1.5rem * var(--density-factor));
+  --space-lg: calc(2rem * var(--density-factor));
+  --space-xl: calc(3rem * var(--density-factor));
 
   /* Z-Index Scale */
   --z-index-0: 0;

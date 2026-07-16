@@ -1,0 +1,30 @@
+---
+import ExampleWorkbench from "./ExampleWorkbench.astro";
+
+interface Props {
+    title?: string;
+    description?: string;
+    compact?: boolean;
+}
+
+const {
+    title = "Live preview",
+    description,
+    compact = false,
+} = Astro.props;
+
+/* Compatibility adapter: the rendered slot becomes the one source used by
+ * both the isolated preview and the copyable code panel. */
+const markup = (await Astro.slots.render("default")).trim();
+const pathPart = Astro.url.pathname.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
+const titlePart = title.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase();
+const id = `live-${pathPart}-${titlePart}`;
+---
+
+<ExampleWorkbench
+    id={id}
+    title={title}
+    description={description}
+    markup={markup}
+    compact={compact}
+/>

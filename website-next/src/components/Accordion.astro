@@ -1,0 +1,267 @@
+---
+// Accordion.astro - Robust collapsible content component
+interface AccordionItem {
+  title: string;
+  content: string | Astro.Component;
+  id?: string;
+}
+
+interface Props {
+  items: AccordionItem[];
+  multiple?: boolean;
+  defaultOpen?: number[];
+  class?: string;
+}
+
+const { items, multiple = false, defaultOpen = [], class: className } = Astro.props;
+---
+
+<div class={`accordion ${className || ''}`} role="region" aria-label="Accordion" data-multiple={multiple}>
+  {items.map((item, index) => (
+    <details
+      class="accordion-item"
+      open={defaultOpen.includes(index)}
+      data-index={index}
+    >
+      <summary class="accordion-header" role="button" aria-expanded={defaultOpen.includes(index) ? "true" : "false"}>
+        <span class="accordion-title">{item.title}</span>
+        <svg class="accordion-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <div class="accordion-content">
+        {typeof item.content === 'string' ? <p set:html={item.content}></p> : item.content}
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  /* Accordion container */
+  .accordion {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background: var(--bg-primary);
+  }
+
+  /* Individual accordion items */
+  .accordion-item {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .accordion-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Accordion headers */
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    background: var(--bg-primary);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-fast);
+    list-style: none; /* Remove default details marker */
+  }
+
+  .accordion-header:hover {
+    background: var(--bg-hover);
+  }
+
+  .accordion-header:focus-visible {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: -1px;
+  }
+
+  .accordion-header::-webkit-details-marker {
+    display: none; /* Hide default marker */
+  }
+
+  /* Accordion titles */
+  .accordion-title {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  /* Accordion icons */
+  .accordion-icon {
+    transition: transform var(--transition-normal);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    margin-left: var(--space-md);
+  }
+
+  .accordion-item[open] .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Accordion content */
+  .accordion-content {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal), padding var(--transition-normal);
+  }
+
+  .accordion-item[open] .accordion-content {
+    max-height: 2000px; /* Large enough for most content */
+    padding: var(--space-lg);
+  }
+
+  .accordion-content p {
+    margin: 0;
+    line-height: var(--line-height-body);
+  }
+
+  .accordion-content p + p {
+    margin-top: var(--space-md);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .accordion {
+      background: var(--bg-primary);
+      border-color: var(--border-color);
+    }
+
+    :root:not(.light-mode) .accordion-header {
+      background: var(--bg-primary);
+    }
+
+    :root:not(.light-mode) .accordion-header:hover {
+      background: var(--bg-hover);
+    }
+
+    :root:not(.light-mode) .accordion-content {
+      background: var(--bg-secondary);
+    }
+  }
+
+  :root.dark-mode .accordion {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+
+  :root.dark-mode .accordion-header {
+    background: var(--bg-primary);
+  }
+
+  :root.dark-mode .accordion-header:hover {
+    background: var(--bg-hover);
+  }
+
+  :root.dark-mode .accordion-content {
+    background: var(--bg-secondary);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .accordion-header {
+      padding: var(--space-md);
+    }
+
+    .accordion-item[open] .accordion-content {
+      padding: var(--space-md);
+    }
+  }
+</style>
+
+<script>
+  function setupAccordion() {
+    const accordions = document.querySelectorAll('.accordion');
+
+    accordions.forEach(accordion => {
+      const items = accordion.querySelectorAll('.accordion-item');
+      const allowMultiple = accordion.hasAttribute('data-multiple');
+
+      items.forEach((item, index) => {
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+
+        // Set up ARIA attributes
+        const contentId = `accordion-content-${index}`;
+        const headerId = `accordion-header-${index}`;
+        header.setAttribute('aria-controls', contentId);
+        content.id = contentId;
+        content.setAttribute('aria-labelledby', headerId);
+        header.id = headerId;
+
+        // Handle click
+        header.addEventListener('click', (e) => {
+          const isOpen = item.hasAttribute('open');
+
+          if (!allowMultiple) {
+            // Close other items
+            items.forEach(otherItem => {
+              if (otherItem !== item) {
+                otherItem.removeAttribute('open');
+                const otherHeader = otherItem.querySelector('.accordion-header');
+                otherHeader.setAttribute('aria-expanded', 'false');
+              }
+            });
+          }
+
+          if (isOpen) {
+            item.removeAttribute('open');
+            header.setAttribute('aria-expanded', 'false');
+          } else {
+            item.setAttribute('open', '');
+            header.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        // Handle keyboard navigation
+        header.addEventListener('keydown', (e) => {
+          switch (e.key) {
+            case 'Enter':
+            case ' ':
+              e.preventDefault();
+              header.click();
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              const prevItem = items[index - 1];
+              if (prevItem) {
+                prevItem.querySelector('.accordion-header').focus();
+              }
+              break;
+            case 'ArrowDown':
+              e.preventDefault();
+              const nextItem = items[index + 1];
+              if (nextItem) {
+                nextItem.querySelector('.accordion-header').focus();
+              }
+              break;
+            case 'Home':
+              e.preventDefault();
+              items[0].querySelector('.accordion-header').focus();
+              break;
+            case 'End':
+              e.preventDefault();
+              items[items.length - 1].querySelector('.accordion-header').focus();
+              break;
+          }
+        });
+      });
+    });
+  }
+
+  // Cleanup function for Astro view transitions
+  let accordionCleanup = () => {};
+
+  function cleanupAccordion() {
+    accordionCleanup();
+  }
+
+  // Setup on page load and after view transitions
+  document.addEventListener('DOMContentLoaded', setupAccordion);
+  document.addEventListener('astro:after-swap', setupAccordion);
+
+  // Cleanup on navigation
+  document.addEventListener('astro:before-swap', cleanupAccordion);
+</script>

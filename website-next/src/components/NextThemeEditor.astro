@@ -1,0 +1,107 @@
+---
+import NextThemeControl from "./NextThemeControl.astro";
+import type { CssVariableControl } from "../data/examples";
+
+type ThemeControl = CssVariableControl & { group: "Color" | "Shape and spacing" | "Typography" };
+
+const controls: ThemeControl[] = [
+  { group: "Color", name: "--accent-h", label: "Accent hue", description: "Primary brand hue.", kind: "number", min: 0, max: 360, step: 1, defaultValue: "280" },
+  { group: "Color", name: "--accent-c", label: "Accent chroma", description: "Brand color intensity in OKLCH.", kind: "number", min: 0, max: 0.35, step: 0.01, defaultValue: "0.15" },
+  { group: "Color", name: "--accent-l", label: "Accent lightness", description: "Brand color lightness.", kind: "percentage", min: 35, max: 85, step: 1, unit: "%", defaultValue: "60%" },
+  { group: "Color", name: "--surface-saturation", label: "Surface tint", description: "Accent hue carried into neutral surfaces.", kind: "number", min: 0, max: 0.06, step: 0.0025, defaultValue: "0.015" },
+  { group: "Color", name: "--secondary-hue-shift", label: "Secondary shift", description: "Secondary relationship to the accent.", kind: "number", min: -180, max: 180, step: 1, defaultValue: "60" },
+  { group: "Color", name: "--tertiary-hue-shift", label: "Tertiary shift", description: "Tertiary relationship to the accent.", kind: "number", min: -180, max: 180, step: 1, defaultValue: "-90" },
+  { group: "Color", name: "--contrast-factor", label: "Contrast", description: "Chromatic separation in semantic text.", kind: "number", min: 0.5, max: 1.5, step: 0.05, defaultValue: "1" },
+  { group: "Color", name: "--success-h", label: "Success hue", description: "Positive feedback color.", kind: "number", min: 0, max: 360, step: 1, defaultValue: "145" },
+  { group: "Color", name: "--warning-h", label: "Warning hue", description: "Caution feedback color.", kind: "number", min: 0, max: 360, step: 1, defaultValue: "55" },
+  { group: "Color", name: "--error-h", label: "Error hue", description: "Destructive feedback color.", kind: "number", min: 0, max: 360, step: 1, defaultValue: "25" },
+  { group: "Color", name: "--info-h", label: "Info hue", description: "Informational feedback color.", kind: "number", min: 0, max: 360, step: 1, defaultValue: "245" },
+  { group: "Shape and spacing", name: "--density-factor", label: "Spacing density", description: "Scales the shared spacing system.", kind: "number", min: 0.65, max: 1.25, step: 0.05, defaultValue: "1" },
+  { group: "Shape and spacing", name: "--radius-factor", label: "Corner radius", description: "Scales corners from square to rounded.", kind: "number", min: 0, max: 2, step: 0.1, defaultValue: "1" },
+  { group: "Typography", name: "--font-size-prose", label: "Prose size", description: "Long-form article text independently of UI text.", kind: "number", min: 0.875, max: 1.25, step: 0.0125, unit: "rem", defaultValue: "1rem" },
+  { group: "Typography", name: "--line-height-prose", label: "Prose leading", description: "Line spacing for Markdown and CMS content.", kind: "number", min: 1.35, max: 1.9, step: 0.025, defaultValue: "1.6" },
+  { group: "Typography", name: "--measure-prose", label: "Prose measure", description: "Maximum readable line length.", kind: "number", min: 48, max: 82, step: 1, unit: "ch", defaultValue: "68ch" },
+  { group: "Typography", name: "--font-size-ui", label: "UI text size", description: "Compact navigation, labels, and interface metadata.", kind: "number", min: 0.75, max: 1.125, step: 0.0125, unit: "rem", defaultValue: "0.875rem" },
+  { group: "Typography", name: "--font-size-control", label: "Control text size", description: "Buttons, inputs, selects, and textareas.", kind: "number", min: 0.8125, max: 1.125, step: 0.0125, unit: "rem", defaultValue: "1rem" },
+  { group: "Typography", name: "--font-weight-heading", label: "Heading weight", description: "Global semantic heading emphasis.", kind: "number", min: 400, max: 800, step: 25, defaultValue: "600" },
+  { group: "Typography", name: "--letter-spacing-heading", label: "Heading tracking", description: "Tighten or open heading letter spacing.", kind: "number", min: -0.05, max: 0.04, step: 0.005, unit: "em", defaultValue: "-0.015em" },
+];
+
+const groups = ["Color", "Shape and spacing", "Typography"] as const;
+---
+
+<details class="next-theme-editor" data-theme-editor>
+  <summary aria-label="Open theme creator">Theme</summary>
+  <section data-theme-editor-panel aria-label="Theme creator">
+    <header>
+      <div>
+        <strong>Theme creator</strong>
+        <p class="caption">Tune semantic inputs, preview them live, then export a trailing CSS layer.</p>
+      </div>
+      <label class="next-theme-editor__scheme">
+        <span>Preview scheme</span>
+        <NextThemeControl />
+      </label>
+    </header>
+
+    <section class="next-theme-editor__presets" aria-labelledby="theme-presets-title">
+      <strong id="theme-presets-title">Starting points</strong>
+      <layout-cluster gap="var(--space-xs)">
+        <button type="button" data-theme-preset="clean">Clean</button>
+        <button type="button" data-theme-preset="compact">Compact</button>
+        <button type="button" data-theme-preset="editorial">Editorial</button>
+      </layout-cluster>
+    </section>
+
+    <div data-theme-editor-controls>
+      {groups.map((group, index) => (
+        <fieldset data-theme-control-group>
+          <legend>{group}</legend>
+          <div>
+            {controls.filter((control) => control.group === group).map((control) => (
+              <label data-theme-variable data-variable-name={control.name} data-variable-unit={control.unit ?? ""}>
+                <span>
+                  <span>{control.label}</span>
+                  <output data-theme-variable-value>{control.defaultValue}</output>
+                </span>
+                <input type="range" min={control.min} max={control.max} step={control.step} value={Number.parseFloat(control.defaultValue ?? "0")} data-theme-variable-input aria-label={control.label} />
+                {control.description && <small>{control.description}</small>}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+    </div>
+
+    <section class="next-theme-editor__export" aria-labelledby="theme-export-title">
+      <div>
+        <strong id="theme-export-title">Export theme</strong>
+        <p class="caption">Load the generated file after <code>css-tags</code>.</p>
+      </div>
+      <div class="next-theme-editor__export-fields">
+        <label>
+          <span>Theme name</span>
+          <input type="text" value="My theme" maxlength="48" data-theme-editor-name />
+        </label>
+        <label>
+          <span>Apply to</span>
+          <select data-theme-editor-scope>
+            <option value="root">Entire document</option>
+            <option value="named">Matching data-theme</option>
+          </select>
+        </label>
+      </div>
+      <layout-cluster gap="var(--space-sm)">
+        <button type="button" data-theme-editor-reset>Reset</button>
+        <button type="button" class="form-button btn-primary" data-theme-editor-copy>Copy layered CSS</button>
+        <button type="button" data-theme-editor-download>Download .css</button>
+      </layout-cluster>
+      <span class="caption" data-theme-editor-status aria-live="polite">Using library defaults.</span>
+      <pre tabindex="0" data-theme-editor-output aria-label="Layered theme CSS"><code></code></pre>
+    </section>
+  </section>
+</details>
+
+<script>
+  import "../scripts/theme-editor";
+</script>

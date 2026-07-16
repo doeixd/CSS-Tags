@@ -1,0 +1,111 @@
+---
+title: CMS and Markdown
+description: Renderer-neutral prose defaults for task lists, footnotes, definitions, figures, embeds, and resilient long-form composition.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+CSS Tags styles semantic renderer output through `.prose` or
+`[data-prose]`. It does not require a Markdown runtime or replace native
+content elements.
+
+## Rendered CMS fragment
+
+<LiveExample title="Markdown-style article output" description="This is ordinary semantic HTML using hooks emitted by common Markdown and CMS renderers.">
+  <article data-prose="compact">
+    <h2 id="cms-demo-release">
+      Release checklist
+      <a data-heading-anchor href="#cms-demo-release" aria-label="Link to Release checklist">#</a>
+    </h2>
+    <p>A renderer can compose tasks, definitions, quotations, tables, disclosure, and footnotes without component wrappers.</p>
+    <ul class="contains-task-list">
+      <li class="task-list-item"><input type="checkbox" checked disabled /> API reviewed</li>
+      <li class="task-list-item"><input type="checkbox" disabled /> Migration guide published</li>
+    </ul>
+    <dl>
+      <dt>Progressive enhancement</dt>
+      <dd>A complete baseline with optional platform upgrades.</dd>
+      <dt>Composition</dt>
+      <dd>Native content that remains useful in layouts and components.</dd>
+    </dl>
+    <blockquote>
+      <p>Content should remain useful before the decoration arrives.</p>
+      <footer><cite>CSS Tags philosophy</cite></footer>
+    </blockquote>
+    <table>
+      <caption>Renderer support</caption>
+      <thead><tr><th>Output</th><th>Hook</th></tr></thead>
+      <tbody><tr><td>Tasks</td><td><code>.task-list-item</code></td></tr><tr><td>Footnotes</td><td><code>data-footnotes</code></td></tr></tbody>
+    </table>
+    <details>
+      <summary>Implementation note</summary>
+      <p>Disclosure remains a native details element without JavaScript.</p>
+    </details>
+    <p id="cms-demo-reference">The renderer can emit a footnote.<sup><a data-footnote-ref href="#cms-demo-fn-1">1</a></sup></p>
+    <section data-footnotes aria-label="Footnotes">
+      <ol>
+        <li id="cms-demo-fn-1">The original source. <a data-footnote-backref href="#cms-demo-reference" aria-label="Back to reference">↩</a></li>
+      </ol>
+    </section>
+  </article>
+</LiveExample>
+
+## Prose scopes
+
+```html
+<article data-prose>...</article>
+<article data-prose="compact">...</article>
+<article data-prose="wide">...</article>
+<article class="prose prose-unbounded">...</article>
+```
+
+Default prose uses the body measure. Compact tightens rhythm, wide uses the
+wide measure, and unbounded delegates width entirely to the surrounding
+layout. Apply prose to the authored article body, not the application shell.
+
+## Renderer-neutral hooks
+
+| Content | Preferred output and accepted hooks |
+| --- | --- |
+| Tasks | `.contains-task-list` / `[data-task-list]` and `.task-list-item` / `[data-task-list-item]` |
+| Footnotes | `[data-footnotes]` or `.footnotes`, with ref/backref data hooks |
+| Heading links | Direct `.heading-anchor__link` or `[data-heading-anchor]` child |
+| Definitions | Native `dl`, `dt`, and `dd` |
+| Quotes | Native `blockquote` with optional direct `footer` or `cite` |
+| Figures | Native `figure` and `figcaption` |
+| Tables | Native `table` and optional `caption` |
+| Disclosure | Native `details` and `summary` |
+| Media | Native images, pictures, video, audio, SVG, and iframe embeds |
+
+The hooks are visual contracts only. Task state belongs in a checkbox,
+footnotes require IDs and links, and heading permalinks need accessible labels.
+
+## Overflow and composition
+
+Long links and inline code wrap without widening the article. Fenced code and
+direct native tables retain independent horizontal scrolling. Media is bounded
+to the prose width, and fragment targets account for sticky headers.
+
+Keep `data-prose` on the article column rather than a grid containing
+navigation. A wrapped table needs overflow on its wrapper or the richer
+`data-table` API.
+
+## Important tokens
+
+- `--prose-task-gap`, `--prose-task-marker-offset`
+- `--prose-footnotes-gap`, `--prose-footnotes-border`,
+  `--prose-footnotes-font-size`
+- `--prose-heading-scroll-margin`, `--prose-heading-anchor-gap`
+- `--prose-quote-cite-gap`, `--prose-definition-gap`
+- `--prose-table-scrollbar-gutter`, `--prose-embed-min-height`
+- `--prose-link-wrap`, `--prose-inline-code-wrap`
+
+## Integration checklist
+
+1. Preserve semantic heading, list, table, quote, figure, and disclosure HTML.
+2. Sanitize user-authored HTML.
+3. Generate unique heading and footnote IDs across repeated fragments.
+4. Provide media alternatives, captions, or transcripts.
+5. Test long URLs, missing media, nested lists, 200% text, RTL, dark mode, and
+   narrow containers.
+

@@ -5,23 +5,23 @@
  */
 
 :is(card, [data-card], .card) {
-  --card-background: var(--surface-default);
-  --card-color: var(--text-default);
-  --card-border-color: var(--outline-subtle, var(--outline, currentColor));
-  --card-border-width: var(--border-width, 1px);
-  --card-radius: var(--radius-lg, 0.75rem);
-  --card-padding: var(--space-lg, 1.5rem);
-  --card-gap: var(--space-sm, 0.75rem);
+  --_card-background: var(--card-background, var(--surface-default));
+  --_card-color: var(--card-color, var(--text-default));
+  --_card-border-color: var(--card-border-color, var(--outline-subtle, var(--outline, currentColor)));
+  --_card-border-width: var(--card-border-width, var(--border-width, 1px));
+  --_card-radius: var(--card-radius, var(--radius-lg, 0.75rem));
+  --_card-padding: var(--card-padding, var(--space-lg, 1.5rem));
+  --_card-gap: var(--card-gap, var(--space-sm, 0.75rem));
 
   container: card-container / inline-size;
   display: flex;
   min-inline-size: 0;
   flex-direction: column;
   overflow: hidden;
-  border: var(--card-border-width) solid var(--card-border-color);
-  border-radius: var(--card-radius);
-  background: var(--card-background);
-  color: var(--card-color);
+  border: var(--_card-border-width) solid var(--_card-border-color);
+  border-radius: var(--_card-radius);
+  background: var(--_card-background);
+  color: var(--_card-color);
   box-shadow: var(--card-shadow, none);
   transition: transform var(--transition-duration, 150ms) var(--transition-timing, ease-out),
               box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out);
@@ -51,16 +51,29 @@
   min-inline-size: 0;
   flex: 1;
   flex-direction: column;
-  gap: var(--card-gap);
-  padding: var(--card-padding);
+  gap: var(--_card-gap);
+  padding: var(--_card-padding);
 }
 
 :is(card-header, [data-card-header], .card-header) {
   display: block;
   color: var(--card-heading-color, var(--text-overt));
-  font-size: var(--card-heading-size, var(--font-size-xl, 1.25rem));
-  font-weight: var(--card-heading-weight, var(--font-weight-semibold, 600));
-  line-height: var(--line-height-heading, 1.2);
+  font-family: var(--font-family-heading, inherit);
+  font-size: var(--card-heading-size, var(--font-size-card-title, var(--font-size-xl, 1.25rem)));
+  font-weight: var(--card-heading-weight, var(--font-weight-heading, var(--font-weight-semibold, 600)));
+  line-height: var(--line-height-card-title, var(--line-height-heading, 1.2));
+}
+
+/* Direct regions own their insets; regions nested in card-body use its inset. */
+:is(card, [data-card], .card) > :is(card-header, [data-card-header], .card-header) {
+  padding: var(--card-header-padding, var(--_card-padding));
+}
+
+@supports selector(:has(*)) {
+  :is(card, [data-card], .card):has(> :is(card-body, [data-card-body], .card-body))
+    > :is(card-header, [data-card-header], .card-header) {
+    padding-block-end: var(--card-header-padding-block-end, 0);
+  }
 }
 
 :is(card-content, [data-card-content], .card-content) {
@@ -83,7 +96,19 @@
   display: block;
   margin-block-start: auto;
   color: var(--card-footer-color, var(--text-subtle));
-  font-size: var(--card-footer-size, var(--font-size-sm, 0.875rem));
+  font-size: var(--card-footer-size, var(--font-size-meta, var(--font-size-sm, 0.875rem)));
+  line-height: var(--line-height-meta, var(--line-height-snug, 1.375));
+}
+
+:is(card, [data-card], .card) > :is(card-footer, [data-card-footer], .card-footer) {
+  padding: var(--card-footer-padding, var(--_card-padding));
+}
+
+@supports selector(:has(*)) {
+  :is(card, [data-card], .card):has(> :is(card-body, [data-card-body], .card-body))
+    > :is(card-footer, [data-card-footer], .card-footer) {
+    padding-block-start: var(--card-footer-padding-block-start, 0);
+  }
 }
 
 @container card-container (min-width: 32rem) {

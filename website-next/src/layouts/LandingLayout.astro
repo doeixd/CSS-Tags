@@ -1,0 +1,818 @@
+---
+import { ViewTransitions, ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
+import LoadingIndicator from "../components/LoadingIndicator.astro";
+import KeyboardShortcuts from "../components/KeyboardShortcuts.astro";
+import { normalizeBase, buildAssetPath, buildHref } from "../utils/url";
+import "../theme.css";
+
+interface Props {
+    title: string;
+    description?: string;
+    currentPath?: string;
+}
+
+const { title, description, currentPath = "/" } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark light" />
+        <meta name="generator" content={Astro.generator} />
+
+        <!-- Performance hints -->
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
+        <title>{title} | CSS Tags</title>
+        <meta
+            name="description"
+            content={description ||
+                "Style HTML directly with modern CSS. No classes, no frameworks—just semantic markup that looks great."}
+        />
+
+        <!-- Open Graph / Social -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${title} | CSS Tags`} />
+        <meta
+            property="og:description"
+            content={description || "Style HTML directly with modern CSS"}
+        />
+        <meta property="og:site_name" content="CSS Tags Documentation" />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${title} | CSS Tags`} />
+        <meta
+            name="twitter:description"
+            content={description || "Style HTML directly with modern CSS"}
+        />
+
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href={buildAssetPath(base, "favicon.svg")}
+        />
+
+        <!-- Resource hints for performance -->
+        <link rel="preconnect" href="https://github.com" crossorigin />
+        <link rel="dns-prefetch" href="https://github.com" />
+
+        <!-- Critical CSS: Inline theme variables and body styles to prevent FOUC -->
+        <style is:inline>
+            /* Critical color variables - Light mode defaults */
+            :root {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent: #0066cc;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Dark mode system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode) {
+                    --text-primary: #e1e4e8;
+                    --text-secondary: #8b949e;
+                    --bg-primary: #171717;
+                    --bg-secondary: #1a1a1a;
+                    --bg-hover: #2d2d2d;
+                    --border-color: #333;
+                    --accent-light: #58a6ff;
+                    --accent-dark: #1a3a52;
+                }
+            }
+
+            /* Manual dark mode override */
+            :root.dark-mode {
+                --text-primary: #e1e4e8;
+                --text-secondary: #8b949e;
+                --bg-primary: #171717;
+                --bg-secondary: #1a1a1a;
+                --bg-hover: #2d2d2d;
+                --border-color: #333;
+                --accent-light: #58a6ff;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Manual light mode override */
+            :root.light-mode {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Critical body styles */
+            body {
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                margin: 0;
+            }
+        </style>
+
+        <!-- Theme FOUC prevention for cached/serverless pages -->
+        <script is:inline>
+            (function () {
+                // Validation
+                function isValidTheme(value) {
+                    return value === "dark" || value === "light";
+                }
+
+                function isValidAnimationPreference(value) {
+                    return value === "none" || value === "blur-in";
+                }
+
+                // Storage read with graceful degradation
+                function getStorageValue(key) {
+                    // Try localStorage first
+                    try {
+                        var value = localStorage.getItem(key);
+                        if (value !== null) return value;
+                    } catch (e) {}
+
+                    // Fall back to reading cookie
+                    try {
+                        var cookieMatch = document.cookie.match(new RegExp("(?:^|; )" + key + "=([^;]*)"));
+                        if (cookieMatch) return cookieMatch[1];
+                    } catch (e) {}
+
+                    // Fall back to sessionStorage
+                    try {
+                        var value = sessionStorage.getItem(key);
+                        if (value !== null) return value;
+                    } catch (e) {}
+
+                    return null;
+                }
+
+                // Get theme with validation
+                function getTheme() {
+                    var stored = getStorageValue("theme");
+                    if (isValidTheme(stored)) {
+                        return stored;
+                    }
+
+                    // Fall back to system preference
+                    try {
+                        return window.matchMedia("(prefers-color-scheme: dark)").matches
+                            ? "dark"
+                            : "light";
+                    } catch (e) {
+                        return "light"; // Ultimate fallback
+                    }
+                }
+
+                // Get animation preference
+                function getAnimationPreference() {
+                    var stored = getStorageValue("animation-preference");
+                    if (isValidAnimationPreference(stored)) {
+                        return stored;
+                    }
+                    return "none"; // Default to no animations
+                }
+
+                // Apply theme immediately
+                var theme = getTheme();
+                var animationPref = getAnimationPreference();
+                var html = document.documentElement;
+
+                html.classList.remove("dark-mode", "light-mode");
+                html.classList.add(theme === "dark" ? "dark-mode" : "light-mode");
+                html.setAttribute("data-theme", theme);
+                html.setAttribute("data-animation-preference", animationPref);
+            })();
+        </script>
+
+        <ViewTransitions fallback="none" />
+        <style is:global>
+            /* Critical theme variables to prevent FOUC during navigation */
+            :root {
+                /* Base colors */
+                --accent: #0066cc;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+
+                /* Selection & accent */
+                --accent-color: var(--accent);
+                --selection-bg: var(--accent-light);
+                --selection-fg: var(--accent-dark);
+
+                /* Content styling */
+                --strong-color-light: var(--text-primary);
+                --strong-color-dark: hsl(214 14% 100% / 1);
+                --italic-color-light: var(--text-secondary);
+                --italic-color-dark: hsl(214 14% 80% / 0.8);
+                --link-color-light: var(--accent);
+                --link-color-dark: #77b2ed;
+
+                /* Inline code styling */
+                --inline-code-bg-light: #f3f5f7;
+                --inline-code-bg-dark: #2d2b2b;
+                --inline-code-color-light: hsl(0 0% 30%);
+                --inline-code-color-dark: hsl(214 14% 85%);
+                --inline-code-border-light: hsl(0 0% 90%);
+                --inline-code-border-dark: hsl(217 19% 25%);
+                --inline-code-padding: 0.1em 0.4em;
+                --inline-code-border-radius: 3px;
+                --inline-code-font-size: 0.9em;
+
+                /* Focus styles */
+                --outline-width: 2px;
+                --outline-offset: 2px;
+                --focus-outline: var(--outline-width) solid var(--accent);
+                --focus-outline-offset: var(--outline-offset);
+                --focus-border-radius: 2px;
+
+                /* Layout */
+                --min-mobile-width: 320px;
+            }
+
+            /* Dark mode system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode) {
+                    --text-primary: #e1e4e8;
+                    --text-secondary: #8b949e;
+                    --bg-primary: #171717;
+                    --bg-secondary: #1a1a1a;
+                    --bg-hover: #2d2d2d;
+                    --border-color: #333;
+                    --accent-light: #58a6ff;
+                    --accent-dark: #1a3a52;
+                }
+            }
+
+            /* Manual dark mode override */
+            :root.dark-mode {
+                --text-primary: #e1e4e8;
+                --text-secondary: #8b949e;
+                --bg-primary: #171717;
+                --bg-secondary: #1a1a1a;
+                --bg-hover: #2d2d2d;
+                --border-color: #333;
+                --accent-light: #58a6ff;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Manual light mode override */
+            :root.light-mode {
+                --text-primary: #1a1a1a;
+                --text-secondary: #6a737d;
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --bg-hover: #e8eaed;
+                --border-color: #e1e4e8;
+                --accent-light: #e3f2fd;
+                --accent-dark: #1a3a52;
+            }
+
+            /* Disable all CSS transitions during theme changes */
+            html.theme-transitioning *,
+            html.theme-transitioning *::before,
+            html.theme-transitioning *::after {
+                transition: none !important;
+            }
+
+            /* Theme transition: Instant switch for speed */
+            html.theme-transitioning ::view-transition-old(root),
+            html.theme-transitioning ::view-transition-new(root) {
+                animation: none;
+                mix-blend-mode: normal;
+            }
+
+            ::view-transition-old(root) {
+                z-index: 1;
+            }
+
+            ::view-transition-new(root) {
+                z-index: 2;
+            }
+
+            /* Heading anchor link styles */
+            h2 .heading-anchor__link,
+            h3 .heading-anchor__link,
+            h4 .heading-anchor__link,
+            h5 .heading-anchor__link,
+            h6 .heading-anchor__link {
+                display: inline-flex;
+                align-items: center;
+                margin-left: var(--space-sm);
+                color: var(--text-secondary);
+                text-decoration: none;
+                opacity: 0;
+                transition: opacity var(--transition-fast), color var(--transition-fast);
+                vertical-align: middle;
+            }
+
+            h2:hover .heading-anchor__link,
+            h3:hover .heading-anchor__link,
+            h4:hover .heading-anchor__link,
+            h5:hover .heading-anchor__link,
+            h6:hover .heading-anchor__link,
+            .heading-anchor__link:focus {
+                opacity: 1;
+            }
+
+            .heading-anchor__link:hover {
+                color: var(--accent);
+            }
+
+            .heading-anchor__link:focus {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+
+            /* Fast fade transition for theme changes */
+            html.theme-transitioning::view-transition-old(root) {
+                animation: theme-fade-out 0.05s ease-out;
+            }
+
+            html.theme-transitioning::view-transition-new(root) {
+                animation: theme-fade-in 0.05s ease-in;
+            }
+
+            /* Ensure theme toggle stays stable (no animation) */
+            ::view-transition-old(header-theme-toggle),
+::view-transition-new(header-theme-toggle),
+::view-transition-old(sidebar-theme-toggle),
+::view-transition-new(sidebar-theme-toggle),
+::view-transition-old(sidebar-footer-theme-toggle),
+::view-transition-new(sidebar-footer-theme-toggle) {
+                animation: none;
+            }
+
+            @keyframes theme-fade-out {
+                to {
+                    opacity: 0;
+                }
+            }
+
+            @keyframes theme-fade-in {
+                from {
+                    opacity: 0;
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            *:focus-visible {
+                outline: var(
+                    --focus-outline,
+                    var(--outline-width) solid var(--accent)
+                );
+                outline-offset: var(
+                    --focus-outline-offset,
+                    var(--outline-offset)
+                );
+                border-radius: var(
+                    --focus-border-radius,
+                    var(--border-radius-sm)
+                );
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* Disable view transition pseudo-element rendering overhead */
+            @media (prefers-reduced-motion: no-preference) {
+                ::view-transition-group(*),
+                ::view-transition-image-pair(*),
+                ::view-transition-old(*),
+                ::view-transition-new(*) {
+                    animation-duration: 0ms !important;
+                    animation-delay: 0ms !important;
+                }
+            }
+
+            body {
+                font-family: system-ui, sans-serif;
+                color: var(--text-primary);
+                background: var(--bg-primary);
+                line-height: 1.6;
+                height: auto;
+                min-height: 100vh;
+                overflow-x: clip;
+                overflow-y: visible;
+                min-width: var(--min-mobile-width);
+                /* Force GPU acceleration for smoother rendering */
+                /* transform: translateZ(0); */
+            }
+
+            html {
+                height: auto;
+                min-height: 100%;
+                overflow-y: auto;
+            }
+
+            /* Minimal scrollbars */
+            * {
+                scrollbar-width: var(--scrollbar-thumb-width);
+                scrollbar-color: var(--border-color) transparent;
+            }
+
+            *::-webkit-scrollbar {
+                width: var(--scrollbar-width);
+                height: var(--scrollbar-width);
+            }
+
+            *::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            *::-webkit-scrollbar-thumb {
+                background: var(--border-color);
+                border-radius: var(--border-radius-md);
+            }
+
+            *::-webkit-scrollbar-thumb:hover {
+                background: var(--text-secondary);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                * {
+                    scrollbar-color: var(--border-color, #333) transparent;
+                }
+
+                *::-webkit-scrollbar-thumb {
+                    background: var(--border-color, #333);
+                }
+
+                *::-webkit-scrollbar-thumb:hover {
+                    background: var(--text-secondary, #8b949e);
+                }
+
+                a {
+                    color: var(--link-color-dark);
+                }
+            }
+
+            /* Manual dark mode toggle */
+            :root.dark-mode a {
+                color: var(--link-color-dark);
+            }
+
+            /* Reduce motion for users who prefer it */
+            @media (prefers-reduced-motion: reduce) {
+                *,
+                *::before,
+                *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                    scroll-behavior: auto !important;
+                }
+            }
+
+            /* View Transition Animations */
+            /* Default: No animations - instant transitions for maximum speed */
+            ::view-transition-group(*) {
+                animation-duration: 0ms !important;
+            }
+
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation: none !important;
+                animation-duration: 0ms !important;
+                mix-blend-mode: normal !important;
+            }
+
+            /* Force instant transitions for all elements */
+            ::view-transition-old(*),
+            ::view-transition-new(*) {
+                animation-duration: 0ms !important;
+            }
+
+            /* Ensure absolutely no delay during instant transitions */
+            html[data-instant-transition] ::view-transition-group(*),
+            html[data-instant-transition] ::view-transition-old(*),
+            html[data-instant-transition] ::view-transition-new(*) {
+                animation: none !important;
+                animation-duration: 0ms !important;
+                animation-delay: 0ms !important;
+                transition: none !important;
+            }
+
+            /* Keep search stable during transitions */
+            ::view-transition-old(search),
+            ::view-transition-new(search) {
+                animation: none;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+
+            ::view-transition-old(main) {
+                animation: none;
+            }
+
+            ::view-transition-new(main) {
+                animation: none;
+            }
+
+            /* Keep header stable during transitions */
+            ::view-transition-old(site-header),
+            ::view-transition-new(site-header) {
+                animation: none;
+                transform: none !important;
+            }
+
+            /* Header styles for persistence during navigation */
+            .site-header {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                height: var(--header-height) !important;
+                background: var(--bg-secondary) !important;
+                border-bottom: 1px solid var(--border-color) !important;
+                z-index: 1003 !important;
+                transition: none !important;
+                /* Optimize fixed positioning */
+                will-change: transform;
+            }
+
+            .header-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 100%;
+                padding: 0 var(--header-padding-x, var(--space-2xl));
+                max-width: var(--header-max-width, 100%);
+                margin: 0 auto;
+                gap: var(--space-lg);
+            }
+
+            .header-left {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+                min-width: 170px;
+            }
+
+            .header-site-title {
+                font-size: var(--font-size-xl);
+                font-weight: var(--font-weight-semibold);
+                color: var(--text-primary);
+                text-decoration: none;
+                transition: color var(--transition-fast);
+            }
+
+            .header-site-title:hover {
+                color: var(--accent);
+            }
+
+            .header-center {
+                flex: 1;
+                max-width: 400px;
+                margin: 0 var(--space-lg);
+            }
+
+            .header-search {
+                position: relative;
+                width: 100%;
+            }
+
+            .header-right {
+                display: flex;
+                align-items: center;
+                gap: var(--space-sm);
+                flex-shrink: 0;
+            }
+
+            .header-icon-links {
+                display: flex;
+                align-items: center;
+                gap: var(--space-xs);
+            }
+
+            .header-icon-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                color: var(--text-secondary);
+                text-decoration: none;
+                border-radius: var(--border-radius-md);
+                transition: all var(--transition-fast);
+            }
+
+            .header-icon-link:hover {
+                color: var(--text-primary);
+                background: var(--bg-hover);
+            }
+
+            /* Hide header on mobile */
+            @media (max-width: 768px) {
+                .site-header {
+                    display: none;
+                }
+            }
+
+            /* Header spacing */
+            /* Header is fixed on desktop, so page needs top padding to account for header height */
+            /* On mobile, Header is hidden so no extra body padding needed */
+            body {
+                padding-top: var(--header-height);
+            }
+
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 0;
+                }
+            }
+
+            /* Landing page container */
+            .landing-container {
+                min-height: 100vh;
+                width: 100%;
+            }
+
+            .landing-content {
+                max-width: var(--landing-max-width, 1200px);
+                margin: 0 auto;
+                padding: var(--landing-padding, var(--space-2xl));
+                width: 100%;
+                /* Prevent layout shift */
+                min-height: 100vh;
+                /* Improve rendering performance */
+                content-visibility: auto;
+                contain-intrinsic-size: auto 1000px;
+            }
+
+            /* Typography for landing pages */
+            h1 {
+                font-size: var(--font-size-4xl);
+                margin-bottom: var(--space-lg);
+                line-height: 1.2;
+            }
+
+            h2 {
+                font-size: var(--font-size-3xl);
+                margin-top: var(--space-2xl);
+                margin-bottom: var(--space-lg);
+            }
+
+            h3 {
+                font-size: var(--font-size-2xl);
+                margin-top: var(--space-xl);
+                margin-bottom: var(--space-md);
+            }
+
+            h4 {
+                font-size: var(--font-size-xl);
+                margin-top: var(--space-lg);
+                margin-bottom: var(--space-sm);
+            }
+
+            p {
+                margin-bottom: var(--space-lg);
+            }
+
+            a {
+                color: var(--link-color-light);
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            /* Inline code styling - Light mode */
+            code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-light);
+                color: var(--inline-code-color-light);
+                border: 1px solid var(--inline-code-border-light);
+                padding: var(--inline-code-padding);
+                border-radius: var(--inline-code-border-radius);
+                font-size: var(--inline-code-font-size);
+                font-family:
+                    "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+            }
+
+            /* Dark mode - system preference */
+            @media (prefers-color-scheme: dark) {
+                :root:not(.light-mode)
+                    code:not(pre code):not(.expressive-code code) {
+                    background: var(--inline-code-bg-dark);
+                    color: var(--inline-code-color-dark);
+                    border: 1px solid var(--inline-code-border-dark);
+                }
+            }
+
+            /* Dark mode - manual toggle */
+            :root.dark-mode code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-dark);
+                color: var(--inline-code-color-dark);
+                border: 1px solid var(--inline-code-border-dark);
+            }
+
+            /* Prevent content overflow */
+            img,
+            video,
+            iframe {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* Mobile adjustments */
+            @media (max-width: 768px) {
+                .landing-content {
+                    padding: var(--space-xl) var(--space-lg);
+                }
+
+                h1 {
+                    font-size: var(--font-size-3xl);
+                }
+
+                h2 {
+                    font-size: var(--font-size-2xl);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <a href="#main-content" class="skip-link">Skip to content</a>
+        <ClientRouter />
+        <script>
+            import { navigate } from 'astro:transitions/client';
+
+            // Expose navigation function globally
+            (window as any).astroNavigate = navigate;
+
+            // Optimize view transitions for maximum speed
+            document.addEventListener('astro:before-preparation', () => {
+                // Signal instant transition
+                document.documentElement.dataset.instantTransition = 'true';
+            }, { passive: true });
+
+            document.addEventListener('astro:after-swap', () => {
+                // Remove flag immediately after swap
+                requestAnimationFrame(() => {
+                    delete document.documentElement.dataset.instantTransition;
+                });
+            }, { passive: true });
+
+            // Ensure scripts re-run properly after navigation
+            document.addEventListener('astro:page-load', () => {
+                // Re-run theme application
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.classList.remove('light-mode', 'dark-mode');
+                document.documentElement.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
+                document.documentElement.setAttribute('data-theme', theme);
+            });
+        </script>
+
+        <!-- Warning for users with JavaScript disabled -->
+        <noscript>
+            <div
+                style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #d97706; color: white; padding: 1rem; text-align: center; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"
+            >
+                ⚠️ JavaScript is required for interactive features like search,
+                navigation, and theme switching. Please enable JavaScript for
+                the best experience.
+            </div>
+        </noscript>
+
+        <!-- Header: visible on desktop only -->
+        <Header
+            currentPath={currentPath}
+            siteTitle="CSS Tags"
+            siteTitleHref={buildHref(base)}
+            showSearch={true}
+            iconLinks={[
+                { href: "https://github.com/doeixd/CSS-Tags", icon: "github", label: "View on GitHub" }
+            ]}
+        />
+
+        <LoadingIndicator />
+        <KeyboardShortcuts />
+
+        <div class="landing-container">
+            <main class="landing-content" id="main-content" tabindex="-1">
+                <slot />
+            </main>
+        </div>
+    </body>
+</html>

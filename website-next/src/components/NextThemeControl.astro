@@ -1,0 +1,42 @@
+<select class="form-select" data-color-scheme-control aria-label="Color scheme">
+  <option value="system">System</option>
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+
+<script>
+  const storageKey = "css-tags-color-scheme";
+
+  const resolveSystemColorScheme = () =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+  const applyColorScheme = (value: string) => {
+    const root = document.documentElement;
+    if (value === "light" || value === "dark") {
+      root.dataset.colorScheme = value;
+      root.dataset.resolvedColorScheme = value;
+      localStorage.setItem(storageKey, value);
+    } else {
+      delete root.dataset.colorScheme;
+      root.dataset.resolvedColorScheme = resolveSystemColorScheme();
+      localStorage.removeItem(storageKey);
+    }
+  };
+
+  const setupColorSchemeControl = () => {
+    const control = document.querySelector<HTMLSelectElement>("[data-color-scheme-control]");
+    if (!control || control.dataset.ready === "true") return;
+    control.dataset.ready = "true";
+    const saved = localStorage.getItem(storageKey);
+    control.value = saved === "light" || saved === "dark" ? saved : "system";
+    control.addEventListener("change", () => applyColorScheme(control.value));
+  };
+
+  setupColorSchemeControl();
+  document.addEventListener("astro:page-load", setupColorSchemeControl);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (!document.documentElement.dataset.colorScheme) {
+      document.documentElement.dataset.resolvedColorScheme = resolveSystemColorScheme();
+    }
+  });
+</script>

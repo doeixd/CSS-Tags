@@ -1,0 +1,196 @@
+---
+// Textarea.astro - Multi-line text input component
+interface Props {
+  placeholder?: string;
+  value?: string;
+  disabled?: boolean;
+  required?: boolean;
+  readonly?: boolean;
+  error?: boolean;
+  success?: boolean;
+  rows?: number;
+  cols?: number;
+  maxlength?: number;
+  minlength?: number;
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  label?: string;
+  helpText?: string;
+  errorText?: string;
+}
+
+const {
+  placeholder,
+  value,
+  disabled = false,
+  required = false,
+  readonly = false,
+  error = false,
+  success = false,
+  rows = 4,
+  cols,
+  maxlength,
+  minlength,
+  resize = 'vertical',
+  size = 'md',
+  class: className,
+  label,
+  helpText,
+  errorText,
+  ...rest
+} = Astro.props;
+---
+
+<div class={`form-field ${className || ''}`}>
+  {label && (
+    <label class="form-label" for={rest.id}>
+      {label}
+      {required && <span class="form-required" aria-label="required">*</span>}
+    </label>
+  )}
+
+  <textarea
+    class={`form-textarea form-textarea--${size} ${error ? 'form-textarea--error' : ''} ${success ? 'form-textarea--success' : ''}`}
+    placeholder={placeholder}
+    value={value}
+    disabled={disabled}
+    required={required}
+    readonly={readonly}
+    rows={rows}
+    cols={cols}
+    maxlength={maxlength}
+    minlength={minlength}
+    style={`resize: ${resize};`}
+    aria-invalid={error}
+    aria-describedby={helpText ? `${rest.id}-help` : errorText ? `${rest.id}-error` : undefined}
+    {...rest}
+  ></textarea>
+
+  {helpText && (
+    <div class="form-help" id={`${rest.id}-help`}>
+      {helpText}
+    </div>
+  )}
+
+  {errorText && (
+    <div class="form-error" id={`${rest.id}-error`} role="alert">
+      {errorText}
+    </div>
+  )}
+</div>
+
+<style>
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .form-label {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    font-size: var(--form-label-font-size, var(--font-size-sm));
+  }
+
+  .form-required {
+    color: var(--form-required-color, #dc3545);
+    margin-left: var(--space-xs);
+  }
+
+  .form-textarea {
+    padding: var(--form-textarea-padding, var(--space-sm) var(--space-md));
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--form-textarea-font-size, var(--font-size-base));
+    font-family: inherit;
+    line-height: var(--line-height-body);
+    transition: all var(--transition-fast);
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+
+  .form-textarea--error {
+    border-color: var(--form-error-color, #dc3545);
+  }
+
+  .form-textarea--error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+  }
+
+  .form-textarea--success {
+    border-color: var(--form-success-color, #28a745);
+  }
+
+  .form-textarea--success:focus {
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  }
+
+  .form-textarea:disabled {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
+
+  /* Size variants */
+  .form-textarea--sm {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .form-textarea--lg {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+  }
+
+  .form-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .form-error {
+    font-size: var(--font-size-sm);
+    color: var(--form-error-color, #dc3545);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .form-textarea:focus {
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    }
+
+    :root:not(.light-mode) .form-textarea--error:focus {
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+    }
+
+    :root:not(.light-mode) .form-textarea--success:focus {
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+    }
+  }
+
+  :root.dark-mode .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  }
+
+  :root.dark-mode .form-textarea--error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+  }
+
+  :root.dark-mode .form-textarea--success:focus {
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .form-textarea--lg {
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--font-size-base);
+    }
+  }
+</style>

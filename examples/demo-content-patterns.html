@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Tags — Content patterns</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+  <main>
+    <container>
+      <layout-stack gap="var(--space-2xl)">
+        <content-header>
+          <user-avatar slot="media" size="lg">CT</user-avatar>
+          <div slot="body">
+            <eyebrow>Workspace</eyebrow>
+            <h1>Content patterns</h1>
+            <p class="lead">Optional regions compose without site-specific selectors.</p>
+          </div>
+          <div slot="meta"><span>Updated today</span><badge status="success">Ready</badge></div>
+          <div slot="actions"><button type="button">Share</button><button type="button">Create</button></div>
+        </content-header>
+
+        <section aria-labelledby="activity-title">
+          <h2 id="activity-title">Recent activity</h2>
+          <layout-stack>
+            <article data-media-object>
+              <user-avatar data-media-object-media>AM</user-avatar>
+              <div data-media-object-body><h3>Alex Morgan</h3><p>Published the release notes.</p></div>
+              <div data-media-object-actions><button type="button">View</button></div>
+            </article>
+            <article class="media-object">
+              <div class="media-object__body"><h3>System update</h3><p>This row intentionally omits media and actions.</p></div>
+            </article>
+          </layout-stack>
+        </section>
+
+        <section class="empty-state" aria-labelledby="empty-title">
+          <span class="empty-state__media" aria-hidden="true">◇</span>
+          <div class="empty-state__body"><h2 id="empty-title">No projects yet</h2><p>Create a project to collect your work.</p></div>
+          <div class="empty-state__actions"><button type="button">Create project</button></div>
+        </section>
+      </layout-stack>
+    </container>
+  </main>
+</body>
+</html>

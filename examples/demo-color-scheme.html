@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS Tags color scheme control</title>
+    <link rel="stylesheet" href="../index.css">
+  </head>
+  <body>
+    <layout-page min-height="100dvh">
+      <header data-site-header slot="header">
+        <container>
+          <strong data-site-brand>Color scheme API</strong>
+          <div data-header-actions>
+            <select class="form-select" id="color-scheme" aria-label="Color scheme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </container>
+      </header>
+
+      <main slot="main">
+        <container>
+          <layout-stack gap="var(--space-xl)">
+            <header>
+              <p class="eyebrow">Theme preference</p>
+              <h1>Automatic by default, explicit when needed</h1>
+              <p class="lead">Set <code>data-color-scheme</code> on the root element, or remove it to follow the operating system.</p>
+            </header>
+            <layout-grid min-item-size="14rem">
+              <card><card-body><h2>Base</h2><p>The page and semantic tokens update together.</p></card-body></card>
+              <card><card-body><h2>Accent</h2><button class="button-primary">Primary action</button></card-body></card>
+              <card><card-body><h2>Form controls</h2><label>Email <input class="form-input" type="email" placeholder="you@example.com"></label></card-body></card>
+            </layout-grid>
+          </layout-stack>
+        </container>
+      </main>
+    </layout-page>
+
+    <script>
+      const control = document.querySelector("#color-scheme");
+      control.addEventListener("change", () => {
+        if (control.value === "system") delete document.documentElement.dataset.colorScheme;
+        else document.documentElement.dataset.colorScheme = control.value;
+      });
+    </script>
+  </body>
+</html>

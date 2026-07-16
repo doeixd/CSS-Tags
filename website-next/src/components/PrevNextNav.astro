@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import { normalizeBase, buildHref } from '../utils/url';
+import { navigation } from '../navigation';
+
+interface Props {
+	currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+
+const allDocs = await getCollection('docs');
+const docsMap = new Map(allDocs.map(doc => [doc.id, doc]));
+
+// Create a flattened list of navigation items in the order they appear in navigation.ts
+const flattenedNavItems: string[] = [];
+navigation.forEach(section => {
+	if (section.items) {
+		section.items.forEach(item => {
+			if (item.slug) {
+				flattenedNavItems.push(item.slug);
+			}
+		});
+	} else if (section.slug) {
+		flattenedNavItems.push(section.slug);
+	}
+});
+
+// Find current position in the navigation order
+const currentIndex = flattenedNavItems.indexOf(currentPath);
+const prevSlug = currentIndex > 0 ? flattenedNavItems[currentIndex - 1] : null;
+const nextSlug = currentIndex < flattenedNavItems.length - 1 ? flattenedNavItems[currentIndex + 1] : null;
+
+const prevDoc = prevSlug ? docsMap.get(prevSlug) || null : null;
+const nextDoc = nextSlug ? docsMap.get(nextSlug) || null : null;
+---
+
+{(prevDoc || nextDoc) && (
+	<nav class="prev-next-nav" aria-label="Previous and next page">
+		{prevDoc && (
+			<a href={buildHref(base, prevDoc.id)} class="prev-next-link prev-link" data-astro-prefetch>
+				<span class="prev-next-label">Previous</span>
+				<span class="prev-next-title">{prevDoc.data.title}</span>
+			</a>
+		)}
+		{nextDoc && (
+			<a href={buildHref(base, nextDoc.id)} class="prev-next-link next-link" data-astro-prefetch>
+				<span class="prev-next-label">Next</span>
+				<span class="prev-next-title">{nextDoc.data.title}</span>
+			</a>
+		)}
+	</nav>
+)}
+
+<style>
+	.prev-next-nav {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--prev-next-nav-gap, var(--space-lg));
+		margin-top: var(--prev-next-nav-margin-top, 3rem);
+		padding-top: var(--prev-next-nav-padding-top, var(--space-2xl));
+		border-top: 1px solid var(--border-color);
+	}
+
+	.prev-next-link {
+		display: flex;
+		flex-direction: column;
+		gap: var(--prev-next-link-gap, var(--space-xs));
+		padding: var(--prev-next-link-padding, var(--space-lg));
+		border: 1px solid var(--border-color);
+		border-radius: var(--prev-next-link-border-radius, var(--border-radius-lg));
+		text-decoration: none;
+		transition: all var(--transition-fast);
+	}
+
+	.prev-next-link:hover {
+		border-color: var(--accent);
+		background: var(--bg-hover);
+	}
+
+	.prev-link {
+		text-align: left;
+	}
+
+	.next-link {
+		text-align: right;
+		grid-column: 2;
+	}
+
+	.prev-next-label {
+		font-size: var(--prev-next-label-font-size, var(--font-size-xs));
+		font-weight: var(--prev-next-label-font-weight, var(--font-weight-semibold));
+		text-transform: uppercase;
+		letter-spacing: var(--prev-next-label-letter-spacing, var(--letter-spacing-uppercase));
+		color: var(--text-secondary);
+	}
+
+	.prev-next-title {
+		font-size: var(--prev-next-title-font-size, var(--font-size-lg));
+		font-weight: var(--prev-next-title-font-weight, var(--font-weight-medium));
+		color: var(--text-primary);
+	}
+
+	@media (max-width: 640px) {
+		.prev-next-nav {
+			grid-template-columns: 1fr;
+		}
+
+		.next-link {
+			grid-column: 1;
+		}
+	}
+
+	/* Dark mode styles (system preference) */
+	@media (prefers-color-scheme: dark) {
+		:root:not(.light-mode) .prev-next-nav {
+			border-top-color: var(--border-color);
+		}
+
+		:root:not(.light-mode) .prev-next-link {
+			border-color: var(--border-color);
+		}
+
+		:root:not(.light-mode) .prev-next-link:hover {
+			border-color: var(--accent-light);
+			background: var(--bg-hover);
+		}
+
+		:root:not(.light-mode) .prev-next-label {
+			color: var(--text-secondary);
+		}
+
+		:root:not(.light-mode) .prev-next-title {
+			color: var(--text-primary);
+		}
+	}
+
+	/* Dark mode styles (manual toggle) */
+	:root.dark-mode .prev-next-nav {
+		border-top-color: var(--border-color);
+	}
+
+	:root.dark-mode .prev-next-link {
+		border-color: var(--border-color);
+	}
+
+	:root.dark-mode .prev-next-link:hover {
+		border-color: var(--accent-light);
+		background: var(--bg-hover);
+	}
+
+	:root.dark-mode .prev-next-label {
+		color: var(--text-secondary);
+	}
+
+	:root.dark-mode .prev-next-title {
+		color: var(--text-primary);
+	}
+</style>

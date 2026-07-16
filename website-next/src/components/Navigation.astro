@@ -1,0 +1,1096 @@
+---
+import { navigation } from "../navigation";
+import Search from "./Search.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import SidebarFooter from "./SidebarFooter.astro";
+import { normalizeBase, buildHref } from "../utils/url";
+
+const {
+  currentPath = '',
+  showSidebarFooter = true,
+  footerShowHideButton = false,
+  footerSticky = true,
+  footerHotEdgeReveal = false
+} = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+
+function isActive(slug: string | undefined) {
+    if (!slug) return currentPath === "" || currentPath === "/";
+    // Exact match for the current path
+    return currentPath === slug;
+}
+---
+
+<div class="mobile-backdrop" transition:name="mobile-backdrop" transition:persist></div>
+
+<!-- MOBILE NAVIGATION OPTION 2: Standalone Floating Menu Button -->
+<!--
+    This is a standalone floating menu button that appears in the top-right on mobile.
+    It provides ONLY the menu button to open the sidebar (no TOC or Search functionality).
+
+    To DISABLE this option: Comment out the <button> element below
+    Note: If you disable this, make sure MobileHeader is enabled in DocsLayout.astro
+
+    CHOOSE ONE:
+    - Option 1 (MobileHeader in DocsLayout.astro): Fixed header bar with TOC + Search + Menu buttons
+    - Option 2 (This button): Standalone floating menu button only
+
+    CUSTOMIZATION:
+    Adjust sidebar padding-top in theme.css via --nav-sidebar-mobile-padding-top:
+    - If using Option 1 (MobileHeader): Keep default var(--mobile-header-height)
+    - If using Option 2 (Standalone button): Set to 0 for no extra padding
+-->
+<!-- COMMENTED OUT - Using MobileHeader instead
+<button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+    <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+    >
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+</button>
+-->
+
+<nav class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="nav-header">
+        <a href={buildHref(base)} class="site-title">CSS Tags</a>
+        <div class="nav-actions" transition:name="nav-actions" transition:persist>
+            <ThemeToggle transitionName="sidebar-theme-toggle" />
+            <a
+                href="https://github.com/doeixd/CSS-Tags"
+                target="_blank"
+                rel="noopener"
+                class="github-link"
+                aria-label="View on GitHub"
+            >
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="github-logo"
+                >
+                    <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                    ></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <Search id="sidebar-search" variant="default" />
+
+    <ul class="nav-list">
+        {
+            navigation.map((section, index) => (
+                <li
+                    class="nav-section"
+                    data-collapsed={section.collapsed ? "true" : "false"}
+                >
+                    {section.items ? (
+                        <>
+                            <button
+                                class="section-title"
+                                data-section-index={index}
+                                aria-expanded={section.collapsed ? "false" : "true"}
+                                aria-controls={`nav-section-${index}`}
+                            >
+                                <span>{section.label}</span>
+                                <svg
+                                    class="section-toggle"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 12 12"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M6 9L2 5h8z" />
+                                </svg>
+                            </button>
+                            <ul
+                                class="section-items"
+                                id={`nav-section-${index}`}
+                                hidden={section.collapsed === true}
+                            >
+                                {section.items
+                                    .filter((item) => item.slug !== undefined)
+                                    .map((item) => (
+                                        <li>
+                                             <a
+                                                 href={buildHref(
+                                                     base,
+                                                     item.slug,
+                                                 )}
+                                                 class:list={[
+                                                     "nav-link",
+                                                     {
+                                                         active: isActive(
+                                                             item.slug,
+                                                         ),
+                                                     },
+                                                 ]}
+                                                 data-astro-prefetch
+                                             >
+                                                {item.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                            </ul>
+                        </>
+                    ) : (
+                        <a
+                            href={buildHref(base, section.slug)}
+                            class:list={[
+                                "nav-link",
+                                "nav-link-standalone",
+                                { active: isActive(section.slug) },
+                            ]}
+                            data-astro-prefetch
+                        >
+                            {section.label}
+                        </a>
+                    )}
+                </li>
+            ))
+        }
+    </ul>
+
+        {showSidebarFooter && (
+        <SidebarFooter
+        showHideButton={footerShowHideButton}
+        sticky={footerSticky}
+        hotEdgeReveal={footerHotEdgeReveal}
+        class:list={[
+        footerHotEdgeReveal && 'hot-edge-enabled',
+            footerSticky ? 'sticky' : 'fixed'
+            ]}
+            />
+    )}
+</nav>
+
+<!-- Floating sidebar toggle button (shown when sidebar is hidden) -->
+<button class="floating-sidebar-toggle" aria-label="Show sidebar">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+<path d="M9 15l6-6-6-6"></path>
+</svg>
+</button>
+
+<style is:inline>
+    .mobile-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height for mobile browsers */
+        background: var(--nav-mobile-backdrop-bg);
+        z-index: var(--z-index-backdrop);
+        opacity: 0;
+        transition: opacity var(--transition-nav);
+        backdrop-filter: blur(var(--backdrop-blur));
+        pointer-events: none;
+    }
+
+    .mobile-backdrop.visible {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        position: fixed;
+        top: var(--nav-mobile-menu-top, var(--space-lg));
+        right: var(--nav-mobile-menu-right, var(--space-lg));
+        z-index: var(--z-index-mobile-menu);
+        padding: var(--nav-mobile-menu-padding, var(--space-md));
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: var(
+            --nav-mobile-menu-border-radius,
+            var(--border-radius-lg)
+        );
+        cursor: pointer;
+        box-shadow: var(--nav-mobile-menu-box-shadow, var(--shadow-sm));
+        transition: all var(--transition-normal);
+    }
+
+    .mobile-menu-toggle:hover {
+        transform: var(--transform-scale-hover);
+    }
+
+    .mobile-menu-toggle:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    .sidebar {
+        position: sticky;
+        top: var(--header-height);
+        height: calc(100dvh - var(--header-height));
+        max-height: calc(100dvh - var(--header-height));
+        overflow-y: auto;
+        padding: var(--nav-sidebar-padding, var(--space-2xl) var(--space-lg));
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-backdrop {
+            display: block;
+        }
+
+        .mobile-menu-toggle {
+            display: block;
+        }
+
+        .sidebar {
+            display: none; /* Completely hide sidebar on mobile by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            height: 100vh;
+            height: 100dvh; /* Full viewport height */
+            max-height: none; /* Override desktop max-height constraint */
+            width: var(--sidebar-width);
+            max-width: var(--sidebar-width-max);
+            z-index: var(--z-index-sidebar);
+            transform: translateX(-100%);
+            transition: transform var(--transition-nav);
+            padding-top: var(--nav-sidebar-mobile-padding-top);
+            /* Optimize for smooth animations */
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .sidebar.open {
+            display: block; /* Show when opened */
+            transform: translateX(0);
+        }
+
+        /* Performance optimization: Handle dragging state */
+        .sidebar.sidebar-dragging {
+            transition: none; /* Disable transitions during drag */
+            transform: translateX(var(--sidebar-drag-x, 0));
+        }
+    }
+
+    /* Sidebar hidden state for footer toggle functionality */
+    .sidebar.sidebar-hidden {
+        transform: translateX(-100%);
+        transition: transform var(--transition-nav);
+    }
+
+    .sidebar.sidebar-revealed {
+        transform: translateX(0);
+        transition: transform var(--transition-fast);
+    }
+
+    /* Hide/show resize handle based on sidebar state - using :has() selector */
+    .docs-container:has(.sidebar-hidden) .sidebar-resize-handle,
+    .docs-container:has(.sidebar.sidebar-hidden) .sidebar-resize-handle {
+        display: none !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .docs-container:not(:has(.sidebar-hidden)) .sidebar-resize-handle,
+    .docs-container:has(.sidebar:not(.sidebar-hidden)) .sidebar-resize-handle {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Floating sidebar toggle button - matches scroll-to-top button style */
+    .floating-sidebar-toggle {
+        /* Fixed positioning at bottom left - aligned vertically with scroll-to-top button */
+        position: fixed;
+        left: var(--space-2xl);
+        bottom: var(--scroll-button-bottom);
+        z-index: var(--z-index-sidebar);
+
+        /* Size - matches scroll button */
+        width: var(--scroll-button-size);
+        height: var(--scroll-button-size);
+        padding: var(--scroll-button-padding);
+
+        /* Appearance - matches scroll button */
+        background: var(--scroll-button-bg);
+        color: var(--scroll-button-fg);
+        border: var(--scroll-button-border);
+        border-radius: var(--scroll-button-border-radius);
+        backdrop-filter: var(--scroll-button-backdrop-filter);
+        -webkit-backdrop-filter: var(--scroll-button-backdrop-filter);
+
+        /* Layout */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        /* Animation - matches scroll button */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: var(--scroll-button-transition);
+    }
+
+    /* Show floating button when sidebar is hidden */
+    .sidebar.sidebar-hidden ~ .floating-sidebar-toggle {
+        opacity: var(--scroll-button-opacity);
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .floating-sidebar-toggle:hover {
+        background: var(--scroll-button-bg-hover);
+        opacity: var(--scroll-button-opacity-hover);
+        transform: var(--scroll-button-transform-hover);
+    }
+
+    .floating-sidebar-toggle:active {
+        transform: var(--scroll-button-transform-active);
+    }
+
+    .floating-sidebar-toggle:focus-visible {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .floating-sidebar-toggle {
+            display: none; /* Hide floating toggle on mobile */
+        }
+    }
+
+    .nav-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--nav-header-margin-bottom, var(--space-2xl));
+        padding-bottom: var(--nav-header-padding-bottom, var(--space-lg));
+        border-bottom: 1px solid var(--nav-header-border-color, transparent);
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .site-title {
+        font-size: var(--nav-site-title-font-size, var(--font-size-2xl));
+        font-weight: var(--nav-site-title-font-weight, var(--font-weight-bold));
+        text-decoration: none;
+        color: var(--text-primary);
+    }
+
+    .github-link {
+        padding: var(
+            --nav-github-link-padding,
+            var(--space-sm) var(--space-lg)
+        );
+        background: var(--nav-github-link-bg, var(--bg-secondary));
+        border: var(--nav-github-link-border, 1px solid transparent);
+        color: var(--nav-github-link-color, var(--text-primary));
+        text-decoration: none;
+        border-radius: var(
+            --nav-github-link-border-radius,
+            var(--border-radius-lg)
+        );
+        font-size: var(--nav-github-link-font-size, var(--font-size-sm));
+        font-weight: var(
+            --nav-github-link-font-weight,
+            var(--font-weight-medium)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition-fast);
+        width: var(--nav-github-link-width, 2.5rem);
+        height: var(--nav-github-link-height, 2.5rem);
+    }
+
+    .github-logo {
+        width: var(--nav-github-logo-size, 20px);
+        height: var(--nav-github-logo-size, 20px);
+        flex-shrink: 0;
+    }
+
+    .github-logo path {
+        stroke: currentColor;
+    }
+
+    .github-link:hover {
+        background: var(--nav-github-link-hover-bg, var(--bg-hover));
+        border-color: var(--nav-github-link-hover-border-color, var(--accent));
+    }
+
+    .github-link:active {
+        transform: var(--nav-github-link-active-transform, scale(0.98));
+    }
+
+    @media (max-width: 768px) {
+        .nav-header {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .github-link {
+            width: var(--nav-github-link-width-mobile, 2.25rem);
+            height: var(--nav-github-link-height-mobile, 2.25rem);
+        }
+    }
+
+    .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-section {
+        margin-bottom: var(--nav-section-margin-bottom, var(--space-lg));
+    }
+
+    .nav-section[data-collapsed="true"] .section-items {
+        display: none;
+    }
+
+    .nav-section:not([data-collapsed="true"]) .section-items {
+        display: block;
+    }
+
+    .nav-section[data-collapsed="true"] .section-toggle {
+        transform: var(--transform-rotate-collapsed);
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: var(--space-sm) 0;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        border: none;
+        font-size: var(--nav-section-title-font-size, 15px);
+        font-weight: var(--nav-section-title-font-weight, 600);
+        text-transform: var(--nav-section-title-text-transform, capitalize);
+        letter-spacing: var(--nav-section-title-letter-spacing, -0.1px);
+        color: var(--nav-section-title-color, hsl(0deg 0% 34.51%));
+        margin: 0 0 var(--space-xs);
+        cursor: pointer;
+        text-align: left;
+        position: static;
+    }
+
+    .section-title:hover {
+        color: var(--text-primary, #1a1a1a);
+    }
+
+    .section-toggle {
+        transition: transform var(--transition-nav);
+    }
+
+    .section-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .section-items li {
+        margin-bottom: var(--nav-section-items-margin-bottom, var(--space-xs));
+    }
+
+    .nav-link {
+        display: block;
+        padding: var(--nav-link-padding, var(--space-sm) var(--space-md));
+        color: var(--text-primary);
+        text-decoration: none;
+        border-radius: var(--nav-link-border-radius, var(--border-radius-md));
+        font-size: var(--nav-link-font-size, var(--font-size-base));
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+        transition: background-color var(--transition-fast),
+                    color var(--transition-fast),
+                    font-weight var(--transition-fast);
+    }
+
+    .nav-link:hover {
+        background: var(--bg-hover);
+    }
+
+    .nav-link.active {
+        background: var(--accent-light);
+        color: var(--accent);
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* Dark mode styles (system preference) */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .sidebar {
+            background: var(--bg-secondary);
+            border-right-color: var(--border-color);
+        }
+
+        :root:not(.light-mode) .site-title,
+        :root:not(.light-mode) .nav-link {
+            color: var(--text-primary);
+        }
+
+        :root:not(.light-mode) .section-title {
+            color: var(--text-secondary);
+        }
+
+        :root:not(.light-mode) .nav-link:hover {
+            background: var(--bg-hover);
+        }
+
+        :root:not(.light-mode) .nav-link.active {
+            background: var(--accent-dark);
+            color: var(--accent-light);
+        }
+
+        :root:not(.light-mode) .github-logo {
+            color: var(--text-primary) !important;
+        }
+    }
+
+    /* Dark mode styles (manual toggle) */
+    :root.dark-mode .sidebar {
+        background: var(--bg-secondary);
+        border-right-color: var(--border-color);
+    }
+
+    :root.dark-mode .site-title,
+    :root.dark-mode .nav-link {
+        color: var(--text-primary);
+    }
+
+    :root.dark-mode .section-title {
+        color: var(--text-secondary);
+    }
+
+    :root.dark-mode .nav-link:hover {
+        background: var(--bg-hover);
+    }
+
+    :root.dark-mode .nav-link.active {
+        background: var(--accent-dark);
+        color: var(--accent-light);
+    }
+
+    :root.dark-mode .github-logo {
+        color: var(--text-primary) !important;
+    }
+</style>
+
+<script>
+    // Cache nav links and their paths for fast lookup (avoids repeated DOM queries)
+    let cachedLinks: Array<{ element: Element; path: string }> = [];
+    let linksCached = false;
+    let previousActiveLink: Element | null = null;
+
+    function cacheNavLinks() {
+        if (linksCached) return;
+
+        const links = document.querySelectorAll(".nav-link");
+        const baseUrl = import.meta.env.BASE_URL;
+
+        cachedLinks = Array.from(links).map(link => ({
+            element: link,
+            path: (link.getAttribute("href") || "")
+                .replace(baseUrl, "")
+                .replace(/\/$/, "")
+        }));
+
+        linksCached = true;
+    }
+
+    function updateActiveLink() {
+        // Use cached links if available, otherwise cache them now
+        if (!linksCached) {
+            cacheNavLinks();
+        }
+
+        const currentPath = window.location.pathname
+            .replace(import.meta.env.BASE_URL, "")
+            .replace(/\/$/, "");
+
+        // PERFORMANCE OPTIMIZATION: Only update links that change
+        // Instead of iterating all links, find the new active link
+        // and only update previous + current (2 operations instead of N)
+        const newActiveLink = cachedLinks.find(({ path }) => path === currentPath);
+
+        if (newActiveLink && newActiveLink.element !== previousActiveLink) {
+            // Remove active from previous link (if exists)
+            if (previousActiveLink) {
+                previousActiveLink.classList.remove("active");
+            }
+
+            // Add active to new link
+            newActiveLink.element.classList.add("active");
+            previousActiveLink = newActiveLink.element;
+        }
+    }
+
+    // Store mobile menu handlers globally to allow cleanup
+    let mobileMenuHandlers: {
+        toggleHandler?: (e: Event) => void;
+        backdropHandler?: (e: Event) => void;
+        linkHandlers?: Map<Element, (e: Event) => void>;
+        focusinHandler?: (e: FocusEvent) => void;
+        touchStartHandler?: (e: TouchEvent) => void;
+        touchMoveHandler?: (e: TouchEvent) => void;
+        touchEndHandler?: (e: TouchEvent) => void;
+    } = {};
+
+    // Touch gesture state
+    let touchState = {
+        startX: 0,
+        startY: 0,
+        currentX: 0,
+        isDragging: false,
+    };
+
+    function setupMobileMenu() {
+        const toggle = document.querySelector(".mobile-menu-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        const backdrop = document.querySelector(".mobile-backdrop");
+
+        // PERFORMANCE FIX: Don't skip mobile menu setup for persisted sidebars
+        // The sidebar persists, but event listeners on backdrop/touch/links need reattachment
+        // Only skip if sidebar doesn't exist
+        if (!sidebar || !backdrop) {
+            return;
+        }
+
+        // Clean up old event listeners
+        if (mobileMenuHandlers.toggleHandler && toggle) {
+            toggle.removeEventListener("click", mobileMenuHandlers.toggleHandler);
+        }
+        if (mobileMenuHandlers.backdropHandler && backdrop) {
+            backdrop.removeEventListener("click", mobileMenuHandlers.backdropHandler);
+        }
+        if (mobileMenuHandlers.linkHandlers) {
+            mobileMenuHandlers.linkHandlers.forEach((handler, link) => {
+                link.removeEventListener("click", handler);
+            });
+        }
+        if (mobileMenuHandlers.focusinHandler) {
+            document.removeEventListener("focusin", mobileMenuHandlers.focusinHandler);
+        }
+        if (mobileMenuHandlers.touchStartHandler && sidebar) {
+            sidebar.removeEventListener("touchstart", mobileMenuHandlers.touchStartHandler);
+        }
+        if (mobileMenuHandlers.touchMoveHandler) {
+            document.removeEventListener("touchmove", mobileMenuHandlers.touchMoveHandler);
+        }
+        if (mobileMenuHandlers.touchEndHandler) {
+            document.removeEventListener("touchend", mobileMenuHandlers.touchEndHandler);
+        }
+
+        if (sidebar && backdrop) {
+            const openMenu = () => {
+                sidebar.classList.add("open");
+                backdrop.classList.add("visible");
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.add("mobile-menu-open");
+            };
+
+            const closeMenu = () => {
+                sidebar.classList.remove("open");
+                backdrop.classList.remove("visible");
+                // PERFORMANCE OPTIMIZATION: Use CSS class instead of inline style
+                document.body.classList.remove("mobile-menu-open");
+                // Reset transform after animation
+                setTimeout(() => {
+                    (sidebar as HTMLElement).style.transform = "";
+                }, 300);
+            };
+
+            // Store backdrop handler
+            mobileMenuHandlers.backdropHandler = () => closeMenu();
+            backdrop.addEventListener("click", mobileMenuHandlers.backdropHandler);
+
+            // Swipe gesture support to close sidebar
+            mobileMenuHandlers.touchStartHandler = (e: TouchEvent) => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+
+                touchState.startX = e.touches[0].clientX;
+                touchState.startY = e.touches[0].clientY;
+                touchState.currentX = touchState.startX;
+                touchState.isDragging = false;
+            };
+
+            mobileMenuHandlers.touchMoveHandler = (e: TouchEvent) => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+                if (!touchState.startX) return;
+
+                touchState.currentX = e.touches[0].clientX;
+                const deltaX = touchState.currentX - touchState.startX;
+                const deltaY = e.touches[0].clientY - touchState.startY;
+
+                // Only start dragging if horizontal movement is greater than vertical
+                if (!touchState.isDragging && Math.abs(deltaX) > 10) {
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        touchState.isDragging = true;
+                    }
+                }
+
+                // If dragging left (negative deltaX), move sidebar
+                if (touchState.isDragging && deltaX < 0) {
+                    e.preventDefault();
+
+                    // PERFORMANCE OPTIMIZATION: Use CSS class and variable instead of inline styles
+                    sidebar.classList.add("sidebar-dragging");
+                    document.documentElement.style.setProperty("--sidebar-drag-x", `${deltaX}px`);
+                }
+            };
+
+            mobileMenuHandlers.touchEndHandler = () => {
+                // Only on mobile when sidebar is open
+                if (window.innerWidth > 768 || !sidebar.classList.contains("open")) return;
+                if (!touchState.startX) return;
+
+                const deltaX = touchState.currentX - touchState.startX;
+
+                // PERFORMANCE OPTIMIZATION: Remove dragging class to re-enable transition
+                sidebar.classList.remove("sidebar-dragging");
+                document.documentElement.style.removeProperty("--sidebar-drag-x");
+
+                // If swiped left more than 50px, close the menu
+                if (deltaX < -50) {
+                    closeMenu();
+                }
+                // Else: Transform is automatically reset via CSS when class is removed
+
+                // Reset touch state
+                touchState.startX = 0;
+                touchState.startY = 0;
+                touchState.currentX = 0;
+                touchState.isDragging = false;
+            };
+
+            sidebar.addEventListener("touchstart", mobileMenuHandlers.touchStartHandler, { passive: true });
+            document.addEventListener("touchmove", mobileMenuHandlers.touchMoveHandler, { passive: false });
+            document.addEventListener("touchend", mobileMenuHandlers.touchEndHandler);
+
+            // Close menu when clicking on a link
+            const links = sidebar.querySelectorAll(".nav-link");
+            mobileMenuHandlers.linkHandlers = new Map();
+            links.forEach((link) => {
+                const handler = () => closeMenu();
+                mobileMenuHandlers.linkHandlers!.set(link, handler);
+                link.addEventListener("click", handler);
+            });
+
+            // Close menu when tabbing outside on mobile
+            mobileMenuHandlers.focusinHandler = (e: FocusEvent) => {
+                // Only handle on mobile (when sidebar can be opened)
+                if (window.innerWidth > 768) return;
+
+                // Check if sidebar is open
+                if (!sidebar.classList.contains("open")) return;
+
+                const target = e.target as HTMLElement;
+
+                // Check if focus moved outside sidebar, backdrop, and toggle
+                const isInSidebar = sidebar.contains(target);
+                const isInBackdrop = backdrop.contains(target);
+                const isToggle = toggle?.contains(target);
+
+                if (!isInSidebar && !isInBackdrop && !isToggle) {
+                    closeMenu();
+                }
+            };
+            document.addEventListener("focusin", mobileMenuHandlers.focusinHandler);
+
+            // Store toggle handler (only if standalone toggle exists)
+            if (toggle) {
+                mobileMenuHandlers.toggleHandler = () => {
+                    if (sidebar.classList.contains("open")) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                };
+                toggle.addEventListener("click", mobileMenuHandlers.toggleHandler);
+            }
+        }
+    }
+
+    // Store sidebar click handler for cleanup
+    let sidebarClickHandler: ((e: Event) => void) | null = null;
+    let sidebarWithClickHandler: Element | null = null;
+
+    function setupCollapsibleSections() {
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return;
+
+        // Clean up old event listener
+        if (sidebarClickHandler && sidebarWithClickHandler) {
+            sidebarWithClickHandler.removeEventListener("click", sidebarClickHandler);
+        }
+
+        // Load saved state from localStorage
+        const savedState = localStorage.getItem("nav-collapsed-state");
+        const collapsedSections = savedState ? JSON.parse(savedState) : {};
+
+        // Apply saved state to existing sections
+        const sectionTitles = sidebar.querySelectorAll(".section-title");
+        sectionTitles.forEach((title) => {
+            const section = title.closest(".nav-section");
+            if (!section) return;
+
+            const sectionIndex = title.getAttribute("data-section-index");
+            if (sectionIndex && collapsedSections[sectionIndex] !== undefined) {
+                section.setAttribute(
+                    "data-collapsed",
+                    collapsedSections[sectionIndex] ? "true" : "false",
+                );
+            }
+
+            title.setAttribute(
+                "aria-expanded",
+                section.getAttribute("data-collapsed") === "true" ? "false" : "true",
+            );
+            const items = section.querySelector<HTMLElement>(".section-items");
+            if (items) {
+                items.hidden = section.getAttribute("data-collapsed") === "true";
+            }
+        });
+
+        // Use event delegation on sidebar
+        sidebarClickHandler = (e: Event) => {
+            const target = e.target as Element;
+            const sectionTitle = target.closest(".section-title") as Element;
+
+            if (!sectionTitle) return;
+
+            const section = sectionTitle.closest(".nav-section");
+            if (!section) return;
+
+            const sectionIndex = sectionTitle.getAttribute("data-section-index");
+            const isCollapsed = section.getAttribute("data-collapsed") === "true";
+            const newState = !isCollapsed;
+
+            section.setAttribute(
+                "data-collapsed",
+                newState ? "true" : "false",
+            );
+            sectionTitle.setAttribute(
+                "aria-expanded",
+                newState ? "false" : "true",
+            );
+            const items = section.querySelector<HTMLElement>(".section-items");
+            if (items) items.hidden = newState;
+
+            // Save state to localStorage
+            if (sectionIndex) {
+                collapsedSections[sectionIndex] = newState;
+                localStorage.setItem(
+                    "nav-collapsed-state",
+                    JSON.stringify(collapsedSections),
+                );
+            }
+        };
+
+        sidebar.addEventListener("click", sidebarClickHandler);
+        sidebarWithClickHandler = sidebar;
+    }
+
+    function isElementInViewport(element) {
+        const sidebar = document.querySelector(".sidebar");
+        if (!sidebar) return false;
+
+        const sidebarRect = sidebar.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        // Check if element is within sidebar's visible area
+        return (
+            elementRect.top >= sidebarRect.top &&
+            elementRect.bottom <= sidebarRect.bottom &&
+    elementRect.left >= sidebarRect.left &&
+        elementRect.right <= sidebarRect.right
+    );
+    }
+
+    function autoExpandActiveSection() {
+        const activeLink = document.querySelector(".nav-link.active");
+        if (!activeLink) return;
+
+        // Find the parent section
+        const section = activeLink.closest(".nav-section");
+        if (!section) return;
+
+        // Check if section is collapsed
+        const isCollapsed = section.getAttribute("data-collapsed") === "true";
+        if (!isCollapsed) {
+            // Section is already expanded, check if active link is visible
+            if (!isElementInViewport(activeLink)) {
+            // Scroll active link into view only if not visible
+            setTimeout(() => {
+            activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 100);
+        }
+            return;
+        }
+
+        // Expand the section
+	section.setAttribute("data-collapsed", "false");
+        section.querySelector(".section-title")?.setAttribute("aria-expanded", "true");
+        const sectionItems = section.querySelector<HTMLElement>(".section-items");
+        if (sectionItems) sectionItems.hidden = false;
+
+        // Update localStorage
+        const savedState = localStorage.getItem("nav-collapsed-state");
+        const collapsedSections = savedState ? JSON.parse(savedState) : {};
+        const sectionIndex = section
+            .querySelector(".section-title")
+            ?.getAttribute("data-section-index");
+
+        if (sectionIndex) {
+            collapsedSections[sectionIndex] = false;
+            localStorage.setItem(
+                "nav-collapsed-state",
+                JSON.stringify(collapsedSections),
+            );
+        }
+
+        // Scroll section into view
+        setTimeout(() => {
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+    }
+
+    // Save sidebar scroll position before navigation
+    document.addEventListener("astro:before-swap", () => {
+        const sidebar = document.querySelector(".sidebar");
+        if (sidebar) {
+            sessionStorage.setItem(
+                "sidebar-scroll",
+                sidebar.scrollTop.toString(),
+            );
+        }
+
+        // Clean up sidebar click handler
+        if (sidebarClickHandler) {
+            if (sidebarWithClickHandler) {
+                sidebarWithClickHandler.removeEventListener("click", sidebarClickHandler);
+            }
+            sidebarClickHandler = null;
+            sidebarWithClickHandler = null;
+        }
+    });
+
+    // Restore sidebar scroll immediately after DOM swap
+    document.addEventListener("astro:after-swap", () => {
+        const sidebar = document.querySelector(".sidebar");
+        const savedScroll = sessionStorage.getItem("sidebar-scroll");
+
+        if (sidebar && savedScroll) {
+            // Use requestAnimationFrame to ensure DOM is fully updated
+            requestAnimationFrame(() => {
+                sidebar.scrollTop = parseInt(savedScroll, 10);
+            });
+        }
+    });
+
+    // Navigate on mousedown for instant navigation (100-200ms faster than waiting for click)
+    function setupInstantNavigation() {
+        const navigate = (window as any).astroNavigate;
+        if (!navigate) return;
+
+        let isNavigating = false;
+
+        document.addEventListener('mousedown', (e) => {
+            // Only trigger on left click (button 0)
+            if (e.button !== 0) return;
+
+            // Prevent double navigation
+            if (isNavigating) return;
+
+            const link = (e.target as Element).closest('a[href]');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('http')) return;
+
+            // Check if it's a nav-link, prev-link, or next-link
+            const isNavLink = link.classList.contains('nav-link') ||
+                            link.classList.contains('prev-link') ||
+                            link.classList.contains('next-link');
+
+            if (!isNavLink) return;
+
+            // Prevent the default click from also firing
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Set navigation flag
+            isNavigating = true;
+
+            // Use requestAnimationFrame for fastest possible navigation
+            requestAnimationFrame(() => {
+                navigate(href);
+            });
+
+            // Reset flag after navigation starts
+            setTimeout(() => {
+                isNavigating = false;
+            }, 50);
+        }, { capture: true, passive: false });
+    }
+
+    // Update on page load
+    document.addEventListener("DOMContentLoaded", () => {
+        updateActiveLink();
+        setupMobileMenu();
+        setupCollapsibleSections();
+        autoExpandActiveSection();
+        setupInstantNavigation();
+
+    });
+
+    // Update after view transitions
+    document.addEventListener("astro:after-swap", () => {
+        // Update active link on navigation
+        updateActiveLink();
+
+        // ALWAYS setup mobile menu handlers (backdrop, touch, links)
+        // These need to be reattached even for persisted sidebars
+        setupMobileMenu();
+
+        // The persisted sidebar loses this listener during before-swap cleanup,
+        // so it must be reattached after every Astro navigation.
+        setupCollapsibleSections();
+        autoExpandActiveSection();
+    });
+</script>

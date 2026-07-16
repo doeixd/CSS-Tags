@@ -1,7 +1,7 @@
 # Badge Component Documentation
 
 ## Overview
-The `badge` component provides compact inline labels for status, metadata, release labels, and short UI callouts. It supports semantic surface roles, semantic status variants, size variants, and progressive text-box enhancement.
+The `badge` component provides compact inline labels for status, metadata, release labels, and short UI callouts. It supports semantic surface variants, status variants, size variants, and progressive text-box enhancement.
 
 ## Base Behavior
 
@@ -14,7 +14,7 @@ The `badge` component provides compact inline labels for status, metadata, relea
 
 Base default:
 
-- no `role` or `status`: overt surface styling
+- no `variant` or `status`: overt surface styling
 
 ## Variants
 
@@ -23,15 +23,16 @@ Base default:
 - `badge[size="md"]`: medium size
 - `badge[size="lg"]`: larger padding and font size
 
-### Role Variants
-- `badge[role="subtle"]`: subtle surface and subtle outline
-- `badge[role="default"]`: default surface and default outline
-- `badge[role="muted"]`: muted surface and subtle outline
-- `badge[role="overt"]`: overt surface and overt outline
+### Surface Variants
+- `badge[variant="subtle"]`: subtle surface and subtle outline
+- `badge[variant="default"]`: default surface and default outline
+- `badge[variant="muted"]`: muted surface and subtle outline
+- `badge[variant="overt"]`: overt surface and overt outline
 
 Notes:
-- if no `role` or `status` is set, the badge defaults to the overt surface treatment
-- role variants are self-contained and do not rely on inherited `--bg` from parent containers
+- if no `variant` or `status` is set, the badge defaults to the overt surface treatment
+- variants are self-contained and do not rely on inherited `--bg` from parent containers
+- use `variant`, `data-variant`, or `.badge-*`; legacy visual `role` values remain compatible but are deprecated because `role` belongs to ARIA
 
 ### Status Variants
 - `badge[status="success"]`: success-tinted semantic badge
@@ -41,13 +42,14 @@ Notes:
 - `badge[status="primary"]`: accent-filled badge with `--text-on-accent`
 - `badge[status="overt"]`: overt surface variant using the status path
 
-Status variants override role styling.
+Status variants override surface styling.
 
 ## Usage Examples
 
 ```html
-<badge role="subtle" size="md">Beta</badge>
-<badge role="default">Stable</badge>
+<badge variant="subtle" size="md">Beta</badge>
+<span data-badge data-variant="default" data-size="md">Stable</span>
+<span class="badge badge-overt badge-lg">Class host</span>
 <badge status="success">Live</badge>
 <badge status="primary" size="lg">New Release</badge>
 ```
@@ -56,7 +58,7 @@ With a parent gradient background:
 
 ```html
 <box bg="linear-gradient(180deg, var(--base), var(--surface-subtle))">
-  <badge role="subtle">Still uses its own surface tokens</badge>
+  <badge variant="subtle">Still uses its own surface tokens</badge>
 </box>
 ```
 
@@ -64,21 +66,16 @@ With a parent gradient background:
 
 Public or externally useful:
 
-- `--_gap`: gap between badge content and any icon
-- `--border-width`: border width
-- `--border-radius-full`: pill radius
+- `--badge-gap`: gap between badge content and any icon
+- `--badge-background` and `--badge-color`: surface and text color
+- `--badge-border-color` and `--badge-border-width`: border styling
+- `--badge-radius`: pill radius
+- `--badge-padding-inline` and `--badge-padding-block`: spacing
 - `--text-box-badge`: shorthand text-box token
 - `--text-box-trim-badge`: longhand trim token
 - `--text-box-edge-badge`: longhand edge token
 
-Internal component variables:
-
-- `--b-bg`: resolved badge background
-- `--b-bw`: resolved border width
-- `--b-bc`: resolved border color
-- `--b-r`: resolved radius
-- `--b-px`: inline padding
-- `--b-py`: block padding
+Resolved internal variables use the `--_badge-*` prefix and are not part of the public API.
 
 ## Text Box Support
 
@@ -99,7 +96,7 @@ Override example:
 ## Accessibility
 
 - semantic status variants use the shared theme tokens
-- auto-contrast text is derived from the badge background
+- each built-in surface resolves to a matching semantic contrast token
 - compact text-box enhancement is progressive, not required for layout
 - use badges for short labels, not long paragraph content
 
@@ -107,4 +104,4 @@ Override example:
 
 - `badge` is a custom element-style selector, not a native HTML element
 - badges are intended for short inline content
-- role-based styling uses explicit resolved surfaces so parent `--bg` values do not hijack the component
+- variant styling uses explicit resolved surfaces so parent values do not hijack the component

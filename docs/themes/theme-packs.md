@@ -23,7 +23,7 @@ The file defines the same brand themes (Ocean, Sunrise, Forest) as the example f
   --secondary-hue-shift: 40; --tertiary-hue-shift: -80;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="ocean"] { --accent-c: 0.20; --accent-l: 70%; }
+  :root:not([data-color-scheme="light"])[data-theme="ocean"] { --accent-c: 0.20; --accent-l: 70%; }
 }
 ```
 
@@ -37,7 +37,7 @@ The file defines the same brand themes (Ocean, Sunrise, Forest) as the example f
   --secondary-hue-shift: 60; --tertiary-hue-shift: -90;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="sunrise"] { --accent-c: 0.22; --accent-l: 72%; }
+  :root:not([data-color-scheme="light"])[data-theme="sunrise"] { --accent-c: 0.22; --accent-l: 72%; }
 }
 ```
 
@@ -51,7 +51,7 @@ The file defines the same brand themes (Ocean, Sunrise, Forest) as the example f
   --secondary-hue-shift: 50; --tertiary-hue-shift: -100;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="forest"] { --accent-c: 0.18; --accent-l: 68%; }
+  :root:not([data-color-scheme="light"])[data-theme="forest"] { --accent-c: 0.18; --accent-l: 68%; }
 }
 ```
 

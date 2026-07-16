@@ -1,0 +1,203 @@
+---
+title: Navigation Component
+description: Responsive navbar, sidebar, breadcrumbs, and pagination patterns built from semantic navigation landmarks.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+## Overview
+The `navigation` component provides responsive navbar and sidebar components with mobile-first design. It uses container queries for responsive behavior and scoped styling to prevent conflicts.
+
+## Key Features
+- **Scoped Styling**: Uses `@scope` to isolate navigation styles
+- **Responsive Design**: Container queries for mobile adaptation
+- **Two Variants**: Navbar and sidebar layouts
+- **Mobile Menu**: Collapsible navigation for small screens
+- **Design Tokens**: Integrated with the framework's color system
+
+## Components
+
+### Navbar (`nav-navbar`)
+Horizontal navigation bar with brand, links, and mobile toggle.
+
+#### Features
+- **Optional Sticky Positioning**: Add `data-sticky`, `.is-sticky`, or `sticky`
+- **Brand Area**: For logo or site title
+- **Navigation Links**: Horizontal list of links
+- **Mobile Toggle**: Opt-in collapsible menu for small containers
+- **Responsive**: Links stack vertically on mobile
+
+### Sidebar (`nav-sidebar`)
+Vertical navigation sidebar with scrollable content.
+
+#### Features
+- **Fixed Width**: Configurable width (default: 250px)
+- **Scrollable**: Auto-scroll for long navigation lists
+- **Section Grouping**: Support for navigation sections
+- **Link Styling**: Hover effects and active states
+
+## Attributes
+
+### Navbar Attributes
+- `container-type`: `inline-size` (set internally)
+- `container-name`: `navbar-container` (set internally)
+
+### Sidebar Attributes
+- `width`: Sidebar width (default: `250px`)
+
+## Structure
+
+### Navbar Structure
+```html
+<nav-navbar>
+  <div class="nav-brand">Brand</div>
+  <ul class="nav-links">
+    <li><a href="#" class="nav-link">Home</a></li>
+    <li><a href="#" class="nav-link">About</a></li>
+  </ul>
+  <button class="nav-toggle">☰</button>
+</nav-navbar>
+```
+
+### Sidebar Structure
+```html
+<nav-sidebar>
+  <ul class="sidebar-nav">
+    <li><a href="#" class="sidebar-link">Dashboard</a></li>
+    <li><a href="#" class="sidebar-link">Settings</a></li>
+    <div class="sidebar-section">Admin</div>
+    <li><a href="#" class="sidebar-link">Users</a></li>
+  </ul>
+</nav-sidebar>
+```
+
+## Responsive Behavior
+
+### Mobile Navbar (< 34rem container width)
+- Links stack vertically and remain visible by default, preserving navigation without JavaScript.
+- Add `data-collapsible` or `.is-collapsible` to opt into a toggle-enhanced menu.
+- The toggle's `aria-expanded="true"` state or `.active` on the link list reveals the menu.
+- The menu stays in normal flow rather than covering nearby content.
+
+### Desktop Navbar (> 34rem container width)
+- Horizontal link layout
+- Toggle button hidden
+- Inline navigation display
+
+## Styling Details
+
+### Common Properties
+- **Colors**: Uses design tokens for backgrounds, text, and borders
+- **Spacing**: Consistent padding and margins
+- **Typography**: Inherited font settings
+- **Transitions**: Smooth hover effects
+
+### Navbar Specific
+- **Layout**: Flexbox with space-between justification
+- **Position**: Sticky top with high z-index
+- **Border**: Bottom border for separation
+
+### Sidebar Specific
+- **Layout**: Flex column with full height
+- **Position**: Sticky top with border right
+- **Overflow**: Auto-scroll for content
+
+## CSS Custom Properties Used
+- `--spacing-md`, `--spacing-sm`, `--spacing-xs`: Spacing values
+- `--bg`: Background colors
+- `--surface-default`: Default surface color
+- `--outline-subtle`: Subtle border color
+- `--z-index-50`: Z-index value (default: 50)
+- `--font-size-lg`: Large font size
+- `--font-weight-bold`: Bold font weight
+- `--text-overt`: Overt text color
+- `--text-default`: Default text color
+- `--radius-md`: Border radius
+- `--highlight-bg-subtle`: Subtle highlight background
+- `--highlight-bg-muted`: Muted highlight background
+- `--accent-subtle`: Subtle accent color
+
+## Utility Classes
+- `.nav-link-active`: Active navigation link styling
+- `.nav-links.active`: Shows mobile menu (JavaScript-controlled)
+
+## Browser Support
+- **@scope**: Chrome 118+, Firefox 128+ (limited support)
+- **Container Queries**: Chrome 105+, Firefox 110+, Safari 16+
+- **CSS Nesting**: Modern browsers
+- **Fallback**: Basic styling without scoping in unsupported browsers
+
+## JavaScript Integration
+Only the opt-in `data-collapsible` mobile menu requires JavaScript. Without that attribute, links remain visible at every width. Enhancement should:
+- Toggle `.active` class on `.nav-links`
+- Handle toggle button clicks
+- Manage focus and accessibility
+
+## Accessibility
+- **Keyboard Navigation**: Focus management for mobile menu
+- **Screen Readers**: Proper semantic structure
+- **Focus Indicators**: Visible focus outlines
+- **ARIA**: May need `aria-expanded` for toggle button
+
+## Use Cases
+- **Website Navigation**: Main site navigation
+- **Dashboard Layouts**: Admin panels and data apps
+- **Mobile Apps**: Responsive web app navigation
+- **Documentation Sites**: Section-based navigation
+
+## Breadcrumbs
+
+Use a native navigation landmark; `nav.breadcrumbs` and `nav[data-breadcrumbs]` are equivalent.
+
+<LiveExample title="Wrapping breadcrumbs">
+  <nav data-breadcrumbs aria-label="Breadcrumb">
+    <ol>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#components">Components</a></li>
+      <li><span aria-current="page">Navigation patterns</span></li>
+    </ol>
+  </nav>
+</LiveExample>
+
+```html
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/components/">Components</a></li>
+    <li><span aria-current="page">Navigation</span></li>
+  </ol>
+</nav>
+```
+
+Separators are decorative generated content, so assistive technology announces only the labels. Theme the pattern with `--breadcrumbs-gap`, `--breadcrumbs-separator`, `--breadcrumbs-color`, `--breadcrumbs-hover-color`, `--breadcrumbs-current-color`, and `--breadcrumbs-font-size`.
+
+## Pagination
+
+Use anchors for location-changing pages. Buttons are appropriate for client-side data grids that keep the same URL.
+
+<LiveExample title="Responsive pagination">
+  <nav class="pagination" aria-label="Pagination">
+    <a class="pagination-previous" href="#page-2">Previous</a>
+    <ol>
+      <li><a href="#page-1">1</a></li>
+      <li><a href="#page-2">2</a></li>
+      <li><a href="#page-3" aria-current="page">3</a></li>
+      <li><a href="#page-4">4</a></li>
+    </ol>
+    <a class="pagination-next" href="#page-4">Next</a>
+  </nav>
+</LiveExample>
+
+```html
+<nav data-pagination aria-label="Pagination">
+  <a class="pagination-previous" href="?page=2">Previous</a>
+  <ol>
+    <li><a href="?page=2">2</a></li>
+    <li><a href="?page=3" aria-current="page">3</a></li>
+    <li><a href="?page=4">4</a></li>
+  </ol>
+  <a class="pagination-next" href="?page=4">Next</a>
+</nav>
+```
+
+Add `data-size="compact"` for dense interfaces or `data-surface="footer"` for an opt-in divider. A disabled anchor must omit `href` and use `aria-disabled="true"`.

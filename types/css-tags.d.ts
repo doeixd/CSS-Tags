@@ -11,6 +11,32 @@ declare global {
   namespace CSSTags {
     type BooleanAttribute = boolean | "" | "true" | "false";
     type CSSValue = string;
+    /** Values accepted by the root `data-color-scheme` override. */
+    type ColorScheme = "light" | "dark";
+
+    /** Typed authoring inputs accepted by the documentation theme creator. */
+    interface ThemeOverrides {
+      "--accent-h"?: CSSValue;
+      "--accent-c"?: CSSValue;
+      "--accent-l"?: CSSValue;
+      "--surface-saturation"?: CSSValue;
+      "--secondary-hue-shift"?: CSSValue;
+      "--tertiary-hue-shift"?: CSSValue;
+      "--contrast-factor"?: CSSValue;
+      "--success-h"?: CSSValue;
+      "--warning-h"?: CSSValue;
+      "--error-h"?: CSSValue;
+      "--info-h"?: CSSValue;
+      "--density-factor"?: CSSValue;
+      "--radius-factor"?: CSSValue;
+      "--font-size-prose"?: CSSValue;
+      "--line-height-prose"?: CSSValue;
+      "--measure-prose"?: CSSValue;
+      "--font-size-ui"?: CSSValue;
+      "--font-size-control"?: CSSValue;
+      "--font-weight-heading"?: CSSValue;
+      "--letter-spacing-heading"?: CSSValue;
+    }
 
     interface GlobalAttributes {
       id?: string;
@@ -31,6 +57,7 @@ declare global {
       gap?: CSSValue;
       align?: CSSValue;
       center?: BooleanAttribute;
+      "container-query"?: BooleanAttribute;
     }
 
     interface LayoutGridAttributes extends LayoutAttributes {
@@ -56,19 +83,19 @@ declare global {
       threshold?: CSSValue;
     }
 
-    interface LayoutPadAttributes extends GlobalAttributes {
+    interface LayoutPadAttributes extends LayoutAttributes {
       padding?: CSSValue;
       "padding-x"?: CSSValue;
       "padding-y"?: CSSValue;
     }
 
-    interface LayoutCenterAttributes extends GlobalAttributes {
+    interface LayoutCenterAttributes extends LayoutAttributes {
       "max-width"?: CSSValue;
       gutters?: CSSValue;
       "and-text"?: BooleanAttribute;
     }
 
-    interface LayoutFrameAttributes extends GlobalAttributes {
+    interface LayoutFrameAttributes extends LayoutAttributes {
       ratio?: CSSValue;
     }
 
@@ -126,13 +153,13 @@ declare global {
 
     interface BadgeAttributes extends GlobalAttributes {
       size?: "sm" | "md" | "lg";
-      role?: "subtle" | "default" | "muted" | "overt" | string;
+      variant?: "subtle" | "default" | "muted" | "overt";
       status?: "success" | "warning" | "error" | "info" | "primary" | "overt";
     }
 
     interface ChipAttributes extends GlobalAttributes {
       size?: "sm" | "md" | "lg";
-      role?: "subtle" | "default" | "muted" | "overt" | string;
+      variant?: "subtle" | "default" | "muted" | "overt";
       removable?: BooleanAttribute;
     }
 
@@ -254,6 +281,18 @@ declare global {
       sticky?: BooleanAttribute;
     }
 
+    interface SiteHeaderAttributes extends GlobalAttributes {
+      sticky?: BooleanAttribute;
+      elevated?: BooleanAttribute;
+      compact?: BooleanAttribute;
+    }
+
+    interface SiteFooterAttributes extends GlobalAttributes {
+      bordered?: BooleanAttribute;
+      compact?: BooleanAttribute;
+      centered?: BooleanAttribute;
+    }
+
     interface ViewPageAttributes extends GlobalAttributes {
       active?: BooleanAttribute;
     }
@@ -285,6 +324,19 @@ declare global {
       "aria-label"?: string;
     }
 
+    interface ContentHeaderAttributes extends GlobalAttributes {}
+
+    interface MediaObjectAttributes extends GlobalAttributes {}
+
+    interface EmptyStateAttributes extends GlobalAttributes {}
+
+    interface AlertAttributes extends GlobalAttributes {
+      status?: "success" | "warning" | "error" | "info";
+      density?: "compact" | "spacious";
+      "data-status"?: "success" | "warning" | "error" | "info";
+      "data-density"?: "compact" | "spacious";
+    }
+
     interface IntrinsicElements {
       "layout-grid": LayoutGridAttributes;
       "layout-split": LayoutSplitAttributes;
@@ -308,6 +360,7 @@ declare global {
       badge: BadgeAttributes;
       chip: ChipAttributes;
       text: TextAttributes;
+      eyebrow: GlobalAttributes;
       container: ContainerAttributes;
       "fluid-container": FluidContainerAttributes;
       grid: GridAttributes;
@@ -325,6 +378,8 @@ declare global {
       "data-table": GlobalAttributes;
       "modal-dialog": ModalDialogAttributes;
       "nav-navbar": NavbarAttributes;
+      "site-header": SiteHeaderAttributes;
+      "site-footer": SiteFooterAttributes;
       "view-transitions": GlobalAttributes;
       "view-transition": GlobalAttributes;
       "view-page": ViewPageAttributes;
@@ -345,6 +400,10 @@ declare global {
       "message-bubble": BubbleAttributes;
       "log-card": GlobalAttributes;
       "snap-feed": SnapFeedAttributes;
+      "content-header": ContentHeaderAttributes;
+      "media-object": MediaObjectAttributes;
+      "empty-state": EmptyStateAttributes;
+      "alert-message": AlertAttributes;
     }
   }
 
@@ -371,6 +430,7 @@ declare global {
     badge: HTMLElement;
     chip: HTMLElement;
     text: HTMLElement;
+    eyebrow: HTMLElement;
     container: HTMLElement;
     "fluid-container": HTMLElement;
     grid: HTMLElement;
@@ -388,6 +448,8 @@ declare global {
     "data-table": HTMLElement;
     "modal-dialog": HTMLElement;
     "nav-navbar": HTMLElement;
+    "site-header": HTMLElement;
+    "site-footer": HTMLElement;
     "view-transitions": HTMLElement;
     "view-transition": HTMLElement;
     "view-page": HTMLElement;
@@ -408,6 +470,10 @@ declare global {
     "message-bubble": HTMLElement;
     "log-card": HTMLElement;
     "snap-feed": HTMLElement;
+    "content-header": HTMLElement;
+    "media-object": HTMLElement;
+    "empty-state": HTMLElement;
+    "alert-message": HTMLElement;
   }
 
   namespace JSX {

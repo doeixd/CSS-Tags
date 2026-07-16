@@ -1,0 +1,70 @@
+---
+import "@pagefind/default-ui/css/ui.css";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<details class="next-docs-search" data-docs-search data-disclosure="compact" data-base={base}>
+  <summary>Search <kbd aria-hidden="true">Ctrl K</kbd></summary>
+  <div data-docs-search-panel>
+    <div id="next-docs-search"></div>
+    <p class="caption" data-docs-search-status aria-live="polite"></p>
+  </div>
+</details>
+
+<script>
+  import { PagefindUI } from "@pagefind/default-ui";
+
+  const setupDocsSearch = () => {
+    const details = document.querySelector<HTMLDetailsElement>("[data-docs-search]");
+    const mount = document.querySelector<HTMLElement>("#next-docs-search");
+    const status = details?.querySelector<HTMLElement>("[data-docs-search-status]");
+    if (!details || !mount || details.dataset.ready === "true") return;
+    details.dataset.ready = "true";
+
+    const base = details.dataset.base ?? "/";
+    try {
+      new PagefindUI({
+        element: "#next-docs-search",
+        showImages: false,
+        showSubResults: true,
+        excerptLength: 18,
+        baseUrl: base,
+        bundlePath: `${base.replace(/\/$/, "")}/pagefind/`,
+        processResult: (result) => {
+          if (result.excerpt) result.excerpt = result.excerpt.replace(/<[^>]*>/g, "");
+          if (result.url) {
+            const prefix = base.replace(/\/$/, "");
+            const path = `/${result.url.replace(/^\/+/, "")}`;
+            result.url = prefix && !path.startsWith(`${prefix}/`) ? `${prefix}${path}` : path;
+          }
+          return result;
+        },
+      });
+    } catch {
+      if (status) status.textContent = "Search is unavailable. Use the documentation menu instead.";
+    }
+
+    const focusSearch = () => {
+      details.open = true;
+      requestAnimationFrame(() => details.querySelector<HTMLInputElement>("input")?.focus());
+    };
+
+    details.addEventListener("toggle", () => {
+      if (details.open) requestAnimationFrame(() => details.querySelector<HTMLInputElement>("input")?.focus());
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        focusSearch();
+      } else if (event.key === "Escape" && details.open) {
+        details.open = false;
+        details.querySelector<HTMLElement>("summary")?.focus();
+      }
+    });
+  };
+
+  setupDocsSearch();
+  document.addEventListener("astro:page-load", setupDocsSearch);
+</script>

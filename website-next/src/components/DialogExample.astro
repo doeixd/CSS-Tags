@@ -1,0 +1,43 @@
+---
+import LiveExample from "./LiveExample.astro";
+
+const id = `dialog-example-${Math.random().toString(36).slice(2)}`;
+---
+
+<LiveExample
+    title="Native dialog"
+    description="The browser supplies focus management, Escape handling, and the top layer."
+>
+    <button type="button" data-open-dialog={id}>Review changes</button>
+    <dialog id={id} data-modal aria-labelledby={`${id}-title`}>
+        <h3 id={`${id}-title`}>Publish these changes?</h3>
+        <p>The updated documentation will be visible to everyone.</p>
+        <form method="dialog">
+            <layout-cluster gap="var(--space-sm)">
+                <button value="cancel">Keep editing</button>
+                <button value="confirm">Publish</button>
+            </layout-cluster>
+        </form>
+    </dialog>
+</LiveExample>
+
+<script>
+    function setupDialogExamples() {
+        document.querySelectorAll<HTMLElement>(".live-example__stage").forEach((host) => {
+            const root = host.shadowRoot;
+            if (!root) return;
+            root.querySelectorAll<HTMLElement>("[data-open-dialog]").forEach((trigger) => {
+                if (trigger.dataset.dialogReady === "true") return;
+                trigger.dataset.dialogReady = "true";
+                trigger.addEventListener("click", () => {
+                    const id = trigger.dataset.openDialog;
+                    const dialog = id ? root.getElementById(id) : null;
+                    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+                });
+            });
+        });
+    }
+
+    setupDialogExamples();
+    document.addEventListener("astro:page-load", setupDialogExamples);
+</script>

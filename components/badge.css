@@ -1,25 +1,30 @@
-/* badge.css */
+/**
+ * Compact, non-interactive metadata with custom-element, data, and class hosts.
+ * `variant` is the visual surface API; `role` is reserved for ARIA semantics.
+ */
 
 :is(badge, [data-badge], .badge) {
+  --_badge-background: var(--badge-background, var(--surface-overt));
+  --_badge-color: var(--badge-color, var(--text-on-surface-overt, var(--text-default)));
+  --_badge-border-color: var(--badge-border-color, var(--outline-overt));
+  --_badge-border-width: var(--badge-border-width, var(--border-width, 1px));
+  --_badge-radius: var(--badge-radius, var(--radius-full, var(--border-radius-full, 9999px)));
+  --_badge-padding-inline: var(--badge-padding-inline, 0.55em);
+  --_badge-padding-block: var(--badge-padding-block, 0.15em);
+  --_badge-gap: var(--badge-gap, var(--space-2xs, 0.25rem));
+
   display: inline-flex;
   align-items: center;
-  gap: var(--_gap);
-  --b-bg: var(--surface-overt);
-  --b-bw: var(--border-width, 1px);
-  --b-bc: var(--outline-overt);
-  --bg: var(--b-bg);
-  --border: var(--b-bc);
-  --b-r: var(--border-radius-full, 9999px);
-  --b-px: 0.55em;
-  --b-py: 0.15em;
-  background-color: var(--b-bg);
-  border: var(--b-bw) solid var(--b-bc);
-  border-radius: var(--b-r);
-  padding: var(--b-py) var(--b-px);
+  gap: var(--_badge-gap);
+  max-inline-size: 100%;
+  padding: var(--_badge-padding-block) var(--_badge-padding-inline);
+  border: var(--_badge-border-width) solid var(--_badge-border-color);
+  border-radius: var(--_badge-radius);
+  background: var(--_badge-background);
+  color: var(--_badge-color);
   font-size: 0.85em;
   line-height: 1;
-  @apply --contrast-text-for-bg;
-  @apply --state-adjust;
+  overflow-wrap: anywhere;
 }
 
 @supports (text-box: trim-both cap alphabetic) {
@@ -35,19 +40,86 @@
   }
 }
 
-:is(badge, [data-badge], .badge)[size="sm"] { --b-py: 0.1em; --b-px: 0.45em; font-size: 0.75em; }
-:is(badge, [data-badge], .badge)[size="md"] { --b-py: 0.15em; --b-px: 0.55em; font-size: 0.85em; }
-:is(badge, [data-badge], .badge)[size="lg"] { --b-py: 0.25em; --b-px: 0.7em; font-size: 0.95em; }
+:is(badge, [data-badge], .badge):is([size="sm"], [data-size="sm"], .badge-sm) {
+  --_badge-padding-block: 0.1em;
+  --_badge-padding-inline: 0.45em;
+  font-size: 0.75em;
+}
 
-:is(badge, [data-badge], .badge)[role="subtle"] { --b-bg: var(--surface-subtle); --b-bc: var(--outline-subtle); }
-:is(badge, [data-badge], .badge)[role="default"] { --b-bg: var(--surface-default); --b-bc: var(--outline-default); }
-:is(badge, [data-badge], .badge)[role="muted"] { --b-bg: var(--surface-muted); --b-bc: var(--outline-subtle); }
-:is(badge, [data-badge], .badge)[role="overt"] { --b-bg: var(--surface-overt); --b-bc: var(--outline-overt); }
+:is(badge, [data-badge], .badge):is([size="md"], [data-size="md"], .badge-md) {
+  --_badge-padding-block: 0.15em;
+  --_badge-padding-inline: 0.55em;
+  font-size: 0.85em;
+}
 
-/* status variants */
-:is(badge, [data-badge], .badge)[status="success"] { @apply --feedback-role(success); --bg: var(--surface-success); --b-bg: var(--bg); --b-bc: var(--outline-success); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-success); @apply --contrast-text-for-bg; }
-:is(badge, [data-badge], .badge)[status="warning"] { @apply --feedback-role(warning); --bg: var(--surface-warning); --b-bg: var(--bg); --b-bc: var(--outline-warning); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-warning); @apply --contrast-text-for-bg; }
-:is(badge, [data-badge], .badge)[status="error"]   { @apply --feedback-role(error);   --bg: var(--surface-error); --b-bg: var(--bg); --b-bc: var(--outline-error); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-error); @apply --contrast-text-for-bg; }
-:is(badge, [data-badge], .badge)[status="info"]    { @apply --feedback-role(info);    --bg: var(--surface-info); --b-bg: var(--bg); --b-bc: var(--outline-info); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-info); @apply --contrast-text-for-bg; }
-:is(badge, [data-badge], .badge)[status="primary"] { --bg: var(--accent); --b-bg: var(--bg); --b-bc: var(--accent-overt, var(--accent)); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); color: var(--text-on-accent); }
-:is(badge, [data-badge], .badge)[status="overt"]   { --bg: var(--surface-overt); --b-bg: var(--bg); --b-bc: var(--outline-overt); --border: var(--b-bc); background-color: var(--b-bg); border-color: var(--b-bc); @apply --contrast-text-for-bg; }
+:is(badge, [data-badge], .badge):is([size="lg"], [data-size="lg"], .badge-lg) {
+  --_badge-padding-block: 0.25em;
+  --_badge-padding-inline: 0.7em;
+  font-size: 0.95em;
+}
+
+:is(badge, [data-badge], .badge):is([variant="subtle"], [data-variant="subtle"], .badge-subtle) {
+  --_badge-background: var(--surface-subtle);
+  --_badge-color: var(--text-on-surface-subtle, var(--text-default));
+  --_badge-border-color: var(--outline-subtle);
+}
+
+:is(badge, [data-badge], .badge):is([variant="default"], [data-variant="default"], .badge-default) {
+  --_badge-background: var(--surface-default);
+  --_badge-color: var(--text-on-surface, var(--text-default));
+  --_badge-border-color: var(--outline-default);
+}
+
+:is(badge, [data-badge], .badge):is([variant="muted"], [data-variant="muted"], .badge-muted) {
+  --_badge-background: var(--surface-muted);
+  --_badge-color: var(--text-on-surface-muted, var(--text-default));
+  --_badge-border-color: var(--outline-subtle);
+}
+
+:is(badge, [data-badge], .badge):is([variant="overt"], [data-variant="overt"], .badge-overt) {
+  --_badge-background: var(--surface-overt);
+  --_badge-color: var(--text-on-surface-overt, var(--text-default));
+  --_badge-border-color: var(--outline-overt);
+}
+
+/* Deprecated compatibility: use `variant`; `role` must describe accessibility. */
+:is(badge, [data-badge], .badge)[role="subtle"] { --_badge-background: var(--surface-subtle); --_badge-color: var(--text-on-surface-subtle, var(--text-default)); --_badge-border-color: var(--outline-subtle); }
+:is(badge, [data-badge], .badge)[role="default"] { --_badge-background: var(--surface-default); --_badge-color: var(--text-on-surface, var(--text-default)); --_badge-border-color: var(--outline-default); }
+:is(badge, [data-badge], .badge)[role="muted"] { --_badge-background: var(--surface-muted); --_badge-color: var(--text-on-surface-muted, var(--text-default)); --_badge-border-color: var(--outline-subtle); }
+:is(badge, [data-badge], .badge)[role="overt"] { --_badge-background: var(--surface-overt); --_badge-color: var(--text-on-surface-overt, var(--text-default)); --_badge-border-color: var(--outline-overt); }
+
+:is(badge, [data-badge], .badge):is([status="success"], [data-status="success"], .badge-success) {
+  --_badge-background: var(--surface-success);
+  --_badge-color: var(--text-success);
+  --_badge-border-color: var(--outline-success);
+}
+
+:is(badge, [data-badge], .badge):is([status="warning"], [data-status="warning"], .badge-warning) {
+  --_badge-background: var(--surface-warning);
+  --_badge-color: var(--text-warning);
+  --_badge-border-color: var(--outline-warning);
+}
+
+:is(badge, [data-badge], .badge):is([status="error"], [data-status="error"], .badge-error) {
+  --_badge-background: var(--surface-error);
+  --_badge-color: var(--text-error);
+  --_badge-border-color: var(--outline-error);
+}
+
+:is(badge, [data-badge], .badge):is([status="info"], [data-status="info"], .badge-info) {
+  --_badge-background: var(--surface-info);
+  --_badge-color: var(--text-info);
+  --_badge-border-color: var(--outline-info);
+}
+
+:is(badge, [data-badge], .badge):is([status="primary"], [data-status="primary"], .badge-primary) {
+  --_badge-background: var(--accent);
+  --_badge-color: var(--text-on-accent);
+  --_badge-border-color: var(--accent-overt, var(--accent));
+}
+
+:is(badge, [data-badge], .badge):is([status="overt"], [data-status="overt"], .badge-status-overt) {
+  --_badge-background: var(--surface-overt);
+  --_badge-color: var(--text-on-surface-overt, var(--text-default));
+  --_badge-border-color: var(--outline-overt);
+}

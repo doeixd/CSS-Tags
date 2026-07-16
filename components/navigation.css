@@ -22,6 +22,9 @@
   border-radius: var(--nav-radius, var(--radius-lg, 0.75rem));
   position: relative;
   z-index: var(--nav-z-index, var(--z-index-50, 50));
+  font-family: var(--font-family-ui, inherit);
+  font-size: var(--font-size-navigation, var(--font-size-sm, 0.875rem));
+  line-height: var(--line-height-navigation, var(--line-height-snug, 1.375));
 }
 
 :where(nav-navbar, [data-navbar], .navbar, .nav-navbar):is([sticky], [data-sticky], .is-sticky) {
@@ -59,6 +62,7 @@
   align-items: center;
   color: var(--nav-link-color, var(--text-default));
   text-decoration: none;
+  font-weight: var(--nav-link-font-weight, var(--font-weight-ui, 500));
   padding: var(--nav-link-padding-block, var(--spacing-sm, 0.5rem)) var(--nav-link-padding-inline, var(--spacing-md, 1rem));
   border-radius: var(--nav-link-radius, var(--radius-md, 6px));
   transition: background-color 0.15s ease, color 0.15s ease;

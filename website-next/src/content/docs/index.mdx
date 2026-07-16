@@ -1,0 +1,168 @@
+---
+title: CSS Tags
+description: Style HTML directly with modern CSS. No classes, no frameworks—just semantic markup that looks great.
+---
+
+## Try It Right Now
+
+See it for yourself in 60 seconds. Copy this code into an `index.html` file and open it in your browser:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Tags Demo</title>
+
+  <!-- 1. Add the stylesheet. That's the only setup. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+</head>
+<body p="var(--space-lg)">
+
+  <!-- 2. Write semantic HTML. No classes needed. -->
+  <layout-center max-width="70ch">
+    <card>
+      <card-body>
+        <h1>It Just Works.</h1>
+        <p>This component is already responsive and adapts to your system's light or dark mode. No build step, no configuration needed.</p>
+        <layout-cluster gap="var(--space-sm)">
+          <!-- 3. Use design tokens for declarative styling. -->
+          <button bg="var(--accent)">Get Started</button>
+          <button>Learn More</button>
+        </layout-cluster>
+      </card-body>
+    </card>
+  </layout-center>
+
+</body>
+</html>
+```
+
+## Before & After
+
+### Traditional CSS Frameworks
+
+```html
+<!-- You are forced to describe the styling, not the content. -->
+<div class="card max-w-sm rounded-lg overflow-hidden shadow-lg bg-white p-6">
+  <img class="w-full h-48 object-cover" src="..." alt="...">
+  <div class="py-4">
+    <div class="font-bold text-xl mb-2 text-gray-900">Amazing Product</div>
+    <p class="text-gray-700 text-base">Description of the product...</p>
+  </div>
+  <div class="pt-4 pb-2">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Buy Now
+    </button>
+  </div>
+</div>
+```
+
+### With CSS Tags
+
+```html
+<!-- You describe the content. The styling is automatic. -->
+<card>
+  <card-media><img src="..." alt="..."></card-media>
+  <card-body>
+    <h3>Amazing Product</h3>
+    <p>Description of the product...</p>
+    <button bg="var(--accent)">Buy Now</button>
+  </card-body>
+</card>
+```
+
+**The difference:** Clean, readable HTML that automatically adapts to themes, screen sizes, and user preferences.
+
+## Why CSS Tags?
+
+CSS Tags brings styling back to HTML. Instead of cluttering your markup with utility classes, you write clean, semantic tags, and the stylesheet makes them beautiful and responsive automatically.
+
+- **Semantic HTML** - Write clean, readable HTML that describes your content, not your styling. No more div soup with endless class chains.
+- **Zero Configuration** - Just add one stylesheet link. No build step, no JavaScript, no configuration needed. Works immediately in any HTML file.
+- **Modern CSS Showcase** - Learn cutting-edge CSS features: OKLCH colors, container queries, cascade layers, :has() selector, and more.
+- **Theme-Aware** - Automatically adapts to light/dark mode with sophisticated OKLCH color system. Full theme customization via CSS variables.
+- **Container Queries** - Components respond to their container size, not viewport. A card in a sidebar looks different from one in main content—automatically.
+- **Design Token System** - Change one variable, update the entire theme. Everything from colors to spacing uses CSS custom properties.
+
+## The Foundational Pillars
+
+This library isn't magic—it's a showcase of powerful, modern CSS features that are now widely supported. Understanding them is key to mastering CSS Tags.
+
+### 1. Unknown HTML Tags
+
+**What It Is:** Any HTML tag a browser doesn't recognize (like `<card>`) is rendered as a generic element. It's valid HTML.
+
+**Why It Matters:** We can target these custom, semantic tags directly in CSS to build an entire component system without needing classes.
+
+```html
+<card>
+  <card-body>Clean, semantic markup</card-body>
+</card>
+```
+
+### 2. OKLCH Color Space
+
+**What It Is:** A perceptually uniform color space using Lightness, Chroma (intensity), and Hue.
+
+**Why It Matters:** Unlike HSL, where 50% lightness looks different for yellow vs. blue, OKLCH is perceptually uniform. A 10% increase in lightness *looks* 10% lighter to the human eye, regardless of color.
+
+```css
+/* One hue value creates an entire palette */
+--primary-h: 240;
+--accent: oklch(55% 0.15 240);
+```
+
+### 3. Relative Color Syntax
+
+**What It Is:** Create new colors by modifying existing ones directly in CSS.
+
+**Why It Matters:** No need to pre-define dozens of color variants. Derive them on the fly for hover, active, and subtle states.
+
+```css
+/* Make button 10% darker on hover, whatever its color */
+button:hover {
+  background: oklch(from var(--bg) calc(l - 0.1) c h);
+}
+```
+
+### 4. The :has() Selector
+
+**What It Is:** Style a parent element based on children it contains.
+
+**Why It Matters:** Enables automatic component variations without extra classes. A card styles itself differently just by detecting if an image is present.
+
+```css
+/* If card has media, make it horizontal */
+card:has(card-media) {
+  display: flex;
+  flex-direction: row;
+}
+```
+
+### 5. The attr() Function
+
+**What It Is:** Read HTML attribute values in CSS.
+
+**Why It Matters:** Pass "props" from HTML to CSS, creating declarative, configurable components without JavaScript.
+
+```html
+<layout-grid min-item-size="300px">...</layout-grid>
+```
+
+## What You Get
+
+### Layout Components
+Declarative layout primitives: `<layout-center>`, `<layout-grid>`, `<layout-stack>`, `<layout-sidebar>`, `<layout-cluster>`, and more.
+
+### UI Components
+Pre-built components: `<card>`, `<button>`, `<alert>`, `<badge>`, `<modal>`, `<tooltip>`, `<carousel>`, and more.
+
+### Core System
+Foundational layers: Reset, Base, Tokens, Theme, Engine, Palette—all using modern CSS cascade layers.
+
+### Utilities
+Single-purpose utility classes for rapid styling when you need them.
+
+[View all components →](/components/alert/)

@@ -1,12 +1,12 @@
 # Card Component Documentation
 
 ## Overview
-The `card` component is a responsive, self-contained card element that adapts its layout based on its container size using container queries. It features scoped styling to prevent conflicts and includes hover effects with elevation changes.
+The `card` component is a responsive, self-contained surface that adapts its layout based on its container size. Explicit host and part selectors keep its API available as custom elements, classes, or `data-*` attributes.
 
 ## Key Features
 - **Container Queries**: Layout adapts to the card's own width, not viewport
-- **Scoped Styling**: Uses `@scope` to isolate internal styles
-- **Responsive Design**: Switches from vertical to horizontal layout at 400px width
+- **Explicit Styling**: Selectors target card hosts and named card parts
+- **Responsive Design**: Switches from vertical to horizontal layout at 32rem
 - **Elevation Effects**: Hover animations with shadow changes
 - **Flexible Content**: Supports media, header, content, and footer sections
 
@@ -21,12 +21,12 @@ The card component consists of several semantic elements:
 
 ## Layout Behavior
 
-### Narrow Layout (< 400px)
+### Narrow Layout (< 32rem)
 - Vertical stack layout
 - Media at top (16:9 aspect ratio)
 - Body content below
 
-### Wide Layout (≥ 400px)
+### Wide Layout (≥ 32rem)
 - Horizontal layout
 - Media on left (150px square)
 - Body content on right (60% width)
@@ -34,13 +34,12 @@ The card component consists of several semantic elements:
 ## Styling Customization
 The card supports several CSS custom properties for customization:
 
-- `--b-bg`: Background color (default: slightly lighter than theme background)
-- `--b-fg`: Text color (default: inherit)
-- `--b-r`: Border radius (default: 0.75rem, or `radius` attribute)
-- `--b-bw`: Border width (default: 0)
-- `--b-bc`: Border color (default: transparent)
-- `--b-shadow`: Box shadow (default: none)
-- `--b-p`: Body padding (default: 1.5rem)
+- `--card-background`, `--card-color`
+- `--card-border-color`, `--card-border-width`
+- `--card-radius`, `--card-padding`, `--card-gap`
+- `--card-header-padding`, `--card-header-padding-block-end`
+- `--card-footer-padding`, `--card-footer-padding-block-start`
+- `--card-shadow`, `--card-hover-transform`, `--card-hover-shadow`
 
 ## Usage Example
 ```html
@@ -60,24 +59,48 @@ The card supports several CSS custom properties for customization:
 </card>
 ```
 
+## Customization
+
+Cards expose `--card-background`, `--card-color`, `--card-border-color`,
+`--card-border-width`, `--card-radius`, `--card-padding`, and `--card-gap`.
+The variables can be set directly on one card or inherited from a surrounding
+region:
+
+```css
+.pricing-grid {
+  --card-padding: 2rem;
+  --card-radius: 1rem;
+}
+
+.pricing-grid > card[data-featured] {
+  --card-border-color: var(--accent);
+}
+```
+
+Card internals consume these public variables through private computed aliases,
+so a scoped ancestor override is not accidentally replaced on every card.
+
+`card-header` and `card-footer` use the card inset when they are direct children
+of a card. When they are nested in `card-body`, the body owns the inset instead,
+so padding is never doubled.
+
 ## Hover Effects
-- **Transform**: Moves up 5px on hover
-- **Elevation**: Increases shadow depth from level 2 to 3
+- **Transform**: Moves up 2px by default
+- **Elevation**: Uses `--card-hover-shadow`, falling back to `--shadow-sm`
 
 ## Technical Implementation
 
-### @scope Usage
+### Selector scope
 ```css
-@scope (card) {
-  /* All styles contained within card elements */
-}
+:is(card, [data-card], .card) { /* card host */ }
+:is(card-body, [data-card-body], .card-body) { /* card body */ }
 ```
-This prevents card styles from affecting elements outside the card.
+Explicit host and part selectors prevent unrelated content from receiving card layout.
 
 ### Container Queries
 ```css
-@container card-container (min-width: 400px) {
-  /* Styles applied when card is ≥400px wide */
+@container card-container (min-width: 32rem) {
+  /* Styles applied when card is at least 32rem wide */
 }
 ```
 The card establishes itself as a container with `container-type: inline-size`.
@@ -86,7 +109,6 @@ The card establishes itself as a container with `container-type: inline-size`.
 Uses native CSS nesting for organized, hierarchical styles.
 
 ## Browser Support
-- Requires `@scope` support (Chrome 118+, Firefox 128+)
 - Container queries (Chrome 105+, Firefox 110+, Safari 16+)
 - CSS nesting (all modern browsers)
 - Fallback: Cards display in vertical layout in unsupported browsers

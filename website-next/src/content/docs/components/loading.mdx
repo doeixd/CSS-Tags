@@ -1,0 +1,90 @@
+---
+title: Loading States
+description: Token-driven spinner and skeleton loading states using aria-busy and semantic placeholders.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+## Overview
+The loading system provides token-driven spinners and skeleton placeholders using semantic selectors instead of framework-specific wrappers.
+
+## Spinner
+Use `aria-busy="true"` on any element to show a loading spinner.
+
+<LiveExample title="Spinner sizes" description="aria-busy is the styling hook and the accessible state.">
+  <layout-cluster gap="var(--space-lg)">
+    <div aria-busy="true" data-spinner="small" aria-label="Loading small example"></div>
+    <div aria-busy="true" aria-label="Loading example"></div>
+    <div aria-busy="true" data-spinner="large" aria-label="Loading large example"></div>
+    <button aria-busy="true" data-spinner="small" disabled>Saving</button>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<div aria-busy="true" data-spinner="small"></div>
+<div aria-busy="true"></div>
+<div aria-busy="true" data-spinner="large"></div>
+<button aria-busy="true" data-spinner="small" disabled>Loading</button>
+```
+
+### Spinner Variants
+- default: medium spinner
+- `data-spinner="small"`
+- `data-spinner="large"`
+- `data-spinner="overlay"`
+
+### Overlay Spinner
+`data-spinner="overlay"` dims the host contents and overlays the spinner on top.
+
+```html
+<article aria-busy="true" data-spinner="overlay">
+  <h3>Card Title</h3>
+  <p>This content is dimmed while the spinner overlays the container.</p>
+</article>
+```
+
+## Skeleton
+Use `.skeleton` or `[data-skeleton]` for loading placeholders.
+
+<LiveExample title="Article skeleton">
+  <article role="status" aria-label="Loading article">
+    <layout-stack gap="var(--space-sm)">
+      <div class="skeleton box"></div>
+      <div class="skeleton line" style="width: 60%;"></div>
+      <div class="skeleton line"></div>
+      <div class="skeleton line" style="width: 82%;"></div>
+    </layout-stack>
+  </article>
+</LiveExample>
+
+```html
+<article class="skeleton" role="status" aria-label="Loading card">
+  <div class="skeleton box"></div>
+  <div class="skeleton line" style="width: 60%;"></div>
+  <div class="skeleton line"></div>
+</article>
+```
+
+### Skeleton Helpers
+- `.line`: text-row placeholder
+- `.box`: media/image placeholder
+
+## Tokens
+- `--spinner-size`
+- `--spinner-size-small`
+- `--spinner-size-large`
+- `--spinner-stroke-width`
+- `--spinner-speed`
+- `--spinner-color`
+- `--spinner-track-color`
+- `--spinner-overlay-backdrop`
+- `--spinner-overlay-blur`
+- `--skeleton-background`
+- `--skeleton-highlight`
+- `--skeleton-radius`
+- `--skeleton-shimmer-duration`
+
+## Accessibility
+- Use `aria-busy="true"` for loading state semantics.
+- Use `role="status"` and a label for skeleton placeholders when they represent async content.
+- Reduced motion disables spinner rotation and shimmer animations.

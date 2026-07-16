@@ -1,0 +1,49 @@
+---
+import { getEntry, render } from "astro:content";
+import NextDocsLayout from "../../layouts/NextDocsLayout.astro";
+import NextBreadcrumbs from "../../components/NextBreadcrumbs.astro";
+import NextPrevNavigation from "../../components/NextPrevNavigation.astro";
+import PageExample from "../../components/PageExample.astro";
+
+export function getStaticPaths() {
+  return [
+    "color-system",
+    "cms-markdown",
+    "common-footguns",
+    "getting-started",
+    "graffiti-ui-elements-gap-analysis",
+    "introduction",
+    "npm",
+    "philosophy",
+    "theming",
+    "typescript",
+  ].map((slug) => ({ params: { slug } }));
+}
+
+const slug = Astro.params.slug;
+const entry = slug ? await getEntry("docs", `guides/${slug}`) : undefined;
+
+if (!entry) {
+  throw new Error(`Missing docs entry: guides/${slug}`);
+}
+
+const { Content, headings } = await render(entry);
+const currentPath = entry.id;
+const hasRenderedExample = /<(?:LiveExample|DialogExample|TabsExample|ColorPaletteViewer)\b/.test(entry.body);
+---
+
+<NextDocsLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  currentPath={currentPath}
+  headings={headings}
+>
+  <NextBreadcrumbs currentPath={currentPath} title={entry.data.title} />
+  <article data-prose>
+    <h1>{entry.data.title}</h1>
+    {entry.data.description && <p class="lead">{entry.data.description}</p>}
+    {!hasRenderedExample && <PageExample currentPath={currentPath} pageTitle={entry.data.title} />}
+    <Content />
+    <NextPrevNavigation currentPath={currentPath} />
+  </article>
+</NextDocsLayout>

@@ -1,0 +1,180 @@
+---
+import { Code } from "astro:components";
+import type { ExampleDefinition } from "../data/examples";
+import CssVariableEditor from "./CssVariableEditor.astro";
+
+interface Props extends ExampleDefinition {}
+
+const {
+  id,
+  title,
+  description,
+  markup,
+  css,
+  variables = [],
+  canvas = "default",
+  compact = false,
+} = Astro.props;
+
+const titleId = `${id}-title`;
+const descriptionId = `${id}-description`;
+const previewTabId = `${id}-preview-tab`;
+const codeTabId = `${id}-code-tab`;
+const previewPanelId = `${id}-preview-panel`;
+const codePanelId = `${id}-code-panel`;
+---
+
+<card
+  data-example-workbench
+  data-example-id={id}
+  data-canvas={canvas}
+  class:list={["example-workbench", { "example-workbench--compact": compact }]}
+  aria-labelledby={titleId}
+  aria-describedby={description ? descriptionId : undefined}
+>
+  <card-header>
+    <layout-cluster justify="space-between" align="start" gap="var(--space-md)">
+      <div>
+        <h2 id={titleId}>{title}</h2>
+        {description && <p id={descriptionId} class="caption">{description}</p>}
+      </div>
+      <layout-cluster gap="var(--space-xs)">
+        <button type="button" data-workbench-reset>Reset preview</button>
+        <button type="button" class="form-button btn-primary" data-workbench-copy>Copy HTML</button>
+      </layout-cluster>
+    </layout-cluster>
+  </card-header>
+
+  <card-body>
+    <div role="tablist" aria-label={`${title} views`} data-workbench-tabs>
+      <button
+        type="button"
+        role="tab"
+        id={previewTabId}
+        aria-controls={previewPanelId}
+        aria-selected="true"
+        tabindex="0"
+      >
+        Preview
+      </button>
+      <button
+        type="button"
+        role="tab"
+        id={codeTabId}
+        aria-controls={codePanelId}
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Code
+      </button>
+    </div>
+
+    <section
+      role="tabpanel"
+      id={previewPanelId}
+      aria-labelledby={previewTabId}
+      data-workbench-preview-panel
+    >
+      <div class="example-workbench__canvas">
+        <css-tags-example data-workbench-preview>
+          <Fragment set:html={markup} />
+        </css-tags-example>
+      </div>
+    </section>
+
+    <section
+      role="tabpanel"
+      id={codePanelId}
+      aria-labelledby={codeTabId}
+      data-workbench-code-panel
+      hidden
+    >
+      <div class="example-workbench__code" data-workbench-source="html">
+        <Code code={markup.trim()} lang="html" theme="github-dark" />
+      </div>
+      {css && (
+        <div class="example-workbench__code" data-workbench-source="css">
+          <Code code={css.trim()} lang="css" theme="github-dark" />
+        </div>
+      )}
+    </section>
+
+    {variables.length > 0 && <CssVariableEditor exampleId={id} variables={variables} />}
+
+    <template data-workbench-template set:html={markup}></template>
+    <span class="caption" data-workbench-status aria-live="polite">Ready.</span>
+  </card-body>
+</card>
+
+<script>
+  import "../scripts/css-tags-shadow";
+  import { copyText } from "../scripts/clipboard";
+
+  function setupExampleWorkbenches() {
+    document.querySelectorAll<HTMLElement>("[data-example-workbench]").forEach((workbench) => {
+      if (workbench.dataset.ready === "true") return;
+      workbench.dataset.ready = "true";
+
+      const tabs = Array.from(workbench.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const panels = Array.from(workbench.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+      const status = workbench.querySelector<HTMLElement>("[data-workbench-status]");
+      const copyButton = workbench.querySelector<HTMLButtonElement>("[data-workbench-copy]");
+      const resetButton = workbench.querySelector<HTMLButtonElement>("[data-workbench-reset]");
+      const template = workbench.querySelector<HTMLTemplateElement>("[data-workbench-template]");
+
+      const selectTab = (nextTab: HTMLButtonElement, focus = false) => {
+        tabs.forEach((tab) => {
+          const selected = tab === nextTab;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.id !== nextTab.getAttribute("aria-controls");
+        });
+        if (focus) nextTab.focus();
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectTab(tab));
+        tab.addEventListener("keydown", (event) => {
+          let nextIndex = index;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+          else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+          else if (event.key === "Home") nextIndex = 0;
+          else if (event.key === "End") nextIndex = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          selectTab(tabs[nextIndex], true);
+        });
+      });
+
+      copyButton?.addEventListener("click", async () => {
+        const source = workbench.querySelector<HTMLElement>('[data-workbench-source="html"] code');
+        const value = source?.textContent ?? "";
+        try {
+          await copyText(value);
+          if (status) status.textContent = "Copied HTML source.";
+        } catch {
+          if (status) status.textContent = "Copy unavailable. Select the source manually.";
+        } finally {
+          copyButton.focus();
+        }
+      });
+
+      resetButton?.addEventListener("click", () => {
+        const current = workbench.querySelector<HTMLElement>("[data-workbench-preview]");
+        if (!current || !template) return;
+        const replacement = document.createElement("css-tags-example");
+        replacement.dataset.workbenchPreview = "";
+        replacement.append(template.content.cloneNode(true));
+        current.replaceWith(replacement);
+        workbench.dispatchEvent(new CustomEvent("workbench:preview-reset"));
+        if (status) status.textContent = "Preview reset.";
+        resetButton.focus();
+      });
+    });
+  }
+
+  setupExampleWorkbenches();
+  document.addEventListener("astro:page-load", setupExampleWorkbenches);
+</script>

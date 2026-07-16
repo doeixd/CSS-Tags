@@ -1,0 +1,356 @@
+---
+// SidebarFooter.astro - Optional footer for sidebar with theme toggle and GitHub link
+import ThemeToggle from "./ThemeToggle.astro";
+interface Props {
+  showHideButton?: boolean;
+  sticky?: boolean;
+  hotEdgeReveal?: boolean;
+  class?: string;
+}
+
+const { showHideButton = false, sticky = true, hotEdgeReveal = false, class: className } = Astro.props;
+---
+
+<div class="sidebar-footer" class:list={[className]}>
+  <div class="footer-actions">
+    <ThemeToggle transitionName="sidebar-footer-theme-toggle" />
+    <a
+      href="https://github.com/doeixd/CSS-Tags"
+      target="_blank"
+      rel="noopener"
+      class="github-link"
+      aria-label="View on GitHub"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="github-logo"
+      >
+        <path
+          d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+        ></path>
+      </svg>
+    </a>
+    {showHideButton && (
+    <button class="sidebar-toggle" aria-label="Toggle sidebar visibility" style="view-transition-name: sidebar-toggle;">
+        <svg
+        width="20"
+        height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+      </button>
+    )}
+  </div>
+</div>
+
+<style>
+  .sidebar-footer {
+    position: sticky;
+    bottom: calc(var(--space-2xl) * -1);
+    margin-top: auto;
+    padding: var(--sidebar-footer-padding, var(--space-lg));
+    background: var(--sidebar-footer-bg, var(--bg-secondary));
+    border-top: var(--sidebar-footer-border, 1px solid var(--border-color));
+    margin-left: calc(var(--space-lg) * -1);
+    margin-right: calc(var(--space-lg) * -1);
+    margin-bottom: calc(var(--space-2xl) * -1);
+    z-index: var(--sidebar-footer-z-index, 10);
+  }
+
+  .sidebar-footer.sticky {
+    position: sticky;
+  }
+
+  .sidebar-footer.fixed {
+    position: fixed;
+  }
+
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sidebar-footer-gap, var(--space-sm));
+  }
+
+  .github-link {
+    padding: var(--sidebar-footer-github-padding, var(--space-sm) var(--space-lg));
+    background: var(--sidebar-footer-github-bg, var(--bg-secondary));
+    border: var(--sidebar-footer-github-border, 1px solid transparent);
+    color: var(--sidebar-footer-github-color, var(--text-primary));
+    text-decoration: none;
+    border-radius: var(--sidebar-footer-github-border-radius, var(--border-radius-lg));
+    font-size: var(--sidebar-footer-github-font-size, var(--font-size-sm));
+    font-weight: var(--sidebar-footer-github-font-weight, var(--font-weight-medium));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    width: var(--sidebar-footer-github-width, 2.5rem);
+    height: var(--sidebar-footer-github-height, 2.5rem);
+  }
+
+  .github-logo {
+    width: var(--sidebar-footer-github-logo-size, 20px);
+    height: var(--sidebar-footer-github-logo-size, 20px);
+    flex-shrink: 0;
+  }
+
+  .github-logo path {
+    stroke: currentColor;
+  }
+
+  .github-link:hover {
+    background: var(--sidebar-footer-github-hover-bg, var(--bg-hover));
+    border-color: var(--sidebar-footer-github-hover-border-color, var(--accent));
+  }
+
+  .github-link:active {
+    transform: var(--sidebar-footer-github-active-transform, scale(0.98));
+  }
+
+  .sidebar-toggle {
+    padding: var(--sidebar-footer-toggle-padding, var(--space-sm));
+    background: var(--sidebar-footer-toggle-bg, transparent);
+    border: var(--sidebar-footer-toggle-border, none);
+    color: var(--sidebar-footer-toggle-color, var(--text-primary));
+    border-radius: var(--sidebar-footer-toggle-border-radius, var(--border-radius-md));
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--sidebar-footer-toggle-width, 2rem);
+    height: var(--sidebar-footer-toggle-height, 2rem);
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--sidebar-footer-toggle-hover-bg, var(--bg-hover));
+    border-color: var(--sidebar-footer-toggle-hover-border-color, var(--accent));
+  }
+
+  .sidebar-toggle:active {
+    transform: var(--sidebar-footer-toggle-active-transform, scale(0.95));
+  }
+
+  .sidebar-toggle svg {
+    transition: transform var(--transition-fast);
+  }
+
+  /* When sidebar is hidden, show only the toggle button */
+  .sidebar-footer.sidebar-hidden .footer-actions > :not(.sidebar-toggle) {
+    display: none;
+  }
+
+  /* Style the toggle button when it's the only visible element */
+  .sidebar-footer.sidebar-hidden .footer-actions {
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+  }
+
+  .sidebar-footer.sidebar-hidden .sidebar-toggle {
+    margin: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Reset margins for hidden state */
+  .sidebar-footer.sidebar-hidden {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding: var(--space-sm);
+  }
+
+  /* Toggle button rotation when sidebar is hidden */
+  .sidebar-footer.sidebar-hidden .sidebar-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .sidebar-footer {
+      display: none; /* Footer not shown on mobile - sidebar overlay behavior */
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .github-logo {
+      color: var(--text-primary) !important;
+    }
+  }
+
+  :root.dark-mode .github-logo {
+    color: var(--text-primary) !important;
+  }
+
+  /* Hot edge reveal styles */
+  .sidebar-footer.hot-edge-enabled {
+    /* Additional styles for hot edge reveal can be added here */
+  }
+</style>
+
+<script>
+  // Sidebar footer functionality
+class SidebarFooterManager {
+  private footer: HTMLElement | null = null;
+  private toggleButton: HTMLElement | null = null;
+  private sidebar: HTMLElement | null = null;
+  private isHidden = false;
+  private _afterSwapListenerAdded = false;
+
+    constructor() {
+      this.init();
+    }
+
+    private init() {
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup());
+      } else {
+        this.setup();
+      }
+    }
+
+    private setup() {
+      this.footer = document.querySelector('.sidebar-footer');
+      this.toggleButton = document.querySelector('.sidebar-toggle');
+      this.sidebar = document.querySelector('.sidebar');
+
+      // Also find the floating toggle button
+      const floatingToggle = document.querySelector('.floating-sidebar-toggle');
+
+      if (!this.footer || !this.sidebar) return;
+
+      // Restore saved state
+      this.restoreState();
+
+      // Setup toggle functionality for both buttons
+      const handleToggle = () => this.toggleSidebar();
+
+      if (this.toggleButton) {
+        this.toggleButton.addEventListener('click', handleToggle);
+      }
+
+      if (floatingToggle) {
+        floatingToggle.addEventListener('click', handleToggle);
+      }
+
+      // Setup hot edge reveal if enabled
+      if (this.footer.classList.contains('hot-edge-enabled')) {
+        this.setupHotEdgeReveal();
+      }
+
+      // Save state before navigation
+      document.addEventListener('astro:before-swap', () => {
+        this.saveState();
+      });
+
+      // Only add after-swap listener once to avoid duplicates
+      if (!this._afterSwapListenerAdded) {
+        document.addEventListener('astro:after-swap', () => {
+          setTimeout(() => this.reinitialize(), 0);
+        });
+        this._afterSwapListenerAdded = true;
+      }
+    }
+
+    private reinitialize() {
+      // Just update DOM references and restore state, don't create new instance
+      this.footer = document.querySelector('.sidebar-footer');
+      this.toggleButton = document.querySelector('.sidebar-toggle');
+      this.sidebar = document.querySelector('.sidebar');
+
+      if (this.footer && this.sidebar) {
+        this.restoreState();
+      }
+    }
+
+    private toggleSidebar() {
+      if (!this.sidebar || !this.footer) return;
+
+      this.isHidden = !this.isHidden;
+
+
+
+      if (this.isHidden) {
+        this.sidebar.classList.add('sidebar-hidden');
+        this.footer.classList.add('sidebar-hidden');
+      } else {
+        this.sidebar.classList.remove('sidebar-hidden');
+        this.footer.classList.remove('sidebar-hidden');
+      }
+
+      this.saveState();
+    }
+
+    private setupHotEdgeReveal() {
+      if (!this.sidebar || !this.footer) return;
+
+      let revealTimeout: number;
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!this.isHidden) return;
+
+        // Check if mouse is near the left edge (where sidebar would be)
+        const sidebarWidth = this.sidebar!.offsetWidth;
+        const threshold = 50; // pixels from edge
+
+        if (e.clientX <= threshold) {
+          // Show sidebar temporarily
+          clearTimeout(revealTimeout);
+          this.sidebar!.classList.add('sidebar-revealed');
+          this.footer!.classList.add('sidebar-revealed');
+
+          revealTimeout = window.setTimeout(() => {
+            this.sidebar!.classList.remove('sidebar-revealed');
+            this.footer!.classList.remove('sidebar-revealed');
+          }, 1000); // Hide after 1 second of no activity
+        }
+      };
+
+      document.addEventListener('mousemove', handleMouseMove);
+    }
+
+    private saveState() {
+      try {
+        localStorage.setItem('sidebar-hidden', this.isHidden.toString());
+      } catch (e) {
+        console.warn('Failed to save sidebar state:', e);
+      }
+    }
+
+    private restoreState() {
+      try {
+        const saved = localStorage.getItem('sidebar-hidden');
+        this.isHidden = saved === 'true';
+
+        if (this.isHidden && this.sidebar && this.footer) {
+          this.sidebar.classList.add('sidebar-hidden');
+          this.footer.classList.add('sidebar-hidden');
+        }
+      } catch (e) {
+        console.warn('Failed to restore sidebar state:', e);
+      }
+    }
+  }
+
+  // Initialize footer manager
+  new SidebarFooterManager();
+</script>

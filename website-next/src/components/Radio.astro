@@ -1,0 +1,259 @@
+---
+// Radio.astro - Accessible radio button component
+interface RadioOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  helpText?: string;
+}
+
+interface Props {
+  options: RadioOption[];
+  value?: string;
+  name: string;
+  disabled?: boolean;
+  required?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  layout?: 'vertical' | 'horizontal';
+  class?: string;
+  label?: string;
+  helpText?: string;
+  errorText?: string;
+}
+
+const {
+  options,
+  value,
+  name,
+  disabled = false,
+  required = false,
+  size = 'md',
+  layout = 'vertical',
+  class: className,
+  label,
+  helpText,
+  errorText,
+  ...rest
+} = Astro.props;
+---
+
+<div class={`form-field ${className || ''}`}>
+  {label && (
+    <legend class="form-legend">
+      {label}
+      {required && <span class="form-required" aria-label="required">*</span>}
+    </legend>
+  )}
+
+  <fieldset class={`radio-group radio-group--${layout}`} role="radiogroup" aria-describedby={helpText ? `${name}-help` : errorText ? `${name}-error` : undefined}>
+    {options.map((option, index) => (
+      <label class={`radio-wrapper radio-wrapper--${size}`}>
+        <input
+          type="radio"
+          name={name}
+          value={option.value}
+          checked={value === option.value}
+          disabled={disabled || option.disabled}
+          required={required}
+          class="radio-input"
+          {...rest}
+        />
+        <span class="radio-checkmark" aria-hidden="true">
+          <span class="radio-checkmark-inner"></span>
+        </span>
+        <span class="radio-label">
+          {option.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+
+  {helpText && (
+    <div class="form-help" id={`${name}-help`}>
+      {helpText}
+    </div>
+  )}
+
+  {errorText && (
+    <div class="form-error" id={`${name}-error`} role="alert">
+      {errorText}
+    </div>
+  )}
+</div>
+
+<style>
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .form-legend {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    font-size: var(--form-legend-font-size, var(--font-size-base));
+    margin-bottom: var(--space-xs);
+  }
+
+  .form-required {
+    color: var(--form-required-color, #dc3545);
+    margin-left: var(--space-xs);
+  }
+
+  .radio-group {
+    display: flex;
+    gap: var(--space-md);
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .radio-group--vertical {
+    flex-direction: column;
+  }
+
+  .radio-group--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .radio-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+
+  .radio-wrapper:has(.radio-input:disabled) {
+    cursor: not-allowed;
+  }
+
+  .radio-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .radio-checkmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--bg-primary);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .radio-checkmark-inner {
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: all var(--transition-fast);
+  }
+
+  .radio-input:focus-visible + .radio-checkmark {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .radio-input:checked + .radio-checkmark .radio-checkmark-inner {
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+  }
+
+  .radio-input:disabled + .radio-checkmark {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    opacity: 0.6;
+  }
+
+  .radio-input:disabled:checked + .radio-checkmark .radio-checkmark-inner {
+    background: var(--text-secondary);
+  }
+
+  /* Size variants */
+  .radio-wrapper--sm .radio-checkmark {
+    width: var(--radio-size-sm, 1rem);
+    height: var(--radio-size-sm, 1rem);
+  }
+
+  .radio-wrapper--md .radio-checkmark {
+    width: var(--radio-size-md, 1.25rem);
+    height: var(--radio-size-md, 1.25rem);
+  }
+
+  .radio-wrapper--lg .radio-checkmark {
+    width: var(--radio-size-lg, 1.5rem);
+    height: var(--radio-size-lg, 1.5rem);
+  }
+
+  .radio-label {
+    color: var(--text-primary);
+    font-size: var(--radio-label-font-size, var(--font-size-base));
+    line-height: var(--line-height-body);
+    margin-top: 2px; /* Align with checkmark */
+  }
+
+  .form-help {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .form-error {
+    font-size: var(--font-size-sm);
+    color: var(--form-error-color, #dc3545);
+  }
+
+  /* Hover states */
+  .radio-wrapper:hover .radio-checkmark:not(.radio-input:disabled + &) {
+    border-color: var(--accent);
+  }
+
+  .radio-wrapper:hover .radio-input:checked + .radio-checkmark .radio-checkmark-inner {
+    background: var(--accent-dark);
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .radio-input:focus-visible + .radio-checkmark {
+      outline-color: var(--accent-light);
+    }
+
+    :root:not(.light-mode) .radio-wrapper:hover .radio-checkmark:not(.radio-input:disabled + &) {
+      border-color: var(--accent-light);
+    }
+
+    :root:not(.light-mode) .radio-wrapper:hover .radio-input:checked + .radio-checkmark .radio-checkmark-inner {
+      background: var(--accent-light);
+    }
+  }
+
+  :root.dark-mode .radio-input:focus-visible + .radio-checkmark {
+    outline-color: var(--accent-light);
+  }
+
+  :root.dark-mode .radio-wrapper:hover .radio-checkmark:not(.radio-input:disabled + &) {
+    border-color: var(--accent-light);
+  }
+
+  :root.dark-mode .radio-wrapper:hover .radio-input:checked + .radio-checkmark .radio-checkmark-inner {
+    background: var(--accent-light);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .radio-group--horizontal {
+      flex-direction: column;
+    }
+
+    .radio-wrapper--lg .radio-checkmark {
+      width: var(--radio-size-md, 1.25rem);
+      height: var(--radio-size-md, 1.25rem);
+    }
+  }
+</style>

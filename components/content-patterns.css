@@ -1,0 +1,234 @@
+/**
+ * Composable content patterns.
+ *
+ * `slot` attributes are light-DOM region labels here. The matching data and
+ * class hooks are equivalent for renderers that consume or reserve `slot`.
+ */
+
+:is(content-header, [data-content-header], .content-header) {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--content-header-gap, var(--space-md, 1rem));
+  padding: var(--content-header-padding, 0);
+  color: var(--content-header-color, var(--text-default));
+}
+
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="body"], [data-content-header-body], .content-header__body) {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--content-header-body-gap, var(--space-xs, 0.5rem));
+}
+
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="eyebrow"], [data-content-header-eyebrow], .content-header__eyebrow) {
+  color: var(--content-header-eyebrow-color, var(--text-muted));
+}
+
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="media"], [data-content-header-media], .content-header__media) {
+  align-self: start;
+  inline-size: var(--content-header-media-size, auto);
+  max-inline-size: 100%;
+}
+
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="meta"], [data-content-header-meta], .content-header__meta),
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="actions"], [data-content-header-actions], .content-header__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--content-header-region-gap, var(--space-sm, 0.75rem));
+  min-inline-size: 0;
+}
+
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="meta"], [data-content-header-meta], .content-header__meta) {
+  color: var(--content-header-meta-color, var(--text-muted));
+  font-size: var(--content-header-meta-font-size, var(--font-size-sm, 0.875rem));
+}
+
+/* Baseline is stacked. Parent-aware layouts are progressive enhancements. */
+@supports selector(:has(*)) {
+  :is(content-header, [data-content-header], .content-header):has(
+      > :is([slot="media"], [data-content-header-media], .content-header__media)
+    ) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+
+  :is(content-header, [data-content-header], .content-header):has(
+      > :is([slot="media"], [data-content-header-media], .content-header__media)
+    )
+    > :not(:is([slot="media"], [data-content-header-media], .content-header__media)) {
+    grid-column: 2;
+  }
+
+  :is(content-header, [data-content-header], .content-header):has(
+      > :is([slot="actions"], [data-content-header-actions], .content-header__actions)
+    )
+    > :is([slot="actions"], [data-content-header-actions], .content-header__actions) {
+    margin-block-start: var(--content-header-actions-offset, var(--space-xs, 0.5rem));
+  }
+}
+
+:is(media-object, [data-media-object], .media-object) {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--media-object-gap, var(--space-md, 1rem));
+  align-items: var(--media-object-align, start);
+  padding: var(--media-object-padding, 0);
+  border: var(--media-object-border, 0);
+  border-radius: var(--media-object-radius, 0);
+  background: var(--media-object-background, transparent);
+  color: var(--media-object-color, var(--text-default));
+}
+
+:is(media-object, [data-media-object], .media-object)
+  > :is([slot="media"], [data-media-object-media], .media-object__media) {
+  inline-size: var(--media-object-media-size, auto);
+  max-inline-size: 100%;
+}
+
+:is(media-object, [data-media-object], .media-object)
+  > :is([slot="body"], [data-media-object-body], .media-object__body) {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--media-object-body-gap, var(--space-xs, 0.5rem));
+}
+
+:is(media-object, [data-media-object], .media-object)
+  > :is([slot="actions"], [data-media-object-actions], .media-object__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--media-object-actions-gap, var(--space-sm, 0.75rem));
+  min-inline-size: 0;
+}
+
+@supports selector(:has(*)) {
+  :is(media-object, [data-media-object], .media-object):has(
+      > :is([slot="media"], [data-media-object-media], .media-object__media)
+    ) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  :is(media-object, [data-media-object], .media-object):has(
+      > :is([slot="actions"], [data-media-object-actions], .media-object__actions)
+    ) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  :is(media-object, [data-media-object], .media-object):has(
+      > :is([slot="media"], [data-media-object-media], .media-object__media)
+    ):has(
+      > :is([slot="actions"], [data-media-object-actions], .media-object__actions)
+    ) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 30rem) {
+  @supports selector(:has(*)) {
+    :is(media-object, [data-media-object], .media-object):has(
+        > :is([slot="media"], [data-media-object-media], .media-object__media)
+      ):has(
+        > :is([slot="actions"], [data-media-object-actions], .media-object__actions)
+      ) {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    :is(media-object, [data-media-object], .media-object):has(
+        > :is([slot="media"], [data-media-object-media], .media-object__media)
+      )
+      > :is([slot="actions"], [data-media-object-actions], .media-object__actions) {
+      grid-column: 2;
+    }
+
+    :is(media-object, [data-media-object], .media-object):not(:has(
+        > :is([slot="media"], [data-media-object-media], .media-object__media)
+      )):has(
+        > :is([slot="actions"], [data-media-object-actions], .media-object__actions)
+      ) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+:is(empty-state, [data-empty-state], .empty-state) {
+  display: grid;
+  justify-items: var(--empty-state-align, center);
+  inline-size: 100%;
+  max-inline-size: var(--empty-state-max-width, 40rem);
+  margin-inline: auto;
+  gap: var(--empty-state-gap, var(--space-md, 1rem));
+  padding: var(--empty-state-padding, var(--space-2xl, 3rem) var(--space-lg, 1.5rem));
+  border: var(--empty-state-border-width, var(--border-width, 1px))
+    var(--empty-state-border-style, dashed)
+    var(--empty-state-border-color, var(--outline-subtle));
+  border-radius: var(--empty-state-radius, var(--radius-lg, 0.75rem));
+  background: var(--empty-state-background, var(--surface-subtle));
+  color: var(--empty-state-color, var(--text-default));
+  text-align: var(--empty-state-text-align, center);
+}
+
+:is(empty-state, [data-empty-state], .empty-state)
+  > :is([slot="media"], [data-empty-state-media], .empty-state__media) {
+  display: grid;
+  place-items: center;
+  inline-size: var(--empty-state-media-size, 3rem);
+  min-block-size: var(--empty-state-media-size, 3rem);
+  color: var(--empty-state-media-color, var(--text-muted));
+  font-size: var(--empty-state-media-font-size, var(--font-size-2xl, 1.5rem));
+}
+
+:is(empty-state, [data-empty-state], .empty-state)
+  > :is([slot="body"], [data-empty-state-body], .empty-state__body) {
+  display: grid;
+  justify-items: inherit;
+  min-inline-size: 0;
+  gap: var(--empty-state-body-gap, var(--space-xs, 0.5rem));
+}
+
+/* Component regions own their compact rhythm; page/prose rhythm stays outside. */
+:is(content-header, [data-content-header], .content-header)
+  > :is([slot="body"], [data-content-header-body], .content-header__body)
+  > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl),
+:is(media-object, [data-media-object], .media-object)
+  > :is([slot="body"], [data-media-object-body], .media-object__body)
+  > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl),
+:is(empty-state, [data-empty-state], .empty-state)
+  > :is([slot="body"], [data-empty-state-body], .empty-state__body)
+  > :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl) {
+  margin-block: 0;
+}
+
+:is(empty-state, [data-empty-state], .empty-state)
+  > :is([slot="actions"], [data-empty-state-actions], .empty-state__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--empty-state-actions-gap, var(--space-sm, 0.75rem));
+}
+
+@supports selector(:has(*)) {
+  :is(empty-state, [data-empty-state], .empty-state):not(:has(
+      > :is([slot="media"], [data-empty-state-media], .empty-state__media)
+    )) {
+    --empty-state-padding: var(--empty-state-padding-without-media, var(--space-xl, 2rem) var(--space-lg, 1.5rem));
+  }
+
+  :is(empty-state, [data-empty-state], .empty-state):has(
+      > :is([slot="actions"], [data-empty-state-actions], .empty-state__actions)
+    ) {
+    --empty-state-body-gap: var(--empty-state-body-gap-with-actions, var(--space-sm, 0.75rem));
+  }
+}
+
+@media (forced-colors: active) {
+  :is(empty-state, [data-empty-state], .empty-state),
+  :is(media-object, [data-media-object], .media-object) {
+    border-color: CanvasText;
+  }
+}

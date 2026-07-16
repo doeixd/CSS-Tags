@@ -1,0 +1,37 @@
+---
+title: npm Installation
+description: Install CSS Tags, load its layered CSS, enable global custom-tag types, and add exported themes.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+CSS Tags ships as the `css-tags` package. Its root entry is the complete
+layered stylesheet and exposes the custom-tag DOM and JSX declarations.
+
+<LiveExample title="Package-ready semantic UI">
+  <card><card-body><eyebrow>Installed from npm</eyebrow><card-header>One CSS import, typed custom tags</card-header><badge status="success">Ready</badge></card-body></card>
+</LiveExample>
+
+## Install
+
+```bash
+npm install css-tags
+```
+
+```css
+@import "css-tags";
+```
+
+```ts
+/// <reference types="css-tags" />
+```
+
+## Add a generated theme
+
+```css
+@import "css-tags";
+@import "./my-theme.css";
+```
+
+The generated file uses a trailing `css-tags-theme` layer so its token
+declarations win without selector escalation.

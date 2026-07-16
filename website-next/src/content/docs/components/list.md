@@ -1,0 +1,178 @@
+---
+title: List Component
+description: The `list` component provides flexible, styleable list layouts with support for custom markers, icons, and dividers. It can display as vertical lists or inline 
+---
+
+## Overview
+The `list` component provides flexible, styleable list layouts with support for custom markers, icons, and dividers. It can display as vertical lists or inline horizontal arrangements.
+
+Start with native `<ul>` or `<ol>` semantics. Add `data-list` or `.list` to the list and `data-list-item` or `.list-item` to each `<li>`. The custom `<list>` and `<list-item>` hosts are optional styling shorthand.
+
+## Key Features
+- **Flexible Layout**: Vertical or inline horizontal display
+- **Custom Markers**: Styleable list item markers with `::marker`
+- **Icon Support**: Custom icons using CSS masks
+- **Dividers**: Optional separator lines between items
+- **Logical Properties**: RTL-friendly positioning
+
+## Structure
+- Container: `list`, `[data-list]`, or `.list`
+- Item: `list-item`, `[data-list-item]`, or `.list-item`
+- Divider: `list-divider`, `[data-list-divider]`, or `.list-divider`
+
+## Attributes
+
+### Container Attributes
+- `padding`: Padding for the list (default: `0`)
+- `margin`: Margin for the list (default: `0`)
+- `gap`: Gap between items (default: `var(--l-gap, 0.5rem)`)
+- `indent`: Left padding for marker positioning (default: `1.5rem`)
+- `inline`: Changes to horizontal flex layout with no markers
+
+### Item Attributes
+- `marker-color`: Color of the default bullet marker
+- `type`: Content for the marker (default: `'•'`)
+
+### Icon Attributes (for `list-item[icon]`)
+- `icon`: URL of the icon image
+- `icon-size`: Size of the icon (default: `1.2em`)
+- `icon-color`: Color of the icon (applied via background-color)
+
+### Divider Attributes
+- `gap`: Margin around the divider (default: `0.5rem`)
+
+### Divider Tokens
+- `--list-divider-color`: Divider color (defaults to the shared divider color system)
+- `--list-divider-size`: Divider thickness (defaults to `--divider-size`)
+
+## Usage Examples
+
+### Basic Vertical List
+```html
+<ul data-list>
+  <li data-list-item>First item</li>
+  <li data-list-item>Second item</li>
+  <li data-list-item>Third item</li>
+</ul>
+```
+
+### Inline List
+```html
+<list inline>
+  <list-item>Home</list-item>
+  <list-item>About</list-item>
+  <list-item>Contact</list-item>
+</list>
+```
+
+### Custom Markers
+```html
+<ul class="list">
+  <li class="list-item" marker-color="red" type="→">Important</li>
+  <li class="list-item" marker-color="green" type="✓">Completed</li>
+</ul>
+```
+
+### With Icons
+```html
+<list>
+  <list-item icon="check.svg" icon-color="green">Task completed</list-item>
+  <list-item icon="warning.svg" icon-color="orange">Warning</list-item>
+</list>
+```
+
+### With Dividers
+```html
+<list>
+  <list-item>Section 1</list-item>
+  <list-divider></list-divider>
+  <list-item>Section 2</list-item>
+</list>
+```
+
+## Styling Details
+
+### Vertical Layout
+- **Display**: Flex column
+- **Gap**: Configurable spacing between items
+- **Indent**: Left padding for marker positioning
+- **List Style**: Outside positioning
+
+### Inline Layout
+- **Display**: Flex row with wrapping
+- **No Markers**: `list-style: none`
+- **No Indent**: `padding-inline-start: 0`
+
+### Markers
+- **::marker Pseudo-element**: Styles the bullet or custom marker
+- **Color**: Customizable via `marker-color`
+- **Content**: Customizable via `type` attribute
+
+### Icons
+- **CSS Masks**: Uses `mask-image` for scalable icons
+- **Positioning**: Absolutely positioned at start of item
+- **Sizing**: Configurable via `icon-size`
+- **Coloring**: Applied via `background-color` (mask shows through)
+
+### Dividers
+- **Appearance**: Thin horizontal line
+- **Color**: `--list-divider-color`, falling back to `--divider-color-subtle`
+- **Height**: `--list-divider-size`, falling back to `--divider-size`
+- **Margins**: Configurable via `gap` attribute
+
+## CSS Implementation
+
+### Container Styles
+```css
+:is(list, [data-list], .list) {
+  display: flex;
+  flex-direction: column;
+  gap: attr(gap type(<length>), var(--l-gap, 0.5rem));
+  padding-inline-start: attr(indent type(<length>), 1.5rem);
+}
+```
+
+### Inline Variant
+```css
+&[inline] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-inline-start: 0;
+  list-style: none;
+}
+```
+
+### Item Markers
+```css
+& > :is(list-item, [data-list-item], .list-item)::marker {
+  color: attr(marker-color type(<color>), var(--theme-primary));
+  content: attr(type type(*), '•') ' ';
+}
+```
+
+### Icon Items
+```css
+&[icon] {
+  list-style: none;
+  padding-inline-start: calc(attr(icon-size type(<length>), 1.2em) + 0.5rem);
+
+  &::before {
+    mask-image: url(attr(icon type(<url>)));
+    background-color: attr(icon-color type(<color>), var(--theme-primary));
+  }
+}
+```
+
+## Browser Support
+- **CSS Nesting**: Modern browsers
+- **::marker**: Firefox 68+, Chrome 86+, Safari 11.1+
+- **CSS Masks**: All modern browsers
+- **Logical Properties**: Modern browsers
+- **attr() with types**: Limited support (graceful fallbacks)
+
+## Use Cases
+- **Navigation Menus**: Inline horizontal lists
+- **Feature Lists**: Vertical lists with custom markers
+- **Task Lists**: Items with checkmark icons
+- **Content Sections**: Lists with dividers between sections
+- **Status Lists**: Items with colored markers or icons

@@ -14,11 +14,37 @@ divider.setAttribute("aria-orientation", "vertical");
 const fluidContainer = document.createElement("fluid-container");
 fluidContainer.append(document.createElement("h2"));
 
+const siteHeader = document.createElement("site-header");
+siteHeader.setAttribute("role", "banner");
+
+const siteFooter = document.createElement("site-footer");
+siteFooter.setAttribute("role", "contentinfo");
+
+const contentHeader = document.createElement("content-header");
+contentHeader.append(document.createElement("h1"));
+
+const mediaObject = document.createElement("media-object");
+mediaObject.setAttribute("aria-label", "Account activity");
+
+const emptyState = document.createElement("empty-state");
+emptyState.setAttribute("role", "status");
+
+const alertMessage = document.createElement("alert-message");
+alertMessage.setAttribute("role", "status");
+
+const colorScheme: CSSTags.ColorScheme = "dark";
+const eyebrow = document.createElement("eyebrow");
+const themeOverrides: CSSTags.ThemeOverrides = {
+  "--accent-h": "210",
+  "--font-size-prose": "1.0625rem",
+  "--measure-prose": "64ch",
+};
+
 const example = (
   <layout-grid min-item-size="14rem" gap="var(--space-md)">
     <card>
       <card-body>
-        <badge status="success" size="sm">Typed</badge>
+        <badge status="success" size="sm" variant="subtle">Typed</badge>
       </card-body>
     </card>
   </layout-grid>
@@ -38,6 +64,15 @@ const fluidTypeExample = (
   </fluid-container>
 );
 
+const queryLayoutExample = <layout-stack container-query />;
+
+const siteShellExample = (
+  <>
+    <site-header role="banner" sticky compact />
+    <site-footer role="contentinfo" bordered centered />
+  </>
+);
+
 const newElementsExample = (
   <layout-stack>
     <icon-button size="sm" aria-label="Close" />
@@ -45,6 +80,11 @@ const newElementsExample = (
     <user-avatar shape="square" size="lg">AL</user-avatar>
     <message-bubble data-sender="self">Hello</message-bubble>
     <snap-feed aria-label="Updates" />
+    <content-header><text size="2xl">Projects</text></content-header>
+    <media-object aria-label="Account activity" />
+    <empty-state role="status">No projects</empty-state>
+    <alert-message status="success" density="compact" role="status">Saved</alert-message>
+    <chip variant="overt" size="sm">Typed chip</chip>
   </layout-stack>
 );
 
@@ -54,6 +94,12 @@ const invalidSidebar = <layout-sidebar side="middle" />;
 // @ts-expect-error badge status is a documented finite set.
 const invalidBadge = <badge status="maybe" />;
 
+// @ts-expect-error badge surfaces use `variant`; `role` remains an ARIA attribute.
+const invalidBadgeVariant = <badge variant="loud" />;
+
+// @ts-expect-error chip surfaces use the documented finite variant set.
+const invalidChipVariant = <chip variant="loud" />;
+
 // @ts-expect-error divider orientation is intentionally finite.
 const invalidDivider = <divider orientation="diagonal" />;
 
@@ -61,7 +107,18 @@ void example;
 void modalExample;
 void dividerExample;
 void fluidTypeExample;
+void queryLayoutExample;
+void siteShellExample;
 void newElementsExample;
 void invalidSidebar;
 void invalidBadge;
+void invalidBadgeVariant;
+void invalidChipVariant;
 void invalidDivider;
+void colorScheme;
+void eyebrow;
+void themeOverrides;
+void contentHeader;
+void mediaObject;
+void emptyState;
+void alertMessage;

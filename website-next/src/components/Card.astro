@@ -1,0 +1,172 @@
+---
+// Card.astro - Flexible card component with header, body, and footer sections
+interface Props {
+  variant?: 'default' | 'elevated' | 'outlined';
+  href?: string;
+  class?: string;
+  children: Astro.Component | string;
+}
+
+const { variant = 'default', href, class: className, ...rest } = Astro.props;
+---
+
+{href ? (
+  <a href={href} class={`card card--${variant} ${className || ''}`} {...rest}>
+    {children}
+  </a>
+) : (
+  <div class={`card card--${variant} ${className || ''}`} {...rest}>
+    {children}
+  </div>
+)}
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--card-border-radius, var(--border-radius-lg));
+    background: var(--card-bg, var(--bg-primary));
+    border: var(--card-border, 1px solid var(--border-color));
+    transition: all var(--transition-fast);
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover, 0 8px 16px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Card variants */
+  .card--default {
+    box-shadow: var(--card-shadow-default, 0 2px 4px rgba(0, 0, 0, 0.05));
+  }
+
+  .card--elevated {
+    box-shadow: var(--card-shadow-elevated, 0 4px 8px rgba(0, 0, 0, 0.1));
+  }
+
+  .card--elevated:hover {
+    box-shadow: var(--card-shadow-elevated-hover, 0 12px 24px rgba(0, 0, 0, 0.15));
+  }
+
+  .card--outlined {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    box-shadow: none;
+  }
+
+  .card--outlined:hover {
+    border-color: var(--accent);
+    box-shadow: var(--card-shadow-outlined-hover, 0 4px 8px rgba(0, 123, 255, 0.1));
+  }
+
+  /* Card sections */
+  .card-header {
+    padding: var(--card-header-padding, var(--space-lg));
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .card-header img,
+  .card-header svg {
+    width: var(--card-header-icon-size, 2rem);
+    height: var(--card-header-icon-size, 2rem);
+    flex-shrink: 0;
+    border-radius: var(--border-radius-md);
+  }
+
+  .card-header h3,
+  .card-header h4 {
+    margin: 0;
+    font-size: var(--card-header-title-size, var(--font-size-lg));
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .card-body {
+    padding: var(--card-body-padding, var(--space-lg));
+    flex: 1;
+    color: var(--text-primary);
+    line-height: var(--line-height-body);
+  }
+
+  .card-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .card-body ul,
+  .card-body ol {
+    margin: var(--space-md) 0;
+    padding-left: var(--space-xl);
+  }
+
+  .card-body li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .card-footer {
+    padding: var(--card-footer-padding, var(--space-lg));
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    background: var(--card-footer-bg, var(--bg-secondary));
+  }
+
+  /* Link card styles */
+  a.card {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  a.card:focus-visible {
+    outline: var(--outline-width) solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .card--outlined:hover {
+      border-color: var(--accent-light);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    :root:not(.light-mode) .card-footer {
+      background: var(--bg-secondary);
+    }
+  }
+
+  :root.dark-mode .card--outlined:hover {
+    border-color: var(--accent-light);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+  }
+
+  :root.dark-mode .card-footer {
+    background: var(--bg-secondary);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .card {
+      margin: var(--space-sm) 0;
+    }
+
+    .card-header,
+    .card-body,
+    .card-footer {
+      padding: var(--space-md);
+    }
+
+    .card-header h3,
+    .card-header h4 {
+      font-size: var(--font-size-base);
+    }
+
+    .card-footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

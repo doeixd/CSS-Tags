@@ -1,0 +1,120 @@
+---
+title: Divider
+description: Semantic horizontal rules and token-first horizontal or vertical separators.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Dividers separate related regions without introducing another content surface. CSS Tags styles the semantic native `<hr>` and provides `divider`, `[data-divider]`, and `.divider` hosts for layout separators.
+
+## Semantic horizontal rules
+
+Use `<hr>` when the content itself changes topic. It already has separator semantics and is horizontal by default.
+
+<LiveExample title="Native horizontal rule">
+  <layout-stack gap="var(--space-sm)">
+    <div><strong>Account</strong><p class="text-subtle">Profile and security settings.</p></div>
+    <hr />
+    <div><strong>Billing</strong><p class="text-subtle">Invoices and payment methods.</p></div>
+  </layout-stack>
+</LiveExample>
+
+```html
+<section>
+  <h2>Account</h2>
+  <p>Manage profile and security settings.</p>
+  <hr>
+  <h2>Billing</h2>
+  <p>Manage invoices and payment methods.</p>
+</section>
+```
+
+## Vertical separators
+
+Use a divider host when the line belongs to a layout rather than the document outline. A meaningful non-native separator needs `role="separator"`. Its `aria-orientation` is both the accessibility state and the styling hook.
+
+<LiveExample title="Vertical divider" compact>
+  <layout-cluster gap="0" align="stretch">
+    <box p="var(--space-sm)"><strong>Overview</strong></box>
+    <divider role="separator" aria-orientation="vertical"></divider>
+    <box p="var(--space-sm)"><strong>Activity</strong></box>
+    <divider role="separator" aria-orientation="vertical" strength="accent"></divider>
+    <box p="var(--space-sm)"><strong>Settings</strong></box>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<layout-cluster gap="0" align="stretch">
+  <span>Overview</span>
+  <divider role="separator" aria-orientation="vertical"></divider>
+  <span>Activity</span>
+</layout-cluster>
+```
+
+`orientation="vertical"` and the boolean `vertical` attribute are also supported as visual conveniences, but they do not add accessibility semantics. Use `aria-hidden="true"` when a line is purely decorative.
+
+## Strength
+
+<LiveExample title="Semantic divider strengths">
+  <layout-stack gap="var(--space-md)">
+    <div><small class="text-subtle">Muted</small><hr strength="muted" /></div>
+    <div><small class="text-subtle">Subtle</small><hr strength="subtle" /></div>
+    <div><small class="text-subtle">Default</small><hr strength="default" /></div>
+    <div><small class="text-subtle">Overt</small><hr strength="overt" /></div>
+    <div><small class="text-subtle">Accent</small><hr strength="accent" /></div>
+  </layout-stack>
+</LiveExample>
+
+```html
+<hr strength="muted">
+<hr strength="subtle">
+<hr strength="default">
+<hr strength="overt">
+<hr strength="accent">
+```
+
+Subtle is the default. Strength values map to theme roles rather than fixed colors.
+
+## Public API
+
+The four hosts share one visual API:
+
+```html
+<hr>
+<divider role="separator"></divider>
+<div data-divider role="separator"></div>
+<div class="divider" role="separator"></div>
+```
+
+Common tokens:
+
+- `--divider-color`: local color override
+- `--divider-color-muted`, `--divider-color-subtle`, `--divider-color-default`, `--divider-color-overt`, `--divider-color-accent`: semantic role colors
+- `--divider-size`: line thickness
+- `--divider-style`: `solid`, `dashed`, `dotted`, or another border style
+- `--divider-gap`: block gap when horizontal and inline gap when vertical
+- `--divider-length`: inline length when horizontal and block length when vertical
+- `--divider-min-length`: minimum length for a vertical divider
+
+The legacy `--hr-color` token now aliases `--divider-color-subtle`.
+
+## List dividers
+
+The list-specific `list-divider`, `[data-list-divider]`, and `.list-divider` hosts remain available. They now inherit the shared divider tokens and expose `--list-divider-color` and `--list-divider-size` for scoped overrides.
+
+```html
+<list>
+  <list-item>Profile</list-item>
+  <list-divider></list-divider>
+  <list-item>Security</list-item>
+</list>
+```
+
+## Accessibility
+
+- Native `<hr>` has separator semantics automatically.
+- Give meaningful non-native hosts `role="separator"`.
+- Add `aria-orientation="vertical"` to meaningful vertical separators.
+- Use `aria-hidden="true"` for decorative lines.
+- Do not make dividers focusable or rely on a line alone to communicate state.
+- Forced-colors mode uses the system text color so separators remain visible.

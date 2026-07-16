@@ -1,0 +1,29 @@
+{
+  "name": "css-tags-website-next",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --port 4322",
+    "start": "astro dev --port 4322",
+    "build": "astro build",
+    "audit:build": "node scripts/audit-build.mjs",
+    "check": "npm run build && npm run audit:build",
+    "preview": "astro preview --port 4322",
+    "sync:content": "node scripts/sync-content.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.8",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.6.1",
+    "astro-expressive-code": "^0.41.3",
+    "astro-pagefind": "^1.8.5",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "sharp": "^0.34.2",
+    "terser": "^5.44.1"
+  },
+  "devDependencies": {
+    "unist-util-visit": "^5.0.0"
+  }
+}

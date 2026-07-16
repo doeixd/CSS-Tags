@@ -94,6 +94,15 @@ Interactive demo of theme switching capabilities.
 - Dark/light mode toggle
 - Real-time theme updates
 
+### `demo-color-scheme.html` - Light, Dark, And System Modes
+
+A small, no-custom-CSS example of the public root color-scheme override.
+
+**Features Demonstrated:**
+- `data-color-scheme="light"` and `data-color-scheme="dark"`
+- returning to automatic system preference by removing the attribute
+- semantic surfaces, actions, and form controls updating together
+
 ### `old.css.txt` - Legacy Reference
 
 Text file containing older CSS implementations for reference.
@@ -112,6 +121,9 @@ logs, and the vertical snap feed using only the shipped library CSS.
 `demo-fluid-type.html` shows the custom, data, and class fluid-container APIs
 alongside the skip-link primitive. `demo-navigation-patterns.html` is a focused,
 JavaScript-free breadcrumbs and pagination reference.
+
+`demo-site-shell.html` demonstrates the native-first header and footer APIs as
+a complete page with no custom CSS or JavaScript.
 
 1. Ensure the framework files are properly linked
 2. Open any `.html` file in a modern browser

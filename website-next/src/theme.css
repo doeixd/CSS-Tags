@@ -1,0 +1,887 @@
+@import url("../../components/accessibility.css") layer(website-theme);
+
+/* =============================================================================
+   WEBSITE THEME VARIABLES
+   CSS Tags Documentation Website Theme
+   ============================================================================= */
+
+@layer website-theme {
+    /* =========================================================================
+       ROOT VARIABLES
+       Design tokens and theme configuration
+       ========================================================================= */
+
+    :root {
+        /* ---------------------------------------------------------------------
+           BASE COLORS
+           --------------------------------------------------------------------- */
+        --accent: #0066cc;
+        --accent-light: #e3f2fd;
+        --accent-dark: #1a3a52;
+
+        --text-primary: #1a1a1a;
+        --text-secondary: #6a737d;
+
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-hover: #e8eaed;
+
+        --border-color: #e1e4e8;
+
+        /* ---------------------------------------------------------------------
+           SELECTION & ACCENT
+           --------------------------------------------------------------------- */
+        --accent-color: var(--accent);
+        --selection-bg: var(--accent-light);
+        --selection-fg: var(--accent-dark);
+
+        /* Content styling */
+        --strong-color-light: var(--text-primary);
+        --strong-color-dark: hsl(214 14% 100% / 1);
+        --italic-color-light: var(--text-secondary);
+        --italic-color-dark: hsl(214 14% 80% / 0.8);
+        --link-color-light: var(--accent);
+        --link-color-dark: #77b2ed;
+
+        /* Inline code styling */
+        --inline-code-bg-light: #f3f5f7;
+        --inline-code-bg-dark: #2d2b2b;
+        --inline-code-color-light: hsl(0 0% 30%);
+        --inline-code-color-dark: hsl(214 14% 85%);
+        --inline-code-border-light: hsl(0 0% 90%);
+        --inline-code-border-dark: hsl(217 19% 25%);
+        --inline-code-padding: 0.1em 0.4em;
+        --inline-code-border-radius: 3px;
+        --inline-code-font-size: 0.9em;
+
+        /* Header code styling */
+        --header-code-bg-light: hsl(0 0% 96%);
+        --header-code-bg-dark: hsl(217 19% 20%);
+        --header-code-color-light: hsl(0 0% 30%);
+        --header-code-color-dark: hsl(214 14% 85%);
+        --header-code-border-light: hsl(0 0% 90%);
+        --header-code-border-dark: hsl(217 19% 25%);
+        --header-code-padding: 0.15em 0.3em;
+        --header-code-border-radius: 2px;
+        --header-code-font-size: 0.85em;
+
+        /* ---------------------------------------------------------------------
+            SPACING SCALE
+            --------------------------------------------------------------------- */
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 0.75rem;
+        --space-lg: 1rem;
+        --space-xl: 1.5rem;
+        --space-2xl: 2rem;
+
+        /* ---------------------------------------------------------------------
+           TYPOGRAPHY
+           --------------------------------------------------------------------- */
+        /* Font Sizes */
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 0.9375rem;
+        --font-size-lg: 1rem;
+        --font-size-xl: 1.25rem;
+        --font-size-2xl: 1.5rem;
+        --font-size-3xl: 2rem;
+        --font-size-4xl: 2.5rem;
+        --font-size-5xl: 3rem;
+
+        /* Font Weights */
+        --font-weight-normal: 400;
+        --font-weight-medium: 500;
+        --font-weight-semibold: 600;
+        --font-weight-bold: 700;
+
+        /* Line Height */
+        --line-height-body: 1.6;
+
+        /* Letter Spacing */
+        --letter-spacing-uppercase: 0.05em;
+
+        /* ---------------------------------------------------------------------
+           BORDERS & RADIUS
+           --------------------------------------------------------------------- */
+        --border-radius-sm: 2px;
+        --border-radius-md: 4px;
+        --border-radius-lg: 6px;
+
+        /* ---------------------------------------------------------------------
+           LAYOUT & DIMENSIONS
+           --------------------------------------------------------------------- */
+        /* Responsive Breakpoints */
+        --breakpoint-sm: 640px;
+        --breakpoint-md: 768px;
+        --breakpoint-lg: 1024px;
+        --breakpoint-xl: 1200px;
+
+        /* Layout Widths */
+        --sidebar-width: 280px;
+        --sidebar-width-max: 85vw;
+        --toc-width: 250px;
+        --min-mobile-width: 320px;
+
+        /* Scrollbar */
+        --scrollbar-width: 8px;
+        --scrollbar-thumb-width: thin;
+
+        /* Resize Handle */
+        --resize-handle-width: 4px;
+        --resize-handle-hit-area: 12px;
+
+        /* Max Heights */
+        --max-height-collapsed: 0;
+        --max-height-expanded: 1000px;
+
+        /* ---------------------------------------------------------------------
+           ELEVATION & DEPTH
+           --------------------------------------------------------------------- */
+        /* Z-Index Scale */
+        --z-index-backdrop: 999;
+        --z-index-sidebar: 1000;
+        --z-index-mobile-menu: 1001;
+        --z-index-mobile-toc: 1001;
+        --z-index-mobile-header: 1002;
+        --z-index-skip-link: 10001;
+
+        /* Shadows */
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        /* Opacity */
+        --opacity-hover: 0.9;
+        --opacity-backdrop: 0.5;
+
+        /* ---------------------------------------------------------------------
+           MOTION & TRANSITIONS
+           --------------------------------------------------------------------- */
+        --transition-fast: 0.1s ease-out;
+        --transition-normal: 0.15s ease-out;
+        --transition-slow: 0.2s ease-out;
+        --transition-slow-bezier: 0.2s ease-out;
+        --transition-nav: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* Transforms */
+        --transform-scale-hover: scale(1.05);
+        --transform-rotate-collapsed: rotate(-90deg);
+
+
+
+        /* =========================================================================
+        VIEW TRANSITIONS
+        Smooth theme transitions
+        ========================================================================= */
+
+        @view-transition {
+            navigation: auto;
+        }
+
+        /* Theme transition animations */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation-duration: var(--transition-slow-bezier);
+            animation-timing-function: ease-out;
+        }
+
+        ::view-transition-old(root) {
+            animation-name: theme-out;
+        }
+
+        ::view-transition-new(root) {
+            animation-name: theme-in;
+        }
+
+        @keyframes theme-out {
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes theme-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* =========================================================================
+        CONTENT STYLING
+        ========================================================================= */
+
+        /* Light mode: Strong and italic text in content areas */
+        :root:not(.dark-mode) .content strong {
+            color: var(--strong-color-light);
+        }
+
+        :root:not(.dark-mode) .content em,
+        :root:not(.dark-mode) .content i {
+            color: var(--italic-color-light);
+        }
+
+        /* Dark mode: Strong and italic text in content areas */
+        @media (prefers-color-scheme: dark) {
+            :root:not(.light-mode) .content strong {
+                color: var(--strong-color-dark);
+            }
+
+            :root:not(.light-mode) .content em,
+            :root:not(.light-mode) .content i {
+                color: var(--italic-color-dark);
+            }
+        }
+
+        :root.dark-mode .content strong {
+            color: var(--strong-color-dark);
+        }
+
+        :root.dark-mode .content em,
+        :root.dark-mode .content i {
+            color: var(--italic-color-dark);
+        }
+
+        /* Inline code styling - Light mode */
+        :root:not(.dark-mode) code:not(pre code):not(.expressive-code code) {
+            background: var(--inline-code-bg-light) !important;
+            color: var(--inline-code-color-light) !important;
+            border: 1px solid var(--inline-code-border-light) !important;
+            padding: var(--inline-code-padding) !important;
+            border-radius: var(--inline-code-border-radius) !important;
+            font-size: var(--inline-code-font-size) !important;
+            font-family:
+                "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace !important;
+        }
+
+        /* Dark mode overrides - OPTIMIZED: Consolidated duplicate selectors */
+        @media (prefers-color-scheme: dark) {
+            :root:not(.light-mode) code:not(pre code):not(.expressive-code code) {
+                background: var(--inline-code-bg-dark) !important;
+                color: var(--inline-code-color-dark) !important;
+                border-color: var(--inline-code-border-dark) !important;
+            }
+        }
+
+        :root.dark-mode code:not(pre code):not(.expressive-code code) {
+            background: var(--inline-code-bg-dark) !important;
+            color: var(--inline-code-color-dark) !important;
+            border-color: var(--inline-code-border-dark) !important;
+        }
+
+        /* Reset styling for code blocks */
+        pre code,
+        .expressive-code code {
+            background: transparent !important;
+            color: inherit !important;
+            border: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+        }
+
+        /* Header code styling */
+        :root:not(.dark-mode) h1 code,
+        :root:not(.dark-mode) h2 code,
+        :root:not(.dark-mode) h3 code,
+        :root:not(.dark-mode) h4 code,
+        :root:not(.dark-mode) h5 code,
+        :root:not(.dark-mode) h6 code {
+            background: var(--header-code-bg-light);
+            color: var(--header-code-color-light);
+            border: 1px solid var(--header-code-border-light);
+            padding: var(--header-code-padding);
+            border-radius: var(--header-code-border-radius);
+            font-size: var(--header-code-font-size);
+            font-family:
+                "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+        }
+
+        /* Dark mode overrides - OPTIMIZED: Only override colors */
+        @media (prefers-color-scheme: dark) {
+            :root:not(.light-mode) h1 code,
+            :root:not(.light-mode) h2 code,
+            :root:not(.light-mode) h3 code,
+            :root:not(.light-mode) h4 code,
+            :root:not(.light-mode) h5 code,
+            :root:not(.light-mode) h6 code {
+                background: var(--header-code-bg-dark);
+                color: var(--header-code-color-dark);
+                border-color: var(--header-code-border-dark);
+            }
+        }
+
+        :root.dark-mode h1 code,
+        :root.dark-mode h2 code,
+        :root.dark-mode h3 code,
+        :root.dark-mode h4 code,
+        :root.dark-mode h5 code,
+        :root.dark-mode h6 code {
+            background: var(--header-code-bg-dark);
+            color: var(--header-code-color-dark);
+            border-color: var(--header-code-border-dark);
+        }
+
+        /* Backdrop Effects */
+        --backdrop-blur: 3px;
+
+        /* ---------------------------------------------------------------------
+           FOCUS STYLES
+           --------------------------------------------------------------------- */
+        --outline-width: 2px;
+        --outline-offset: 2px;
+        --focus-outline: var(--outline-width) solid var(--accent);
+        --focus-outline-offset: var(--outline-offset);
+        --focus-border-radius: var(--border-radius-sm);
+
+        /* =====================================================================
+           COMPONENT-SPECIFIC VARIABLES
+           ===================================================================== */
+
+        /* ---------------------------------------------------------------------
+           NAVIGATION COMPONENT
+           --------------------------------------------------------------------- */
+        --nav-sidebar-padding: 1.25rem 0.75rem;
+        --nav-sidebar-padding-top: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-right: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-bottom: var(--nav-sidebar-padding);
+        --nav-sidebar-padding-left: var(--nav-sidebar-padding);
+
+        /* Mobile sidebar padding-top to account for mobile header */
+        /* Set to 0 if using standalone menu button (no mobile header) */
+        /* Set to var(--mobile-header-height) if using MobileHeader component */
+        --nav-sidebar-mobile-padding-top: var(--mobile-header-height);
+
+        --nav-mobile-backdrop-bg: rgba(0, 0, 0, var(--opacity-backdrop));
+        --nav-mobile-menu-top: 2.1lh;
+        --nav-mobile-menu-right: 2.1lh;
+        --nav-mobile-menu-padding: 4px 10px;
+        --nav-mobile-menu-border-radius: var(--border-radius-lg);
+        --nav-mobile-menu-box-shadow: var(--shadow-sm);
+
+        --nav-header-margin-bottom: var(--space-lg);
+        --nav-header-padding-bottom: var(--space-sm);
+
+        --nav-site-title-font-size: var(--font-size-lg);
+        --nav-site-title-font-weight: var(--font-weight-bold);
+
+        --nav-github-link-padding: var(--space-sm) var(--space-lg);
+        --nav-github-link-font-size: var(--font-size-sm);
+        --nav-github-link-font-weight: var(--font-weight-medium);
+        --nav-github-link-border-radius: var(--border-radius-lg);
+        --nav-github-logo-size: 20px;
+        --nav-github-logo-color: oklch(from var(--text-secondary) l c h / 50%);
+
+        --nav-section-margin-bottom: var(--space-lg);
+        --nav-section-title-font-size: var(--font-size-sm);
+        --nav-section-title-font-weight: 600;
+        --nav-section-title-text-transform: capitalize;
+        --nav-section-title-letter-spacing: -0.1px;
+        --nav-section-title-color: hsl(0deg 1.5% 16.31%);
+        --nav-section-title-margin-bottom: var(--space-sm);
+
+        --nav-section-items-margin-bottom: var(--space-xs);
+
+        --nav-link-padding: 0.35rem 0.5rem;
+        --nav-link-border-radius: var(--border-radius-md);
+        --nav-link-font-size: var(--font-size-sm);
+
+        /* ---------------------------------------------------------------------
+           MOBILE HEADER COMPONENT
+           --------------------------------------------------------------------- */
+        --mobile-header-height: 3.5rem;
+        --mobile-header-bg: var(--bg-secondary);
+        --mobile-header-border-color: var(--border-color);
+        --mobile-header-padding: var(--space-sm) var(--space-lg);
+        --mobile-header-gap: var(--space-md);
+        --mobile-header-button-size: 2.5rem;
+        --mobile-header-button-bg: transparent;
+        --mobile-header-button-hover-bg: var(--bg-hover);
+        --mobile-header-button-color: var(--text-primary);
+
+        /* ---------------------------------------------------------------------
+           HEADER COMPONENT
+           --------------------------------------------------------------------- */
+        --header-height: 3.5rem;
+        --header-height-mobile: 3.5rem;
+        --header-bg: var(--bg-secondary);
+        --header-border: 1px solid var(--border-color);
+        --header-padding-x: var(--space-xl);
+        --header-max-width: 100%;
+        --header-z-index: 1003;
+        --header-logo-height: 2rem;
+        --header-search-offset: 0.5px;
+
+        /* ---------------------------------------------------------------------
+           LAYOUT COMPONENT
+           --------------------------------------------------------------------- */
+        --layout-content-wrapper-padding: 2rem var(--space-xl);
+        --layout-content-wrapper-padding-top: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-right: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-bottom: var(
+            --layout-content-wrapper-padding
+        );
+        --layout-content-wrapper-padding-left: var(
+            --layout-content-wrapper-padding
+        );
+
+        --layout-toc-wrapper-padding: 2rem var(--space-md) 2rem 0;
+        --layout-toc-wrapper-padding-top: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-right: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-bottom: var(--layout-toc-wrapper-padding);
+        --layout-toc-wrapper-padding-left: var(--layout-toc-wrapper-padding);
+
+        --layout-docs-container-gap: var(--space-2xl);
+
+        /* Typography within layout */
+        --layout-h1-font-size: 2rem;
+        --layout-h1-margin-bottom: var(--space-sm);
+
+        --layout-h2-font-size: 1.5rem;
+        --layout-h2-margin-top: var(--space-xl);
+        --layout-h2-margin-bottom: var(--space-md);
+        --layout-h2-padding-top: var(--space-sm);
+
+        --layout-h3-font-size: 1.25rem;
+        --layout-h3-margin-top: var(--space-xl);
+        --layout-h3-margin-bottom: var(--space-sm);
+
+        --layout-h4-font-size: 1.1rem;
+        --layout-h4-margin-top: var(--space-lg);
+        --layout-h4-margin-bottom: var(--space-sm);
+
+        --layout-p-margin-bottom: var(--space-md);
+
+        /* Code elements within layout */
+        --layout-code-padding: 0.2em 0.4em;
+        --layout-code-border-radius: 3px;
+
+        --layout-pre-padding: var(--space-md);
+        --layout-pre-border-radius: var(--border-radius-lg);
+        --layout-pre-margin-bottom: var(--space-lg);
+
+        /* Lists within layout */
+        --layout-ul-ol-margin-bottom: var(--space-lg);
+        --layout-ul-ol-padding-left: var(--space-2xl);
+        --layout-li-margin-bottom: var(--space-sm);
+
+        /* Blockquotes within layout */
+        --layout-blockquote-border-left: 4px solid var(--accent);
+        --layout-blockquote-padding-left: var(--space-lg);
+        --layout-blockquote-margin: var(--space-lg) 0;
+
+        /* Tables within layout */
+        --layout-table-margin-bottom: var(--space-lg);
+        --layout-th-td-padding: var(--space-md);
+        --layout-th-font-weight: var(--font-weight-semibold);
+
+        --layout-description-font-size: 1.125rem;
+        --layout-description-margin-bottom: var(--space-2xl);
+
+        /* ---------------------------------------------------------------------
+           TABLE OF CONTENTS COMPONENT
+           --------------------------------------------------------------------- */
+        --toc-padding: 1.5rem;
+        --toc-background: transparent;
+        --toc-border: transparent;
+        --toc-border-radius: var(--border-radius-lg);
+        --toc-font-size: var(--font-size-sm);
+
+        --toc-title-font-size: var(--font-size-sm);
+        --toc-title-font-weight: var(--font-weight-bold);
+        --toc-title-letter-spacing: var(--letter-spacing-uppercase);
+        --toc-title-margin-bottom: var(--space-lg);
+
+        --toc-item-margin-bottom: var(--space-sm);
+        --toc-depth-3-margin-left: var(--space-lg);
+
+        --toc-link-padding: var(--space-xs) var(--space-sm);
+        --toc-link-border-radius: var(--border-radius-md);
+        --toc-link-opacity-default: 0.55;
+        --toc-link-opacity-hover: 1;
+        --toc-link-color: hsl(0deg 1.5% 45%);
+        --toc-link-hover-bg: hsl(0deg 0% 97%);
+
+        /* TOC depth transition margins */
+        --toc-depth-transition-margin-2-to-3: var(--space-sm);
+        --toc-depth-transition-margin-3-to-2: 0;
+
+        /* ---------------------------------------------------------------------
+            PREVIOUS/NEXT NAVIGATION COMPONENT
+            --------------------------------------------------------------------- */
+        --prev-next-nav-gap: var(--space-lg);
+        --prev-next-nav-margin-top: 2rem;
+        --prev-next-nav-padding-top: var(--space-2xl);
+
+        --prev-next-link-gap: var(--space-xs);
+        --prev-next-link-padding: var(--space-lg);
+        --prev-next-link-border-radius: var(--border-radius-lg);
+
+        --prev-next-label-font-size: var(--font-size-xs);
+        --prev-next-label-font-weight: var(--font-weight-semibold);
+        --prev-next-label-letter-spacing: var(--letter-spacing-uppercase);
+
+        --prev-next-title-font-size: var(--font-size-lg);
+        --prev-next-title-font-weight: var(--font-weight-medium);
+
+        /* ---------------------------------------------------------------------
+           SKIP LINK
+           --------------------------------------------------------------------- */
+        --skip-link-inset-block: var(--space-md);
+        --skip-link-inset-inline: var(--space-lg);
+        --skip-link-padding: var(--space-md) calc(var(--space-lg) * 1.5);
+        --skip-link-radius: var(--border-radius-md);
+        --skip-link-font-weight: var(--font-weight-medium);
+        --skip-link-duration: var(--transition-normal);
+        --skip-link-background: var(--accent);
+        --skip-link-color: white;
+
+        /* ---------------------------------------------------------------------
+           SCROLL TO TOP BUTTON
+           --------------------------------------------------------------------- */
+        /* Button size */
+        --scroll-button-size: 2.75rem;
+        --scroll-button-size-mobile: 2.5rem;
+
+        /* Button positioning */
+        --scroll-button-bottom: var(--space-2xl);
+        --scroll-button-right: var(--space-2xl);
+        --scroll-button-bottom-mobile: var(--space-lg);
+        --scroll-button-right-mobile: var(--space-lg);
+
+        /* Button appearance - Matches mobile header button style by default */
+        --scroll-button-bg: transparent;
+        --scroll-button-bg-hover: var(--bg-hover);
+        --scroll-button-fg: var(--text-primary);
+        --scroll-button-border: 1px solid var(--border-color);
+        --scroll-button-border-radius: var(--border-radius-md);
+        --scroll-button-padding: var(--space-sm);
+        --scroll-button-backdrop-filter: blur(8px);
+
+        /* Button opacity */
+        --scroll-button-opacity: 0.7;
+        --scroll-button-opacity-hover: 1;
+
+        /* Button transforms */
+        --scroll-button-transform-hidden: translateY(20px);
+        --scroll-button-transform-visible: translateY(0);
+        --scroll-button-transform-hover: translateY(-2px);
+        --scroll-button-transform-active: scale(0.95);
+
+        /* Button transition */
+        --scroll-button-transition: background 0.2s ease-out;
+
+        /* Alternative: Circular accent style (uncomment to use) */
+        /* --scroll-button-bg: var(--accent); */
+        /* --scroll-button-fg: white; */
+        /* --scroll-button-border: none; */
+        /* --scroll-button-border-radius: 50%; */
+
+        /* ---------------------------------------------------------------------
+        SIDEBAR FOOTER COMPONENT
+        --------------------------------------------------------------------- */
+         --sidebar-footer-position: sticky;
+         --sidebar-footer-padding: var(--space-lg);
+         --sidebar-footer-bg: var(--bg-secondary);
+         --sidebar-footer-border: 1px solid var(--border-color);
+         --sidebar-footer-z-index: 10;
+         --sidebar-footer-gap: var(--space-sm);
+
+         /* Footer actions */
+         --sidebar-footer-github-padding: var(--space-sm) var(--space-lg);
+         --sidebar-footer-github-bg: var(--bg-secondary);
+         --sidebar-footer-github-border: 1px solid transparent;
+         --sidebar-footer-github-color: var(--text-primary);
+         --sidebar-footer-github-border-radius: var(--border-radius-lg);
+         --sidebar-footer-github-font-size: var(--font-size-sm);
+         --sidebar-footer-github-font-weight: var(--font-weight-medium);
+         --sidebar-footer-github-width: 2.5rem;
+         --sidebar-footer-github-height: 2.5rem;
+         --sidebar-footer-github-logo-size: 20px;
+         --sidebar-footer-github-hover-bg: var(--bg-hover);
+         --sidebar-footer-github-hover-border-color: var(--accent);
+         --sidebar-footer-github-active-transform: scale(0.98);
+
+         /* Toggle button */
+         --sidebar-footer-toggle-padding: var(--space-sm);
+         --sidebar-footer-toggle-bg: transparent;
+         --sidebar-footer-toggle-border: 1px solid var(--border-color);
+         --sidebar-footer-toggle-color: var(--text-primary);
+         --sidebar-footer-toggle-border-radius: var(--border-radius-md);
+         --sidebar-footer-toggle-width: 2rem;
+         --sidebar-footer-toggle-height: 2rem;
+         --sidebar-footer-toggle-hover-bg: var(--bg-hover);
+         --sidebar-footer-toggle-hover-border-color: var(--accent);
+         --sidebar-footer-toggle-active-transform: scale(0.95);
+
+         /* ---------------------------------------------------------------------
+            SEARCH COMPONENT
+            --------------------------------------------------------------------- */
+        --search-border-radius: var(--border-radius-lg);
+        --search-focus-shadow: 0 0 0 3px;
+        --search-clear-button-top: 6px;
+        --search-clear-icon-size: 14px;
+        --search-clear-icon-thickness: 2px;
+        --search-text-indent-hidden: -9999px;
+        --pagefind-message-margin: 0 0 0 2px;
+
+        /* ---------------------------------------------------------------------
+           SELECT/DROPDOWN COMPONENT
+           --------------------------------------------------------------------- */
+        /* Field spacing */
+        --select-field-gap: var(--space-xs);
+
+        /* Label styling */
+        --select-label-font-size: var(--font-size-sm);
+        --select-label-font-weight: var(--font-weight-medium);
+        --select-required-color: var(--accent);
+
+        /* Select box dimensions */
+        --select-padding-y: var(--space-sm);
+        --select-padding-x: var(--space-md);
+        --select-border-width: 1px;
+        --select-border-radius: var(--border-radius-md);
+
+        /* Select box colors */
+        --select-bg: var(--bg-primary);
+        --select-font-size: var(--font-size-base);
+
+        /* Focus state */
+        --select-focus-shadow: 0 0 0 3px;
+
+        /* State colors */
+        --select-error-color: #dc2626;
+        --select-success-color: #16a34a;
+
+        /* =====================================================================
+           EXPRESSIVE CODE THEMING
+           Overrides for @expressive-code/astro package
+           ===================================================================== */
+
+        /* ---------------------------------------------------------------------
+           CODE BLOCK FRAME
+           --------------------------------------------------------------------- */
+        --code-frame-border: 1px solid var(--border-color);
+        --code-margin-bottom: 1lh;
+
+        /* ---------------------------------------------------------------------
+           CODE COPY BUTTON
+           Comprehensive theming for code block copy button
+           --------------------------------------------------------------------- */
+
+        /* Button dimensions */
+        --code-copy-button-width: 1.9rem;
+        --code-copy-button-height: 1.9rem;
+        --code-copy-button-width-hover: 1.9rem;
+        --code-copy-button-height-hover: 1.9rem;
+
+        /* Button shape */
+        --code-copy-button-border-radius: 6px;
+
+        /* Button border */
+        --code-copy-button-border-width: var(--ec-brdWd);
+        --code-copy-button-border-color: var(--ec-frm-inlBtnBrd);
+        --code-copy-button-border-opacity: var(--ec-frm-inlBtnBrdOpa);
+
+        /* Button background layers */
+        --code-copy-button-bg: var(--code-background);
+        --code-copy-button-bg-inner: var(--ec-frm-inlBtnBg);
+        --code-copy-button-bg-inner-idle-opacity: var(--ec-frm-inlBtnBgIdleOpa);
+        --code-copy-button-bg-inner-hover-opacity: var(
+            --ec-frm-inlBtnBgHoverOrFocusOpa
+        );
+
+        /* Button visibility states */
+        --code-copy-button-opacity: 0.75;
+        --code-copy-button-hover-opacity: 1;
+        --code-copy-button-hidden-opacity: 0;
+
+        /* Button icon */
+        --code-copy-button-icon-color: var(--ec-frm-inlBtnFg);
+        --code-copy-button-icon-margin: 0.475rem;
+
+        /* Button transitions */
+        --code-copy-button-transition-property:
+            opacity, background, border-color;
+        --code-copy-button-transition-duration: 0.2s;
+        --code-copy-button-transition-timing: ease-out;
+
+        /* ---------------------------------------------------------------------
+           CODE COPY SUCCESS TOOLTIP
+           --------------------------------------------------------------------- */
+        --ec-frm-tooltipSuccessBg: var(--accent-light);
+        --ec-frm-tooltipSuccessFg: var(--accent-dark);
+        --tooltip-bg: var(--bg-secondary);
+
+        --code-copy-tooltip-padding: 0.125rem 0.75rem;
+        --code-copy-tooltip-border-radius: 0.2rem;
+        --code-copy-tooltip-font-size: 0.875rem;
+
+        /* Global accent color assignment */
+        accent-color: var(--accent-color);
+    }
+
+    /* =========================================================================
+       GLOBAL STYLES
+       ========================================================================= */
+
+    /* Text selection styling */
+    ::selection {
+        background-color: var(--selection-bg);
+        color: var(--selection-fg);
+    }
+
+    /* =========================================================================
+       DARK MODE
+       Automatic color scheme adjustments + manual override support
+       ========================================================================= */
+
+    /* System preference dark mode */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) {
+            --text-primary: #e1e4e8;
+            --text-secondary: #8b949e;
+            --bg-primary: #171717;
+            --bg-secondary: #1a1a1a;
+            --bg-hover: #2d2d2d;
+            --border-color: #333;
+            --accent-light: #58a6ff;
+            --accent-dark: #1a3a52;
+        }
+    }
+
+    /* Manual dark mode override */
+    :root.dark-mode {
+        --text-primary: #e1e4e8;
+        --text-secondary: #8b949e;
+        --bg-primary: #171717;
+        --bg-secondary: #1a1a1a;
+        --bg-hover: #2d2d2d;
+        --border-color: #333;
+        --accent-light: #58a6ff;
+        --accent-dark: #1a3a52;
+    }
+
+    /* Manual light mode override (for users with dark system preference) */
+    :root.light-mode {
+        --text-primary: #1a1a1a;
+        --text-secondary: #6a737d;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-hover: #e8eaed;
+        --border-color: #e1e4e8;
+        --accent-light: #e3f2fd;
+        --accent-dark: #1a3a52;
+    }
+
+    /* =========================================================================
+       EXPRESSIVE CODE OVERRIDES
+       Apply theme variables to expressive-code components
+       ========================================================================= */
+
+    /* Code block spacing */
+    .expressive-code {
+        margin-bottom: var(--code-margin-bottom) !important;
+    }
+
+    /* -------------------------------------------------------------------------
+       CODE COPY BUTTON STYLING
+       ------------------------------------------------------------------------- */
+
+    /* Button base styles */
+    .expressive-code .copy button {
+        width: var(--code-copy-button-width) !important;
+        height: var(--code-copy-button-height) !important;
+        border-radius: var(--code-copy-button-border-radius) !important;
+        background: var(--code-copy-button-bg) !important;
+        opacity: var(--code-copy-button-opacity) !important;
+        transition-property: var(
+            --code-copy-button-transition-property
+        ) !important;
+        transition-duration: var(
+            --code-copy-button-transition-duration
+        ) !important;
+        transition-timing-function: var(
+            --code-copy-button-transition-timing
+        ) !important;
+    }
+
+    /* Button inner background layer */
+    .expressive-code .copy button div {
+        background: var(--code-copy-button-bg-inner) !important;
+        opacity: var(--code-copy-button-bg-inner-idle-opacity) !important;
+        transition-property: inherit !important;
+        transition-duration: inherit !important;
+        transition-timing-function: inherit !important;
+    }
+
+    /* Button border (::before pseudo-element) */
+    .expressive-code .copy button::before {
+        border: var(--code-copy-button-border-width) solid
+            var(--code-copy-button-border-color) !important;
+        opacity: var(--code-copy-button-border-opacity) !important;
+    }
+
+    /* Button icon (::after pseudo-element) */
+    .expressive-code .copy button::after {
+        background-color: var(--code-copy-button-icon-color) !important;
+        margin: var(--code-copy-button-icon-margin) !important;
+    }
+
+    /* Button hover and focus states */
+    .expressive-code .copy button:hover,
+    .expressive-code .copy button:focus:focus-visible {
+        opacity: var(--code-copy-button-hover-opacity) !important;
+    }
+
+    .expressive-code .copy button:hover div,
+    .expressive-code .copy button:focus:focus-visible div {
+        opacity: var(--code-copy-button-bg-inner-hover-opacity) !important;
+    }
+
+    /* Responsive behavior on hover-capable devices */
+    @media (hover: hover) {
+        .expressive-code .copy button {
+            opacity: var(--code-copy-button-hidden-opacity) !important;
+            width: var(--code-copy-button-width-hover) !important;
+            height: var(--code-copy-button-height-hover) !important;
+        }
+
+        .expressive-code .frame:hover .copy button:not(:hover),
+        .expressive-code
+            .frame:focus-within
+            :focus-visible
+            ~ .copy
+            button:not(:hover),
+        .expressive-code .frame .copy .feedback.show ~ button:not(:hover) {
+            opacity: var(--code-copy-button-opacity) !important;
+        }
+    }
+
+    /* -------------------------------------------------------------------------
+       CODE COPY SUCCESS TOOLTIP
+       ------------------------------------------------------------------------- */
+
+    .expressive-code .copy .feedback {
+        background-color: var(--ec-frm-tooltipSuccessBg) !important;
+        color: var(--ec-frm-tooltipSuccessFg) !important;
+        padding: var(--code-copy-tooltip-padding) !important;
+        border-radius: var(--code-copy-tooltip-border-radius) !important;
+        font-size: var(--code-copy-tooltip-font-size) !important;
+    }
+
+    .expressive-code .copy .feedback::before {
+        background: var(--ec-frm-tooltipSuccessBg) !important;
+    }
+}
+
+html .expressive-code .frame pre,
+html body .expressive-code .frame pre {
+    padding: var(--code-block-padding, 10px 0px) !important;
+}

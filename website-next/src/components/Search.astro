@@ -1,0 +1,886 @@
+---
+// Search component using Pagefind
+const base = import.meta.env.BASE_URL;
+const searchId = Astro.props.id || "search";
+const variant = Astro.props.variant || "default"; // "default" or "header"
+---
+
+<div
+    class={`search-container search-container--${variant}`}
+    style={variant === 'header' ? `view-transition-name: search;` : ''}
+>
+    <div id={searchId} data-search-variant={variant}></div>
+</div>
+
+<script>
+    // @ts-ignore
+
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    function setQueryParam(name, value) {
+        const url = new URL(window.location);
+        if (value) {
+            url.searchParams.set(name, value);
+        } else {
+            url.searchParams.delete(name);
+        }
+        window.history.replaceState({}, "", url);
+    }
+
+    // Get the primary search element for URL syncing (prioritize header, then mobile, then sidebar)
+    function getPrimarySearchElement() {
+        return (
+            document.querySelector("#header-search") ||
+            document.querySelector("#mobile-search") ||
+            document.querySelector("#sidebar-search")
+        );
+    }
+
+    async function initSearch() {
+        // Initialize all search elements that exist
+        const searchElements = document.querySelectorAll('[id$="-search"]');
+        for (const searchElement of searchElements) {
+            const elementId = searchElement.id;
+            if (!elementId) continue;
+
+            // Skip if already initialized
+            if (searchElement.hasAttribute("data-pagefind-initialized"))
+                continue;
+
+            // Clear any existing content
+            searchElement.innerHTML = "";
+
+            searchElement.setAttribute("data-pagefind-initialized", "true");
+
+            try {
+                // @ts-ignore
+                const { PagefindUI } = await import("@pagefind/default-ui");
+
+                // Initialize new search UI
+                const pagefindUI = new PagefindUI({
+                    element: "#" + elementId,
+                    showSubResults: true,
+                    showImages: false,
+                    excerptLength: 15,
+                    // @ts-ignore
+                    baseUrl: import.meta.env.BASE_URL,
+                    bundlePath:
+                        import.meta.env.BASE_URL.replace(/\/$/, "") +
+                        "/pagefind/",
+                    processResult: (result) => {
+                        // Strip HTML tags from excerpt
+                        if (result.excerpt) {
+                            result.excerpt = result.excerpt.replace(
+                                /<[^>]*>/g,
+                                "",
+                            );
+                        }
+                        // Ensure URL is correct
+                        if (result.url) {
+                            // Make sure it's absolute path
+                            if (!result.url.startsWith('/')) {
+                                result.url = '/' + result.url;
+                            }
+                            // Prepend baseUrl if needed
+                            const baseUrl = import.meta.env.BASE_URL;
+                            if (baseUrl !== '/' && !result.url.startsWith(baseUrl)) {
+                                result.url = baseUrl.replace(/\/$/, "") + result.url;
+                            }
+                            // Make it a full URL for proper navigation
+                            if (typeof window !== 'undefined') {
+                                result.url = window.location.origin + result.url;
+                            }
+                        }
+                        return result;
+                    },
+                });
+
+                // Ensure result links are clickable - watch for new results
+                const ensureLinksClickable = () => {
+                const resultLinks = searchElement.querySelectorAll(".pagefind-ui__result-link");
+                resultLinks.forEach((link) => {
+                if (!link.hasAttribute("data-click-handler")) {
+                link.setAttribute("data-click-handler", "true");
+                link.addEventListener("click", (e) => {
+                // Mark that we're navigating from a search result
+                searchElement._navigatingFromResult = true;
+
+                // Ensure the link navigates properly
+                const href = link.getAttribute("href");
+                if (href) {
+                const a = document.createElement('a');
+                a.href = href;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+                            });
+                    }
+                });
+
+                // Make entire result li clickable (but not when clicking on anchors)
+                const resultLis = searchElement.querySelectorAll(".pagefind-ui__result");
+                resultLis.forEach((li) => {
+                if (!li.hasAttribute("data-li-click-handler")) {
+                li.setAttribute("data-li-click-handler", "true");
+                li.addEventListener("click", (e) => {
+                // Check if the click target is an anchor or inside an anchor
+                if (e.target.closest("a")) {
+                    return; // Let the anchor handle the click
+                }
+                // Mark that we're navigating from a search result
+                searchElement._navigatingFromResult = true;
+
+                // Find the first result link and navigate to it
+                const firstLink = li.querySelector(".pagefind-ui__result-link");
+                if (firstLink) {
+                const href = firstLink.getAttribute("href");
+                if (href) {
+                        const a = document.createElement('a');
+                            a.href = href;
+                                document.body.appendChild(a);
+                                    a.click();
+                                        document.body.removeChild(a);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                };
+
+                // Initial check
+                setTimeout(ensureLinksClickable, 500);
+                setTimeout(ensureLinksClickable, 1000);
+                setTimeout(ensureLinksClickable, 2000);
+
+                // Watch for new results
+                const resultsObserver = new MutationObserver(ensureLinksClickable);
+                resultsObserver.observe(searchElement, {
+                    childList: true,
+                    subtree: true
+                });
+
+                // Store observer for cleanup
+                searchElement._resultsObserver = resultsObserver;
+
+                // Listen for input changes and keyboard navigation
+                setTimeout(() => {
+                    const input = searchElement.querySelector(
+                        ".pagefind-ui__search-input",
+                    );
+                    if (input) {
+                        // Only sync URL for the primary search element
+                        if (
+                            searchElement.id === getPrimarySearchElement()?.id
+                        ) {
+                            // Get initial query from URL
+                            const initialQuery = getQueryParam("q") || "";
+
+                            // Set initial query if present
+                            if (initialQuery) {
+                                setTimeout(() => {
+                                    input.value = initialQuery;
+                                    // Trigger search
+                                    input.dispatchEvent(
+                                        new Event("input", { bubbles: true }),
+                                    );
+
+                                    // Scroll search into view after results load
+                                    setTimeout(() => {
+                                        searchElement.scrollIntoView({
+                                            behavior: "smooth",
+                                            block: "start",
+                                        });
+                                    }, 200);
+                                }, 100);
+                            }
+
+                            // Input handler - update URL
+                            input.addEventListener("input", (e) => {
+                                const query = e.target.value.trim();
+                                setQueryParam("q", query);
+                            });
+                        }
+
+                        // For header search: handle focus and input to show results
+                        if (searchElement.dataset.searchVariant === "header") {
+                        console.log('Setting up header search drawer logic for:', elementId);
+
+                        const showDrawerIfResults = () => {
+                        const drawer = searchElement.querySelector(
+                        ".pagefind-ui__drawer",
+                        );
+                        console.log('Checking drawer:', drawer, 'for element:', elementId);
+                        if (drawer) {
+                        setTimeout(() => {
+                        const results = searchElement.querySelector(
+                        ".pagefind-ui__results",
+                        );
+                        console.log('Results element:', results, 'for element:', elementId);
+                        console.log('Results children:', results ? Array.from(results.children) : [], 'for element:', elementId);
+                        console.log('Results children length:', results ? results.children.length : 0, 'for element:', elementId);
+
+                        // Also check for any result elements that might be hidden
+                        const allResults = searchElement.querySelectorAll('.pagefind-ui__result');
+                        console.log('All result elements found:', allResults.length, 'for element:', elementId);
+
+                        if (
+                            results &&
+                                results.children.length > 0
+                                ) {
+                                        console.log('Showing drawer for:', elementId);
+                                            drawer.style.display = "block";
+                                    } else {
+                                        console.log('No results to show drawer for:', elementId);
+                                    }
+                            }, 100);
+                        }
+                        };
+
+                        input.addEventListener("focus", () => {
+                                console.log('Header search focused, value:', input.value, 'for element:', elementId);
+                            // Show drawer when focusing if there's already content
+                        if (input.value.trim()) {
+                            showDrawerIfResults();
+                            }
+                            });
+
+                            input.addEventListener("input", (e) => {
+                                console.log('Header search input:', e.target.value, 'for element:', elementId);
+                                // Show drawer when typing starts and there are results
+                                showDrawerIfResults();
+                            });
+                        }
+
+                        // Keyboard navigation for results
+                        input.addEventListener("keydown", (e) => {
+                            const results = searchElement.querySelectorAll(
+                                ".pagefind-ui__result-link",
+                            );
+                            if (results.length === 0) return;
+
+                            let currentIndex = -1;
+                            results.forEach((result, index) => {
+                                if (result === document.activeElement) {
+                                    currentIndex = index;
+                                }
+                            });
+
+                            if (e.key === "ArrowDown") {
+                                e.preventDefault();
+                                const nextIndex =
+                                    currentIndex < results.length - 1
+                                        ? currentIndex + 1
+                                        : 0;
+                                (results[nextIndex] as HTMLElement).focus();
+                            } else if (e.key === "ArrowUp") {
+                                e.preventDefault();
+                                if (currentIndex <= 0) {
+                                    input.focus();
+                                } else {
+                                    (
+                                        results[currentIndex - 1] as HTMLElement
+                                    ).focus();
+                                }
+                            } else if (e.key === "Enter" && currentIndex >= 0) {
+                                // Let the focused link handle the enter key
+                            }
+                        });
+                    }
+                }, 100);
+
+                // Add click outside handler for header search on desktop
+                if (searchElement.dataset.searchVariant === "header") {
+                    const handleClickOutside = function(e) {
+                        if (window.innerWidth <= 768) return;
+                        setTimeout(function() {
+                            var drawer = searchElement.querySelector(".pagefind-ui__drawer");
+                            var searchContainer = searchElement.closest(".header-search");
+                            if (!drawer || !searchContainer || drawer.offsetWidth === 0) return;
+                        var isInSearchContainer = searchContainer.contains(e.target);
+                            var isInDrawer = drawer.contains(e.target);
+                            if (!isInSearchContainer && !isInDrawer) {
+                                drawer.style.display = "none";
+                            }
+                        }, 150);
+                    };
+                document.addEventListener("click", handleClickOutside);
+                searchElement._clickOutsideHandler = handleClickOutside;
+                }
+
+                // Wait for Pagefind to render, then move clear button outside form (only for header search)
+                if (searchElement.dataset.searchVariant === "header") {
+                    setTimeout(() => {
+                        const form =
+                            searchElement.querySelector(".pagefind-ui__form");
+                        const clearButton = searchElement.querySelector(
+                            ".pagefind-ui__search-clear",
+                        );
+
+                        if (form && clearButton) {
+                        // Move clear button to be a sibling of the form instead of inside it
+                        form.parentNode?.insertBefore(
+                        clearButton,
+                        form.nextSibling,
+                        );
+
+                        // Keep it visually positioned inside the input
+                        clearButton.style.position = "absolute";
+
+                             // Ensure clear button clears query params
+                             clearButton.addEventListener("click", () => {
+                                 setQueryParam("q", "");
+                             });
+                         }
+                    }, 100);
+                }
+
+                // For sidebar search: ensure drawer is directly after form
+                if (searchElement.dataset.searchVariant === "default" && searchElement.id === "sidebar-search") {
+                    const ensureDrawerPosition = () => {
+                        const form = searchElement.querySelector(".pagefind-ui__form");
+                        const drawer = searchElement.querySelector(".pagefind-ui__drawer");
+
+                        if (form && drawer && drawer.previousElementSibling !== form) {
+                            // Move drawer to be directly after form
+                            form.parentNode?.insertBefore(drawer, form.nextSibling);
+                        }
+                    };
+
+                    // Initial check
+                    setTimeout(ensureDrawerPosition, 100);
+
+                    // Set up mutation observer to watch for DOM changes
+                    const observer = new MutationObserver(ensureDrawerPosition);
+                    observer.observe(searchElement, {
+                        childList: true,
+                        subtree: true
+                    });
+
+                    // Store observer for cleanup
+                    searchElement._drawerObserver = observer;
+                }
+            } catch (error) {
+                console.error("Failed to initialize Pagefind search:", error);
+                // Fallback: show a message or hide the search
+                searchElement.innerHTML =
+                    "<p>Search is currently unavailable.</p>";
+            }
+        }
+    }
+
+    // Track if global event listeners have been added to prevent duplicates
+    let globalListenersAdded = false;
+
+    function setupGlobalEventListeners() {
+        if (globalListenersAdded) return;
+        globalListenersAdded = true;
+
+        // Listen for browser navigation (back/forward buttons) - sync with primary search
+        window.addEventListener("popstate", () => {
+            const primarySearch = getPrimarySearchElement();
+            if (primarySearch) {
+                const input = primarySearch.querySelector(
+                    ".pagefind-ui__search-input",
+                );
+                const newQuery = getQueryParam("q") || "";
+                if (input && input.value !== newQuery) {
+                    input.value = newQuery;
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+            }
+        });
+
+        // Keyboard shortcut: Ctrl+K to focus primary search (header first, then mobile, then sidebar)
+        document.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+                e.preventDefault();
+                const primarySearch = getPrimarySearchElement();
+                if (primarySearch) {
+                    const input = primarySearch.querySelector(
+                        ".pagefind-ui__search-input",
+                    );
+                    if (input) {
+                        // Scroll search into view
+                        primarySearch.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                        // Focus the input after a short delay to ensure scroll completes
+                        setTimeout(() => {
+                            input.focus();
+                        }, 300);
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener("DOMContentLoaded", () => {
+        setupGlobalEventListeners();
+        initSearch();
+    });
+
+    // Cleanup before navigation
+    document.addEventListener("astro:before-swap", () => {
+        const searchElements = document.querySelectorAll('[id$="-search"]');
+        searchElements.forEach((searchElement) => {
+            // CRITICAL: Clean up click-outside handler
+            if (searchElement._clickOutsideHandler) {
+                document.removeEventListener("click", searchElement._clickOutsideHandler);
+                delete searchElement._clickOutsideHandler;
+            }
+
+            // CRITICAL: Disconnect MutationObservers to prevent memory leaks
+            if (searchElement._resultsObserver) {
+                searchElement._resultsObserver.disconnect();
+                delete searchElement._resultsObserver;
+            }
+
+            if (searchElement._drawerObserver) {
+                searchElement._drawerObserver.disconnect();
+                delete searchElement._drawerObserver;
+            }
+        });
+    });
+
+    // Handle navigation events
+    document.addEventListener("astro:after-swap", () => {
+    // Close search results drawer if we navigated from a search result
+    const searchElements = document.querySelectorAll('[id$="-search"]');
+    searchElements.forEach((searchElement) => {
+    if (searchElement._navigatingFromResult) {
+    const drawer = searchElement.querySelector(".pagefind-ui__drawer");
+    if (drawer) {
+    drawer.style.display = "none";
+    }
+    // Clear the flag
+    delete searchElement._navigatingFromResult;
+    }
+        });
+    });
+
+        // After initialization, sync URL query with primary search
+        setTimeout(() => {
+        const primarySearch = getPrimarySearchElement();
+        if (primarySearch) {
+            const input = primarySearch.querySelector(".pagefind-ui__search-input") as HTMLInputElement;
+            const urlQuery = getQueryParam("q") || "";
+            if (input && input.value !== urlQuery) {
+                input.value = urlQuery;
+                if (urlQuery) {
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
+
+                    // Re-show drawer for header search if there's a query
+                    if (primarySearch.dataset.searchVariant === "header") {
+                        setTimeout(() => {
+                            const drawer = primarySearch.querySelector(".pagefind-ui__drawer") as HTMLElement;
+                            if (drawer) {
+                                drawer.style.display = "block";
+                            }
+                        }, 300);
+                    }
+                }
+        }
+        }
+        }, 200);
+
+    // No cleanup needed since we're not reinitializing
+</script>
+
+<style is:global>
+    .search-container {
+        width: 100%;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid
+            var(--search-container-border-color, transparent);
+        position: relative;
+    }
+
+    /* Pagefind UI Styling */
+    #search {
+        width: 100%;
+    }
+
+    .pagefind-ui__form {
+        position: relative;
+    }
+
+    .pagefind-ui__search-input {
+        width: 100%;
+        padding: var(--space-md) 2.75rem var(--space-md) var(--space-lg);
+        font-size: var(--font-size-base);
+        border: 1px solid var(--border-color);
+        border-radius: var(--search-border-radius);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: border-color var(--transition-fast);
+    }
+
+    .pagefind-ui__search-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: var(--search-focus-shadow) var(--accent-light);
+    }
+
+    .pagefind-ui__search-clear {
+        position: absolute !important;
+        right: var(--space-sm) !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: var(--search-clear-size, 2rem);
+        height: var(--search-clear-size, 2rem);
+        padding: 0;
+        background: var(--search-clear-bg, transparent);
+        border: none;
+        border-radius: var(
+            --search-clear-border-radius,
+            var(--border-radius-md)
+        );
+        color: var(--search-clear-color, var(--text-secondary));
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition-fast);
+        font-size: 0;
+        line-height: 0;
+        text-indent: var(--search-text-indent-hidden);
+        overflow: hidden;
+        z-index: 10;
+    }
+
+    /* Hide when input is empty (Pagefind adds .pagefind-ui__suppressed class) */
+    .pagefind-ui__search-clear.pagefind-ui__suppressed {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Show when input has content */
+    .search-container:has(.pagefind-ui__search-input:not(:placeholder-shown))
+        .pagefind-ui__search-clear:not(.pagefind-ui__suppressed) {
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    .pagefind-ui__search-clear:hover {
+        background: var(--search-clear-hover-bg, var(--bg-hover));
+        color: var(--search-clear-hover-color, var(--text-primary));
+    }
+
+    .pagefind-ui__search-clear:active {
+        transform: scale(0.95);
+    }
+
+    /* X icon using pseudo-elements */
+    .pagefind-ui__search-clear::before,
+    .pagefind-ui__search-clear::after {
+        content: "";
+        position: absolute;
+        width: var(--search-clear-icon-width, var(--search-clear-icon-size));
+        height: var(--search-clear-icon-thickness);
+        background: currentColor;
+        border-radius: var(--search-clear-icon-border-radius, 1px);
+    }
+
+    .pagefind-ui__search-clear::before {
+        transform: rotate(45deg);
+    }
+
+    .pagefind-ui__search-clear::after {
+        transform: rotate(-45deg);
+    }
+
+    /* Hide any child elements (text nodes, etc) */
+    .pagefind-ui__search-clear > *,
+    .pagefind-ui__search-clear svg {
+        display: none !important;
+    }
+
+    .pagefind-ui__results {
+        margin-top: 1rem;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    .pagefind-ui__result {
+        padding: var(--space-lg);
+        margin-bottom: var(--space-sm);
+        border: 1px solid var(--border-color);
+        border-radius: var(--search-border-radius);
+        background: var(--bg-primary);
+        transition: background-color var(--transition-fast);
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .pagefind-ui__result:hover {
+        background: var(--bg-hover);
+    }
+
+    .pagefind-ui__result-link {
+        color: var(--text-primary, #1a1a1a);
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .pagefind-ui__result-link:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: var(--border-radius-sm);
+    }
+
+    .pagefind-ui__result-link:focus .pagefind-ui__result {
+        background: var(--accent-light);
+    }
+
+    /* Dark mode - Override default link color for search results */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .pagefind-ui__result-link {
+            color: var(--text-primary);
+        }
+    }
+
+    :root.dark-mode .pagefind-ui__result-link {
+        color: var(--text-primary);
+    }
+
+    .pagefind-ui__result {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .pagefind-ui__result-title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+        line-height: var(--line-height-body);
+    }
+
+    .pagefind-ui__result-excerpt {
+        font-size: var(--font-size-base);
+        color: var(--text-secondary);
+        line-height: var(--line-height-body);
+        margin: 0;
+    }
+
+    .pagefind-ui__result-highlight {
+        background-color: var(--accent-light) !important;
+        color: var(--accent-dark) !important;
+        padding: 0.1em 0.2em !important;
+        border-radius: var(--border-radius-sm) !important;
+        font-weight: var(--font-weight-medium) !important;
+    }
+
+    /* Style <mark> elements used by Pagefind for highlighting */
+    .pagefind-ui mark {
+        background-color: var(--accent-light) !important;
+        color: var(--accent-dark) !important;
+        padding: 0.1em 0.2em !important;
+        border-radius: var(--border-radius-sm) !important;
+        font-weight: var(--font-weight-medium) !important;
+    }
+
+    /* Load more results button */
+    .pagefind-ui__button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: var(--space-md) var(--space-lg);
+        border-radius: var(--border-radius-md);
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        transition: background-color var(--transition-fast);
+        display: block;
+        margin: var(--space-lg) auto;
+        width: fit-content;
+    }
+
+    .pagefind-ui__button:hover {
+        background: var(--accent-dark);
+    }
+
+    .pagefind-ui__button:active {
+        transform: scale(0.98);
+    }
+
+    /* Ensure button is inside the results list */
+    .pagefind-ui__results > .pagefind-ui__button {
+        margin-top: var(--space-md);
+        margin-bottom: var(--space-md);
+    }
+
+    /* Results count/stats text */
+    .pagefind-ui__stats {
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary) !important;
+        text-align: center;
+        margin: var(--space-md) 0;
+        font-weight: var(--font-weight-normal);
+    }
+
+    /* Any other Pagefind UI text elements */
+    .pagefind-ui p,
+    .pagefind-ui span,
+    .pagefind-ui div {
+        color: var(--text-secondary) !important;
+    }
+
+    /* ============================================
+    HEADER SEARCH VARIANT
+        Special styling for header search dropdown
+    ============================================ */
+    .search-container--header {
+        position: static;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    /* Wrapper for header search to control positioning context */
+    .header-search {
+        position: relative;
+    }
+
+    /* Header search drawer (contains results + button) */
+    .search-container--header .pagefind-ui__drawer {
+        position: fixed;
+        top: calc(var(--header-search-offset, 1px) + var(--header-height));
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(90ch, calc(100vw - var(--space-2xl) * 2));
+        max-height: calc(100vh - var(--header-height) - var(--space-2xl));
+        overflow-y: auto;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        box-shadow: none;
+        z-index: 1001;
+        padding: var(--space-md);
+    }
+
+    /* Header search results list (ol) - reset positioning */
+    .search-container--header .pagefind-ui__results {
+        position: static;
+        margin-top: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    /* Header search - message (shows count) */
+    .search-container--header .pagefind-ui__message {
+        position: static;
+        padding: 0 0 var(--space-sm) 0;
+        margin: 0;
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary);
+    }
+
+    /* Header search results - compact styling */
+    .search-container--header .pagefind-ui__result {
+        padding: var(--space-md);
+        margin-bottom: var(--space-xs);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+    }
+
+    .search-container--header .pagefind-ui__result:hover {
+        background: var(--bg-hover);
+    }
+
+    .search-container--header .pagefind-ui__result-title {
+        font-size: var(--font-size-base);
+    }
+
+    .search-container--header .pagefind-ui__result-excerpt {
+        font-size: var(--font-size-sm);
+    }
+
+    /* Scrollbar styling for header search drawer */
+    .search-container--header .pagefind-ui__drawer::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .search-container--header .pagefind-ui__drawer::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius-sm);
+    }
+
+    .search-container--header .pagefind-ui__drawer::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: var(--border-radius-sm);
+    }
+
+    .search-container--header
+        .pagefind-ui__drawer::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+    }
+
+    /* Firefox scrollbar */
+    .search-container--header .pagefind-ui__drawer {
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-color) var(--bg-secondary);
+    }
+
+    /* Load More button - at the bottom inside drawer */
+    .search-container--header .pagefind-ui__button {
+        position: static;
+        margin: var(--space-md) auto;
+        display: block;
+        width: fit-content;
+    }
+
+    /* Stats/count text */
+    .search-container--header .pagefind-ui__stats {
+        margin: var(--space-sm) 0;
+        text-align: center;
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary);
+    }
+
+    /* Results area wrapper */
+    .search-container--header .pagefind-ui__results-area {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Close dropdown when empty */
+    .search-container--header .pagefind-ui__drawer:empty {
+        display: none;
+    }
+
+    /* Ensure Pagefind hidden elements are actually hidden */
+    .pagefind-ui__hidden {
+        display: none !important;
+    }
+
+    /* Prevent search container from affecting layout */
+    .search-container--header > div {
+        position: static;
+    }
+
+    /* Mobile adjustments for header search */
+    @media (max-width: 768px) {
+        .search-container--header .pagefind-ui__drawer {
+            width: calc(100vw - var(--space-lg) * 2);
+            max-height: calc(
+                100vh - var(--mobile-header-height, 3.5rem) - var(--space-lg)
+            );
+        }
+    }
+</style>

@@ -1,0 +1,723 @@
+---
+import type { CssVariableControl } from "../data/examples";
+
+const numericControl = (
+    label: string,
+    name: `--${string}`,
+    min: number,
+    max: number,
+    step: number,
+    unit = "",
+): CssVariableControl => ({
+    label,
+    name,
+    min,
+    max,
+    step,
+    unit,
+    kind: unit === "%" ? "percentage" : name.includes("hue") || name.endsWith("-h") ? "angle" : "number",
+});
+
+const groups = [
+    {
+        id: "brand",
+        label: "Brand",
+        colors: [
+            ["Accent", "accent-palette"],
+            ["Secondary", "secondary-palette"],
+            ["Tertiary", "tertiary-palette"],
+        ],
+    },
+    {
+        id: "foundations",
+        label: "Foundations",
+        colors: [
+            ["Gray", "gray"],
+            ["Neutral", "neutral"],
+        ],
+    },
+    {
+        id: "feedback",
+        label: "Feedback",
+        colors: [
+            ["Success", "success-palette"],
+            ["Warning", "warning-palette"],
+            ["Error", "error-palette"],
+            ["Info", "info-palette"],
+        ],
+    },
+    {
+        id: "extended",
+        label: "Extended",
+        colors: [
+            ["Brown", "brown"], ["Gold", "gold"], ["Olive", "olive"],
+            ["Orange", "orange"], ["Amber", "amber"], ["Yellow", "yellow"],
+            ["Lime", "lime"], ["Green", "green"], ["Emerald", "emerald"],
+            ["Teal", "teal"], ["Cyan", "cyan"], ["Sky", "sky"],
+            ["Blue", "blue"], ["Slate", "slate"], ["Indigo", "indigo"],
+            ["Violet", "violet"], ["Purple", "purple"], ["Fuchsia", "fuchsia"],
+            ["Magenta", "magenta"], ["Pink", "pink"], ["Rose", "rose"],
+            ["Red", "red"],
+        ],
+    },
+] as const;
+
+const steps = Array.from({ length: 13 }, (_, index) => index);
+
+const namedHues = [
+    "brown", "gold", "olive", "orange", "amber", "yellow", "lime", "green",
+    "emerald", "teal", "cyan", "sky", "blue", "slate", "indigo", "violet",
+    "purple", "fuchsia", "magenta", "pink", "rose", "red",
+];
+
+const tunedFamilies = ["brown", "gold", "orange", "yellow", "cyan", "slate"];
+
+const editableTokenGroups = [
+    {
+        label: "Brand relationships",
+        tokens: [
+            numericControl("Accent hue", "--accent-h", 0, 360, 1),
+            numericControl("Secondary hue shift", "--secondary-hue-shift", -360, 360, 1),
+            numericControl("Tertiary hue shift", "--tertiary-hue-shift", -360, 360, 1),
+        ],
+    },
+    {
+        label: "Feedback hues",
+        tokens: [
+            numericControl("Success hue", "--success-h", 0, 360, 1),
+            numericControl("Warning hue", "--warning-h", 0, 360, 1),
+            numericControl("Error hue", "--error-h", 0, 360, 1),
+            numericControl("Info hue", "--info-h", 0, 360, 1),
+        ],
+    },
+    {
+        label: "Named hues",
+        tokens: namedHues.map((name) => numericControl(
+            `${name[0].toUpperCase()}${name.slice(1)} hue`, `--hue-${name}`, 0, 360, 1,
+        )),
+    },
+    {
+        label: "Shared lightness",
+        tokens: steps.map((step) => numericControl(`Lightness ${step}`, `--scale-l-${step}`, 0, 100, 1, "%")),
+    },
+    {
+        label: "Shared chroma",
+        tokens: Array.from({ length: 12 }, (_, index) => index + 1).map((step) =>
+            numericControl(`Chroma ${step}`, `--scale-c-${step}`, 0, 0.4, 0.005)),
+    },
+    {
+        label: "Gamut clamps",
+        tokens: Array.from({ length: 7 }, (_, step) =>
+            numericControl(`Maximum chroma ${step}`, `--max-chroma-${step}`, 0, 0.4, 0.005)),
+    },
+    ...tunedFamilies.map((family) => ({
+        label: `${family[0].toUpperCase()}${family.slice(1)} chroma profile`,
+        tokens: steps.map((step) => numericControl(
+            `${family} chroma ${step}`, `--palette-${family}-chroma-${step}`, 0, 0.4, 0.001,
+        )),
+    })),
+] as const;
+---
+
+<css-tags-tokens class="palette-token-scope">
+<section class="palette-viewer" data-palette-viewer aria-labelledby="palette-viewer-title">
+    <div class="palette-viewer__intro">
+        <div>
+            <h2 id="palette-viewer-title">Palette explorer</h2>
+            <p>Choose a group, then select any swatch to copy it.</p>
+        </div>
+        <label class="copy-mode">
+            <span>Copy</span>
+            <select data-copy-mode>
+                <option value="token">CSS variable</option>
+                <option value="value">Resolved color</option>
+            </select>
+        </label>
+    </div>
+
+    <details class="palette-editor" data-palette-editor>
+        <summary>Live token editor</summary>
+        <div class="palette-editor__body">
+            <p>Edit the real palette input tokens. Changes are scoped to this explorer and update every dependent swatch immediately.</p>
+            <div class="palette-editor__controls">
+                <label>
+                    <span>CSS variable</span>
+                    <select data-token-select>
+                        {editableTokenGroups.map((group) => (
+                            <optgroup label={group.label}>
+                                {group.tokens.map((token) => (
+                                    <option value={token.name} data-min={token.min} data-max={token.max} data-step={token.step} data-unit={token.unit}>
+                                        {token.label} ({token.name})
+                                    </option>
+                                ))}
+                            </optgroup>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    <span>Value</span>
+                    <div class="palette-editor__value">
+                        <input type="range" data-token-range aria-label="Token value slider" />
+                        <input type="number" data-token-value aria-label="Token numeric value" />
+                        <span data-token-unit aria-hidden="true"></span>
+                    </div>
+                </label>
+            </div>
+            <div class="palette-editor__actions">
+                <button type="button" data-token-reset>Reset selected</button>
+                <button type="button" data-token-reset-all>Reset all</button>
+                <span data-token-status aria-live="polite">No overrides applied.</span>
+            </div>
+            <pre class="palette-editor__output" data-token-output aria-label="Current CSS overrides">:root {
+  /* Edit a token to generate an override. */
+}</pre>
+        </div>
+    </details>
+
+    <div class="palette-filters" aria-label="Filter palette groups">
+        <button type="button" data-palette-filter="all" aria-pressed="true">All</button>
+        {groups.map((group) => (
+            <button type="button" data-palette-filter={group.id} aria-pressed="false">
+                {group.label}
+            </button>
+        ))}
+    </div>
+
+    <p class="palette-status" data-palette-status aria-live="polite">
+        Showing all 31 color scales. Scroll horizontally to see every step.
+    </p>
+
+    <div class="palette-scrollbar" data-palette-scrollbar aria-hidden="true">
+        <div data-palette-scrollbar-space></div>
+    </div>
+
+    <div class="palette-scroll" tabindex="0" aria-label="Scrollable color palette">
+        <div class="palette-grid">
+            <div class="palette-grid__steps" aria-hidden="true">
+                <span></span>
+                {steps.map((step) => <span>{step}</span>)}
+            </div>
+
+            {groups.map((group) => group.colors.map(([label, prefix]) => (
+                <div class="palette-row" data-palette-group={group.id}>
+                    <div class="palette-row__name">
+                        <strong>{label}</strong>
+                        <small>{prefix}</small>
+                    </div>
+                    {steps.map((step) => {
+                        const token = `--${prefix}-${step}`;
+                        return (
+                            <button
+                                type="button"
+                                class="swatch"
+                                style={`--swatch-color: var(${token})`}
+                                data-color-token={token}
+                                aria-label={`Copy ${token}`}
+                                title={`Copy var(${token})`}
+                            >
+                                <span class="swatch__color" aria-hidden="true"></span>
+                                <span class="swatch__step">{step}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            )))}
+        </div>
+    </div>
+</section>
+</css-tags-tokens>
+
+<script>
+    import "../scripts/css-tags-shadow";
+    import { copyText } from "../scripts/clipboard";
+
+    function setupPaletteViewers() {
+        document.querySelectorAll<HTMLElement>("[data-palette-viewer]").forEach((viewer) => {
+            if (viewer.dataset.ready === "true") return;
+            viewer.dataset.ready = "true";
+
+            const status = viewer.querySelector<HTMLElement>("[data-palette-status]");
+            const mode = viewer.querySelector<HTMLSelectElement>("[data-copy-mode]");
+            const paletteScroll = viewer.querySelector<HTMLElement>(".palette-scroll");
+            const topScrollbar = viewer.querySelector<HTMLElement>("[data-palette-scrollbar]");
+            const topScrollbarSpace = viewer.querySelector<HTMLElement>("[data-palette-scrollbar-space]");
+            const filterButtons = viewer.querySelectorAll<HTMLButtonElement>("[data-palette-filter]");
+            const rows = viewer.querySelectorAll<HTMLElement>("[data-palette-group]");
+            const tokenScope = viewer.closest<HTMLElement>("css-tags-tokens");
+            const tokenSelect = viewer.querySelector<HTMLSelectElement>("[data-token-select]");
+            const tokenRange = viewer.querySelector<HTMLInputElement>("[data-token-range]");
+            const tokenValue = viewer.querySelector<HTMLInputElement>("[data-token-value]");
+            const tokenUnit = viewer.querySelector<HTMLElement>("[data-token-unit]");
+            const tokenStatus = viewer.querySelector<HTMLElement>("[data-token-status]");
+            const tokenOutput = viewer.querySelector<HTMLElement>("[data-token-output]");
+            const tokenReset = viewer.querySelector<HTMLButtonElement>("[data-token-reset]");
+            const tokenResetAll = viewer.querySelector<HTMLButtonElement>("[data-token-reset-all]");
+
+            if (tokenScope && tokenSelect && tokenRange && tokenValue) {
+                const defaults = new Map<string, string>();
+                const overrides = new Map<string, string>();
+
+                Array.from(tokenSelect.options).forEach((option) => {
+                    defaults.set(option.value, getComputedStyle(tokenScope).getPropertyValue(option.value).trim());
+                });
+
+                const selectedOption = () => tokenSelect.selectedOptions[0];
+                const formatValue = (value: string) => `${value}${selectedOption()?.dataset.unit ?? ""}`;
+
+                const updateOutput = () => {
+                    if (tokenOutput) {
+                        tokenOutput.textContent = overrides.size
+                            ? `:root {\n${Array.from(overrides, ([token, value]) => `  ${token}: ${value};`).join("\n")}\n}`
+                            : ":root {\n  /* Edit a token to generate an override. */\n}";
+                    }
+                    if (tokenStatus) {
+                        tokenStatus.textContent = overrides.size
+                            ? `${overrides.size} palette ${overrides.size === 1 ? "override" : "overrides"} applied.`
+                            : "No overrides applied.";
+                    }
+                };
+
+                const configureInputs = () => {
+                    const option = selectedOption();
+                    if (!option) return;
+                    const unit = option.dataset.unit ?? "";
+                    const raw = overrides.get(option.value) ?? defaults.get(option.value) ?? "0";
+                    const numeric = Number.parseFloat(raw);
+
+                    [tokenRange, tokenValue].forEach((input) => {
+                        input.min = option.dataset.min ?? "0";
+                        input.max = option.dataset.max ?? "360";
+                        input.step = option.dataset.step ?? "1";
+                        input.value = Number.isFinite(numeric) ? String(numeric) : "0";
+                    });
+                    if (tokenUnit) tokenUnit.textContent = unit;
+                };
+
+                const applyInput = (source: HTMLInputElement) => {
+                    const token = tokenSelect.value;
+                    const numeric = Number.parseFloat(source.value);
+                    if (!token || !Number.isFinite(numeric)) return;
+                    const value = formatValue(String(numeric));
+                    tokenRange.value = String(numeric);
+                    tokenValue.value = String(numeric);
+                    tokenScope.style.setProperty(token, value);
+                    overrides.set(token, value);
+                    updateOutput();
+                };
+
+                tokenSelect.addEventListener("change", configureInputs);
+                tokenRange.addEventListener("input", () => applyInput(tokenRange));
+                tokenValue.addEventListener("input", () => applyInput(tokenValue));
+                tokenReset?.addEventListener("click", () => {
+                    const token = tokenSelect.value;
+                    tokenScope.style.removeProperty(token);
+                    overrides.delete(token);
+                    configureInputs();
+                    updateOutput();
+                });
+                tokenResetAll?.addEventListener("click", () => {
+                    overrides.forEach((_, token) => tokenScope.style.removeProperty(token));
+                    overrides.clear();
+                    configureInputs();
+                    updateOutput();
+                });
+
+                configureInputs();
+            }
+
+            if (paletteScroll && topScrollbar && topScrollbarSpace) {
+                const updateScrollbarWidth = () => {
+                    topScrollbarSpace.style.width = `${paletteScroll.scrollWidth}px`;
+                };
+                let syncing = false;
+                topScrollbar.addEventListener("scroll", () => {
+                    if (syncing) return;
+                    syncing = true;
+                    paletteScroll.scrollLeft = topScrollbar.scrollLeft;
+                    requestAnimationFrame(() => syncing = false);
+                });
+                paletteScroll.addEventListener("scroll", () => {
+                    if (syncing) return;
+                    syncing = true;
+                    topScrollbar.scrollLeft = paletteScroll.scrollLeft;
+                    requestAnimationFrame(() => syncing = false);
+                });
+                updateScrollbarWidth();
+                new ResizeObserver(updateScrollbarWidth).observe(paletteScroll);
+            }
+
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const filter = button.dataset.paletteFilter ?? "all";
+                    filterButtons.forEach((candidate) => {
+                        candidate.setAttribute("aria-pressed", String(candidate === button));
+                    });
+
+                    let visible = 0;
+                    rows.forEach((row) => {
+                        row.hidden = filter !== "all" && row.dataset.paletteGroup !== filter;
+                        if (!row.hidden) visible += 1;
+                    });
+
+                    if (status) {
+                        const label = button.textContent?.trim() ?? "Selected";
+                        status.textContent = `Showing ${visible} ${label.toLowerCase()} color ${visible === 1 ? "scale" : "scales"}.`;
+                    }
+                });
+            });
+
+            viewer.addEventListener("click", async (event) => {
+                const button = (event.target as Element).closest<HTMLButtonElement>("[data-color-token]");
+                if (!button) return;
+
+                const token = button.dataset.colorToken;
+                if (!token) return;
+                const color = button.querySelector<HTMLElement>(".swatch__color");
+                const value = mode?.value === "value" && color
+                    ? getComputedStyle(color).backgroundColor
+                    : `var(${token})`;
+
+                try {
+                    await copyText(value);
+                    if (status) status.textContent = `Copied ${value}`;
+                    button.dataset.copied = "true";
+                    window.setTimeout(() => delete button.dataset.copied, 900);
+                } catch {
+                    if (status) status.textContent = `Copy unavailable. Use ${value}`;
+                }
+            });
+        });
+    }
+
+    setupPaletteViewers();
+    document.addEventListener("astro:page-load", setupPaletteViewers);
+</script>
+
+<style>
+    .palette-token-scope {
+        display: block;
+    }
+
+    .palette-viewer {
+        margin-block: 1.5rem 2rem;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: var(--border-radius-lg, 0.75rem);
+        overflow: clip;
+        background: var(--bg-primary, #fff);
+    }
+
+    .palette-viewer__intro {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-color, #d8dee4);
+    }
+
+    .palette-viewer__intro h2,
+    .palette-viewer__intro p {
+        margin: 0;
+    }
+
+    .palette-viewer__intro p {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.875rem;
+    }
+
+    .copy-mode {
+        display: grid;
+        gap: 0.25rem;
+        min-width: 10rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .copy-mode select {
+        min-height: 2.25rem;
+        padding-inline: 0.65rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-secondary, #f6f8fa);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+    }
+
+    .palette-editor {
+        margin: 0.85rem 1.25rem 0;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.5rem;
+        background: var(--bg-secondary, #f6f8fa);
+    }
+
+    .palette-editor summary {
+        padding: 0.7rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 650;
+        cursor: pointer;
+    }
+
+    .palette-editor__body {
+        display: grid;
+        gap: 0.8rem;
+        padding: 0 0.85rem 0.85rem;
+        border-top: 1px solid var(--border-color, #d8dee4);
+    }
+
+    .palette-editor__body > p {
+        margin: 0.75rem 0 0;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.78rem;
+    }
+
+    .palette-editor__controls {
+        display: grid;
+        grid-template-columns: minmax(14rem, 1fr) minmax(18rem, 1.2fr);
+        gap: 0.75rem;
+    }
+
+    .palette-editor__controls label {
+        display: grid;
+        gap: 0.3rem;
+        min-width: 0;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .palette-editor__controls select,
+    .palette-editor__controls input[type="number"] {
+        min-width: 0;
+        min-height: 2.25rem;
+        padding-inline: 0.6rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font: inherit;
+        font-size: 0.8rem;
+    }
+
+    .palette-editor__value {
+        display: grid;
+        grid-template-columns: minmax(7rem, 1fr) 5.5rem auto;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .palette-editor__value input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent, #06c);
+    }
+
+    .palette-editor__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .palette-editor__actions button {
+        min-height: 2rem;
+        padding: 0.35rem 0.65rem;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font: inherit;
+        font-size: 0.75rem;
+        cursor: pointer;
+    }
+
+    .palette-editor__actions span {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.75rem;
+    }
+
+    .palette-editor__output {
+        max-height: 9rem;
+        margin: 0;
+        padding: 0.65rem;
+        overflow: auto;
+        color: var(--text-primary, inherit);
+        background: var(--bg-primary, #fff);
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 0.4rem;
+        font-size: 0.72rem;
+        line-height: 1.45;
+    }
+
+    .palette-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        padding: 0.85rem 1.25rem 0;
+    }
+
+    .palette-filters button {
+        min-height: 2rem;
+        padding: 0.35rem 0.7rem;
+        color: var(--text-secondary, inherit);
+        background: transparent;
+        border: 1px solid var(--border-color, #d8dee4);
+        border-radius: 999px;
+        font: inherit;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .palette-filters button[aria-pressed="true"] {
+        color: white;
+        background: var(--accent, #06c);
+        border-color: transparent;
+    }
+
+    .palette-status {
+        min-height: 1.5em;
+        margin: 0;
+        padding: 0.55rem 1.25rem 0.75rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.8rem;
+    }
+
+    .palette-scroll {
+        max-width: 100%;
+        padding: 0 1.25rem 1.25rem;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        touch-action: pan-x pan-y;
+    }
+
+    .palette-scrollbar {
+        height: 0.85rem;
+        margin: 0 1.25rem 0.35rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-gutter: stable;
+    }
+
+    .palette-scrollbar > div {
+        display: block;
+        height: 1px;
+    }
+
+    .palette-grid {
+        min-width: 58rem;
+    }
+
+    .palette-grid__steps,
+    .palette-row {
+        display: grid;
+        grid-template-columns: 8rem repeat(13, minmax(3.25rem, 1fr));
+        gap: 0.35rem;
+        align-items: center;
+    }
+
+    .palette-grid__steps {
+        margin-block-end: 0.35rem;
+        color: var(--text-secondary, #59636e);
+        font-size: 0.7rem;
+        text-align: center;
+    }
+
+    .palette-row + .palette-row {
+        margin-block-start: 0.65rem;
+    }
+
+    .palette-row[hidden] {
+        display: none;
+    }
+
+    .palette-row__name {
+        min-width: 0;
+    }
+
+    .palette-row__name strong,
+    .palette-row__name small {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .palette-row__name strong {
+        font-size: 0.85rem;
+    }
+
+    .palette-row__name small {
+        color: var(--text-secondary, #59636e);
+        font-size: 0.65rem;
+    }
+
+    .swatch {
+        position: relative;
+        display: grid;
+        gap: 0.2rem;
+        min-width: 0;
+        padding: 0;
+        color: var(--text-secondary, inherit);
+        background: transparent;
+        border: 0;
+        border-radius: 0.35rem;
+        cursor: copy;
+    }
+
+    .swatch__color {
+        display: block;
+        height: 2.65rem;
+        background: var(--swatch-color);
+        border: 1px solid rgb(127 127 127 / 0.18);
+        border-radius: 0.3rem;
+        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+    }
+
+    .swatch__step {
+        font-size: 0.65rem;
+        line-height: 1;
+        text-align: center;
+    }
+
+    .swatch:hover .swatch__color,
+    .swatch:focus-visible .swatch__color {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgb(0 0 0 / 0.18);
+    }
+
+    .swatch[data-copied="true"]::after {
+        position: absolute;
+        z-index: 1;
+        inset: 0.35rem 0.2rem auto;
+        padding: 0.2rem;
+        content: "Copied";
+        color: white;
+        background: rgb(0 0 0 / 0.72);
+        border-radius: 0.25rem;
+        font-size: 0.65rem;
+        text-align: center;
+    }
+
+    @media (max-width: 42rem) {
+        .palette-viewer__intro {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .copy-mode {
+            min-width: 0;
+        }
+
+        .palette-editor__controls {
+            grid-template-columns: 1fr;
+        }
+
+        .palette-editor__value {
+            grid-template-columns: minmax(6rem, 1fr) 5rem auto;
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .swatch__color {
+            transition: transform 120ms ease, box-shadow 120ms ease;
+        }
+    }
+</style>

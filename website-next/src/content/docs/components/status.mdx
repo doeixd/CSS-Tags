@@ -1,0 +1,104 @@
+---
+title: Progress and Meter
+description: Native progress and meter examples for task completion, bounded measurements, and indeterminate work.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Use `progress` for task completion and `meter` for a measurement within a known range. They may look similar, but their meanings are different.
+
+## Task progress
+
+<LiveExample title="Determinate and indeterminate progress">
+  <layout-stack gap="var(--space-md)">
+    <label>
+      Uploading assets — 68%
+      <progress value="68" max="100">68%</progress>
+    </label>
+    <label>
+      Preparing preview
+      <progress aria-label="Preparing preview"></progress>
+    </label>
+  </layout-stack>
+</LiveExample>
+
+```html
+<label>
+  Uploading assets — 68%
+  <progress value="68" max="100">68%</progress>
+</label>
+
+<label>
+  Preparing preview
+  <progress></progress>
+</label>
+```
+
+Omit `value` only when the amount completed is genuinely unknown. Update both the visible text and `value` as determinate work advances.
+
+## Bounded measurements
+
+<LiveExample title="Meter ranges">
+  <layout-stack gap="var(--space-md)">
+    <label>
+      Storage used — 24 of 100 GB
+      <meter min="0" max="100" low="60" high="85" optimum="20" value="24">24 GB</meter>
+    </label>
+    <label>
+      Storage used — 72 of 100 GB
+      <meter min="0" max="100" low="60" high="85" optimum="20" value="72">72 GB</meter>
+    </label>
+    <label>
+      Storage used — 94 of 100 GB
+      <meter min="0" max="100" low="60" high="85" optimum="20" value="94">94 GB</meter>
+    </label>
+  </layout-stack>
+</LiveExample>
+
+```html
+<label>
+  Storage used — 72 of 100 GB
+  <meter min="0" max="100" low="60" high="85" optimum="20" value="72">
+    72 GB
+  </meter>
+</label>
+```
+
+The browser uses `low`, `high`, and `optimum` to determine which semantic color range applies. Do not use `meter` as a decorative rating bar without an accessible label.
+
+## Selector API
+
+Native elements are canonical. The optional class and data hooks belong on those native elements:
+
+```html
+<progress class="progress" value="40" max="100">40%</progress>
+<progress data-progress value="40" max="100">40%</progress>
+<meter class="meter" min="0" max="10" value="7">7 out of 10</meter>
+<meter data-meter min="0" max="10" value="7">7 out of 10</meter>
+```
+
+Adding `.progress` to a `div` does not create progress semantics or native value rendering.
+
+## Tokens
+
+Progress:
+
+- `--progress-height`
+- `--progress-radius`
+- `--progress-background`
+- `--progress-border`
+- `--progress-value-background`
+- `--progress-indeterminate-background`
+- `--progress-indeterminate-speed`
+
+Meter:
+
+- `--meter-height`
+- `--meter-radius`
+- `--meter-background`
+- `--meter-border`
+- `--meter-optimum-background`
+- `--meter-suboptimum-background`
+- `--meter-even-less-good-background`
+
+Indeterminate animation is disabled when the user requests reduced motion.

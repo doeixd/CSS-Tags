@@ -43,14 +43,21 @@
 /* Base styles for all layout components */
 :where(layout-grid, [data-layout-grid], .layout-grid, layout-split, [data-layout-split], .layout-split, layout-stack, [data-layout-stack], .layout-stack, layout-cluster, [data-layout-cluster], .layout-cluster, layout-reel, [data-layout-reel], .layout-reel, layout-switcher, [data-layout-switcher], .layout-switcher, layout-pad, [data-layout-pad], .layout-pad, layout-center, [data-layout-center], .layout-center, layout-inline-center, [data-layout-inline-center], .layout-inline-center, layout-frame, [data-layout-frame], .layout-frame, layout-sidebar, [data-layout-sidebar], .layout-sidebar, layout-page, [data-layout-page], .layout-page) {
   display: block;
-  container-type: inline-size;
-  container-name: layout-container;
 
   /* Prevent children from overflowing their container */
   & > * {
     min-inline-size: 0;
     max-inline-size: 100%;
   }
+}
+
+/*
+ * Size containment changes intrinsic sizing. Keep it opt-in so a layout used
+ * as a flex/grid item sizes from its children unless it actually owns queries.
+ */
+:where(layout-grid, [data-layout-grid], .layout-grid, layout-split, [data-layout-split], .layout-split, layout-stack, [data-layout-stack], .layout-stack, layout-cluster, [data-layout-cluster], .layout-cluster, layout-reel, [data-layout-reel], .layout-reel, layout-switcher, [data-layout-switcher], .layout-switcher, layout-pad, [data-layout-pad], .layout-pad, layout-center, [data-layout-center], .layout-center, layout-inline-center, [data-layout-inline-center], .layout-inline-center, layout-frame, [data-layout-frame], .layout-frame, layout-sidebar, [data-layout-sidebar], .layout-sidebar, layout-page, [data-layout-page], .layout-page):is([container-query], [data-container-query], .layout-container) {
+  container-type: inline-size;
+  container-name: var(--layout-container-name, layout-container);
 }
 
 /*
@@ -93,11 +100,11 @@
   grid-template-columns: 1fr; /* Default to stacked */
 }
 @media (min-width: 30em) {
-  :is(layout-split, [data-layout-split], .layout-split):not([force-stack]) {
+  :is(layout-split, [data-layout-split], .layout-split):not([force-stack], [data-force-stack], .layout-split-force-stack) {
     grid-template-columns: var(--_fraction, 1fr 1fr);
   }
 }
-:is(layout-split, [data-layout-split], .layout-split)[no-stack]:has(:nth-child(2):last-child) {
+:is(layout-split, [data-layout-split], .layout-split):is([no-stack], [data-no-stack], .layout-split-no-stack) {
   grid-template-columns: var(--_fraction, 1fr 1fr);
 }
 
@@ -304,19 +311,19 @@
   gap: var(--_gap, var(--l-gap));
 
   /* The "switcher" logic for the main content area */
-  & > :not([slot="aside"]) {
+  & > :not(:is([slot="aside"], [data-layout-sidebar-aside], .layout-sidebar__aside)) {
     flex-grow: 9999;
     flex-basis: var(--_content-min);
   }
 
   /* Sidebar sizing */
-  & > [slot="aside"] {
+  & > :is([slot="aside"], [data-layout-sidebar-aside], .layout-sidebar__aside) {
     flex-grow: 1;
     flex-basis: var(--_side-width);
   }
 
   /* Handle right-side sidebar using order */
-  &[side="right"] > [slot="aside"] {
+  &[side="right"] > :is([slot="aside"], [data-layout-sidebar-aside], .layout-sidebar__aside) {
     order: 1;
   }
 }

@@ -1,0 +1,82 @@
+---
+// Aside.astro - Styled aside component for supplementary content
+interface Props {
+  variant?: 'default' | 'pull-quote' | 'highlight';
+  class?: string;
+  children: Astro.Component | string;
+}
+
+const { variant = 'default', class: className, ...rest } = Astro.props;
+---
+
+<aside class={`aside aside--${variant} ${className || ''}`} {...rest}>
+  {children}
+</aside>
+
+<style>
+  .aside {
+    margin: var(--aside-margin, var(--space-lg) 0);
+    padding: var(--aside-padding, var(--space-lg));
+    border: var(--aside-border, 1px solid var(--border-color));
+    border-radius: var(--aside-border-radius, var(--border-radius-lg));
+    background: var(--aside-bg, var(--bg-secondary));
+    font-size: var(--aside-font-size, var(--font-size-sm));
+    color: var(--text-primary);
+  }
+
+  .aside--pull-quote {
+    border-left: var(--aside-pull-quote-border, 4px solid var(--accent));
+    background: var(--aside-pull-quote-bg, var(--bg-primary));
+    font-style: italic;
+  }
+
+  .aside--pull-quote blockquote {
+    margin: 0;
+    font-size: var(--aside-quote-font-size, var(--font-size-lg));
+    font-weight: var(--font-weight-medium);
+  }
+
+  .aside--pull-quote cite {
+    display: block;
+    margin-top: var(--space-sm);
+    font-style: normal;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .aside--highlight {
+    border-color: var(--accent);
+    background: var(--aside-highlight-bg, rgba(0, 123, 255, 0.05));
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light-mode) .aside--pull-quote {
+      border-left-color: var(--accent-light);
+    }
+
+    :root:not(.light-mode) .aside--highlight {
+      background: rgba(0, 123, 255, 0.1);
+    }
+  }
+
+  :root.dark-mode .aside--pull-quote {
+    border-left-color: var(--accent-light);
+  }
+
+  :root.dark-mode .aside--highlight {
+    background: rgba(0, 123, 255, 0.1);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .aside {
+      margin: var(--space-md) 0;
+      padding: var(--space-md);
+    }
+
+    .aside--pull-quote blockquote {
+      font-size: var(--font-size-base);
+    }
+  }
+</style>

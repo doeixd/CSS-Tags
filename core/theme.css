@@ -31,11 +31,20 @@
   --border-width-thick: 2px;    /* Thick border width */
 
   /* Border Radius Scale */
-  --border-radius-sm: 3px;
-  --border-radius-md: 6px;
-  --border-radius-lg: 8px;
-  --border-radius-xl: 12px;
+  --radius-factor: 1;
+  --border-radius-sm: calc(3px * var(--radius-factor));
+  --border-radius-md: calc(6px * var(--radius-factor));
+  --border-radius-lg: calc(8px * var(--radius-factor));
+  --border-radius-xl: calc(12px * var(--radius-factor));
   --border-radius-full: 9999px;
+
+  /* Preferred short aliases used by components and application themes. */
+  --radius-xs: calc(2px * var(--radius-factor));
+  --radius-sm: var(--border-radius-sm);
+  --radius-md: var(--border-radius-md);
+  --radius-lg: var(--border-radius-lg);
+  --radius-xl: var(--border-radius-xl);
+  --radius-full: var(--border-radius-full);
 
   /* Color Relationships */
   --secondary-hue-shift: 60;    /* Degrees for secondary (+60° = complementary) */
@@ -220,6 +229,7 @@
   /* Map to original framework variables for compatibility */
   --theme-primary: var(--accent);
   --theme-secondary: var(--secondary);
+  --theme-bg: var(--base);
   --theme-surface: var(--surface);
   --theme-surface-subtle: var(--surface-subtle);
   --theme-text: var(--text);
@@ -313,7 +323,7 @@
 /* ============================================ */
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-color-scheme="light"]) {
     /* Dark mode adjustments */
      --accent-l: 70%;
      --accent-c: 0.18;
@@ -373,6 +383,36 @@
   }
 }
 
+/* Allow applications to override the operating-system preference explicitly.
+ * Removing the attribute restores automatic mode. */
+:root[data-color-scheme="dark"] {
+  --accent-l: 70%;
+  --accent-c: 0.18;
+  --surface-saturation: 0.02;
+
+  --base: oklch(22% calc(var(--surface-saturation) * 0.9) var(--neutral-h));
+  --bedrock: oklch(98% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
+  --surface-muted: oklch(20% calc(var(--surface-saturation) * 0.5) var(--neutral-h));
+  --surface-subtle: oklch(21% calc(var(--surface-saturation) * 0.7) var(--neutral-h));
+  --surface: oklch(25% var(--surface-saturation) var(--neutral-h));
+  --surface-overt: oklch(30% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+  --surface-c: var(--surface-saturation);
+  --surface-default: var(--surface);
+  --surface-overt-dark: var(--surface-overt);
+
+  --text-muted: oklch(65% calc(var(--surface-saturation) * 1.2) var(--neutral-h));
+  --text-subtle: oklch(75% calc(var(--surface-saturation) * 1) var(--neutral-h));
+  --text: oklch(88% calc(var(--surface-saturation) * 0.8) var(--neutral-h));
+  --text-overt: oklch(95% calc(var(--surface-saturation) * 0.6) var(--neutral-h));
+  --text-default: var(--text);
+  --text-on-base: oklch(90% 0.02 var(--neutral-h));
+  --text-on-bedrock: oklch(5% 0.01 var(--neutral-h));
+  --text-on-surface-muted: oklch(85% 0.02 var(--neutral-h));
+  --text-on-surface-subtle: oklch(87% 0.02 var(--neutral-h));
+  --text-on-surface: oklch(90% 0.02 var(--neutral-h));
+  --text-on-surface-overt: oklch(92% 0.02 var(--neutral-h));
+}
+
 /* ============================================ */
 /* BRAND THEME OVERRIDES                       */
 /* ============================================ */
@@ -394,13 +434,13 @@
 
 /* Dark mode brand adjustments */
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="ocean"] {
+  :root:not([data-color-scheme="light"])[data-theme="ocean"] {
     --accent-c: 0.20; --accent-l: 70%;
   }
-  :root[data-theme="sunrise"] {
+  :root:not([data-color-scheme="light"])[data-theme="sunrise"] {
     --accent-c: 0.22; --accent-l: 72%;
   }
-  :root[data-theme="forest"] {
+  :root:not([data-color-scheme="light"])[data-theme="forest"] {
     --accent-c: 0.18; --accent-l: 68%;
   }
 }
@@ -553,4 +593,16 @@
 .bg-accent .button-primary {
   background-color: var(--accent);
   color: var(--accent-on-base);
+}
+
+:root[data-color-scheme="dark"][data-theme="ocean"] {
+  --accent-c: 0.20; --accent-l: 70%;
+}
+
+:root[data-color-scheme="dark"][data-theme="sunrise"] {
+  --accent-c: 0.22; --accent-l: 72%;
+}
+
+:root[data-color-scheme="dark"][data-theme="forest"] {
+  --accent-c: 0.18; --accent-l: 68%;
 }

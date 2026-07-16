@@ -1,0 +1,166 @@
+---
+interface Props {
+    level?: 1 | 2 | 3 | 4;
+    align?: 'left' | 'center' | 'right';
+    gradient?: boolean;
+    underline?: boolean;
+    subtitle?: string;
+    class?: string;
+}
+
+const {
+    level = 2,
+    align = 'center',
+    gradient = false,
+    underline = false,
+    subtitle,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const Tag = `h${level}` as any;
+---
+
+<div class={`landing-heading landing-heading--${align} ${className || ''}`} {...rest}>
+    <Tag class={`landing-heading__title landing-heading__title--${level} ${gradient ? 'landing-heading__title--gradient' : ''} ${underline ? 'landing-heading__title--underline' : ''}`}>
+        <slot />
+    </Tag>
+    {subtitle && (
+        <p class="landing-heading__subtitle">
+            {subtitle}
+        </p>
+    )}
+</div>
+
+<style>
+    .landing-heading {
+        width: 100%;
+        margin-bottom: var(--landing-heading-margin-bottom, var(--space-2xl));
+    }
+
+    .landing-heading--left {
+        text-align: left;
+    }
+
+    .landing-heading--center {
+        text-align: center;
+    }
+
+    .landing-heading--right {
+        text-align: right;
+    }
+
+    .landing-heading__title {
+        font-weight: var(--landing-heading-font-weight, var(--font-weight-bold));
+        line-height: var(--landing-heading-line-height, 1.2);
+        margin: 0 0 var(--landing-heading-title-margin-bottom, var(--space-md)) 0;
+        color: var(--text-primary);
+    }
+
+    .landing-heading__title--1 {
+        font-size: var(--landing-heading-h1-size, var(--font-size-5xl));
+    }
+
+    .landing-heading__title--2 {
+        font-size: var(--landing-heading-h2-size, var(--font-size-4xl));
+    }
+
+    .landing-heading__title--3 {
+        font-size: var(--landing-heading-h3-size, var(--font-size-3xl));
+    }
+
+    .landing-heading__title--4 {
+        font-size: var(--landing-heading-h4-size, var(--font-size-2xl));
+    }
+
+    .landing-heading__title--gradient {
+        background: var(--landing-heading-gradient, linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .landing-heading__title--gradient {
+            background: var(--landing-heading-gradient-dark, linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    :root.dark-mode .landing-heading__title--gradient {
+        background: var(--landing-heading-gradient-dark, linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .landing-heading__title--underline {
+        position: relative;
+        padding-bottom: var(--landing-heading-underline-padding, var(--space-md));
+    }
+
+    .landing-heading__title--underline::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: var(--landing-heading-underline-width, 4rem);
+        height: var(--landing-heading-underline-height, 4px);
+        background: var(--landing-heading-underline-color, var(--accent));
+        border-radius: var(--landing-heading-underline-radius, 2px);
+    }
+
+    .landing-heading--left .landing-heading__title--underline::after {
+        left: 0;
+    }
+
+    .landing-heading--center .landing-heading__title--underline::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .landing-heading--right .landing-heading__title--underline::after {
+        right: 0;
+    }
+
+    .landing-heading__subtitle {
+        font-size: var(--landing-heading-subtitle-size, var(--font-size-lg));
+        color: var(--text-secondary);
+        line-height: var(--landing-heading-subtitle-line-height, 1.6);
+        margin: 0;
+        max-width: var(--landing-heading-subtitle-max-width, 65ch);
+    }
+
+    .landing-heading--center .landing-heading__subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-heading--right .landing-heading__subtitle {
+        margin-left: auto;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .landing-heading__title--1 {
+            font-size: var(--landing-heading-h1-size-mobile, var(--font-size-3xl));
+        }
+
+        .landing-heading__title--2 {
+            font-size: var(--landing-heading-h2-size-mobile, var(--font-size-2xl));
+        }
+
+        .landing-heading__title--3 {
+            font-size: var(--landing-heading-h3-size-mobile, var(--font-size-xl));
+        }
+
+        .landing-heading__title--4 {
+            font-size: var(--landing-heading-h4-size-mobile, var(--font-size-lg));
+        }
+
+        .landing-heading__subtitle {
+            font-size: var(--landing-heading-subtitle-size-mobile, var(--font-size-base));
+        }
+    }
+</style>

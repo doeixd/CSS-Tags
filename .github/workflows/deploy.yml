@@ -25,20 +25,20 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: website/package-lock.json
+          cache-dependency-path: website-next/package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./website
+        working-directory: ./website-next
 
-      - name: Build Astro site
-        run: npm run build
-        working-directory: ./website
+      - name: Build and audit Astro site
+        run: npm run check
+        working-directory: ./website-next
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: ./website/dist
+          path: ./website-next/dist
 
   deploy:
     needs: build

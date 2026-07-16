@@ -1,0 +1,182 @@
+---
+interface Props {
+    level: 1 | 2 | 3 | 4 | 5 | 6;
+    id?: string;
+    showIcon?: boolean;
+    iconPosition?: 'left' | 'right';
+    class?: string;
+}
+
+const {
+    level,
+    id,
+    showIcon = true,
+    iconPosition = 'right',
+    class: className,
+    ...rest
+} = Astro.props;
+
+// Generate ID from slot content if not provided
+const slotContent = await Astro.slots.render('default');
+const textContent = slotContent.replace(/<[^>]*>/g, '').trim();
+const generatedId = id || textContent
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-');
+
+const Tag = `h${level}` as any;
+---
+
+<Tag
+    id={generatedId}
+    class={`heading-anchor heading-anchor--${iconPosition} ${className || ''}`}
+    {...rest}
+>
+    {iconPosition === 'left' && showIcon && (
+        <a
+            href={`#${generatedId}`}
+            class="heading-anchor__link"
+            aria-label={`Link to ${textContent}`}
+            tabindex="-1"
+        >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7.5 4.5H5.5C4.39543 4.5 3.5 5.39543 3.5 6.5V10.5C3.5 11.6046 4.39543 12.5 5.5 12.5H7.5M8.5 11.5H10.5C11.6046 11.5 12.5 10.6046 12.5 9.5V5.5C12.5 4.39543 11.6046 3.5 10.5 3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="6" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </a>
+    )}
+    <span class="heading-anchor__content">
+        <slot />
+    </span>
+    {iconPosition === 'right' && showIcon && (
+        <a
+            href={`#${generatedId}`}
+            class="heading-anchor__link"
+            aria-label={`Link to ${textContent}`}
+            tabindex="-1"
+        >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M7.5 4.5H5.5C4.39543 4.5 3.5 5.39543 3.5 6.5V10.5C3.5 11.6046 4.39543 12.5 5.5 12.5H7.5M8.5 11.5H10.5C11.6046 11.5 12.5 10.6046 12.5 9.5V5.5C12.5 4.39543 11.6046 3.5 10.5 3.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="6" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </a>
+    )}
+</Tag>
+
+<style>
+    .heading-anchor {
+        position: relative;
+        scroll-margin-top: var(--heading-anchor-scroll-margin, calc(var(--header-height) + var(--space-lg)));
+    }
+
+    .heading-anchor--left {
+        display: flex;
+        align-items: center;
+        gap: var(--heading-anchor-gap, var(--space-sm));
+    }
+
+    .heading-anchor--right {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--heading-anchor-gap, var(--space-sm));
+    }
+
+    .heading-anchor__content {
+        display: inline;
+    }
+
+    .heading-anchor__link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--heading-anchor-color, var(--text-secondary));
+        text-decoration: none;
+        opacity: 0;
+        transition: var(--heading-anchor-transition, opacity var(--transition-fast), color var(--transition-fast));
+        flex-shrink: 0;
+    }
+
+    .heading-anchor:hover .heading-anchor__link,
+    .heading-anchor__link:focus {
+        opacity: 1;
+    }
+
+    .heading-anchor__link:hover {
+        color: var(--heading-anchor-hover-color, var(--accent));
+    }
+
+    .heading-anchor__link:focus {
+        outline: var(--outline-width) solid var(--accent);
+        outline-offset: var(--outline-offset);
+        border-radius: var(--border-radius-sm);
+    }
+
+    /* Always show on touch devices */
+    @media (hover: none) {
+        .heading-anchor__link {
+            opacity: 0.6;
+        }
+
+        .heading-anchor:hover .heading-anchor__link,
+        .heading-anchor__link:active {
+            opacity: 1;
+        }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+        .heading-anchor {
+            scroll-margin-top: var(--heading-anchor-scroll-margin-mobile, calc(var(--mobile-header-height) + var(--space-lg)));
+        }
+
+        .heading-anchor__link svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+</style>
+
+<script>
+    function setupHeadingAnchors() {
+        const headings = document.querySelectorAll('.heading-anchor');
+
+        headings.forEach((heading) => {
+            const link = heading.querySelector('.heading-anchor__link');
+            if (!link) return;
+
+            // Smooth scroll when clicked
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = link.getAttribute('href')?.slice(1);
+                if (!id) return;
+
+                const target = document.getElementById(id);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+
+                    // Update URL without triggering navigation
+                    history.pushState(null, '', `#${id}`);
+
+                    // Focus the heading for accessibility
+                    target.focus({ preventScroll: true });
+                }
+            });
+        });
+
+        // Handle initial hash on page load
+        if (window.location.hash) {
+            const id = window.location.hash.slice(1);
+            const target = document.getElementById(id);
+            if (target) {
+                // Delay to allow page to render
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }
+
+    // Setup on page load and after view transitions
+    document.addEventListener('DOMContentLoaded', setupHeadingAnchors);
+    document.addEventListener('astro:after-swap', setupHeadingAnchors);
+</script>

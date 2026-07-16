@@ -1,0 +1,27 @@
+---
+import { navigation } from "../navigation";
+import { normalizeBase, buildHref } from "../utils/url";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+const pages = navigation.flatMap((section) => section.items ?? (section.slug !== undefined ? [section] : []))
+  .filter((item): item is typeof item & { slug: string } => item.slug !== undefined && item.slug !== "");
+const index = pages.findIndex((item) => item.slug === currentPath);
+const previous = index > 0 ? pages[index - 1] : undefined;
+const next = index >= 0 && index < pages.length - 1 ? pages[index + 1] : undefined;
+---
+
+{(previous || next) && (
+  <nav aria-label="Previous and next documentation pages">
+    <layout-cluster justify="space-between" align="center" gap="var(--space-md)">
+      {previous
+        ? <a rel="prev" href={buildHref(base, previous.slug)}><small>Previous</small><br />{previous.label}</a>
+        : <span aria-hidden="true"></span>}
+      {next && <a rel="next" href={buildHref(base, next.slug)}><small>Next</small><br />{next.label}</a>}
+    </layout-cluster>
+  </nav>
+)}

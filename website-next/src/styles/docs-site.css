@@ -1,0 +1,363 @@
+/* Documentation-only shell behavior. Public component visuals come from index.css. */
+
+.next-docs__shell {
+  padding-block: var(--space-xl);
+}
+
+/* Documentation navigation remains visible while reading long API pages. */
+.next-docs__sidebar,
+.next-docs__outline {
+  position: sticky;
+  inset-block-start: calc(var(--site-header-min-height) + var(--space-md));
+  max-block-size: calc(100dvh - var(--site-header-min-height) - var(--space-xl));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.next-docs__sidebar {
+  --list-navigation-gap: var(--space-2xs);
+  --list-navigation-item-padding: var(--space-xs) var(--space-sm);
+}
+
+/* Long code and preview content must shrink inside the nested sidebar layout. */
+.next-docs__content {
+  min-inline-size: 0;
+  --space-heading-top: 1.25em;
+  --space-heading-bottom: 0.45em;
+  --space-rich-block: 1.25em;
+}
+
+.next-docs__content > [data-prose] {
+  max-inline-size: none;
+}
+
+.next-docs__navigation-disclosure > summary {
+  margin-block-end: var(--space-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Pagefind is site tooling; the surrounding disclosure uses library controls. */
+.next-docs-search > summary {
+  white-space: nowrap;
+}
+
+.next-docs-search > summary kbd {
+  margin-inline-start: var(--space-xs);
+  font-size: var(--font-size-xs);
+}
+
+.next-docs-search > [data-docs-search-panel] {
+  position: absolute;
+  z-index: calc(var(--site-header-z-index) + 1);
+  inset-block-start: 100%;
+  inset-inline-end: max(var(--site-header-padding-inline), env(safe-area-inset-right));
+  inline-size: min(38rem, calc(100vw - 2 * var(--space-md)));
+  max-block-size: calc(100dvh - var(--site-header-min-height) - var(--space-md));
+  padding: var(--space-md);
+  overflow: auto;
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-default);
+}
+
+.next-docs-search .pagefind-ui {
+  --pagefind-ui-scale: 0.65;
+  --pagefind-ui-primary: var(--accent);
+  --pagefind-ui-text: var(--text-default);
+  --pagefind-ui-background: var(--surface-default);
+  --pagefind-ui-border: var(--outline-subtle);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--radius-md);
+}
+
+.next-docs-search .pagefind-ui__result {
+  padding-block: var(--space-sm);
+}
+
+[data-color-scheme-control] {
+  inline-size: auto;
+  min-inline-size: 6.5rem;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm) var(--space-lg);
+}
+
+/* The collapsed theme control stays small; its editor is documentation tooling. */
+.next-theme-editor {
+  position: relative;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.next-theme-editor > summary {
+  --_padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-default);
+  white-space: nowrap;
+}
+
+.next-theme-editor > summary::after {
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  border-width: 1px;
+}
+
+.next-theme-editor > [data-theme-editor-panel] {
+  position: absolute;
+  z-index: calc(var(--site-header-z-index) + 2);
+  inset-block-start: calc(100% + var(--space-xs));
+  inset-inline-end: 0;
+  inline-size: min(40rem, calc(100vw - 2 * var(--space-md)));
+  max-block-size: calc(100dvh - var(--site-header-min-height) - 2 * var(--space-md));
+  padding: var(--space-md);
+  overflow: auto;
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-default);
+  color: var(--text-default);
+}
+
+.next-theme-editor > [data-theme-editor-panel] > header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-md);
+  margin-block-end: var(--space-md);
+}
+
+.next-theme-editor > [data-theme-editor-panel] > header p {
+  margin: var(--space-xs) 0 0;
+}
+
+.next-theme-editor__scheme {
+  display: grid;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+
+[data-theme-editor-controls] {
+  display: grid;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-md);
+}
+
+[data-theme-control-group] {
+  min-inline-size: 0;
+  padding: var(--space-sm);
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+}
+
+[data-theme-control-group] > legend {
+  padding-inline: var(--space-xs);
+  color: var(--text-overt);
+  font-size: var(--font-size-ui);
+  font-weight: var(--font-weight-semibold);
+}
+
+[data-theme-control-group] > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm) var(--space-md);
+}
+
+[data-theme-variable] {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xs);
+  min-inline-size: 0;
+}
+
+[data-theme-variable] > span {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+[data-theme-variable] output,
+[data-theme-variable] small {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+}
+
+[data-theme-variable] input[type="range"] {
+  inline-size: 100%;
+}
+
+[data-theme-editor-panel] button {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.next-theme-editor__presets,
+.next-theme-editor__export {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.next-theme-editor__presets {
+  margin-block-end: var(--space-md);
+}
+
+.next-theme-editor__export {
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid var(--outline-subtle);
+}
+
+.next-theme-editor__export p {
+  margin: var(--space-xs) 0 0;
+}
+
+.next-theme-editor__export-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.7fr);
+  gap: var(--space-sm);
+}
+
+.next-theme-editor__export-fields > label {
+  display: grid;
+  gap: var(--space-xs);
+  font-size: var(--font-size-ui);
+  font-weight: var(--font-weight-ui);
+}
+
+.next-theme-editor__export-fields :is(input, select) {
+  min-inline-size: 0;
+  padding: var(--space-xs) var(--space-sm);
+}
+
+[data-theme-editor-output] {
+  max-inline-size: 100%;
+  max-block-size: 10rem;
+  margin-block: var(--space-md) 0;
+  overflow: auto;
+  box-shadow: none;
+}
+
+@media (max-width: 40rem) {
+  .next-theme-editor > [data-theme-editor-panel] {
+    position: fixed;
+    inset-block-start: calc(var(--site-header-min-height) + var(--space-sm));
+    inset-inline: var(--space-sm);
+    inline-size: auto;
+  }
+
+  .next-theme-editor > [data-theme-editor-panel] > header,
+  [data-theme-control-group] > div,
+  .next-theme-editor__export-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stacked sidebars should stop behaving like sticky desktop panes. */
+@media (max-width: 64rem) {
+  .next-docs__sidebar,
+  .next-docs__outline {
+    position: static;
+    max-block-size: none;
+  }
+}
+
+/* The canvas is documentation tooling; component visuals remain in the shadow-loaded library. */
+.example-workbench {
+  --card-padding: var(--space-md);
+  --card-gap: var(--space-sm);
+  margin-block: var(--space-lg);
+}
+
+.example-workbench card-header h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.example-workbench card-header p {
+  margin-block: var(--space-xs) 0;
+}
+
+.example-workbench card-header button,
+.example-workbench [role="tab"] {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.example-workbench__canvas {
+  min-block-size: 12rem;
+  padding: clamp(var(--space-md), 4cqi, var(--space-xl));
+  overflow: auto;
+  background: var(--surface-subtle);
+}
+
+.example-workbench[data-canvas="transparent"] .example-workbench__canvas {
+  background-color: var(--surface-default);
+  background-image:
+    linear-gradient(45deg, var(--outline-muted) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--outline-muted) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--outline-muted) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--outline-muted) 75%);
+  background-position: 0 0, 0 0.5rem, 0.5rem -0.5rem, -0.5rem 0;
+  background-size: 1rem 1rem;
+}
+
+/* Build-time highlighted source needs bounded scrolling inside the docs column. */
+.example-workbench__code {
+  max-inline-size: 100%;
+  overflow: auto;
+}
+
+.example-workbench__code pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Variable controls are documentation tooling, arranged with native form elements. */
+[data-variable-controls] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-md);
+}
+
+[data-variable-control] {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xs);
+  min-inline-size: 0;
+  padding: var(--space-sm);
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+}
+
+[data-variable-control] > label,
+[data-variable-number-inputs],
+[data-variable-color-inputs] {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+[data-variable-number-inputs] {
+  grid-template-columns: minmax(6rem, 1fr) minmax(5rem, 0.35fr) auto;
+  align-items: center;
+}
+
+[data-variable-color-inputs] {
+  grid-template-columns: 3rem minmax(0, 1fr);
+}
+
+[data-variable-color-inputs] input[type="color"] {
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 2.75rem;
+  padding: 0.2rem;
+}
+
+[data-variable-output] {
+  max-inline-size: 100%;
+  margin: 0;
+  overflow: auto;
+  box-shadow: none;
+}

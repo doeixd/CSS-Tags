@@ -4,6 +4,46 @@
 
 CSS Tags brings styling back to HTML. Instead of cluttering your markup with utility classes, you write clean, semantic tags, and the stylesheet makes them beautiful and responsive automatically.
 
+## Install
+
+```bash
+npm install css-tags
+```
+
+Import the complete layered stylesheet from your application entry point:
+
+```css
+@import "css-tags";
+```
+
+Or import it from JavaScript when your bundler supports CSS imports:
+
+```js
+import "css-tags";
+```
+
+The package includes full DOM and JSX declarations for the library's custom
+tags. Add the global declarations once when your framework does not discover
+the package types automatically:
+
+```ts
+/// <reference types="css-tags" />
+```
+
+For a no-build setup, use the npm CDN entry:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
+```
+
+Load your own theme stylesheet after CSS Tags so its layer is appended after
+the library layers:
+
+```css
+@import "css-tags";
+@import "./my-theme.css";
+```
+
 ### Before: Traditional CSS Frameworks
 
 ```html

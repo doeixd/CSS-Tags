@@ -1,0 +1,65 @@
+{
+  "name": "css-tags",
+  "version": "0.1.0",
+  "description": "Token-first CSS for semantic HTML, custom tags, data attributes, and class hosts.",
+  "keywords": [
+    "css",
+    "design-system",
+    "semantic-html",
+    "custom-elements",
+    "css-framework",
+    "oklch",
+    "components"
+  ],
+  "homepage": "https://doeixd.github.io/CSS-Tags/",
+  "bugs": {
+    "url": "https://github.com/doeixd/CSS-Tags/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doeixd/CSS-Tags.git"
+  },
+  "license": "MIT",
+  "author": "Patrick Glenn <doeixd@gmail.com>",
+  "type": "module",
+  "style": "index.css",
+  "types": "types/css-tags.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/css-tags.d.ts",
+      "default": "./index.css"
+    },
+    "./index.css": "./index.css",
+    "./types": "./types/css-tags.d.ts",
+    "./components/*": "./components/*",
+    "./core/*": "./core/*",
+    "./layouts/*": "./layouts/*",
+    "./themes/*": "./themes/*",
+    "./utilities/*": "./utilities/*",
+    "./carousel.js": "./carousel.js",
+    "./view-transition.js": "./view-transition.js",
+    "./theme-generator.css": "./theme-generator.css"
+  },
+  "files": [
+    "index.css",
+    "components",
+    "core",
+    "layouts",
+    "themes",
+    "utilities",
+    "types/css-tags.d.ts",
+    "carousel.js",
+    "view-transition.js",
+    "theme-generator.css"
+  ],
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

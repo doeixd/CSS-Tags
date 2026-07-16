@@ -27,7 +27,7 @@
 
   /* --- Base Body & Document Styles --- */
   body {
-     font-family: system-ui, sans-serif; /* Consistent with base.css */
+    font-family: var(--font-family-body, system-ui, sans-serif);
     color: var(--text-default); /* UPDATED */
     --bg: var(--base);
     background-color: var(--base); /* UPDATED */
@@ -53,6 +53,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading, var(--font-family-body, system-ui, sans-serif));
     font-weight: var(--font-weight-heading, 600);
     line-height: var(--line-height-heading, 1.15);
     color: var(--text-overt); /* UPDATED */
@@ -90,7 +91,7 @@
 
   /* Code blocks and inline code - Structure only, colors in @components */
   pre, code, kbd, samp {
-    font-family: var(--font-mono, monospace);
+    font-family: var(--font-family-code, var(--font-mono, monospace));
     font-size: var(--font-size-code, 0.9em);
     line-height: var(--line-height-code, 1.4);
     /* color: handled in @components */
@@ -135,7 +136,9 @@
     border-width: var(--border-width, 1px);
     border-style: solid;
     border-radius: var(--radius-md, 6px);
-    font-size: var(--font-size-input, 1rem);
+    font-family: var(--font-family-ui, inherit);
+    font-size: var(--font-size-input, var(--font-size-control, 1rem));
+    line-height: var(--line-height-control, 1.5);
     transition: border-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
                 box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
                 background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out);
@@ -159,7 +162,10 @@
   button, input[type="button"], input[type="submit"], input[type="reset"] {
     padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
     border-radius: var(--radius-md, 6px);
-    font-weight: var(--font-weight-button, 500);
+    font-family: var(--font-family-ui, inherit);
+    font-size: var(--font-size-button, var(--font-size-control, 1rem));
+    font-weight: var(--font-weight-button, var(--font-weight-ui, 500));
+    letter-spacing: var(--letter-spacing-ui, 0);
     border-width: var(--border-width-button, 1px);
     border-style: solid;
     transition: background-color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
@@ -167,7 +173,7 @@
                 color var(--transition-duration, 150ms) var(--transition-timing, ease-out),
                 box-shadow var(--transition-duration, 150ms) var(--transition-timing, ease-out),
                 transform calc(var(--transition-duration, 150ms) / 2) var(--transition-timing, ease-out);
-    line-height: 1;
+    line-height: var(--line-height-button, var(--line-height-ui, 1.375));
     box-shadow: var(--shadow-button, none); /* Keep shadows if defined elsewhere */
     /* Colors/borders applied via utility classes */
   }
@@ -305,9 +311,11 @@
     border: var(--border-width) solid var(--outline-default); /* Default outline */
     background-color: var(--surface-default); /* Default surface */
     color: var(--text-default); /* Use default text */
-    font-weight: 500; text-align: center; cursor: pointer;
+    font-family: var(--font-family-ui, inherit);
+    font-size: var(--font-size-control, 1rem);
+    font-weight: var(--font-weight-ui, 500); text-align: center; cursor: pointer;
     transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
-    user-select: none; line-height: 1.2;
+    user-select: none; line-height: var(--line-height-ui, 1.375);
   }
    .button:hover:not([disabled]) {
      border-color: var(--outline-overt);

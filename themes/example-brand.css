@@ -29,16 +29,31 @@
 
 /* Optional dark tweaks per brand */
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="ocean"] {
+  :root:not([data-color-scheme="light"])[data-theme="ocean"] {
     --accent-c: 0.20;
     --accent-l: 70%;
   }
-  :root[data-theme="sunrise"] {
+  :root:not([data-color-scheme="light"])[data-theme="sunrise"] {
     --accent-c: 0.22;
     --accent-l: 72%;
   }
-  :root[data-theme="forest"] {
+  :root:not([data-color-scheme="light"])[data-theme="forest"] {
     --accent-c: 0.18;
     --accent-l: 68%;
   }
+}
+
+:root[data-color-scheme="dark"][data-theme="ocean"] {
+  --accent-c: 0.20;
+  --accent-l: 70%;
+}
+
+:root[data-color-scheme="dark"][data-theme="sunrise"] {
+  --accent-c: 0.22;
+  --accent-l: 72%;
+}
+
+:root[data-color-scheme="dark"][data-theme="forest"] {
+  --accent-c: 0.18;
+  --accent-l: 68%;
 }

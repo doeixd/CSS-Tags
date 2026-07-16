@@ -1,0 +1,393 @@
+---
+// Theme toggle button component
+interface Props {
+  transitionName?: string;
+}
+
+const { transitionName = 'theme-toggle' } = Astro.props;
+---
+
+<button
+class="theme-toggle"
+aria-label="Toggle dark mode"
+title="Toggle dark mode"
+    data-transition-name={transitionName}
+>
+    <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="4" fill="currentColor" />
+        <path
+            d="M10 1v2m0 14v2M4.22 4.22l1.42 1.42m8.72 8.72l1.42 1.42M1 10h2m14 0h2M4.22 15.78l1.42-1.42m8.72-8.72l1.42-1.42"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+        />
+    </svg>
+    <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 10.5A7 7 0 1 1 9.5 3a5.5 5.5 0 0 0 7.5 7.5z" />
+    </svg>
+</button>
+
+<style>
+    .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--theme-toggle-gap, var(--space-sm));
+        padding: var(--theme-toggle-padding, var(--space-sm) var(--space-lg));
+        background: var(--theme-toggle-bg, var(--bg-secondary));
+        border: var(--theme-toggle-border, 1px solid transparent);
+        border-radius: var(--theme-toggle-border-radius, var(--border-radius-lg));
+        color: var(--theme-toggle-color, var(--text-primary));
+        font-size: var(--theme-toggle-font-size, var(--font-size-sm));
+        font-weight: var(--theme-toggle-font-weight, var(--font-weight-medium));
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        white-space: nowrap;
+        position: relative;
+        width: var(--theme-toggle-width, 2.5rem);
+        height: var(--theme-toggle-height, 2.5rem);
+    }
+
+    /* Set view-transition-name based on data attribute for each instance */
+    .theme-toggle[data-transition-name="header-theme-toggle"] {
+        view-transition-name: header-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="sidebar-theme-toggle"] {
+        view-transition-name: sidebar-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="sidebar-footer-theme-toggle"] {
+        view-transition-name: sidebar-footer-theme-toggle;
+    }
+
+    .theme-toggle[data-transition-name="theme-toggle"] {
+        view-transition-name: theme-toggle;
+    }
+
+    .theme-toggle:hover {
+        background: var(--theme-toggle-hover-bg, var(--bg-hover));
+        border-color: var(--theme-toggle-hover-border-color, var(--accent));
+    }
+
+    .theme-toggle:active {
+        transform: var(--theme-toggle-active-transform, scale(0.98));
+    }
+
+    .sun-icon,
+    .moon-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: none; /* Disable by default to prevent navigation flicker */
+        color: var(--theme-toggle-icon-color, currentColor);
+        width: var(--theme-toggle-icon-size, 20px);
+        height: var(--theme-toggle-icon-size, 20px);
+    }
+
+    /* Enable transitions only when button is being clicked */
+    .theme-toggle.transitioning .sun-icon,
+    .theme-toggle.transitioning .moon-icon {
+        transition: all var(--transition-normal);
+    }
+
+    /* Default: show sun icon (for light mode) */
+    .sun-icon {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(90deg) scale(0.8);
+    }
+
+    .moon-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+
+    /* Dark mode: show moon icon */
+    :global(.dark-mode) .sun-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+
+    :global(.dark-mode) .moon-icon {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-90deg) scale(0.8);
+    }
+
+    @media (max-width: 768px) {
+        .theme-toggle {
+            width: var(--theme-toggle-width-mobile, 2.25rem);
+            height: var(--theme-toggle-height-mobile, 2.25rem);
+        }
+    }
+</style>
+
+<script>
+    // Type validation
+    type Theme = "dark" | "light";
+    type AnimationPreference = "none" | "blur-in";
+
+    function isValidTheme(value: unknown): value is Theme {
+        return value === "dark" || value === "light";
+    }
+
+    function isValidAnimationPreference(value: unknown): value is AnimationPreference {
+        return value === "none" || value === "blur-in";
+    }
+
+    // Storage abstraction with graceful degradation
+    const storage = {
+        get(key: string): string | null {
+            // Try localStorage first
+            try {
+                const value = localStorage.getItem(key);
+                if (value !== null) return value;
+            } catch (e) {
+                console.warn(`localStorage.getItem failed for ${key}:`, e);
+            }
+
+            // Fall back to reading cookie
+            try {
+                const cookieMatch = document.cookie.match(new RegExp(`(?:^|; )${key}=([^;]*)`));
+                if (cookieMatch) return cookieMatch[1];
+            } catch (e) {
+                console.warn(`Cookie read failed for ${key}:`, e);
+            }
+
+            // Fall back to sessionStorage
+            try {
+                const value = sessionStorage.getItem(key);
+                if (value !== null) return value;
+            } catch (e) {
+                console.warn(`sessionStorage.getItem failed for ${key}:`, e);
+            }
+
+            return null;
+        },
+
+        set(key: string, value: string): void {
+            // Try localStorage (primary)
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.warn(`localStorage.setItem failed for ${key}:`, e);
+            }
+
+            // Always sync to cookie for SSR
+            try {
+                const isProduction = window.location.protocol === 'https:';
+                const secure = isProduction ? '; Secure' : '';
+                document.cookie = `${key}=${value}; path=/; max-age=31536000; SameSite=Lax${secure}`;
+            } catch (e) {
+                console.warn(`Cookie write failed for ${key}:`, e);
+            }
+
+            // Also save to sessionStorage as last resort backup
+            try {
+                sessionStorage.setItem(key, value);
+            } catch (e) {
+                console.warn(`sessionStorage.setItem failed for ${key}:`, e);
+            }
+        }
+    };
+
+    // Get theme with validation and fallback to system preference
+    function getTheme(): Theme {
+        const stored = storage.get("theme");
+        if (isValidTheme(stored)) {
+            return stored;
+        }
+
+        // Fall back to system preference
+        try {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        } catch (e) {
+            console.warn("matchMedia failed, defaulting to light theme:", e);
+            return "light";
+        }
+    }
+
+    // Get animation preference with validation
+    function getAnimationPreference(): AnimationPreference {
+        const stored = storage.get("animation-preference");
+        if (isValidAnimationPreference(stored)) {
+            return stored;
+        }
+        return "none"; // Default to no animations
+    }
+
+    // Apply theme to DOM
+    function applyTheme(theme: Theme, suppressTransitions = false): void {
+        const html = document.documentElement;
+
+        // PERFORMANCE OPTIMIZATION: Batch DOM mutations to reduce style recalculations
+        // Store all changes and apply them in one go
+        if (suppressTransitions) {
+            html.classList.add("theme-transitioning");
+        }
+
+        // Batch classList operations by getting current classes and modifying them
+        const themeClass = theme === "dark" ? "dark-mode" : "light-mode";
+        const otherThemeClass = theme === "dark" ? "light-mode" : "dark-mode";
+
+        // Single batch: remove old theme, add new theme
+        html.classList.remove(otherThemeClass);
+        if (!html.classList.contains(themeClass)) {
+            html.classList.add(themeClass);
+        }
+
+        html.setAttribute("data-theme", theme);
+
+        if (suppressTransitions) {
+            // Use requestAnimationFrame for proper timing
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    html.classList.remove("theme-transitioning");
+                });
+            });
+        }
+    }
+
+    // Apply animation preference to DOM
+    function applyAnimationPreference(preference: AnimationPreference): void {
+        const html = document.documentElement;
+        html.setAttribute("data-animation-preference", preference);
+    }
+
+    // Restore theme from storage (no transitions)
+    function restoreTheme(): void {
+        const theme = getTheme();
+        const animationPreference = getAnimationPreference();
+        applyTheme(theme, true);
+        applyAnimationPreference(animationPreference);
+    }
+
+    // Update theme and persist to storage
+    function updateTheme(theme: Theme): void {
+        if (!isValidTheme(theme)) {
+            console.error("Invalid theme value:", theme);
+            return;
+        }
+
+        applyTheme(theme, false);
+        storage.set("theme", theme);
+
+        // Dispatch custom event for other components
+        window.dispatchEvent(new CustomEvent("theme-changed", { detail: { theme } }));
+    }
+
+    // Setup theme toggle button
+    function setupThemeToggle(): void {
+    const buttons = document.querySelectorAll(".theme-toggle");
+    if (!buttons.length) {
+    console.warn("No theme toggle buttons found");
+    return;
+    }
+
+    buttons.forEach((button) => {
+        // PERFORMANCE OPTIMIZATION: Skip if button already has handler attached
+        // This prevents unnecessary cloning for persisted elements (header, sidebar)
+        if ((button as any).__theme_handler_attached__) {
+            return;
+        }
+
+        // Remove any existing event listeners to prevent duplicates by cloning
+        const newButton = button.cloneNode(true) as HTMLElement;
+            button.parentNode?.replaceChild(newButton, button);
+
+    newButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const html = document.documentElement;
+        const currentTheme = html.classList.contains("dark-mode") ? "dark" : "light";
+                const newTheme: Theme = currentTheme === "dark" ? "light" : "dark";
+
+        // Enable icon transitions for smooth animation on user click
+                newButton.classList.add("transitioning");
+
+        // Disable CSS transitions temporarily during theme change
+                html.classList.add("theme-transitioning");
+
+                updateTheme(newTheme);
+
+        // Remove transition classes after animation completes
+    requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+        newButton.classList.remove("transitioning");
+            html.classList.remove("theme-transitioning");
+            });
+            });
+            });
+
+        // Mark button as having handler attached
+        (newButton as any).__theme_handler_attached__ = true;
+        });
+    }
+
+    // Setup multi-tab synchronization
+    function setupStorageListener(): void {
+        window.addEventListener("storage", (e) => {
+            if (e.key === "theme" && isValidTheme(e.newValue)) {
+                applyTheme(e.newValue, true);
+            } else if (e.key === "animation-preference" && isValidAnimationPreference(e.newValue)) {
+                applyAnimationPreference(e.newValue);
+            }
+        });
+    }
+
+    // Setup system theme change listener
+    function setupMediaQueryListener(): void {
+        try {
+            const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+            const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+                // Only update if user hasn't manually set a preference
+                const hasManualPreference = storage.get("theme") !== null;
+                if (!hasManualPreference) {
+                    const systemTheme: Theme = e.matches ? "dark" : "light";
+                    applyTheme(systemTheme, true);
+                }
+            };
+
+            // Modern browsers
+            if (mediaQuery.addEventListener) {
+                mediaQuery.addEventListener("change", handleChange);
+            } else {
+                // Fallback for older browsers
+                mediaQuery.addListener(handleChange);
+            }
+        } catch (e) {
+            console.warn("Failed to setup media query listener:", e);
+        }
+    }
+
+    // Initialize theme system (called once per page load)
+    let initialized = false;
+
+    function initThemeSystem(): void {
+        if (initialized) return;
+        initialized = true;
+
+        restoreTheme();
+        setupThemeToggle();
+        setupStorageListener();
+        setupMediaQueryListener();
+    }
+
+    // Restore theme before DOM swap (prevent FOUC during navigation)
+    document.addEventListener("astro:before-swap", () => {
+        restoreTheme();
+    });
+
+    // Re-initialize after Astro view transitions
+    document.addEventListener("astro:after-swap", () => {
+        initialized = false;
+        initThemeSystem();
+    });
+
+    // Initial setup
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initThemeSystem);
+    } else {
+        initThemeSystem();
+    }
+</script>

@@ -1,0 +1,41 @@
+---
+import { navigation } from "../navigation";
+import { normalizeBase, buildHref } from "../utils/url";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+---
+
+<nav aria-label="Documentation">
+  <layout-stack gap="var(--space-sm)">
+    {navigation.map((section) => (
+      section.items ? (
+        <details data-disclosure="compact" open={!section.collapsed || section.items.some((item) => item.slug === currentPath)}>
+          <summary>{section.label}</summary>
+          <ul data-list-navigation>
+            {section.items
+              .filter((item) => item.slug !== undefined)
+              .map((item) => (
+                <li>
+                  <a
+                    href={buildHref(base, item.slug)}
+                    aria-current={item.slug === currentPath ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </details>
+      ) : section.slug ? (
+        <a href={buildHref(base, section.slug)} aria-current={section.slug === currentPath ? "page" : undefined}>
+          {section.label}
+        </a>
+      ) : null
+    ))}
+  </layout-stack>
+</nav>

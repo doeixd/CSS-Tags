@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Tags — Site shell</title>
+  <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header" data-sticky>
+    <container>
+      <a data-site-brand href="#">CSS Tags</a>
+      <nav data-header-navigation aria-label="Primary">
+        <layout-cluster gap="var(--space-md)">
+          <a href="#features">Features</a>
+          <a href="#examples">Examples</a>
+          <a href="#docs">Docs</a>
+        </layout-cluster>
+      </nav>
+      <div data-header-actions>
+        <button type="button">Theme</button>
+      </div>
+    </container>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <container>
+      <layout-stack gap="var(--space-2xl)">
+        <section data-prose>
+          <eyebrow>Library-only page shell</eyebrow>
+          <h1>Header and footer primitives that compose</h1>
+          <p class="lead">This page has no custom CSS. Resize it to see the header and footer adapt through their shipped APIs.</p>
+        </section>
+
+        <grid id="features" columns="repeat(auto-fit, minmax(min(14rem, 100%), 1fr))" gap="var(--space-lg)">
+          <card><card-body><h2>Native first</h2><p>Use real landmarks and navigation.</p></card-body></card>
+          <card><card-body><h2>Token driven</h2><p>Theme the shell without replacing its selectors.</p></card-body></card>
+          <card><card-body><h2>Responsive</h2><p>Navigation wraps under container pressure.</p></card-body></card>
+        </grid>
+      </layout-stack>
+    </container>
+  </main>
+
+  <footer data-site-footer data-bordered>
+    <container>
+      <div data-footer-grid>
+        <section><h2>Product</h2><nav aria-label="Product"><a href="#docs">Documentation</a></nav></section>
+        <section><h2>Community</h2><nav aria-label="Community"><a href="#examples">Examples</a></nav></section>
+        <section><h2>Project</h2><p>Semantic CSS for real interfaces.</p></section>
+      </div>
+      <div data-footer-meta><span>CSS Tags</span><span>Library-only demonstration</span></div>
+    </container>
+  </footer>
+</body>
+</html>

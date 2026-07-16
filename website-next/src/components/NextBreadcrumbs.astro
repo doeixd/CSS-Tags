@@ -1,0 +1,21 @@
+---
+import { navigation } from "../navigation";
+import { normalizeBase, buildHref } from "../utils/url";
+
+interface Props {
+  currentPath: string;
+  title: string;
+}
+
+const { currentPath, title } = Astro.props;
+const base = normalizeBase(import.meta.env.BASE_URL);
+const section = navigation.find((item) => item.items?.some((child) => child.slug === currentPath));
+---
+
+<nav data-breadcrumbs aria-label="Breadcrumb">
+  <ol>
+    <li><a href={buildHref(base)}>Home</a></li>
+    {section && <li><span>{section.label}</span></li>}
+    <li><span aria-current="page">{title}</span></li>
+  </ol>
+</nav>

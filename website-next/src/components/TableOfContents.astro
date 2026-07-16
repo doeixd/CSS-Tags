@@ -1,0 +1,250 @@
+---
+// Table of Contents component - auto-generates from headings
+interface Props {
+    headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { headings = [] } = Astro.props;
+
+// Filter to only h2 and h3 headings with non-empty text
+const tocHeadings = headings.filter(
+    (h) => h.depth >= 2 && h.depth <= 3 && h.text && h.text.trim().length > 0
+);
+---
+
+{
+    tocHeadings.length > 0 && (
+        <nav class="toc" aria-label="Table of contents">
+            <h2 class="toc-title">On this page</h2>
+            <ul class="toc-list">
+                {tocHeadings.map((heading) => (
+                    <li class={`toc-item toc-depth-${heading.depth}`}>
+                        <a href={`#${heading.slug}`} class="toc-link">
+                            {heading.text}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    )
+}
+
+<style is:inline>
+    .toc {
+        position: sticky;
+        top: var(--space-2xl);
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
+        padding: var(--toc-padding, 1.5rem);
+        background: var(--toc-background, transparent);
+        border: 1px solid var(--toc-border, transparent);
+        border-radius: var(--toc-border-radius, var(--border-radius-lg));
+        font-size: var(--toc-font-size, var(--font-size-sm));
+        scrollbar-gutter: stable;
+    }
+
+    .toc::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    .toc:hover::-webkit-scrollbar-thumb {
+        background: var(--toc-link-hover-bg, var(--border-color));
+    }
+
+    .toc {
+        scrollbar-color: transparent transparent;
+    }
+
+    .toc:hover {
+        scrollbar-color: var(--border-color) transparent;
+    }
+
+    .toc-title {
+        font-size: var(--toc-title-font-size, var(--font-size-sm));
+        font-weight: var(--toc-title-font-weight, var(--font-weight-bold));
+        text-transform: uppercase;
+        letter-spacing: var(
+            --toc-title-letter-spacing,
+            var(--letter-spacing-uppercase)
+        );
+        color: var(--text-secondary);
+        margin-bottom: var(--toc-title-margin-bottom, var(--space-lg));
+    }
+
+    .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .toc-item {
+        margin-bottom: var(--toc-item-margin-bottom, var(--space-sm));
+    }
+
+    .toc-depth-3 {
+        margin-left: var(--toc-depth-3-margin-left, var(--space-lg));
+    }
+
+    /* Depth transition margins */
+    .toc-depth-2 + .toc-depth-3 {
+        margin-top: var(--toc-depth-transition-margin-2-to-3);
+    }
+
+    .toc-depth-3 + .toc-depth-2 {
+        margin-top: var(--toc-depth-transition-margin-3-to-2);
+    }
+
+    .toc-link {
+        display: block;
+        color: var(--toc-link-color, var(--text-primary));
+        text-decoration: none;
+        padding: var(--toc-link-padding, var(--space-xs) var(--space-sm));
+        border-radius: var(--toc-link-border-radius, var(--border-radius-md));
+        transition: all var(--transition-fast);
+        line-height: 1.4;
+        opacity: var(--toc-link-opacity-default, 0.45);
+    }
+
+    .toc:hover :is(.toc-item a, .toc-item) {
+        opacity: var(--toc-link-opacity-hover, 1);
+    }
+
+    .toc-link:hover {
+        background: var(--toc-link-hover-bg, var(--bg-hover));
+        color: var(--accent);
+        opacity: var(--toc-link-opacity-hover, 1);
+    }
+
+    .toc-link.active {
+        background: var(--accent-light);
+        color: var(--accent);
+        opacity: var(--toc-link-opacity-hover, 1);
+    }
+
+    @media (max-width: 1200px) {
+        .toc {
+            display: none;
+        }
+    }
+
+    /* Dark mode styles (system preference) */
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light-mode) .toc {
+            background: var(--toc-background, transparent);
+            border-color: var(--toc-border, transparent);
+        }
+
+        :root:not(.light-mode) .toc-title {
+            color: var(--text-secondary);
+        }
+
+        :root:not(.light-mode) .toc-link {
+            color: var(--text-primary);
+        }
+
+        :root:not(.light-mode) .toc-link:hover {
+            background: var(--bg-hover);
+        }
+
+        :root:not(.light-mode) .toc-link.active {
+            background: var(--accent-dark);
+            color: var(--accent-light);
+        }
+    }
+
+    /* Dark mode styles (manual toggle) */
+    :root.dark-mode .toc {
+        background: var(--toc-background, transparent);
+        border-color: var(--toc-border, transparent);
+    }
+
+    :root.dark-mode .toc-title {
+        color: var(--text-secondary);
+    }
+
+    :root.dark-mode .toc-link {
+        color: var(--text-primary);
+    }
+
+    :root.dark-mode .toc-link:hover {
+        background: var(--bg-hover);
+    }
+
+    :root.dark-mode .toc-link.active {
+        background: var(--accent-dark);
+        color: var(--accent-light);
+    }
+</style>
+
+<script>
+    let tocScrollHandler: (() => void) | null = null;
+
+    function setupTocHighlight() {
+        // Clean up previous listener to prevent memory leaks
+        if (tocScrollHandler) {
+            window.removeEventListener("scroll", tocScrollHandler);
+        }
+
+        const tocLinks = document.querySelectorAll(".toc-link");
+        const tocContainer = document.querySelector(".toc");
+        if (!tocLinks.length || !tocContainer) return;
+
+        const headings = Array.from(document.querySelectorAll("h2, h3")).filter(
+            (h) => h.id,
+        );
+
+        function updateActiveLink() {
+            const scrollPos = window.scrollY + 100;
+
+            let activeHeading = headings[0];
+            for (const heading of headings) {
+                if (heading.offsetTop <= scrollPos) {
+                    activeHeading = heading;
+                } else {
+                    break;
+                }
+            }
+
+            tocLinks.forEach((link) => {
+                link.classList.remove("active");
+                if (
+                    activeHeading &&
+                    link.getAttribute("href") === `#${activeHeading.id}`
+                ) {
+                    link.classList.add("active");
+
+                    // Scroll within TOC container only, don't affect main page scroll
+                    const linkTop = (link as HTMLElement).offsetTop;
+                    const containerTop = (tocContainer as HTMLElement).scrollTop;
+                    const containerHeight = (tocContainer as HTMLElement).clientHeight;
+                    const linkHeight = (link as HTMLElement).clientHeight;
+
+                    // Check if link is outside the visible area
+                    if (
+                        linkTop < containerTop ||
+                        linkTop + linkHeight > containerTop + containerHeight
+                    ) {
+                        // Scroll the TOC container to center the active link
+                        (tocContainer as HTMLElement).scrollTop =
+                            linkTop - containerHeight / 2 + linkHeight / 2;
+                    }
+                }
+            });
+        }
+
+        tocScrollHandler = updateActiveLink;
+        window.addEventListener("scroll", tocScrollHandler, { passive: true });
+        updateActiveLink();
+    }
+
+    // Cleanup on page navigation
+    document.addEventListener("astro:before-swap", () => {
+        if (tocScrollHandler) {
+            window.removeEventListener("scroll", tocScrollHandler);
+            tocScrollHandler = null;
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", setupTocHighlight);
+    document.addEventListener("astro:after-swap", setupTocHighlight);
+</script>

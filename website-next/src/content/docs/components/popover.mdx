@@ -1,0 +1,74 @@
+---
+title: Popover
+description: Progressive-enhancement patterns using the native Popover API, with no JavaScript required for basic toggling and light dismiss.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+The native Popover API handles top-layer placement, Escape dismissal, and light dismiss. CSS Tags styles any element with the `popover` attribute.
+
+<LiveExample title="Native popover" description="Open it, press Escape, or click outside to dismiss.">
+  <button type="button" popovertarget="account-popover">Account details</button>
+  <div id="account-popover" popover="auto">
+    <layout-stack gap="var(--space-sm)">
+      <strong>Signed in as Ada</strong>
+      <span class="example-muted">ada@example.com</span>
+      <button type="button" popovertarget="account-popover" popovertargetaction="hide">Close</button>
+    </layout-stack>
+  </div>
+</LiveExample>
+
+```html
+<button type="button" popovertarget="account-popover">
+  Account details
+</button>
+
+<div id="account-popover" popover="auto">
+  <strong>Signed in as Ada</strong>
+  <p>ada@example.com</p>
+  <button
+    type="button"
+    popovertarget="account-popover"
+    popovertargetaction="hide"
+  >
+    Close
+  </button>
+</div>
+```
+
+## Choosing a popover mode
+
+| Value | Behavior | Typical use |
+| --- | --- | --- |
+| `popover` or `popover="auto"` | Light dismiss and one auto popover at a time | Menus and account panels |
+| `popover="manual"` | Opens and closes only when explicitly requested | Persistent teaching UI |
+| `popover="hint"` | Hint-style relationship where supported | Nonessential hover/focus hints |
+
+Popover content is non-modal: it does not make the rest of the page inert or trap focus. Use a native `<dialog>` when the user must respond before continuing.
+
+## Theme tokens
+
+```css
+[popover] {
+  --b-bg: var(--surface-default);
+  --b-bc: var(--outline-default);
+  --b-bw: 1px;
+  --b-r: var(--radius-lg);
+  --b-p: var(--space-lg);
+  --popover-max-width: 24rem;
+  --popover-max-height: 32rem;
+}
+```
+
+Popovers are centered in the top layer by default, which remains reliable when anchor positioning is unavailable. Add `data-scrim` when the popover benefits from a dimmed backdrop; ordinary non-modal popovers keep the page unobscured.
+
+## Progressive enhancement
+
+The trigger and popover attributes provide the behavior without application JavaScript in supporting browsers. If older browsers are in scope, keep essential actions available elsewhere or load a focused Popover API polyfill. Do not hide critical navigation exclusively inside an unsupported popover.
+
+## Accessibility checklist
+
+- Use a real `<button>` as the trigger.
+- Give icon-only triggers an accessible name.
+- Keep focusable controls in a logical DOM order.
+- Use menu roles only when you also implement the complete keyboard interaction expected of an application menu.
