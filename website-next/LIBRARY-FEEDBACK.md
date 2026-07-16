@@ -377,8 +377,9 @@ they can be removed.
   from assistive technology and made inert.
 - Documentation solution: preview roots retain DOM and selector isolation while
   inheriting live theme inputs, and the carousel example initializes through
-  the shipped JavaScript module. Search, outline nesting, and sequential page
-  navigation now use compact, readable patterns from the previous site.
+  the shipped JavaScript module. Search, scroll-aware outline nesting,
+  auto-hiding shell scrollbars, and sequential page navigation now use the
+  compact, readable patterns from the previous site.
 - Removal condition: the build audit requires the shared carousel initializer,
   full-width slide contract, enhancement flag, inert inactive slides, and
   inherited preview theme inputs; browser QA confirms search, outline depth,

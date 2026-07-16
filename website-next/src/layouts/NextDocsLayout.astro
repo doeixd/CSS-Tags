@@ -163,6 +163,63 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
   setupNavigationDisclosure();
   document.addEventListener("astro:page-load", setupNavigationDisclosure);
 
+  const updateOutline = () => {
+    const outline = document.querySelector<HTMLElement>(".next-docs__outline");
+    const links = Array.from(outline?.querySelectorAll<HTMLAnchorElement>('a[href^="#"]') ?? []);
+    const targets = links
+      .map((link) => ({ link, heading: document.getElementById(link.hash.slice(1)) }))
+      .filter((item): item is { link: HTMLAnchorElement; heading: HTMLElement } => item.heading !== null);
+    if (!outline || targets.length === 0) return;
+    const offset = window.scrollY + 120;
+    let active = targets[0];
+    for (const target of targets) {
+      if (target.heading.offsetTop <= offset) active = target;
+      else break;
+    }
+    targets.forEach(({ link }) => link.removeAttribute("aria-current"));
+    active.link.setAttribute("aria-current", "location");
+
+    const linkTop = active.link.offsetTop;
+    const visibleTop = outline.scrollTop;
+    const visibleBottom = visibleTop + outline.clientHeight;
+    if (linkTop < visibleTop || linkTop + active.link.offsetHeight > visibleBottom) {
+      outline.scrollTop = linkTop - outline.clientHeight / 2;
+    }
+  };
+
+  const setupOutline = () => {
+    updateOutline();
+    if (document.documentElement.dataset.docsOutlineReady !== "true") {
+      document.documentElement.dataset.docsOutlineReady = "true";
+      window.addEventListener("scroll", () => requestAnimationFrame(updateOutline), { passive: true });
+    }
+  };
+
+  const setupAutoHideScrollbars = () => {
+    if (document.documentElement.dataset.docsScrollbarReady === "true") return;
+    document.documentElement.dataset.docsScrollbarReady = "true";
+    const timers = new WeakMap<Element, number>();
+    const reveal = (element: Element) => {
+      element.setAttribute("data-scroll-active", "true");
+      const previous = timers.get(element);
+      if (previous) window.clearTimeout(previous);
+      timers.set(element, window.setTimeout(() => {
+        element.removeAttribute("data-scroll-active");
+        timers.delete(element);
+      }, 900));
+    };
+    window.addEventListener("scroll", () => reveal(document.documentElement), { passive: true });
+    document.addEventListener("scroll", (event) => {
+      if (event.target instanceof Element && event.target.matches(".next-docs__sidebar, .next-docs__outline, [data-docs-search-panel]")) {
+        reveal(event.target);
+      }
+    }, { capture: true, passive: true });
+  };
+
+  setupOutline();
+  setupAutoHideScrollbars();
+  document.addEventListener("astro:page-load", setupOutline);
+
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {

@@ -78,6 +78,8 @@ const sourceContracts = [
   ["website-next/src/scripts/css-tags-shadow.ts", "--accent-h: inherit", "example theme inheritance"],
   ["website-next/src/layouts/NextDocsLayout.astro", "ClientRouter", "Astro client routing"],
   ["website-next/src/layouts/NextDocsLayout.astro", "serviceWorker.register", "documentation offline cache"],
+  ["website-next/src/layouts/NextDocsLayout.astro", 'aria-current", "location', "active outline location"],
+  ["website-next/src/layouts/NextDocsLayout.astro", "data-scroll-active", "auto-hiding documentation scrollbars"],
   ["website-next/src/scripts/theme-editor.ts", "@layer css-tags-theme", "layered theme export"],
   ["website-next/src/scripts/theme-editor.ts", "data-theme", "named theme export"],
 ];
