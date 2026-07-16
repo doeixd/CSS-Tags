@@ -13,7 +13,7 @@
   --font-size-h1: clamp(2.25rem, 4vw, 3rem);
   --font-size-h2: clamp(1.75rem, 3vw, 2.25rem);
   --font-size-h3: clamp(1.35rem, 2vw, 1.65rem);
-  --measure-heading: 26ch;
+  --measure-heading: 36ch;
   --site-header-background: var(--base);
   --site-footer-background: var(--base);
   --docs-safe-max-width: 96rem;
@@ -649,6 +649,7 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 
 .example-workbench card-header h2 {
   margin: 0;
+  max-inline-size: min(40ch, 100%);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-tight);
 }
@@ -688,13 +689,51 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   background-size: 1rem 1rem;
 }
 
-/* Build-time highlighted source needs bounded scrolling inside the docs column. */
+/* Build-time highlighted source stays formatted and scrolls only when a line
+   genuinely exceeds the available docs column. */
+.example-workbench__source {
+  overflow: hidden;
+  border: 1px solid var(--outline-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.example-workbench__source + .example-workbench__source {
+  margin-block-start: var(--space-sm);
+}
+
+.example-workbench__source-toolbar {
+  display: flex;
+  min-block-size: 2.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-block-end: 1px solid var(--outline-subtle);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.example-workbench__source-toolbar button {
+  min-block-size: 2rem;
+  padding: var(--space-2xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 .example-workbench__code {
   max-inline-size: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .example-workbench__code pre {
+  inline-size: max-content;
+  min-inline-size: 100%;
   max-inline-size: none;
   margin: 0;
   overflow: visible;
@@ -706,9 +745,11 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 
 .example-workbench__code pre > code {
   display: block;
-  min-inline-size: max-content;
   padding: var(--space-md);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
   tab-size: 2;
+  white-space: pre;
 }
 
 /* Variable controls are documentation tooling, arranged with native form elements. */

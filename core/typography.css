@@ -158,8 +158,9 @@
   min-inline-size: 100%;
   max-inline-size: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  scrollbar-gutter: var(--prose-table-scrollbar-gutter, stable);
+  scrollbar-gutter: var(--prose-table-scrollbar-gutter, auto);
   scrollbar-width: var(--prose-table-scrollbar-width, thin);
 }
 

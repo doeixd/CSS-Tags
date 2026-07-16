@@ -26,6 +26,8 @@ export interface ExampleDefinition {
   description?: string;
   markup: string;
   markupSource?: string;
+  markupLanguage?: string;
+  markupLabel?: string;
   css?: string;
   variables?: CssVariableControl[];
   canvas?: "default" | "transparent" | "viewport";

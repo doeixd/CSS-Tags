@@ -11,9 +11,9 @@
   inline-size: 100%;
   max-width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   border-radius: var(--table-radius, var(--radius-md, 0.5rem));
   overscroll-behavior-inline: contain;
-  scrollbar-gutter: stable;
 }
 
 :is(table[data-table], table.data-table, data-table > table) {
@@ -88,6 +88,7 @@
     display: block;
     max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
     overscroll-behavior-inline: contain;
   }
 

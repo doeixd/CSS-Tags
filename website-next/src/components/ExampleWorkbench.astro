@@ -11,6 +11,8 @@ const {
   description,
   markup,
   markupSource,
+  markupLanguage = "html",
+  markupLabel = "HTML",
   css,
   variables = [],
   canvas = "default",
@@ -43,7 +45,6 @@ const codePanelId = `${id}-code-panel`;
       </div>
       <layout-cluster gap="var(--space-xs)">
         <button type="button" data-workbench-reset>Reset preview</button>
-        <button type="button" class="form-button btn-primary" data-workbench-copy>Copy HTML</button>
       </layout-cluster>
     </layout-cluster>
   </card-header>
@@ -92,12 +93,24 @@ const codePanelId = `${id}-code-panel`;
       data-workbench-code-panel
       hidden
     >
-      <div class="example-workbench__code" data-workbench-source="html">
-        <Code code={displayedMarkup} lang="html" theme="github-dark" />
+      <div class="example-workbench__source">
+        <div class="example-workbench__source-toolbar">
+          <span>{markupLabel}</span>
+          <button type="button" data-workbench-copy="markup">Copy {markupLabel}</button>
+        </div>
+        <div class="example-workbench__code" data-workbench-source="markup">
+          <Code code={displayedMarkup} lang={markupLanguage} theme="github-dark" />
+        </div>
       </div>
       {css && (
-        <div class="example-workbench__code" data-workbench-source="css">
-          <Code code={css.trim()} lang="css" theme="github-dark" />
+        <div class="example-workbench__source">
+          <div class="example-workbench__source-toolbar">
+            <span>CSS</span>
+            <button type="button" data-workbench-copy="css">Copy CSS</button>
+          </div>
+          <div class="example-workbench__code" data-workbench-source="css">
+            <Code code={css.trim()} lang="css" theme="github-dark" />
+          </div>
         </div>
       )}
     </section>
@@ -121,7 +134,7 @@ const codePanelId = `${id}-code-panel`;
       const tabs = Array.from(workbench.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
       const panels = Array.from(workbench.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
       const status = workbench.querySelector<HTMLElement>("[data-workbench-status]");
-      const copyButton = workbench.querySelector<HTMLButtonElement>("[data-workbench-copy]");
+      const copyButtons = Array.from(workbench.querySelectorAll<HTMLButtonElement>("[data-workbench-copy]"));
       const resetButton = workbench.querySelector<HTMLButtonElement>("[data-workbench-reset]");
       const template = workbench.querySelector<HTMLTemplateElement>("[data-workbench-template]");
 
@@ -151,18 +164,19 @@ const codePanelId = `${id}-code-panel`;
         });
       });
 
-      copyButton?.addEventListener("click", async () => {
-        const source = workbench.querySelector<HTMLElement>('[data-workbench-source="html"] code');
+      copyButtons.forEach((copyButton) => copyButton.addEventListener("click", async () => {
+        const sourceName = copyButton.dataset.workbenchCopy ?? "markup";
+        const source = workbench.querySelector<HTMLElement>(`[data-workbench-source="${sourceName}"] code`);
         const value = source?.textContent ?? "";
         try {
           await copyText(value);
-          if (status) status.textContent = "Copied HTML source.";
+          if (status) status.textContent = `Copied ${copyButton.textContent?.replace(/^Copy\s+/, "") ?? "source"}.`;
         } catch {
           if (status) status.textContent = "Copy unavailable. Select the source manually.";
         } finally {
           copyButton.focus();
         }
-      });
+      }));
 
       resetButton?.addEventListener("click", () => {
         const current = workbench.querySelector<HTMLElement>("[data-workbench-preview]");

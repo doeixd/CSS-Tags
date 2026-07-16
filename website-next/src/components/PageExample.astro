@@ -10,6 +10,20 @@ interface Props {
 const { currentPath, pageTitle } = Astro.props;
 const example = getPageExample(currentPath, pageTitle);
 const id = `page-example-${(currentPath || "home").replace(/[^a-z0-9]+/gi, "-")}`;
+
+function inferSourceLanguage(source: string) {
+    const trimmed = source.trim();
+    if (trimmed.startsWith("---")) return { language: "astro", label: "Astro" };
+    if (/^(?:\/\/|interface\b|type\b|const\b|export\b)/.test(trimmed) && /(?:CSSTags|<[A-Z]|:\s*[A-Z]\w*)/.test(trimmed)) {
+        return { language: "tsx", label: "TypeScript" };
+    }
+    if (!trimmed.startsWith("<") && trimmed.includes("{") && trimmed.includes("}")) {
+        return { language: "css", label: "CSS" };
+    }
+    return { language: "html", label: "HTML" };
+}
+
+const sourceType = inferSourceLanguage(example.code);
 ---
 
 <section aria-label="Quick example">
@@ -18,6 +32,9 @@ const id = `page-example-${(currentPath || "home").replace(/[^a-z0-9]+/gi, "-")}
         title={example.title}
         description={example.description}
         markup={example.preview}
+        markupSource={example.code}
+        markupLanguage={sourceType.language}
+        markupLabel={sourceType.label}
     />
 </section>
 
