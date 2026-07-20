@@ -22,9 +22,9 @@ const base = normalizeBase(import.meta.env.BASE_URL);
               .map((item) => (
                 <li>
                   <a
-                    href={buildHref(base, item.slug)}
+                    href={`${buildHref(base, item.slug)}${item.hash ? `#${item.hash}` : ""}`}
                     data-astro-prefetch="hover"
-                    aria-current={item.slug === currentPath ? "page" : undefined}
+                    aria-current={!item.hash && item.slug === currentPath ? "page" : undefined}
                   >
                     {item.label}
                   </a>
@@ -42,6 +42,8 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 </nav>
 
 <script>
+  let sidebarScrollPosition: number | null = null;
+
   function revealCurrentNavigationItem() {
     const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
     const current = sidebar?.querySelector<HTMLElement>('[aria-current="page"]');
@@ -55,6 +57,25 @@ const base = normalizeBase(import.meta.env.BASE_URL);
     });
   }
 
+  function saveSidebarScrollPosition() {
+    const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
+    if (sidebar) sidebarScrollPosition = sidebar.scrollTop;
+  }
+
+  function restoreSidebarScrollPosition() {
+    if (sidebarScrollPosition === null) return;
+    const savedPosition = sidebarScrollPosition;
+
+    requestAnimationFrame(() => {
+      const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
+      if (sidebar) sidebar.scrollTop = savedPosition;
+      sidebarScrollPosition = null;
+    });
+  }
+
+  // On a direct visit, place the current page within view. During client-side
+  // navigation, preserve the reader's exact position instead of re-centering it.
   revealCurrentNavigationItem();
-  document.addEventListener("astro:page-load", revealCurrentNavigationItem);
+  document.addEventListener("astro:before-swap", saveSidebarScrollPosition);
+  document.addEventListener("astro:after-swap", restoreSidebarScrollPosition);
 </script>

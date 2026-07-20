@@ -4,9 +4,9 @@
  */
 
 :is(badge, [data-badge], .badge) {
-  --_badge-background: var(--badge-background, var(--surface-overt));
-  --_badge-color: var(--badge-color, var(--text-on-surface-overt, var(--text-default)));
-  --_badge-border-color: var(--badge-border-color, var(--outline-overt));
+  --_badge-background: var(--badge-background, var(--badge-background-overt, var(--surface-overt)));
+  --_badge-color: var(--badge-color, var(--badge-color-overt, var(--text-overt, var(--text-default))));
+  --_badge-border-color: var(--badge-border-color, var(--badge-border-overt, var(--outline-overt)));
   --_badge-border-width: var(--badge-border-width, var(--border-width, 1px));
   --_badge-radius: var(--badge-radius, var(--radius-full, var(--border-radius-full, 9999px)));
   --_badge-padding-inline: var(--badge-padding-inline, 0.55em);
@@ -59,34 +59,34 @@
 }
 
 :is(badge, [data-badge], .badge):is([variant="subtle"], [data-variant="subtle"], .badge-subtle) {
-  --_badge-background: var(--surface-subtle);
-  --_badge-color: var(--text-on-surface-subtle, var(--text-default));
-  --_badge-border-color: var(--outline-subtle);
+  --_badge-background: var(--badge-background-subtle, var(--surface-subtle));
+  --_badge-color: var(--badge-color-subtle, var(--text-subtle, var(--text-default)));
+  --_badge-border-color: var(--badge-border-subtle, var(--outline-subtle));
 }
 
 :is(badge, [data-badge], .badge):is([variant="default"], [data-variant="default"], .badge-default) {
-  --_badge-background: var(--surface-default);
-  --_badge-color: var(--text-on-surface, var(--text-default));
-  --_badge-border-color: var(--outline-default);
+  --_badge-background: var(--badge-background-default, var(--surface-default));
+  --_badge-color: var(--badge-color-default, var(--text-default));
+  --_badge-border-color: var(--badge-border-default, var(--outline-default));
 }
 
 :is(badge, [data-badge], .badge):is([variant="muted"], [data-variant="muted"], .badge-muted) {
-  --_badge-background: var(--surface-muted);
-  --_badge-color: var(--text-on-surface-muted, var(--text-default));
-  --_badge-border-color: var(--outline-subtle);
+  --_badge-background: var(--badge-background-muted, var(--surface-muted));
+  --_badge-color: var(--badge-color-muted, var(--text-muted, var(--text-default)));
+  --_badge-border-color: var(--badge-border-muted, var(--outline-subtle));
 }
 
 :is(badge, [data-badge], .badge):is([variant="overt"], [data-variant="overt"], .badge-overt) {
-  --_badge-background: var(--surface-overt);
-  --_badge-color: var(--text-on-surface-overt, var(--text-default));
-  --_badge-border-color: var(--outline-overt);
+  --_badge-background: var(--badge-background-overt, var(--surface-overt));
+  --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default)));
+  --_badge-border-color: var(--badge-border-overt, var(--outline-overt));
 }
 
 /* Deprecated compatibility: use `variant`; `role` must describe accessibility. */
-:is(badge, [data-badge], .badge)[role="subtle"] { --_badge-background: var(--surface-subtle); --_badge-color: var(--text-on-surface-subtle, var(--text-default)); --_badge-border-color: var(--outline-subtle); }
-:is(badge, [data-badge], .badge)[role="default"] { --_badge-background: var(--surface-default); --_badge-color: var(--text-on-surface, var(--text-default)); --_badge-border-color: var(--outline-default); }
-:is(badge, [data-badge], .badge)[role="muted"] { --_badge-background: var(--surface-muted); --_badge-color: var(--text-on-surface-muted, var(--text-default)); --_badge-border-color: var(--outline-subtle); }
-:is(badge, [data-badge], .badge)[role="overt"] { --_badge-background: var(--surface-overt); --_badge-color: var(--text-on-surface-overt, var(--text-default)); --_badge-border-color: var(--outline-overt); }
+:is(badge, [data-badge], .badge)[role="subtle"] { --_badge-background: var(--badge-background-subtle, var(--surface-subtle)); --_badge-color: var(--badge-color-subtle, var(--text-subtle, var(--text-default))); --_badge-border-color: var(--badge-border-subtle, var(--outline-subtle)); }
+:is(badge, [data-badge], .badge)[role="default"] { --_badge-background: var(--badge-background-default, var(--surface-default)); --_badge-color: var(--badge-color-default, var(--text-default)); --_badge-border-color: var(--badge-border-default, var(--outline-default)); }
+:is(badge, [data-badge], .badge)[role="muted"] { --_badge-background: var(--badge-background-muted, var(--surface-muted)); --_badge-color: var(--badge-color-muted, var(--text-muted, var(--text-default))); --_badge-border-color: var(--badge-border-muted, var(--outline-subtle)); }
+:is(badge, [data-badge], .badge)[role="overt"] { --_badge-background: var(--badge-background-overt, var(--surface-overt)); --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default))); --_badge-border-color: var(--badge-border-overt, var(--outline-overt)); }
 
 :is(badge, [data-badge], .badge):is([status="success"], [data-status="success"], .badge-success) {
   --_badge-background: var(--surface-success);
@@ -119,7 +119,7 @@
 }
 
 :is(badge, [data-badge], .badge):is([status="overt"], [data-status="overt"], .badge-status-overt) {
-  --_badge-background: var(--surface-overt);
-  --_badge-color: var(--text-on-surface-overt, var(--text-default));
-  --_badge-border-color: var(--outline-overt);
+  --_badge-background: var(--badge-background-overt, var(--surface-overt));
+  --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default)));
+  --_badge-border-color: var(--badge-border-overt, var(--outline-overt));
 }

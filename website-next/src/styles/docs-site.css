@@ -700,7 +700,48 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   min-block-size: 12rem;
   padding: clamp(var(--space-md), 4cqi, var(--space-xl));
   overflow: auto;
-  background: var(--surface-muted);
+  background: transparent;
+}
+
+.example-workbench__viewport {
+  position: relative;
+  inline-size: 100%;
+  min-inline-size: min(15rem, 100%);
+  max-inline-size: 100%;
+}
+
+.example-workbench__resize-handle {
+  position: absolute;
+  z-index: 2;
+  inset-block: 0;
+  inset-inline-end: -0.5rem;
+  display: grid;
+  inline-size: 1rem;
+  min-block-size: 3rem;
+  place-items: center;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.example-workbench__resize-handle > span {
+  inline-size: 0.2rem;
+  block-size: min(3rem, 55%);
+  border-radius: var(--radius-full);
+  background: var(--outline-default);
+}
+
+.example-workbench__resize-handle:is(:hover, :focus-visible) > span {
+  background: var(--accent);
+}
+
+.example-workbench__resize-handle:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+html[data-workbench-resizing="true"] {
+  cursor: ew-resize;
+  user-select: none;
 }
 
 .example-workbench[data-canvas="transparent"] .example-workbench__canvas {

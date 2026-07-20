@@ -193,10 +193,15 @@ declare global {
       columns?: CSSValue;
       rows?: CSSValue;
       areas?: CSSValue;
+      "auto-columns"?: CSSValue;
+      "auto-rows"?: CSSValue;
+      "auto-flow"?: CSSValue;
       lanes?: string | number;
       "flow-tolerance"?: CSSValue;
       "justify-items"?: CSSValue;
       "align-items"?: CSSValue;
+      "justify-content"?: CSSValue;
+      "align-content"?: CSSValue;
       "col-rule-width"?: CSSValue;
       "col-rule-style"?: CSSValue;
       "col-rule-color"?: CSSValue;

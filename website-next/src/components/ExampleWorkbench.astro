@@ -80,9 +80,24 @@ const codePanelId = `${id}-code-panel`;
       data-workbench-preview-panel
     >
       <div class="example-workbench__canvas">
-        <css-tags-example data-workbench-preview>
-          <Fragment set:html={markup} />
-        </css-tags-example>
+        <div class="example-workbench__viewport" data-workbench-viewport>
+          <css-tags-example data-workbench-preview>
+            <Fragment set:html={markup} />
+          </css-tags-example>
+          <div
+            class="example-workbench__resize-handle"
+            data-workbench-resize-handle
+            role="separator"
+            aria-label={`Resize ${title} preview`}
+            aria-orientation="vertical"
+            aria-valuemin="25"
+            aria-valuemax="100"
+            aria-valuenow="100"
+            aria-valuetext="Full width"
+            tabindex="0"
+            title="Drag to resize the preview; use arrow keys for precise control"
+          ><span aria-hidden="true"></span></div>
+        </div>
       </div>
     </section>
 
@@ -118,7 +133,7 @@ const codePanelId = `${id}-code-panel`;
     {variables.length > 0 && <CssVariableEditor exampleId={id} variables={variables} />}
 
     <template data-workbench-template set:html={markup}></template>
-    <span class="caption" data-workbench-status aria-live="polite">Ready.</span>
+    <span class="caption" data-workbench-status aria-live="polite"></span>
   </card-body>
 </card>
 
@@ -137,6 +152,77 @@ const codePanelId = `${id}-code-panel`;
       const copyButtons = Array.from(workbench.querySelectorAll<HTMLButtonElement>("[data-workbench-copy]"));
       const resetButton = workbench.querySelector<HTMLButtonElement>("[data-workbench-reset]");
       const template = workbench.querySelector<HTMLTemplateElement>("[data-workbench-template]");
+      const canvas = workbench.querySelector<HTMLElement>(".example-workbench__canvas");
+      const viewport = workbench.querySelector<HTMLElement>("[data-workbench-viewport]");
+      const resizeHandle = workbench.querySelector<HTMLElement>("[data-workbench-resize-handle]");
+
+      const availableWidth = () => {
+        if (!canvas) return 0;
+        const style = getComputedStyle(canvas);
+        return Math.max(0, canvas.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd));
+      };
+
+      const syncResizeState = () => {
+        if (!viewport || !resizeHandle) return;
+        const maximum = availableWidth();
+        const percentage = maximum > 0
+          ? Math.round((viewport.getBoundingClientRect().width / maximum) * 100)
+          : 100;
+        const clampedPercentage = Math.min(100, Math.max(25, percentage));
+        resizeHandle.setAttribute("aria-valuenow", String(clampedPercentage));
+        resizeHandle.setAttribute("aria-valuetext", clampedPercentage >= 100 ? "Full width" : `${clampedPercentage}% width`);
+      };
+
+      const setPreviewWidth = (requestedWidth: number) => {
+        if (!viewport) return;
+        const maximum = availableWidth();
+        const minimum = Math.min(240, maximum);
+        const width = Math.min(maximum, Math.max(minimum, requestedWidth));
+        if (width >= maximum - 1) viewport.style.removeProperty("inline-size");
+        else viewport.style.inlineSize = `${Math.round(width)}px`;
+        syncResizeState();
+      };
+
+      if (viewport && resizeHandle && canvas) {
+        resizeHandle.addEventListener("pointerdown", (event) => {
+          if (event.button !== 0) return;
+          event.preventDefault();
+          const startX = event.clientX;
+          const startWidth = viewport.getBoundingClientRect().width;
+          const direction = getComputedStyle(viewport).direction === "rtl" ? -1 : 1;
+          resizeHandle.setPointerCapture(event.pointerId);
+          document.documentElement.dataset.workbenchResizing = "true";
+
+          const move = (moveEvent: PointerEvent) => {
+            setPreviewWidth(startWidth + ((moveEvent.clientX - startX) * direction));
+          };
+          const finish = () => {
+            document.documentElement.removeAttribute("data-workbench-resizing");
+            resizeHandle.removeEventListener("pointermove", move);
+            resizeHandle.removeEventListener("pointerup", finish);
+            resizeHandle.removeEventListener("pointercancel", finish);
+          };
+
+          resizeHandle.addEventListener("pointermove", move);
+          resizeHandle.addEventListener("pointerup", finish);
+          resizeHandle.addEventListener("pointercancel", finish);
+        });
+
+        resizeHandle.addEventListener("keydown", (event) => {
+          const currentWidth = viewport.getBoundingClientRect().width;
+          let nextWidth = currentWidth;
+          if (event.key === "ArrowLeft" || event.key === "ArrowDown") nextWidth -= 24;
+          else if (event.key === "ArrowRight" || event.key === "ArrowUp") nextWidth += 24;
+          else if (event.key === "Home") nextWidth = 0;
+          else if (event.key === "End") nextWidth = availableWidth();
+          else return;
+          event.preventDefault();
+          setPreviewWidth(nextWidth);
+        });
+
+        resizeHandle.addEventListener("dblclick", () => setPreviewWidth(availableWidth()));
+        syncResizeState();
+      }
 
       const selectTab = (nextTab: HTMLButtonElement, focus = false) => {
         tabs.forEach((tab) => {
@@ -185,6 +271,8 @@ const codePanelId = `${id}-code-panel`;
         replacement.dataset.workbenchPreview = "";
         replacement.append(template.content.cloneNode(true));
         current.replaceWith(replacement);
+        viewport?.style.removeProperty("inline-size");
+        syncResizeState();
         workbench.dispatchEvent(new CustomEvent("workbench:preview-reset"));
         if (status) status.textContent = "Preview reset.";
         resetButton.focus();

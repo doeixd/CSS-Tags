@@ -67,6 +67,42 @@ function inferSourceLanguage(source: string) {
 const sourceType = inferSourceLanguage(example.code);
 const compactMarkup = scopeMarkup(example.preview, "compact");
 const themedMarkup = scopeMarkup(example.preview, "themed");
+const additionalExamples = example.additionalExamples
+    ? example.additionalExamples.map((additional, index) => {
+        const source = inferSourceLanguage(additional.code);
+        return {
+            id: `${id}-additional-${index + 1}`,
+            title: additional.title,
+            description: additional.description,
+            markup: scopeMarkup(additional.preview, `additional-${index + 1}`),
+            markupSource: additional.code,
+            markupLanguage: source.language,
+            markupLabel: source.label,
+            compact: additional.compact ?? false,
+        };
+    })
+    : [
+        {
+            id: `${id}-compact`,
+            title: "Compact composition",
+            description: "Lower the density input for a tighter application surface without rewriting component spacing.",
+            markup: `<div style="--density-factor: 0.72">${compactMarkup}</div>`,
+            markupSource: wrapSource('<div style="--density-factor: 0.72">', compactMarkup),
+            markupLanguage: "html",
+            markupLabel: "HTML",
+            compact: true,
+        },
+        {
+            id: `${id}-themed`,
+            title: "Locally themed composition",
+            description: "Theme variables inherit through the example subtree while its markup and semantics stay unchanged.",
+            markup: `<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">${themedMarkup}</section>`,
+            markupSource: wrapSource('<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">', themedMarkup),
+            markupLanguage: "html",
+            markupLabel: "HTML",
+            compact: true,
+        },
+    ];
 ---
 
 <section aria-label="Quick example">
@@ -81,29 +117,22 @@ const themedMarkup = scopeMarkup(example.preview, "themed");
     />
 
     <h2>More examples</h2>
-    <p>These use the same component API under different inherited theme inputs.</p>
+    <p>{example.additionalExamples
+        ? "Each example introduces a different part of the shipped API."
+        : "These use the same component API under different inherited theme inputs."}</p>
 
-    <ExampleWorkbench
-        id={`${id}-compact`}
-        title="Compact composition"
-        description="Lower the density input for a tighter application surface without rewriting component spacing."
-        markup={`<div style="--density-factor: 0.72">${compactMarkup}</div>`}
-        markupSource={wrapSource('<div style="--density-factor: 0.72">', compactMarkup)}
-        markupLanguage="html"
-        markupLabel="HTML"
-        compact
-    />
-
-    <ExampleWorkbench
-        id={`${id}-themed`}
-        title="Locally themed composition"
-        description="Theme variables inherit through the example subtree while its markup and semantics stay unchanged."
-        markup={`<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">${themedMarkup}</section>`}
-        markupSource={wrapSource('<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">', themedMarkup)}
-        markupLanguage="html"
-        markupLabel="HTML"
-        compact
-    />
+    {additionalExamples.map((additional) => (
+        <ExampleWorkbench
+            id={additional.id}
+            title={additional.title}
+            description={additional.description}
+            markup={additional.markup}
+            markupSource={additional.markupSource}
+            markupLanguage={additional.markupLanguage}
+            markupLabel={additional.markupLabel}
+            compact={additional.compact}
+        />
+    ))}
 </section>
 
 <script>

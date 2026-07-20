@@ -3,6 +3,13 @@ export interface PageExampleDefinition {
     description: string;
     preview: string;
     code: string;
+    additionalExamples?: Array<{
+        title: string;
+        description: string;
+        preview: string;
+        code: string;
+        compact?: boolean;
+    }>;
 }
 
 const panel = (content: string) => `<div class="example-panel">${content}</div>`;
@@ -148,6 +155,12 @@ const examples: Record<string, PageExampleDefinition> = {
         description: "CSS Tags styles semantic structures directly while keeping class and data hosts available.",
         preview: `<card><card-body><layout-stack><span eyebrow>Getting started</span><h3>Describe the interface</h3><p class="example-muted">The markup says what each region is, and the theme supplies its visual language.</p><layout-cluster><badge status="success">Ready</badge><button class="form-button btn-primary" type="button">Continue</button></layout-cluster></layout-stack></card-body></card>`,
         code: `<card>\n  <card-body>\n    <span eyebrow>Getting started</span>\n    <h2>Describe the interface</h2>\n    <p>The theme supplies its visual language.</p>\n    <badge status="success">Ready</badge>\n    <button class="form-button btn-primary">Continue</button>\n  </card-body>\n</card>`,
+        additionalExamples: [{
+            title: "Native HTML belongs to the system",
+            description: "Labels, controls, fieldsets, and buttons receive coherent defaults without a component wrapper.",
+            preview: `<form><layout-stack gap="var(--space-md)"><fieldset><legend>Project settings</legend><layout-stack gap="var(--space-sm)"><label>Project name <input name="project" value="Northstar" /></label><label>Visibility <select name="visibility"><option>Private</option><option>Public</option></select></label></layout-stack></fieldset><button type="button" class="stack-intrinsic">Save settings</button></layout-stack></form>`,
+            code: `<form>\n  <fieldset>\n    <legend>Project settings</legend>\n    <label>\n      Project name\n      <input name="project" value="Northstar">\n    </label>\n    <label>\n      Visibility\n      <select name="visibility">\n        <option>Private</option>\n        <option>Public</option>\n      </select>\n    </label>\n  </fieldset>\n  <button type="submit">Save settings</button>\n</form>`,
+        }],
     },
     "guides/philosophy": {
         title: "Three hosts, one public primitive",

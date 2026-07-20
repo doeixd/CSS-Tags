@@ -30,7 +30,6 @@ const {
     .live-example {
         --example-border: var(--outline-subtle, var(--border-color, #d8dee4));
         --example-surface: var(--surface-default, var(--bg-primary, #fff));
-        --example-canvas: var(--surface-subtle, var(--bg-secondary, #f6f8fa));
 
         margin: 1rem 0 0.75rem;
         overflow: clip;
@@ -63,9 +62,7 @@ const {
         display: block;
         container: live-example / inline-size;
         padding: clamp(0.75rem, 2.5cqi, 1.25rem);
-        background:
-            linear-gradient(var(--example-canvas), var(--example-canvas)) padding-box,
-            var(--example-canvas);
+        background: transparent;
     }
 
     .live-example--compact .live-example__stage {

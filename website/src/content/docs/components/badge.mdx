@@ -29,23 +29,33 @@ Use badges for short, read-only metadata. A badge should support nearby content,
 
 Status colors are visual reinforcement. Keep the status word in the badge so meaning is not communicated by color alone.
 
-## Size and emphasis
+## Surface variants
 
-<LiveExample title="Size and surface variants" compact>
+<LiveExample title="Semantic surface variants" compact>
   <layout-cluster gap="var(--space-sm)" align="center">
-    <badge size="sm" variant="subtle">Small</badge>
-    <badge size="md" variant="default">Medium</badge>
-    <badge size="lg" variant="overt">Large</badge>
     <badge variant="muted">Muted</badge>
+    <span data-badge data-variant="subtle">Subtle</span>
+    <span class="badge badge-default">Default</span>
+    <badge variant="overt">Overt</badge>
   </layout-cluster>
 </LiveExample>
 
 ```html
-<badge size="sm" variant="subtle">Small</badge>
-<badge size="md" variant="default">Medium</badge>
-<badge size="lg" variant="overt">Large</badge>
 <badge variant="muted">Muted</badge>
+<span data-badge data-variant="subtle">Subtle</span>
+<span class="badge badge-default">Default</span>
+<badge variant="overt">Overt</badge>
 ```
+
+## Sizes
+
+<LiveExample title="Badge sizes" compact>
+  <layout-cluster gap="var(--space-sm)" align="center">
+    <badge size="sm" variant="subtle">Small</badge>
+    <badge size="md" variant="subtle">Medium</badge>
+    <badge size="lg" variant="subtle">Large</badge>
+  </layout-cluster>
+</LiveExample>
 
 ## Public API
 
@@ -59,6 +69,7 @@ Common customization variables:
 
 - `--badge-background` and `--badge-color`
 - `--badge-border-color` and `--badge-border-width`
+- `--badge-background-*`, `--badge-color-*`, and `--badge-border-*` for the `muted`, `subtle`, `default`, and `overt` roles
 - `--badge-radius`
 - `--badge-padding-inline` and `--badge-padding-block`
 - `--badge-gap`

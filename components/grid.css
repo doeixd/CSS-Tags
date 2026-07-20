@@ -16,6 +16,11 @@
   --grid-rows:    attr(rows type(*), none);
   --grid-areas:   attr(areas type(*), none);
   --grid-gap:     attr(gap type(*), 1.5rem);
+  --grid-auto-columns: attr(auto-columns type(*), auto);
+  --grid-auto-rows: attr(auto-rows type(*), auto);
+  --grid-auto-flow: attr(auto-flow type(*), row);
+  --grid-justify-content: attr(justify-content type(*), normal);
+  --grid-align-content: attr(align-content type(*), normal);
   --grid-flow-tolerance: attr(flow-tolerance type(*), 1em);
 
   display: grid;
@@ -23,11 +28,16 @@
   grid-template-columns: var(--grid-columns);
   grid-template-rows: var(--grid-rows);
   grid-template-areas: var(--grid-areas);
+  grid-auto-columns: var(--grid-auto-columns);
+  grid-auto-rows: var(--grid-auto-rows);
+  grid-auto-flow: var(--grid-auto-flow);
   gap: var(--grid-gap);
 
   /* --- Grid-wide Item Alignment --- */
   justify-items: attr(justify-items type(*), stretch);
   align-items:   attr(align-items type(*), stretch);
+  justify-content: var(--grid-justify-content);
+  align-content: var(--grid-align-content);
 
   /* --- CSS Gap Decoration Properties (Experimental) --- */
   column-rule-width:  attr(col-rule-width type(*), none);

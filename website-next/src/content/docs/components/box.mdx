@@ -1,0 +1,145 @@
+---
+title: Box
+description: A declarative, token-friendly container for spacing, sizing, appearance, and small layout compositions.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Box is the low-level container primitive. Use it when a semantic element needs a few declarative presentation values and a more specialized component would add the wrong meaning.
+
+## Public hosts
+
+`<box>`, `[data-box]`, and `.box` share the same API. Prefer a semantic native element with `data-box` when the content already has a natural role.
+
+<LiveExample title="Three host forms" description="Each host uses the same attribute contract while retaining its own content and semantic role.">
+  <layout-stack gap="var(--space-sm)">
+    <box p="var(--space-md)" bg="var(--accent)" color="var(--text-on-accent)" radius="var(--radius-md)"><strong>Custom element</strong><br /><small>Concise for neutral layout regions.</small></box>
+    <article data-box p="var(--space-md)" bg="var(--surface-info)" color="var(--text-info)" border="1px solid var(--outline-info)" radius="var(--radius-md)"><strong>Data host</strong><p>A semantic article enhanced as a box.</p></article>
+    <div class="box" p="var(--space-md)" bg="var(--surface-warning)" color="var(--text-warning)" border="1px solid var(--outline-warning)" radius="var(--radius-md)"><strong>Class host</strong><br /><small>Useful in class-oriented templates.</small></div>
+  </layout-stack>
+</LiveExample>
+
+```html
+<box p="var(--space-md)">Custom element</box>
+<article data-box p="var(--space-md)">Semantic data host</article>
+<div class="box" p="var(--space-md)">Class host</div>
+```
+
+## Padding and logical axes
+
+`p` sets both axes. `px` and `py` override the inline and block axes independently, so the same markup remains writing-mode friendly.
+
+<LiveExample title="Padding controls" compact>
+  <grid columns="repeat(auto-fit, minmax(min(100%, 9rem), 1fr))" gap="var(--space-sm)">
+    <box p="var(--space-xs)" border="1px dashed var(--outline-overt)" radius="var(--radius-sm)" align="center">p = xs</box>
+    <box p="var(--space-lg)" border="1px dashed var(--outline-overt)" radius="var(--radius-sm)" align="center">p = lg</box>
+    <box px="var(--space-xl)" py="var(--space-xs)" border="1px dashed var(--outline-overt)" radius="var(--radius-sm)" align="center">wide inline</box>
+  </grid>
+</LiveExample>
+
+## Width, maximum width, and centering
+
+Combine `width`, `max-width`, and logical `mx` margins for a bounded region that remains fluid when the preview narrows.
+
+<LiveExample title="Centered readable notice" description="Drag the preview edge: the notice stays fluid until it reaches its maximum width.">
+  <aside data-box width="calc(100% - var(--space-md))" max-width="32rem" mx="auto" p="var(--space-lg)" bg="var(--surface-subtle)" border="1px solid var(--outline-default)" radius="var(--radius-lg)" align="center">
+    <span eyebrow>Maintenance</span>
+    <h3>Brief interruption tonight</h3>
+    <p>Constrained line length keeps this message readable without a page-level wrapper.</p>
+  </aside>
+</LiveExample>
+
+```html
+<aside data-box width="calc(100% - 1rem)" max-width="32rem" mx="auto">
+  ...
+</aside>
+```
+
+## Horizontal composition
+
+Set `display="flex"` and provide a `gap` for a compact row. Box intentionally exposes only the common display and spacing controls; use the Flex component when you need wrapping or axis alignment.
+
+<LiveExample title="Inline action bar" compact>
+  <nav data-box display="flex" gap="var(--space-sm)" px="var(--space-md)" py="var(--space-sm)" bg="var(--surface-subtle)" border="1px solid var(--outline-subtle)" radius="var(--radius-full)" aria-label="Document actions">
+    <button type="button">Edit</button>
+    <button type="button">Duplicate</button>
+    <button type="button">Archive</button>
+  </nav>
+</LiveExample>
+
+## Vertical composition
+
+Grid display plus a gap creates a simple stack. For richer relationships and full-width child behavior, prefer `layout-stack`.
+
+<LiveExample title="Notification stream">
+  <section class="box" display="grid" gap="var(--space-sm)" p="var(--space-md)" bg="var(--surface-muted)" radius="var(--radius-lg)" aria-label="Recent notifications">
+    <article data-box p="var(--space-sm)" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)"><strong>Build complete</strong><p>Documentation finished without errors.</p></article>
+    <article data-box p="var(--space-sm)" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)"><strong>Review requested</strong><p>Two files are ready for approval.</p></article>
+    <article data-box p="var(--space-sm)" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-md)"><strong>Deploy queued</strong><p>The next release is waiting for its window.</p></article>
+  </section>
+</LiveExample>
+
+## Semantic surfaces
+
+Box accepts full CSS values, including theme tokens. Pair every feedback surface with its matching text and outline tokens.
+
+<LiveExample title="Feedback surfaces" compact>
+  <layout-stack gap="var(--space-sm)">
+    <div data-box px="var(--space-md)" py="var(--space-sm)" bg="var(--surface-success)" color="var(--text-success)" border="1px solid var(--outline-success)" radius="var(--radius-md)"><strong>Success:</strong> changes saved.</div>
+    <div data-box px="var(--space-md)" py="var(--space-sm)" bg="var(--surface-warning)" color="var(--text-warning)" border="1px solid var(--outline-warning)" radius="var(--radius-md)"><strong>Warning:</strong> review required.</div>
+    <div data-box px="var(--space-md)" py="var(--space-sm)" bg="var(--surface-error)" color="var(--text-error)" border="1px solid var(--outline-error)" radius="var(--radius-md)"><strong>Error:</strong> deployment stopped.</div>
+  </layout-stack>
+</LiveExample>
+
+## Fixed and fluid dimensions
+
+`width` and `height` accept functions, percentages, and tokens—not just fixed lengths.
+
+<LiveExample title="Responsive media placeholder" description="The frame has a fixed block size but a fluid inline size.">
+  <box width="min(100%, 38rem)" height="10rem" mx="auto" p="var(--space-md)" bg="linear-gradient(135deg, var(--accent-muted), var(--tertiary-muted))" border="1px solid var(--outline-overt)" radius="var(--radius-xl)" align="center">
+    <strong>min(100%, 38rem) × 10rem</strong>
+  </box>
+</LiveExample>
+
+## Text alignment
+
+The `align` attribute maps to `text-align`. It does not reposition the box itself or control flex/grid alignment.
+
+<LiveExample title="Text alignment roles" compact>
+  <grid columns="repeat(3, 1fr)" gap="var(--space-sm)">
+    <box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-sm)" align="start">Start</box>
+    <box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-sm)" align="center">Center</box>
+    <box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-sm)" align="end">End</box>
+  </grid>
+</LiveExample>
+
+## Complete composition
+
+The primitive is most useful as connective tissue around semantic content, not as a replacement for every specialized component.
+
+<LiveExample title="Account summary pattern">
+  <article data-box display="grid" gap="var(--space-md)" p="var(--space-lg)" bg="var(--surface-default)" border="1px solid var(--outline-default)" radius="var(--radius-xl)" max-width="40rem" mx="auto">
+    <header data-box display="flex" gap="var(--space-sm)"><user-avatar aria-label="Avery Gray">AG</user-avatar><div><strong>Avery Gray</strong><p class="example-muted">Workspace administrator</p></div></header>
+    <hr />
+    <div data-box display="flex" gap="var(--space-lg)"><div><strong>18</strong><br /><small>Projects</small></div><div><strong>7</strong><br /><small>Members</small></div><div><strong>99.9%</strong><br /><small>Uptime</small></div></div>
+    <button type="button">Manage account</button>
+  </article>
+</LiveExample>
+
+## Attribute reference
+
+- Layout: `display`, `gap`
+- Padding: `p`, `px`, `py`
+- Margin: `m`, `mx`, `my`
+- Sizing: `width`, `height`, `max-width`
+- Appearance: `bg`, `color`, `border`, `radius`
+- Typography: `align`
+
+Values are raw CSS values, so tokens, functions, percentages, and logical keywords are valid. Box does not currently implement elevation; use an explicit shadow token in a class when elevation carries meaning.
+
+## Choosing the right primitive
+
+- Use Box for a small number of one-off container values.
+- Use semantic native elements as `[data-box]` hosts whenever possible.
+- Use Flex, Grid, or the layout primitives when the relationship between children is the main concern.
+- Promote repeated Box recipes into a component or semantic token instead of duplicating long attribute lists.

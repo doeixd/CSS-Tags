@@ -9,7 +9,7 @@ The `badge` component provides compact inline labels for status, metadata, relea
 
 - fully rounded corners
 - compact padding and tight line-height
-- automatic contrast text on its resolved background
+- scheme-safe semantic text on its resolved background
 - optional `text-box` enhancement when the browser supports it
 
 Base default:
@@ -69,6 +69,7 @@ Public or externally useful:
 - `--badge-gap`: gap between badge content and any icon
 - `--badge-background` and `--badge-color`: surface and text color
 - `--badge-border-color` and `--badge-border-width`: border styling
+- `--badge-background-*`, `--badge-color-*`, and `--badge-border-*`: per-role tokens for `muted`, `subtle`, `default`, and `overt`
 - `--badge-radius`: pill radius
 - `--badge-padding-inline` and `--badge-padding-block`: spacing
 - `--text-box-badge`: shorthand text-box token

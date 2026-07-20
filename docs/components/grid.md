@@ -29,6 +29,11 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
 ### Spacing
 - `gap`: Gap between grid items (default: `1.5rem`)
 
+### Automatic Placement
+- `auto-flow`: Automatic placement direction and density (default: `row`)
+- `auto-columns`: Size of implicit columns (default: `auto`)
+- `auto-rows`: Size of implicit rows (default: `auto`)
+
 ### Grid Lanes
 - `lanes`: Opt-in boolean attribute for `display: grid-lanes` when supported
 - `flow-tolerance`: Controls how aggressively items change lanes (default: `1em`)
@@ -39,6 +44,8 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
   - Values: `start`, `end`, `center`, `stretch`
 - `align-items`: Default vertical alignment for items (default: `stretch`)
   - Values: `start`, `end`, `center`, `stretch`
+- `justify-content`: Distribution of the grid tracks on the inline axis (default: `normal`)
+- `align-content`: Distribution of the grid tracks on the block axis (default: `normal`)
 
 ### Gap Decorations (Experimental)
 - `col-rule-width`: Width of column gap lines
@@ -58,6 +65,8 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
   - Examples: `1 / 3`, `span 2`, `2`
 - `row`: Grid row position
   - Examples: `1 / -1`, `span 3`, `2 / 4`
+- `col-start` / `col-end`: Longhand column-line placement
+- `row-start` / `row-end`: Longhand row-line placement
 - `col-start`: Grid column start line when `col` is not set
   - Examples: `main-start`, `content-start`, `col-start 4`
 - `col-end`: Grid column end line when `col` is not set
@@ -87,7 +96,7 @@ The `grid` component provides a comprehensive, declarative CSS Grid system with 
 
 ### Named Areas Layout
 ```html
-<grid columns="200px 1fr" rows="auto 1fr auto" areas="'sidebar main' 'sidebar main' 'footer footer'">
+<grid columns="200px 1fr" rows="auto 1fr auto" areas="'header header' 'sidebar main' 'footer footer'">
   <header area="header">Header</header>
   <nav area="sidebar">Navigation</nav>
   <main area="main">Content</main>

@@ -33,6 +33,10 @@
   --_divider-role-color: var(--divider-color-muted, var(--outline-muted));
 }
 
+:is(hr, divider, [data-divider], .divider)[strength="subtle"] {
+  --_divider-role-color: var(--divider-color-subtle, var(--outline-subtle));
+}
+
 :is(hr, divider, [data-divider], .divider)[strength="default"] {
   --_divider-role-color: var(--divider-color-default, var(--outline-default, var(--outline)));
 }

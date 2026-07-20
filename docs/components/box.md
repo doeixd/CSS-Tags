@@ -6,14 +6,15 @@ The `box` component is a versatile utility element that allows declarative contr
 ## Key Features
 - **Attribute-Driven Styling**: Uses HTML attributes to control CSS properties
 - **Logical Properties**: Employs modern CSS logical properties for spacing
-- **Type-Safe Attributes**: Uses `attr()` with type checking and fallbacks
-- **Zero-Specificity**: No class-based styling conflicts
+- **Raw CSS Values**: Attribute values can use tokens, functions, and compound CSS values
+- **Three Host Forms**: Use `<box>`, `[data-box]`, or `.box`
 
 ## Supported Attributes
 
 ### Display & Layout
 - `display`: Sets the display property (default: `block`)
   - Values: `block`, `flex`, `grid`, `inline`, etc.
+- `gap`: Sets spacing between flex or grid children (default: `0`)
 
 ### Spacing (Logical Properties)
 - `p`: Shorthand for padding (default: `0`)
@@ -44,6 +45,9 @@ The `box` component is a versatile utility element that allows declarative contr
 <box p="1rem" bg="var(--surface-subtle)" radius="0.5rem">
   Content
 </box>
+
+<section data-box p="1rem">Semantic host</section>
+<div class="box" p="1rem">Class host</div>
 ```
 
 ### Flex Layout
@@ -70,14 +74,15 @@ The `box` component is a versatile utility element that allows declarative contr
 ## Technical Implementation
 
 ### attr() Function Usage
-The component extensively uses the `attr()` function with type checking:
+The component uses the `attr()` function with open value parsing so compound
+values and `var(...)` expressions remain valid:
 
 ```css
---padding: attr(p type(<length-percentage>), 0);
+--padding: attr(p type(*), 0);
 ```
 
 This provides:
-- **Type Safety**: Ensures attribute values match expected types
+- **CSS Value Support**: Accepts values such as `min(100%, 38rem)` and `var(--space-md)`
 - **Fallbacks**: Default values when attributes are missing
 - **Dynamic Styling**: Properties update automatically when attributes change
 
@@ -102,5 +107,5 @@ The component includes a placeholder for elevation support:
 ## Philosophy
 - **Declarative**: Style through HTML attributes, not CSS classes
 - **Flexible**: Control any CSS property without custom stylesheets
-- **Maintainable**: No specificity conflicts or cascade issues
+- **Maintainable**: A small shared API avoids one-off layout rules
 - **Progressive**: Works with fallbacks in older browsers

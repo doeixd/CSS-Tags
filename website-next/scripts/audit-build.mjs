@@ -23,6 +23,9 @@ const routeForPage = (page) => {
   return `/${relative.replace(/index\.html$/, "")}`;
 };
 const routes = new Set(pages.map(routeForPage));
+const pageHtmlByRoute = new Map(await Promise.all(
+  pages.map(async (page) => [routeForPage(page), await readFile(page, "utf8")]),
+));
 
 if (pages.length < 64) failures.push(`Expected at least 64 routes; found ${pages.length}.`);
 
@@ -98,6 +101,11 @@ const sourceContracts = [
   ["website-next/src/layouts/NextDocsLayout.astro", "data-scroll-active", "auto-hiding documentation scrollbars"],
   ["website-next/src/scripts/theme-editor.ts", "@layer css-tags-theme", "layered theme export"],
   ["website-next/src/scripts/theme-editor.ts", "data-theme", "named theme export"],
+  ["components/divider.css", '[strength="subtle"]', "explicit subtle divider strength"],
+  ["components/identity.css", "> picture > img", "picture avatar image sizing"],
+  ["components/tabs.css", "overflow-y: hidden", "horizontal tablist overflow containment"],
+  ["core/tokens.css", "--badge-background-overt", "distinct semantic badge surfaces"],
+  ["website-next/src/components/ExampleWorkbench.astro", "data-workbench-resize-handle", "resizable example previews"],
 ];
 for (const [file, needle, label] of sourceContracts) {
   const source = await readFile(path.join(libraryRoot, file), "utf8");
@@ -105,8 +113,8 @@ for (const [file, needle, label] of sourceContracts) {
 }
 
 for (const page of pages) {
-  const html = await readFile(page, "utf8");
   const route = routeForPage(page);
+  const html = pageHtmlByRoute.get(route);
   const htmlKilobytes = Buffer.byteLength(html) / 1024;
   if (htmlKilobytes > 300) failures.push(`${route}: HTML payload is ${htmlKilobytes.toFixed(1)} KB; expected at most 300 KB.`);
   if (/http-equiv=["']refresh["']/i.test(html)) continue;
@@ -130,6 +138,13 @@ for (const page of pages) {
   const exampleCount = (html.match(/data-example-workbench/g) ?? []).length;
   if (!html.includes("data-palette-viewer") && exampleCount < 2) {
     failures.push(`${route}: expected at least two rendered examples; found ${exampleCount}.`);
+  }
+  const examplePreviews = Array.from(
+    html.matchAll(/<css-tags-example\b[^>]*>([\s\S]*?)<\/css-tags-example>/g),
+    (match) => match[1].replace(/\s+/g, " ").trim(),
+  );
+  if (examplePreviews.length > 1 && new Set(examplePreviews).size === 1) {
+    failures.push(`${route}: every rendered example has identical preview markup.`);
   }
 
   if (route === "/guides/cms-markdown/") {
@@ -158,19 +173,36 @@ for (const page of pages) {
   }
 
   const brokenLinks = new Set();
+  const brokenFragments = new Set();
   for (const match of activeMarkup.matchAll(/\shref="([^"]+)"/g)) {
     const href = match[1].replaceAll("&amp;", "&");
-    if (/^(?:#|https?:|mailto:|tel:|data:|javascript:)/i.test(href)) continue;
+    if (/^(?:https?:|mailto:|tel:|data:|javascript:)/i.test(href)) continue;
+    /* In-page demo links may intentionally target an embedding application.
+       Cross-page fragments, including sidebar aliases, must resolve here. */
+    if (href.startsWith("#")) continue;
 
-    const resolved = new URL(href, `https://audit.invalid${route}`).pathname;
-    const local = resolved.replace(/^\/CSS-Tags(?=\/|$)/, "") || "/";
+    const resolved = new URL(href, `https://audit.invalid${route}`);
+    const local = resolved.pathname.replace(/^\/CSS-Tags(?=\/|$)/, "") || "/";
     if (/\.[a-z0-9]+$/i.test(local) || local.startsWith("/_astro/") || local.startsWith("/pagefind/")) continue;
 
     const target = local.endsWith("/") ? local : `${local}/`;
     if (!routes.has(target)) brokenLinks.add(href);
+    if (resolved.hash && resolved.hash !== "#" && routes.has(target)) {
+      const targetHtml = pageHtmlByRoute.get(target);
+      if (targetHtml) {
+        const targetMarkup = targetHtml
+          .replace(/<template\b[\s\S]*?<\/template>/gi, "")
+          .replace(/<pre\b[\s\S]*?<\/pre>/gi, "");
+        const fragment = decodeURIComponent(resolved.hash.slice(1));
+        if (!targetMarkup.includes(` id="${fragment}"`)) brokenFragments.add(href);
+      }
+    }
   }
   if (brokenLinks.size) {
     failures.push(`${route}: broken internal links: ${[...brokenLinks].join(", ")}.`);
+  }
+  if (brokenFragments.size) {
+    failures.push(`${route}: broken internal fragments: ${[...brokenFragments].join(", ")}.`);
   }
 }
 

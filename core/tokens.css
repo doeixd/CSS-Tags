@@ -185,6 +185,22 @@
   --shadow-button: none;
   --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
+
+  /* Badge emphasis uses a wider, scheme-safe contrast ramp than the general
+     surface hierarchy so compact labels remain visibly distinct. */
+  --badge-background-muted: color-mix(in oklch, var(--text-default) 5%, var(--base));
+  --badge-background-subtle: color-mix(in oklch, var(--text-default) 10%, var(--base));
+  --badge-background-default: color-mix(in oklch, var(--text-default) 16%, var(--base));
+  --badge-background-overt: color-mix(in oklch, var(--text-default) 28%, var(--base));
+  --badge-color-muted: var(--text-muted);
+  --badge-color-subtle: var(--text-subtle);
+  --badge-color-default: var(--text-default);
+  --badge-color-overt: var(--text-overt);
+  --badge-border-muted: color-mix(in oklch, var(--text-default) 12%, transparent);
+  --badge-border-subtle: color-mix(in oklch, var(--text-default) 20%, transparent);
+  --badge-border-default: color-mix(in oklch, var(--text-default) 30%, transparent);
+  --badge-border-overt: color-mix(in oklch, var(--text-default) 44%, transparent);
+
   --shadow-card: none;
   --card-hover-transform: none;
   --card-hover-shadow: none;
@@ -380,10 +396,13 @@
   --prose-embed-min-height: 18rem;
 
   /* Dividers */
-  --divider-color-muted: var(--outline-muted);
-  --divider-color-subtle: var(--outline-subtle);
-  --divider-color-default: var(--outline-default, var(--outline));
-  --divider-color-overt: var(--outline-overt);
+  /* Use scheme-safe contrast steps instead of adjacent outline roles. A 1px
+     rule needs a wider contrast range for its semantic strengths to remain
+     distinguishable, especially in low-saturation themes. */
+  --divider-color-muted: color-mix(in oklch, var(--text-default) 12%, transparent);
+  --divider-color-subtle: color-mix(in oklch, var(--text-default) 20%, transparent);
+  --divider-color-default: color-mix(in oklch, var(--text-default) 32%, transparent);
+  --divider-color-overt: color-mix(in oklch, var(--text-default) 48%, transparent);
   --divider-color-accent: var(--accent);
   --divider-size: var(--border-width, 1px);
   --divider-style: solid;

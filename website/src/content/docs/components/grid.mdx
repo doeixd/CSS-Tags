@@ -1,0 +1,217 @@
+---
+title: CSS Grid
+description: A visual guide to two-dimensional layout with explicit and implicit tracks, placement, alignment, named areas, responsive grids, and subgrid.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+The grid primitive is a declarative layer over CSS Grid. Use `<grid>`, `[data-grid]`, or `.grid`; each host accepts the same attributes. Unlike Flexbox, Grid coordinates rows and columns together, making it the better choice when content must align in two dimensions.
+
+```html
+<grid columns="1fr 2fr">...</grid>
+<div data-grid columns="1fr 2fr">...</div>
+<section class="grid" columns="1fr 2fr">...</section>
+```
+
+## Grid vocabulary
+
+A grid is made from **tracks** separated by **gaps**. The numbered boundaries around those tracks are **grid lines**. Items can be placed by line number, named line, span, or named area; items without placement instructions enter the auto-placement algorithm.
+
+<LiveExample title="Columns, rows, cells, and gaps" description="This explicit grid has three columns, two rows, and six cells.">
+  <grid columns="repeat(3, 1fr)" rows="repeat(2, 5rem)" gap="var(--space-sm)" style="padding: var(--space-sm); border: 1px dashed var(--outline-overt)"><div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div><div class="example-panel">4</div><div class="example-panel">5</div><div class="example-panel">6</div></grid>
+</LiveExample>
+
+## Defining explicit tracks
+
+### Fixed, intrinsic, and flexible columns
+
+`columns` maps to `grid-template-columns`. Track lists can mix lengths, content-based sizes, and `fr` units.
+
+<LiveExample title="Mixed column sizing" description="The outer tracks fit their jobs while the center track receives the remaining space.">
+  <grid columns="7rem minmax(10rem, 2fr) 1fr" gap="var(--space-sm)"><aside class="example-panel">7rem</aside><main class="example-panel">min 10rem · 2fr</main><aside class="example-panel">1fr</aside></grid>
+</LiveExample>
+
+An `fr` unit receives a share of the free space left after fixed sizes, intrinsic contributions, and gaps have been accounted for.
+
+<LiveExample title="Fractional track ratios" compact>
+  <grid columns="1fr 2fr 1fr" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><div class="example-panel">1fr</div><div class="example-panel">2fr</div><div class="example-panel">1fr</div></grid>
+</LiveExample>
+
+### Explicit rows
+
+`rows` maps to `grid-template-rows`. Items stretch by default, making row sizes easy to compare.
+
+<LiveExample title="Rows with different sizes">
+  <grid columns="repeat(3, 1fr)" rows="3rem 6rem auto" gap="var(--space-xs)"><div class="example-panel" col="1 / -1">3rem row</div><div class="example-panel" col="1 / -1">6rem row</div><div class="example-panel" col="1 / -1">Auto row follows its content.</div></grid>
+</LiveExample>
+
+### Responsive tracks with repeat and minmax
+
+The `auto-fit` and `minmax()` combination creates responsive columns without a page-level media query. The nested `min(100%, …)` keeps the minimum safe in very narrow containers.
+
+<LiveExample title="Auto-fitting card grid" description="Resize the page: cards wrap when another 11rem track no longer fits.">
+  <grid columns="repeat(auto-fit, minmax(min(11rem, 100%), 1fr))" gap="var(--space-sm)"><article class="example-panel"><strong>Analytics</strong><p class="example-muted">Weekly trends</p></article><article class="example-panel"><strong>Orders</strong><p class="example-muted">24 awaiting review</p></article><article class="example-panel"><strong>Customers</strong><p class="example-muted">8 new today</p></article><article class="example-panel"><strong>Inventory</strong><p class="example-muted">3 low-stock items</p></article></grid>
+</LiveExample>
+
+`auto-fill` preserves empty track slots when space remains; `auto-fit` collapses those empty tracks so existing items can expand.
+
+## Named areas
+
+`areas` describes the layout, and each direct child selects a region with `area`. Area names should describe page structure rather than visual position.
+
+<LiveExample title="Named application shell" description="The markup names semantic regions; the template decides their two-dimensional placement.">
+  <grid columns="10rem minmax(0, 1fr)" rows="auto 12rem auto" areas="'header header' 'sidebar main' 'footer footer'" gap="var(--space-sm)"><header class="example-panel" area="header"><strong>Workspace</strong></header><nav class="example-panel" area="sidebar" aria-label="Example"><a href="#">Overview</a><br /><a href="#">Reports</a></nav><main class="example-panel" area="main"><h3>Main content</h3><p class="example-muted">This region takes the flexible column.</p></main><footer class="example-panel" area="footer">Status: all systems operational</footer></grid>
+</LiveExample>
+
+```html
+<div data-grid columns="10rem 1fr" areas="'header header' 'sidebar main' 'footer footer'">
+  <header area="header">...</header>
+  <nav area="sidebar">...</nav>
+  <main area="main">...</main>
+  <footer area="footer">...</footer>
+</div>
+```
+
+## Gaps
+
+`gap` accepts one value for both axes or two values for row and column gaps.
+
+<LiveExample title="Different row and column gaps" compact>
+  <grid columns="repeat(3, 1fr)" gap="var(--space-lg) var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div><div class="example-panel">4</div><div class="example-panel">5</div><div class="example-panel">6</div></grid>
+</LiveExample>
+
+Gap decorations are a progressive enhancement. `col-rule-*` and `row-rule-*` attributes add rules in browsers implementing CSS gap decorations; other browsers retain the grid and its gaps.
+
+## Aligning items inside cells
+
+### Inline-axis alignment
+
+`justify-items` sets the default inline-axis alignment inside every grid area.
+
+<LiveExample title="justify-items values">
+  <layout-grid min-item-size="12rem" gap="var(--space-md)">
+    <section><p class="caption">start</p><grid columns="repeat(2, 1fr)" justify-items="start" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">center</p><grid columns="repeat(2, 1fr)" justify-items="center" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">end</p><grid columns="repeat(2, 1fr)" justify-items="end" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">stretch</p><grid columns="repeat(2, 1fr)" justify-items="stretch" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section>
+  </layout-grid>
+</LiveExample>
+
+### Block-axis alignment
+
+`align-items` sets the default block-axis alignment. The explicit rows provide enough room to make each value visible.
+
+<LiveExample title="align-items values">
+  <layout-grid min-item-size="12rem" gap="var(--space-md)">
+    <section><p class="caption">start</p><grid columns="repeat(2, 1fr)" rows="8rem" align-items="start" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">center</p><grid columns="repeat(2, 1fr)" rows="8rem" align-items="center" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">end</p><grid columns="repeat(2, 1fr)" rows="8rem" align-items="end" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section><section><p class="caption">stretch</p><grid columns="repeat(2, 1fr)" rows="8rem" align-items="stretch" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><span class="example-panel">A</span><span class="example-panel">B</span></grid></section>
+  </layout-grid>
+</LiveExample>
+
+## Aligning the grid inside its container
+
+`justify-content` and `align-content` move or distribute the complete track collection when it is smaller than the grid container. They do not align content inside individual cells.
+
+<LiveExample title="Grid content alignment" description="Both grids use fixed tracks inside a larger stage.">
+  <layout-grid min-item-size="16rem" gap="var(--space-md)">
+    <section><p class="caption">center / center</p><grid columns="repeat(2, 5rem)" rows="repeat(2, 3rem)" justify-content="center" align-content="center" gap="var(--space-xs)" style="min-block-size: 12rem; border: 1px dashed var(--outline-overt)"><div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div><div class="example-panel">4</div></grid></section><section><p class="caption">space-between / end</p><grid columns="repeat(2, 5rem)" rows="repeat(2, 3rem)" justify-content="space-between" align-content="end" gap="var(--space-xs)" style="min-block-size: 12rem; border: 1px dashed var(--outline-overt)"><div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div><div class="example-panel">4</div></grid></section>
+  </layout-grid>
+</LiveExample>
+
+## Placing individual items
+
+### Grid lines and spans
+
+`col` and `row` accept the normal grid placement shorthand: a single line, a start/end pair, or `span`.
+
+<LiveExample title="Line placement and spanning" description="Items can occupy multiple tracks without changing source order.">
+  <grid columns="repeat(4, 1fr)" rows="repeat(3, 4rem)" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><div class="example-panel" col="1 / 3" row="1">columns 1–3</div><div class="example-panel" col="3 / 5" row="1 / 3">2 × 2 area</div><div class="example-panel" col="1" row="2 / 4">two rows</div><div class="example-panel" col="2 / span 2" row="3">span 2</div></grid>
+</LiveExample>
+
+The longhand attributes `col-start`, `col-end`, `row-start`, and `row-end` are useful with named lines or when code constructs one boundary at a time.
+
+<LiveExample title="Named grid lines" compact>
+  <grid columns="[sidebar-start] 9rem [sidebar-end content-start] 1fr [content-end]" gap="var(--space-sm)"><aside class="example-panel" col-start="sidebar-start" col-end="sidebar-end">Sidebar lines</aside><main class="example-panel" col-start="content-start" col-end="content-end">Content lines</main></grid>
+</LiveExample>
+
+### Self alignment
+
+`justify-self` and `align-self` override the container defaults for one item.
+
+<LiveExample title="Per-item alignment overrides">
+  <grid columns="repeat(2, 1fr)" rows="repeat(2, 7rem)" gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><div class="example-panel" justify-self="start" align-self="start">start / start</div><div class="example-panel" justify-self="end" align-self="start">end / start</div><div class="example-panel" justify-self="start" align-self="end">start / end</div><div class="example-panel" justify-self="center" align-self="center">center / center</div></grid>
+</LiveExample>
+
+### Overlapping items
+
+Grid permits multiple items in the same area. DOM order controls painting unless `z-index` says otherwise, so overlap should remain readable and intentional.
+
+<LiveExample title="Layered grid content">
+  <grid columns="1fr" rows="12rem" style="overflow: hidden; border-radius: var(--radius-lg)"><div col="1" row="1" aria-hidden="true" style="background: linear-gradient(135deg, var(--accent-muted), var(--tertiary-muted))"></div><div col="1" row="1" align-self="end" class="example-panel" style="margin: var(--space-md); background: color-mix(in oklch, var(--base) 88%, transparent)"><strong>Quarterly report</strong><p>Layered over the same grid cell.</p></div></grid>
+</LiveExample>
+
+## Automatic placement and implicit tracks
+
+Items without explicit coordinates are placed according to `auto-flow`. Add `dense` to let later, smaller items fill earlier holes; visual order may then differ from source order.
+
+<LiveExample title="Sparse and dense auto-placement" description="The dense grid backfills the opening left by spanning items.">
+  <layout-grid min-item-size="16rem" gap="var(--space-md)">
+    <section><p class="caption">row</p><grid columns="repeat(3, 1fr)" auto-flow="row" auto-rows="3rem" gap="var(--space-xs)"><div class="example-panel" col="span 2">span 2</div><div class="example-panel" col="span 2">span 2</div><div class="example-panel">1</div><div class="example-panel">1</div></grid></section><section><p class="caption">row dense</p><grid columns="repeat(3, 1fr)" auto-flow="row dense" auto-rows="3rem" gap="var(--space-xs)"><div class="example-panel" col="span 2">span 2</div><div class="example-panel" col="span 2">span 2</div><div class="example-panel">1</div><div class="example-panel">1</div></grid></section>
+  </layout-grid>
+</LiveExample>
+
+`auto-rows` and `auto-columns` size tracks created outside the explicit template.
+
+<LiveExample title="Implicit row sizing" compact>
+  <grid columns="repeat(3, 1fr)" auto-rows="minmax(4rem, auto)" gap="var(--space-xs)"><div class="example-panel">Short</div><div class="example-panel">This item has enough content to make its implicit row grow beyond the minimum.</div><div class="example-panel">Short</div><div class="example-panel">A new implicit row</div></grid>
+</LiveExample>
+
+## Subgrid
+
+A direct child with `subgrid` adopts the parent tracks it spans. This lets nested content align with the outer grid instead of inventing slightly different columns.
+
+<LiveExample title="Nested content aligned by subgrid" description="The nested section spans the parent grid and places its children on inherited tracks.">
+  <grid columns="repeat(3, 1fr)" rows="auto auto" gap="var(--space-sm)"><section subgrid col="1 / -1" row="1 / 3"><h3 class="example-panel" col="1" row="1">Starter</h3><h3 class="example-panel" col="2" row="1">Team</h3><h3 class="example-panel" col="3" row="1">Scale</h3><p class="example-panel" col="1" row="2">1 project</p><p class="example-panel" col="2" row="2">20 projects</p><p class="example-panel" col="3" row="2">Unlimited</p></section></grid>
+</LiveExample>
+
+## Practical compositions
+
+<LiveExample title="Responsive dashboard" description="Auto-fit handles card wrapping while explicit placement lets the lead metric span available columns.">
+  <grid columns="repeat(auto-fit, minmax(min(10rem, 100%), 1fr))" auto-rows="minmax(7rem, auto)" gap="var(--space-sm)"><article class="example-panel" col="span 2"><span class="caption">Revenue</span><h3>$84,240</h3><p class="example-muted">Up 12% this month</p></article><article class="example-panel"><span class="caption">Orders</span><h3>1,284</h3></article><article class="example-panel"><span class="caption">Refunds</span><h3>18</h3></article><article class="example-panel" col="span 2"><strong>Recent activity</strong><p class="example-muted">Five deployments completed successfully.</p></article></grid>
+</LiveExample>
+
+<LiveExample title="Progressive masonry lanes" description="Supporting browsers use grid lanes; others retain the useful three-column grid fallback.">
+  <grid columns="repeat(3, 1fr)" lanes="3" flow-tolerance="0.75rem" gap="var(--space-sm)"><article class="example-panel">Short note</article><article class="example-panel">A taller card with more content.<br /><br />Each item remains independently sized.</article><article class="example-panel">Medium card<br />with two lines.</article><article class="example-panel">Another compact note</article><article class="example-panel">A final card with enough content to demonstrate uneven block sizes across the collection.</article></grid>
+</LiveExample>
+
+## API reference
+
+Container attributes:
+
+| Attribute | CSS equivalent | Default |
+| --- | --- | --- |
+| `display` | `display` | `grid` |
+| `columns` | `grid-template-columns` | `none` |
+| `rows` | `grid-template-rows` | `none` |
+| `areas` | `grid-template-areas` | `none` |
+| `gap` | `gap` | `1.5rem` |
+| `auto-flow` | `grid-auto-flow` | `row` |
+| `auto-columns` | `grid-auto-columns` | `auto` |
+| `auto-rows` | `grid-auto-rows` | `auto` |
+| `justify-items` | `justify-items` | `stretch` |
+| `align-items` | `align-items` | `stretch` |
+| `justify-content` | `justify-content` | `normal` |
+| `align-content` | `align-content` | `normal` |
+
+Direct-child attributes:
+
+| Attribute | CSS equivalent | Default |
+| --- | --- | --- |
+| `area` | `grid-area` | `auto` |
+| `col` | `grid-column` | `auto` |
+| `row` | `grid-row` | `auto` |
+| `col-start` / `col-end` | grid column lines | `auto` |
+| `row-start` / `row-end` | grid row lines | `auto` |
+| `justify-self` | `justify-self` | `auto` |
+| `align-self` | `align-self` | `auto` |
+| `subgrid` | inherited parent tracks | off |
+
+Gap decoration attributes are `col-rule-width`, `col-rule-style`, `col-rule-color`, `row-rule-width`, `row-rule-style`, and `row-rule-color`. Experimental masonry-style layout uses `lanes` and `flow-tolerance`, with ordinary Grid as its fallback.
+
+All values accept normal CSS syntax through typed `attr(... type(*))` parsing. The component also exposes hierarchical variables including `--grid-columns`, `--grid-rows`, `--grid-areas`, `--grid-gap`, `--grid-auto-flow`, `--grid-auto-columns`, `--grid-auto-rows`, `--grid-justify-content`, and `--grid-align-content`.

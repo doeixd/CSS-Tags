@@ -1,6 +1,7 @@
 export interface NavItem {
 	label: string;
 	slug?: string;
+	hash?: string;
 	collapsed?: boolean;
 	items?: NavItem[];
 }
@@ -31,7 +32,9 @@ export const navigation: NavItem[] = [
 		label: 'Components',
 		items: [
 			{ label: 'Accessibility', slug: 'components/accessibility' },
+			{ label: 'Actions', slug: 'components/element-patterns', hash: 'icon-buttons-and-switches' },
 			{ label: 'Alert', slug: 'components/alert' },
+			{ label: 'Application Patterns', slug: 'components/element-patterns', hash: 'messages-and-logs' },
 			{ label: 'Badge', slug: 'components/badge' },
 			{ label: 'Box', slug: 'components/box' },
 			{ label: 'Box Extra', slug: 'components/box-extra' },
@@ -46,13 +49,16 @@ export const navigation: NavItem[] = [
 			{ label: 'Element Patterns', slug: 'components/element-patterns' },
 			{ label: 'Flex', slug: 'components/flex' },
 			{ label: 'Form', slug: 'components/form' },
+			{ label: 'Form Patterns', slug: 'components/element-patterns', hash: 'input-group-and-search' },
 			{ label: 'Grid', slug: 'components/grid' },
+			{ label: 'Identity & Avatars', slug: 'components/identity' },
 			{ label: 'Image Container', slug: 'components/img-container' },
 			{ label: 'List', slug: 'components/list' },
 			{ label: 'Loading', slug: 'components/loading' },
 			{ label: 'Masonry', slug: 'components/masonry' },
 			{ label: 'Modal', slug: 'components/modal' },
 			{ label: 'Navigation', slug: 'components/navigation' },
+			{ label: 'Navigation Patterns', slug: 'components/element-patterns', hash: 'toolbar-and-navigation' },
 			{ label: 'Popover', slug: 'components/popover' },
 			{ label: 'Progress and Meter', slug: 'components/status' },
 			{ label: 'Site Header and Footer', slug: 'components/site-shell' },

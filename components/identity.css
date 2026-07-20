@@ -4,11 +4,15 @@
   --_avatar-size: var(--avatar-size, 2.75rem);
 
   position: relative;
+  box-sizing: border-box;
   display: inline-grid;
   place-items: center;
-  flex: 0 0 auto;
+  flex: 0 0 var(--_avatar-size);
   inline-size: var(--_avatar-size);
   block-size: var(--_avatar-size);
+  min-inline-size: var(--_avatar-size);
+  min-block-size: var(--_avatar-size);
+  aspect-ratio: 1;
   overflow: hidden;
   border: var(--avatar-border-width, var(--border-width, 1px)) solid
     var(--avatar-border-color, var(--outline-subtle));
@@ -26,6 +30,13 @@
   position: absolute;
   z-index: 1;
   inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+:is(user-avatar, [data-avatar], .avatar) > img,
+:is(user-avatar, [data-avatar], .avatar) > picture > img {
+  display: block;
   inline-size: 100%;
   block-size: 100%;
   object-fit: var(--avatar-image-fit, cover);
@@ -56,4 +67,3 @@
   box-shadow: 0 0 0 var(--avatar-group-ring-width, 2px)
     var(--avatar-group-ring-color, var(--surface-default));
 }
-
