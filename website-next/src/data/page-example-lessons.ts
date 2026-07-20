@@ -260,7 +260,7 @@ export const supplementalExamples: Record<string, PageExampleLesson[]> = {
     "components/card": [{
         title: "Adaptive cards respond to their container",
         description: "Resize the preview: media moves beside the body when the card container reaches its layout threshold.",
-        preview: `<article data-card data-card-layout="adaptive"><div data-card-media style="display:grid;place-items:center;background:var(--accent-muted)"><strong>Media</strong></div><div data-card-body><div data-card-header>Container-aware card</div><div data-card-content><p>Its layout changes from stacked to horizontal based on available card width.</p></div><div data-card-footer><a href="#card-details">Read details</a></div></div></article>`,
+        preview: `<div style="container-type:inline-size;container-name:card-container"><article data-card data-card-layout="adaptive"><div data-card-media style="display:grid;place-items:center;background:var(--accent-muted)"><strong>Media</strong></div><div data-card-body><div data-card-header>Container-aware card</div><div data-card-content><p>Its layout changes from stacked to horizontal based on available card width.</p></div><div data-card-footer><a href="#card-details">Read details</a></div></div></article></div>`,
         code: `<article data-card data-card-layout="adaptive">\n  <div data-card-media><img src="cover.jpg" alt="" /></div>\n  <div data-card-body>\n    <header data-card-header>Container-aware card</header>\n    <div data-card-content>...</div>\n    <footer data-card-footer><a href="/details">Read details</a></footer>\n  </div>\n</article>`,
     }],
     "components/carousel": [{

@@ -9,7 +9,7 @@ input[type="checkbox"][role="switch"] {
   appearance: none;
   box-sizing: border-box;
   display: inline-grid;
-  align-items: center;
+  place-items: center start;
   inline-size: var(--_switch-width);
   block-size: var(--_switch-height);
   padding: var(--_switch-padding);
@@ -29,7 +29,6 @@ input[type="checkbox"][role="switch"]::before {
   border-radius: 50%;
   background: var(--switch-thumb-background, var(--surface-default));
   box-shadow: var(--switch-thumb-shadow, var(--shadow-sm));
-  transform: translateX(0);
   transition: transform 160ms ease-out;
 }
 
@@ -39,7 +38,11 @@ input[type="checkbox"][role="switch"]:checked {
 }
 
 input[type="checkbox"][role="switch"]:checked::before {
-  transform: translateX(calc(var(--_switch-width) - var(--_switch-thumb) - (2 * var(--_switch-padding)) - (2 * var(--switch-border-width, var(--border-width, 1px)))));
+  transform: none;
+}
+
+input[type="checkbox"][role="switch"]:checked {
+  justify-items: end;
 }
 
 input[type="checkbox"][role="switch"]:focus-visible {
@@ -60,9 +63,19 @@ input[type="checkbox"][role="switch"]:disabled {
 }
 
 :is(input-group, [data-input-group], .input-group) > * {
+  box-sizing: border-box;
   min-inline-size: 0;
   margin: 0;
   border-radius: 0;
+}
+
+:is(input-group, [data-input-group], .input-group) > :is(input, select, textarea) {
+  flex: 1 1 12rem;
+  inline-size: auto;
+}
+
+:is(input-group, [data-input-group], .input-group) > :is(button, [type="button"], [type="submit"], [data-input-affix], .input-affix) {
+  flex: 0 0 auto;
 }
 
 :is(input-group, [data-input-group], .input-group) > :first-child {
@@ -77,10 +90,6 @@ input[type="checkbox"][role="switch"]:disabled {
 
 :is(input-group, [data-input-group], .input-group) > :not(:first-child) {
   margin-inline-start: calc(-1 * var(--input-group-border-overlap, var(--border-width, 1px)));
-}
-
-:is(input-group, [data-input-group], .input-group) > :is(input, select, textarea) {
-  flex: 1 1 auto;
 }
 
 :is([data-input-affix], .input-affix) {
@@ -105,6 +114,8 @@ input[type="checkbox"][role="switch"]:disabled {
 
   :is(input-group, [data-input-group], .input-group)[data-stack="auto"] > * {
     margin: 0 0 calc(-1 * var(--input-group-border-overlap, var(--border-width, 1px)));
+    inline-size: 100%;
+    flex: 0 1 auto;
     border-radius: 0;
   }
 

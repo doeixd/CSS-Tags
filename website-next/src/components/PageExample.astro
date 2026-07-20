@@ -116,6 +116,52 @@ const additionalExamples = example.additionalExamples
 
 <script>
     import { initializeCarousels } from "../../../carousel.js";
+    import { initializeViewTransitions } from "../../../view-transition.js";
+
+    function initializeTabs(root: Document | ShadowRoot | HTMLElement) {
+        root.querySelectorAll<HTMLElement>('[role="tablist"]').forEach((tablist) => {
+            if (tablist.dataset.tabsReady === "true") return;
+            const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+            if (!tabs.length) return;
+            tablist.dataset.tabsReady = "true";
+            tablist.dataset.tabsEnhanced = "true";
+
+            const panels = Array.from(root.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+            const select = (tab: HTMLButtonElement, moveFocus = false) => {
+                if (tab.disabled || tab.getAttribute("aria-disabled") === "true") return;
+                const panelId = tab.getAttribute("aria-controls");
+                tabs.forEach((candidate) => {
+                    const selected = candidate === tab;
+                    candidate.setAttribute("aria-selected", String(selected));
+                    candidate.tabIndex = selected ? 0 : -1;
+                });
+                panels.forEach((panel) => {
+                    if (panelId && panel.id === panelId) panel.removeAttribute("hidden");
+                    else if (panel.getAttribute("aria-labelledby") && tabs.some((candidate) => candidate.getAttribute("aria-controls") === panel.id)) panel.hidden = true;
+                });
+                if (moveFocus) tab.focus();
+            };
+
+            const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
+            select(selected);
+            tabs.forEach((tab, index) => {
+                tab.addEventListener("click", () => select(tab));
+                tab.addEventListener("keydown", (event) => {
+                    const orientation = tablist.getAttribute("aria-orientation") === "vertical" ? "vertical" : "horizontal";
+                    const forward = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
+                    const backward = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
+                    let nextIndex = index;
+                    if (event.key === forward) nextIndex = (index + 1) % tabs.length;
+                    else if (event.key === backward) nextIndex = (index - 1 + tabs.length) % tabs.length;
+                    else if (event.key === "Home") nextIndex = 0;
+                    else if (event.key === "End") nextIndex = tabs.length - 1;
+                    else return;
+                    event.preventDefault();
+                    select(tabs[nextIndex], true);
+                });
+            });
+        });
+    }
 
     function setupQuickExamples() {
         document.querySelectorAll<HTMLElement>("css-tags-example").forEach((host) => {
@@ -123,6 +169,8 @@ const additionalExamples = example.additionalExamples
             if (!root) return;
 
             initializeCarousels(root);
+            initializeViewTransitions(root);
+            initializeTabs(root);
 
             root.querySelectorAll<HTMLElement>("[data-doc-nav]").forEach((nav) => {
                 if (nav.dataset.ready === "true") return;

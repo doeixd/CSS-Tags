@@ -118,6 +118,13 @@ A responsive grid that automatically fits columns based on minimum item size.
 
 A two-column layout that splits at a breakpoint, stacking on smaller screens.
 
+<LiveExample title="Split content and supporting detail" description="Resize the example below 30rem to see the two regions stack.">
+  <layout-split fraction="2fr" gap="var(--space-sm)">
+    <section class="example-panel"><strong>Article</strong><p>Main content keeps the larger fraction.</p></section>
+    <aside class="example-panel"><strong>Aside</strong><p>Supporting context stacks when narrow.</p></aside>
+  </layout-split>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-fraction`: Ratio for first column (default: 1fr)
 - `--l-breakpoint`: Container width to split at
@@ -174,6 +181,14 @@ Children stretch to the available width by default. Add `.stack-intrinsic` when 
 
 Groups items that wrap onto new lines, useful for tags or buttons.
 
+<LiveExample title="Wrapping action cluster" description="The cluster wraps buttons while preserving their intrinsic widths.">
+  <layout-cluster gap="var(--space-sm)" justify="space-between">
+    <button type="button">Save draft</button>
+    <button type="button">Preview</button>
+    <button type="button">Publish changes</button>
+  </layout-cluster>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-gap`: Gap between items (default: var(--space-sm, 0.75rem))
 - `--l-justify`: Justification (default: flex-start)
@@ -197,6 +212,16 @@ Groups items that wrap onto new lines, useful for tags or buttons.
 
 A horizontally scrolling container.
 
+<LiveExample title="Scrollable navigation reel" description="The children stay intrinsic-width; scroll horizontally when the row is too wide.">
+  <layout-reel gap="var(--space-sm)" no-scrollbar aria-label="Project sections">
+    <a class="example-panel" href="#overview">Overview</a>
+    <a class="example-panel" href="#activity">Activity</a>
+    <a class="example-panel" href="#integrations">Integrations</a>
+    <a class="example-panel" href="#permissions">Permissions</a>
+    <a class="example-panel" href="#audit-log">Audit log</a>
+  </layout-reel>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-gap`: Gap between items
 - `--scrollbar-thumb`: Scrollbar thumb color
@@ -218,6 +243,13 @@ A horizontally scrolling container.
 ### `<layout-switcher>`
 
 Switches from vertical stack to horizontal row when items have enough space.
+
+<LiveExample title="Threshold-based switcher" description="The same two regions stack or sit side-by-side based on the container width.">
+  <layout-switcher threshold="24rem" gap="var(--space-sm)">
+    <div class="example-panel"><strong>Profile</strong><p>Account details and avatar.</p></div>
+    <div class="example-panel"><strong>Notifications</strong><p>Email and push preferences.</p></div>
+  </layout-switcher>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-threshold`: Space threshold for switching (default: 30rem)
@@ -241,6 +273,12 @@ Switches from vertical stack to horizontal row when items have enough space.
 
 Adds consistent padding to content.
 
+<LiveExample title="Logical padding controls" description="Change block and inline padding independently without writing directional rules.">
+  <layout-pad padding-y="var(--space-lg)" padding-x="var(--space-md)" style="background: var(--surface-subtle)">
+    <div class="example-panel"><strong>Padded content</strong><p>Block and inline space use the same token vocabulary.</p></div>
+  </layout-pad>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-padding`: Padding value
 - `--l-padding-inline`: Horizontal padding
@@ -262,6 +300,13 @@ Adds consistent padding to content.
 
 Centers content horizontally with max-width for readability. The maximum width includes the component's gutters, so it remains overflow-safe as a full-width child of `layout-stack`, grid, or flex layouts.
 
+<LiveExample title="Readable centered measure" description="The max width controls line length while gutters protect the edges on small screens.">
+  <layout-center max-width="34ch" gutters="var(--space-md)" and-text>
+    <h3>Readable by default</h3>
+    <p>Long-form content stays comfortable to scan instead of stretching across the entire preview.</p>
+  </layout-center>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-max-width`: Maximum width (default: 65ch)
 - `--l-gutters`: Side padding (default: var(--space-md, 1.5rem))
@@ -282,6 +327,12 @@ Centers content horizontally with max-width for readability. The maximum width i
 
 Centers content horizontally without a max-width constraint, useful for full-width centering. Its gutters are included in its rendered width.
 
+<LiveExample title="Full-width inline centering" description="Unlike layout-center, the content can use the full available width while its contents remain centered.">
+  <layout-inline-center gutters="var(--space-md)" and-text style="background: var(--surface-subtle)">
+    <div class="example-panel"><strong>Centered action</strong><br /><button type="button">Continue</button></div>
+  </layout-inline-center>
+</LiveExample>
+
 **CSS Properties:**
 - `--l-gutters`: Side padding (default: var(--space-md, 1.5rem))
 
@@ -299,6 +350,12 @@ Centers content horizontally without a max-width constraint, useful for full-wid
 ### `<layout-frame>`
 
 Creates responsive media containers with fixed aspect ratios.
+
+<LiveExample title="Aspect-ratio frame" description="The frame reserves media space before the asset loads and keeps the ratio responsive.">
+  <layout-frame ratio="4 / 3" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); color: var(--text-on-accent)">
+    <div style="display:grid;place-items:center;block-size:100%"><strong>4:3 media frame</strong></div>
+  </layout-frame>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-aspect-ratio`: Aspect ratio (default: 16 / 9)
@@ -352,6 +409,14 @@ Mark the supporting region with `slot="aside"`, `data-layout-sidebar-aside`, or 
 ### `<layout-page>`
 
 Standard page layout with header, main, and footer.
+
+<LiveExample title="Page regions and slots" description="Header, main, and footer remain named landmarks while layout-page owns the vertical frame.">
+  <layout-page min-height="18rem" gap="var(--space-sm)">
+    <header slot="header" class="example-panel"><strong>Northstar</strong></header>
+    <main slot="main" class="example-panel"><h3>Workspace</h3><p>Main content grows into the available frame.</p></main>
+    <footer slot="footer" class="example-panel"><small>Updated just now</small></footer>
+  </layout-page>
+</LiveExample>
 
 **CSS Properties:**
 - `--l-min-height`: Minimum height (default: 100vh)

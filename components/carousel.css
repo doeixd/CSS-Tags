@@ -59,6 +59,9 @@
   block-size: var(--carousel-trigger-size, 2.75rem);
   padding: 0;
   place-items: center;
+  place-content: center;
+  text-align: center;
+  text-indent: 0;
   transform: translateY(-50%);
   border: 1px solid var(--carousel-trigger-border-color, var(--outline-subtle));
   border-radius: 50%;

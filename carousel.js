@@ -25,11 +25,15 @@ function initializeCarousels(root = document) {
     const isLooping = carousel.hasAttribute('loop');
 
     carousel.dataset.carouselInitialized = 'true';
-    slidesContainer.style.width = '100%';
+    // The track contains every slide side by side. Each item occupies one
+    // fraction of the track, so translating by that same fraction reveals the
+    // next item instead of translating the entire 100%-wide track away.
+    slidesContainer.style.width = `${totalSlides * 100}%`;
     slidesContainer.style.overflowX = 'hidden';
     slidesContainer.style.scrollSnapType = 'none';
     items.forEach(item => {
-      item.style.width = '100%';
+      item.style.width = `${100 / totalSlides}%`;
+      item.style.flex = `0 0 ${100 / totalSlides}%`;
     });
 
     let currentIndex = 0;
@@ -38,7 +42,7 @@ function initializeCarousels(root = document) {
       if (isInstant) slidesContainer.style.transition = 'none';
 
       const direction = getComputedStyle(carousel).direction === 'rtl' ? 1 : -1;
-      slidesContainer.style.transform = `translate3d(${direction * currentIndex * 100}%, 0, 0)`;
+      slidesContainer.style.transform = `translate3d(${direction * currentIndex * (100 / totalSlides)}%, 0, 0)`;
 
       if (isInstant) {
         // Restore transition after the instant move
