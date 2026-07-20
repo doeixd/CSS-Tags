@@ -250,10 +250,15 @@ const examples: Record<string, PageExampleDefinition> = {
 
 export function getPageExample(path: string, pageTitle: string): PageExampleDefinition {
     const normalized = path.replace(/^\/+|\/+$/g, "") || "index";
-    return examples[normalized] ?? {
+    const example = examples[normalized] ?? primaryExamples[normalized] ?? {
         title: `${pageTitle} in context`,
         description: "A small composition using the shipped semantic API and shared design tokens.",
         preview: `<card><card-body><layout-stack><span eyebrow>Example</span><h3>${pageTitle}</h3><p class="example-muted">This composition inherits the active CSS Tags theme.</p><button class="form-button btn-primary" type="button">Continue</button></layout-stack></card-body></card>`,
         code: `<card>\n  <card-body>\n    <span eyebrow>Example</span>\n    <h2>${pageTitle}</h2>\n    <p>This composition inherits the active theme.</p>\n    <button class="form-button btn-primary" type="button">Continue</button>\n  </card-body>\n</card>`,
     };
+    return {
+        ...example,
+        additionalExamples: example.additionalExamples ?? supplementalExamples[normalized],
+    };
 }
+import { primaryExamples, supplementalExamples } from "./page-example-lessons";

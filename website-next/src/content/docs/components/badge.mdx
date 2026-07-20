@@ -1,11 +1,11 @@
 ---
-title: Badges
-description: Compact labels for status, counts, and metadata with size, surface, and feedback variants.
+title: Badges and chips
+description: One compact label primitive for statuses, counts, tags, filters, and metadata.
 ---
 
 import LiveExample from '../../../components/LiveExample.astro';
 
-Use badges for short, read-only metadata. A badge should support nearby content, not replace a heading, button, or full status message.
+Use badges for short, read-only metadata, including statuses, counts, tags, and filter labels. A badge should support nearby content, not replace a heading, button, or full status message.
 
 ## Status badges
 
@@ -57,13 +57,46 @@ Status colors are visual reinforcement. Keep the status word in the badge so mea
   </layout-cluster>
 </LiveExample>
 
+## Tags and filter labels
+
+“Badge” and “chip” describe the same visual primitive here. Prefer the badge API in new code; the old chip hosts remain aliases so existing markup keeps working.
+
+<LiveExample title="Tags and filter labels" compact>
+  <layout-cluster gap="var(--space-sm)">
+    <span data-badge variant="subtle">Design systems</span>
+    <badge variant="default">CSS</badge>
+    <span class="badge badge-muted">Archived</span>
+    <chip variant="overt">Legacy chip host</chip>
+  </layout-cluster>
+</LiveExample>
+
+```html
+<span data-badge variant="subtle">Design systems</span>
+<badge variant="default">CSS</badge>
+<span class="badge badge-muted">Archived</span>
+
+<!-- Compatibility alias; prefer a badge host in new code. -->
+<chip variant="overt">Legacy chip host</chip>
+```
+
+Labels do not wrap by default, which keeps pills intact in clusters and dense UI. For unusually long content, add `wrap`, `data-wrap`, or `.badge-wrap`; first consider whether plain text is more appropriate.
+
+For an interactive or removable filter, use a native button rather than adding behavior to a presentational label:
+
+```html
+<button type="button" aria-label="Remove CSS filter">
+  CSS <span aria-hidden="true">×</span>
+</button>
+```
+
 ## Public API
 
-Use `<badge>`, `[data-badge]`, or `.badge`. When the badge is ordinary inline metadata, prefer semantic HTML such as `<span data-badge>`; the custom element remains available as a concise styling host.
+Use `<badge>`, `[data-badge]`, or `.badge`. When the badge is ordinary inline metadata, prefer semantic HTML such as `<span data-badge>`; the custom element remains available as a concise styling host. Legacy `<chip>`, `[data-chip]`, and `.chip` hosts map to the same implementation.
 
 - Sizes: `sm`, `md`, `lg`
 - Surface variants: `subtle`, `default`, `muted`, `overt`
 - Statuses: `success`, `warning`, `error`, `info`, `primary`, `overt`
+- Wrapping: non-wrapping by default; opt in with `wrap`, `data-wrap`, or `.badge-wrap`
 
 Common customization variables:
 

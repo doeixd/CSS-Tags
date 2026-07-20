@@ -1,7 +1,7 @@
-# Badge Component Documentation
+# Badge and Chip Component Documentation
 
 ## Overview
-The `badge` component provides compact inline labels for status, metadata, release labels, and short UI callouts. It supports semantic surface variants, status variants, size variants, and progressive text-box enhancement.
+The `badge` component provides compact inline labels for statuses, metadata, tags, filters, release labels, and short UI callouts. Badge is the canonical API; `chip`, `[data-chip]`, and `.chip` are backwards-compatible aliases using the same implementation.
 
 ## Base Behavior
 
@@ -9,6 +9,7 @@ The `badge` component provides compact inline labels for status, metadata, relea
 
 - fully rounded corners
 - compact padding and tight line-height
+- non-wrapping text by default
 - scheme-safe semantic text on its resolved background
 - optional `text-box` enhancement when the browser supports it
 
@@ -52,6 +53,8 @@ Status variants override surface styling.
 <span class="badge badge-overt badge-lg">Class host</span>
 <badge status="success">Live</badge>
 <badge status="primary" size="lg">New Release</badge>
+<span data-badge variant="subtle">Design systems</span>
+<chip variant="muted">Legacy chip alias</chip>
 ```
 
 With a parent gradient background:
@@ -77,6 +80,12 @@ Public or externally useful:
 - `--text-box-edge-badge`: longhand edge token
 
 Resolved internal variables use the `--_badge-*` prefix and are not part of the public API.
+
+Legacy `--chip-*` variables remain fallback aliases. Use the `--badge-*` names in new code.
+
+## Wrapping
+
+Compact labels use `white-space: nowrap` by default. Opt into wrapping with `wrap`, `data-wrap`, `.badge-wrap`, or the legacy `.chip-wrap` alias. Long prose generally should not use this component.
 
 ## Text Box Support
 

@@ -59,7 +59,6 @@ The framework uses 10 cascade layers in order of precedence (lowest to highest):
 @import url('components/box.css') layer(components);
 @import url('components/box-extra.css') layer(components);
 @import url('components/badge.css') layer(components);
-@import url('components/chip.css') layer(components);
 @import url('components/alert.css') layer(components);
 @import url('components/modal.css') layer(components);
 @import url('components/tooltip.css') layer(components);

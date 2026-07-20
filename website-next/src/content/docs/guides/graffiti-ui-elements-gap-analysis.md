@@ -52,7 +52,7 @@ needed. It is retained as design rationale rather than a current missing list.
 | Buttons | Native `button`, `.button`, and button variants | Covered | The general button system is present. Icon-only buttons need a dedicated contract. |
 | Icon Button | A normal button can contain an SVG | Partial | No square size tokens, icon sizing rule, `.icon-button`/`[data-icon-button]` host, or focused accessibility example. |
 | Floating Action Button | Position and button utilities can be composed | Missing | No circular FAB API, fixed logical-edge placement, safe-area offsets, size variants, or FAB documentation. |
-| Chips | `chip`, `[data-chip]`, `.chip` | Covered | CSS Tags already distinguishes an interactive chip-like control. |
+| Chips | `badge`, `[data-badge]`, `.badge` | Covered | Tags and filters use the shared compact-label primitive; native buttons provide interaction. |
 | Tags | `badge`, `[data-badge]`, `.badge` | Covered | Badge is the existing non-interactive metadata primitive; another parallel tag component is unnecessary. |
 | Rating | None | Missing | No read-only rating display or native-radio interactive rating pattern. |
 | Reactions | Native `select` receives general form defaults | Missing | No reaction-picker API or progressively enhanced customizable-select treatment. |

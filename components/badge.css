@@ -1,17 +1,18 @@
 /**
- * Compact, non-interactive metadata with custom-element, data, and class hosts.
+ * Compact, non-interactive labels with custom-element, data, and class hosts.
  * `variant` is the visual surface API; `role` is reserved for ARIA semantics.
+ * Legacy chip hosts share this implementation for backwards compatibility.
  */
 
-:is(badge, [data-badge], .badge) {
-  --_badge-background: var(--badge-background, var(--badge-background-overt, var(--surface-overt)));
-  --_badge-color: var(--badge-color, var(--badge-color-overt, var(--text-overt, var(--text-default))));
-  --_badge-border-color: var(--badge-border-color, var(--badge-border-overt, var(--outline-overt)));
-  --_badge-border-width: var(--badge-border-width, var(--border-width, 1px));
-  --_badge-radius: var(--badge-radius, var(--radius-full, var(--border-radius-full, 9999px)));
-  --_badge-padding-inline: var(--badge-padding-inline, 0.55em);
-  --_badge-padding-block: var(--badge-padding-block, 0.15em);
-  --_badge-gap: var(--badge-gap, var(--space-2xs, 0.25rem));
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip) {
+  --_badge-background: var(--badge-background, var(--chip-bg, var(--badge-background-overt, var(--surface-overt))));
+  --_badge-color: var(--badge-color, var(--chip-color, var(--badge-color-overt, var(--text-overt, var(--text-default)))));
+  --_badge-border-color: var(--badge-border-color, var(--chip-border-color, var(--badge-border-overt, var(--outline-overt))));
+  --_badge-border-width: var(--badge-border-width, var(--chip-border-width, var(--border-width, 1px)));
+  --_badge-radius: var(--badge-radius, var(--chip-radius, var(--radius-full, var(--border-radius-full, 9999px))));
+  --_badge-padding-inline: var(--badge-padding-inline, var(--chip-padding-inline, 0.55em));
+  --_badge-padding-block: var(--badge-padding-block, var(--chip-padding-block, 0.15em));
+  --_badge-gap: var(--badge-gap, var(--chip-gap, var(--space-2xs, 0.25rem)));
 
   display: inline-flex;
   align-items: center;
@@ -24,102 +25,116 @@
   color: var(--_badge-color);
   font-size: 0.85em;
   line-height: 1;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([wrap], [data-wrap], .badge-wrap, .chip-wrap) {
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 
 @supports (text-box: trim-both cap alphabetic) {
-  :is(badge, [data-badge], .badge) {
-    text-box: var(--text-box-badge, var(--text-box-ui));
+  :is(badge, [data-badge], .badge, chip, [data-chip], .chip) {
+    text-box: var(--text-box-badge, var(--text-box-chip, var(--text-box-ui)));
   }
 }
 
 @supports (text-box-trim: trim-both) and (text-box-edge: cap alphabetic) {
-  :is(badge, [data-badge], .badge) {
-    text-box-trim: var(--text-box-trim-badge, var(--text-box-trim-ui));
-    text-box-edge: var(--text-box-edge-badge, var(--text-box-edge-ui));
+  :is(badge, [data-badge], .badge, chip, [data-chip], .chip) {
+    text-box-trim: var(--text-box-trim-badge, var(--text-box-trim-chip, var(--text-box-trim-ui)));
+    text-box-edge: var(--text-box-edge-badge, var(--text-box-edge-chip, var(--text-box-edge-ui)));
   }
 }
 
-:is(badge, [data-badge], .badge):is([size="sm"], [data-size="sm"], .badge-sm) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([size="sm"], [data-size="sm"], .badge-sm, .chip-sm) {
   --_badge-padding-block: 0.1em;
   --_badge-padding-inline: 0.45em;
   font-size: 0.75em;
 }
 
-:is(badge, [data-badge], .badge):is([size="md"], [data-size="md"], .badge-md) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([size="md"], [data-size="md"], .badge-md, .chip-md) {
   --_badge-padding-block: 0.15em;
   --_badge-padding-inline: 0.55em;
   font-size: 0.85em;
 }
 
-:is(badge, [data-badge], .badge):is([size="lg"], [data-size="lg"], .badge-lg) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([size="lg"], [data-size="lg"], .badge-lg, .chip-lg) {
   --_badge-padding-block: 0.25em;
   --_badge-padding-inline: 0.7em;
   font-size: 0.95em;
 }
 
-:is(badge, [data-badge], .badge):is([variant="subtle"], [data-variant="subtle"], .badge-subtle) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([variant="subtle"], [data-variant="subtle"], .badge-subtle, .chip-subtle) {
   --_badge-background: var(--badge-background-subtle, var(--surface-subtle));
   --_badge-color: var(--badge-color-subtle, var(--text-subtle, var(--text-default)));
   --_badge-border-color: var(--badge-border-subtle, var(--outline-subtle));
 }
 
-:is(badge, [data-badge], .badge):is([variant="default"], [data-variant="default"], .badge-default) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([variant="default"], [data-variant="default"], .badge-default, .chip-default) {
   --_badge-background: var(--badge-background-default, var(--surface-default));
   --_badge-color: var(--badge-color-default, var(--text-default));
   --_badge-border-color: var(--badge-border-default, var(--outline-default));
 }
 
-:is(badge, [data-badge], .badge):is([variant="muted"], [data-variant="muted"], .badge-muted) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([variant="muted"], [data-variant="muted"], .badge-muted, .chip-muted) {
   --_badge-background: var(--badge-background-muted, var(--surface-muted));
   --_badge-color: var(--badge-color-muted, var(--text-muted, var(--text-default)));
   --_badge-border-color: var(--badge-border-muted, var(--outline-subtle));
 }
 
-:is(badge, [data-badge], .badge):is([variant="overt"], [data-variant="overt"], .badge-overt) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([variant="overt"], [data-variant="overt"], .badge-overt, .chip-overt) {
   --_badge-background: var(--badge-background-overt, var(--surface-overt));
   --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default)));
   --_badge-border-color: var(--badge-border-overt, var(--outline-overt));
 }
 
 /* Deprecated compatibility: use `variant`; `role` must describe accessibility. */
-:is(badge, [data-badge], .badge)[role="subtle"] { --_badge-background: var(--badge-background-subtle, var(--surface-subtle)); --_badge-color: var(--badge-color-subtle, var(--text-subtle, var(--text-default))); --_badge-border-color: var(--badge-border-subtle, var(--outline-subtle)); }
-:is(badge, [data-badge], .badge)[role="default"] { --_badge-background: var(--badge-background-default, var(--surface-default)); --_badge-color: var(--badge-color-default, var(--text-default)); --_badge-border-color: var(--badge-border-default, var(--outline-default)); }
-:is(badge, [data-badge], .badge)[role="muted"] { --_badge-background: var(--badge-background-muted, var(--surface-muted)); --_badge-color: var(--badge-color-muted, var(--text-muted, var(--text-default))); --_badge-border-color: var(--badge-border-muted, var(--outline-subtle)); }
-:is(badge, [data-badge], .badge)[role="overt"] { --_badge-background: var(--badge-background-overt, var(--surface-overt)); --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default))); --_badge-border-color: var(--badge-border-overt, var(--outline-overt)); }
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip)[role="subtle"] { --_badge-background: var(--badge-background-subtle, var(--surface-subtle)); --_badge-color: var(--badge-color-subtle, var(--text-subtle, var(--text-default))); --_badge-border-color: var(--badge-border-subtle, var(--outline-subtle)); }
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip)[role="default"] { --_badge-background: var(--badge-background-default, var(--surface-default)); --_badge-color: var(--badge-color-default, var(--text-default)); --_badge-border-color: var(--badge-border-default, var(--outline-default)); }
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip)[role="muted"] { --_badge-background: var(--badge-background-muted, var(--surface-muted)); --_badge-color: var(--badge-color-muted, var(--text-muted, var(--text-default))); --_badge-border-color: var(--badge-border-muted, var(--outline-subtle)); }
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip)[role="overt"] { --_badge-background: var(--badge-background-overt, var(--surface-overt)); --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default))); --_badge-border-color: var(--badge-border-overt, var(--outline-overt)); }
 
-:is(badge, [data-badge], .badge):is([status="success"], [data-status="success"], .badge-success) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="success"], [data-status="success"], .badge-success) {
   --_badge-background: var(--surface-success);
   --_badge-color: var(--text-success);
   --_badge-border-color: var(--outline-success);
 }
 
-:is(badge, [data-badge], .badge):is([status="warning"], [data-status="warning"], .badge-warning) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="warning"], [data-status="warning"], .badge-warning) {
   --_badge-background: var(--surface-warning);
   --_badge-color: var(--text-warning);
   --_badge-border-color: var(--outline-warning);
 }
 
-:is(badge, [data-badge], .badge):is([status="error"], [data-status="error"], .badge-error) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="error"], [data-status="error"], .badge-error) {
   --_badge-background: var(--surface-error);
   --_badge-color: var(--text-error);
   --_badge-border-color: var(--outline-error);
 }
 
-:is(badge, [data-badge], .badge):is([status="info"], [data-status="info"], .badge-info) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="info"], [data-status="info"], .badge-info) {
   --_badge-background: var(--surface-info);
   --_badge-color: var(--text-info);
   --_badge-border-color: var(--outline-info);
 }
 
-:is(badge, [data-badge], .badge):is([status="primary"], [data-status="primary"], .badge-primary) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="primary"], [data-status="primary"], .badge-primary) {
   --_badge-background: var(--accent);
   --_badge-color: var(--text-on-accent);
   --_badge-border-color: var(--accent-overt, var(--accent));
 }
 
-:is(badge, [data-badge], .badge):is([status="overt"], [data-status="overt"], .badge-status-overt) {
+:is(badge, [data-badge], .badge, chip, [data-chip], .chip):is([status="overt"], [data-status="overt"], .badge-status-overt) {
   --_badge-background: var(--badge-background-overt, var(--surface-overt));
   --_badge-color: var(--badge-color-overt, var(--text-overt, var(--text-default)));
   --_badge-border-color: var(--badge-border-overt, var(--outline-overt));
+}
+
+/* Deprecated chip-only affordance. Use a native button for removable filters. */
+:is(chip, [data-chip], .chip):is([removable], [data-removable])::after {
+  content: "✕";
+  margin-inline-start: 0.25em;
+  font-size: 0.9em;
+  opacity: 0.7;
 }

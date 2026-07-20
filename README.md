@@ -684,7 +684,7 @@ Pre-built UI components with scoped styling and modern CSS features.
   <alert bg="var(--surface-warning)">Warning message</alert>
   ```
 
-*   `<badge>`: Small status indicators and labels. [[docs/components/badge.md](docs/components/badge.md)]
+*   `<badge>`: Compact status, metadata, tag, and filter labels. Legacy chip hosts are compatibility aliases. [[docs/components/badge.md](docs/components/badge.md)]
   ```html
   <badge bg="var(--success)">New</badge>
   <badge bg="var(--warning)">Beta</badge>
@@ -694,7 +694,6 @@ Pre-built UI components with scoped styling and modern CSS features.
 *   `<tooltip>`: Contextual help text with CSS Anchor Positioning. [[docs/components/tooltip.md](docs/components/tooltip.md)]
 *   `<popover>`: Overlay content with automatic positioning. [[docs/components/popover.md](docs/components/popover.md)]
 *   `<box>`: Versatile container controlled by HTML attributes. [[docs/components/box.md](docs/components/box.md)]
-*   `<chip>`: Compact elements for tags, filters, or selections. [[docs/components/chip.md](docs/components/chip.md)]
 *   `<container>`: Responsive container with max-widths. [[docs/components/container.md](docs/components/container.md)]
 *   `<flex>`: Flexible layout container. [[docs/components/flex.md](docs/components/flex.md)]
 *   `<grid>`: CSS Grid-based layout component. [[docs/components/grid.md](docs/components/grid.md)]

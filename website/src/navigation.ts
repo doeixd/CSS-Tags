@@ -38,7 +38,6 @@ export const navigation: NavItem[] = [
 			{ label: 'Card', slug: 'components/card' },
 			{ label: 'Carousel', slug: 'components/carousel' },
 			{ label: 'Carousel JS', slug: 'js/carousel' },
-			{ label: 'Chip', slug: 'components/chip' },
 			{ label: 'Container', slug: 'components/container' },
 			{ label: 'Content Patterns', slug: 'components/content-patterns' },
 			{ label: 'Disclosure', slug: 'components/disclosure' },

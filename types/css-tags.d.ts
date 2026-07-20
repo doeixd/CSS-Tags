@@ -157,11 +157,11 @@ declare global {
       size?: "sm" | "md" | "lg";
       variant?: "subtle" | "default" | "muted" | "overt";
       status?: "success" | "warning" | "error" | "info" | "primary" | "overt";
+      wrap?: BooleanAttribute;
     }
 
-    interface ChipAttributes extends GlobalAttributes {
-      size?: "sm" | "md" | "lg";
-      variant?: "subtle" | "default" | "muted" | "overt";
+    /** @deprecated Use BadgeAttributes. Chip hosts remain compatibility aliases. */
+    interface ChipAttributes extends BadgeAttributes {
       removable?: BooleanAttribute;
     }
 

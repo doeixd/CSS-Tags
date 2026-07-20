@@ -46,7 +46,7 @@ const example = (
   <layout-grid min-item-size="14rem" gap="var(--space-md)">
     <card>
       <card-body>
-        <badge status="success" size="sm" variant="subtle">Typed</badge>
+        <badge status="success" size="sm" variant="subtle" wrap>Typed</badge>
       </card-body>
     </card>
   </layout-grid>
@@ -87,7 +87,7 @@ const newElementsExample = (
     <empty-state role="status">No projects</empty-state>
     <alert-message status="success" density="compact" role="status">Saved</alert-message>
     <nav-list variant="flush" aria-label="Documentation" />
-    <chip variant="overt" size="sm">Typed chip</chip>
+    <chip variant="overt" status="info" size="sm">Typed legacy chip</chip>
   </layout-stack>
 );
 

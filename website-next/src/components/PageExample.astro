@@ -81,28 +81,7 @@ const additionalExamples = example.additionalExamples
             compact: additional.compact ?? false,
         };
     })
-    : [
-        {
-            id: `${id}-compact`,
-            title: "Compact composition",
-            description: "Lower the density input for a tighter application surface without rewriting component spacing.",
-            markup: `<div style="--density-factor: 0.72">${compactMarkup}</div>`,
-            markupSource: wrapSource('<div style="--density-factor: 0.72">', compactMarkup),
-            markupLanguage: "html",
-            markupLabel: "HTML",
-            compact: true,
-        },
-        {
-            id: `${id}-themed`,
-            title: "Locally themed composition",
-            description: "Theme variables inherit through the example subtree while its markup and semantics stay unchanged.",
-            markup: `<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">${themedMarkup}</section>`,
-            markupSource: wrapSource('<section style="--accent-h: 155; --accent-c: 0.14; --surface-lightness-shift: 1%">', themedMarkup),
-            markupLanguage: "html",
-            markupLabel: "HTML",
-            compact: true,
-        },
-    ];
+    : [];
 ---
 
 <section aria-label="Quick example">
@@ -119,7 +98,7 @@ const additionalExamples = example.additionalExamples
     <h2>More examples</h2>
     <p>{example.additionalExamples
         ? "Each example introduces a different part of the shipped API."
-        : "These use the same component API under different inherited theme inputs."}</p>
+        : "The focused example above demonstrates the API used on this page."}</p>
 
     {additionalExamples.map((additional) => (
         <ExampleWorkbench

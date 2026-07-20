@@ -17,6 +17,7 @@ export default defineConfig({
 	base: docsBase,
 	redirects: {
 		'/components/tooltips': `${docsBase}components/tooltip/`,
+		'/components/chip': `${docsBase}components/badge/#tags-and-filter-labels`,
 	},
 	build: {
 		inlineStylesheets: 'never',

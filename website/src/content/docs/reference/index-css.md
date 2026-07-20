@@ -42,7 +42,6 @@ description: The main entry point CSS file that imports all framework components
 @import url('components/box.css') layer(components);
 @import url('components/box-extra.css') layer(components);
 @import url('components/badge.css') layer(components);
-@import url('components/chip.css') layer(components);
 @import url('components/alert.css') layer(components);
 @import url('components/modal.css') layer(components);
 @import url('components/tooltip.css') layer(components);

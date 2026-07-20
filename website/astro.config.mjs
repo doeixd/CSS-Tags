@@ -13,6 +13,9 @@ import { h } from 'hastscript';
 export default defineConfig({
 	site: 'https://doeixd.github.io',
 	base: process.env.NODE_ENV === 'production' ? '/CSS-Tags/' : '/',
+	redirects: {
+		'/components/chip': '/CSS-Tags/components/badge/#tags-and-filter-labels',
+	},
 	build: {
 		inlineStylesheets: 'always',
 		assets: '_astro'
