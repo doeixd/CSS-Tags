@@ -8,14 +8,7 @@
     box-sizing: border-box; 
     vertical-align: baseline;
     min-width: 0;
-    scroll-behavior: smooth;
-    transition-behavior: allow-discrete
-  }
-
-/* I prefer having some sort of transition */
-  :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6))) {
-    transition: ease-out 100ms;
-    transition-property: color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius
+    transition-behavior: allow-discrete;
   }
 
   /* Everything is defined with :where so they have zero specificity and can easily be overwritten. */
@@ -39,11 +32,6 @@
      text-rendering: optimizeLegibility;
      overscroll-behavior: none;
    }
-
-  /* Smooth scrolling when focusing within the page */
-  :where(html:focus-within) {
-   scroll-behavior: smooth;
-  }
 
   /* Makes webcomponents / unknown elements display as you'd expect */
   :where(:not(:defined)) { 
@@ -72,11 +60,6 @@
   :where(:is(input, button, textarea, select):not([disabled])) { 
     font: inherit; 
     cursor: pointer; 
-  }
-
-  :where(*) {
-    transition-timing-function: ease-out;
-    transition-duration: 100ms;
   }
 
   :where(button) {
@@ -207,11 +190,6 @@
        animation-name: none; 
      }
    }
-  /* Turns on view transitions */
-  @view-transition { 
-    navigation: auto; 
-  }
-
   /* Consistent styling for the summary element */ 
   :where(summary) { 
    cursor: pointer; 
@@ -261,10 +239,4 @@
    /* Hide empty elements */
    :where(:is(a:empty, ul:empty, dl:empty, div:empty, section:empty, article:empty, p:empty, h1:empty, h2:empty, h3:empty, h4:empty, h5:empty, h6:empty)) { 
      display: none; 
-   }
-
-   /* Enhanced transitions for non-text elements */
-   :where(:not(:is(svg *, p, h1, h2, h3, h4, h5, h6))) {
-     transition: ease-out 100ms;
-     transition-property: color, background, margin, padding, width, grid-column, grid-row, height, grid-template-columns, grid-template-rows, opacity, border, border-radius;
    }

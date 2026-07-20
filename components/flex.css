@@ -18,6 +18,7 @@
   --flex-wrap:        attr(wrap type(*), nowrap);
   --justify-content:  attr(justify type(*), flex-start);
   --align-items:      attr(align type(*), stretch);
+  --align-content:    attr(align-content type(*), stretch);
   --gap:              attr(gap type(*), 1.5rem);
 
   display: flex;
@@ -25,6 +26,7 @@
   flex-wrap: var(--flex-wrap);
   justify-content: var(--justify-content);
   align-items: var(--align-items);
+  align-content: var(--align-content);
   gap: var(--gap);
 
   /*

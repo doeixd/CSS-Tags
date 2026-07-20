@@ -209,6 +209,7 @@ declare global {
       direction?: CSSValue;
       justify?: CSSValue;
       wrap?: CSSValue;
+      "align-content"?: CSSValue;
     }
 
     interface ImageContainerAttributes extends GlobalAttributes {

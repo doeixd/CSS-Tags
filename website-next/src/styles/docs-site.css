@@ -22,10 +22,14 @@
   --docs-content-gap: var(--space-xl);
   --site-header-padding-inline: var(--docs-safe-padding-inline);
   --site-footer-padding-inline: var(--docs-safe-padding-inline);
-  --view-transition-duration: 100ms;
-  --transition-duration-page: 100ms;
-  --view-transition-old: fade-out;
-  --view-transition-new: fade-in;
+}
+
+/* Route changes are content updates, not animation events. The library ships
+   opt-in View Transition primitives, but the documentation shell stays still. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,6 +62,12 @@
   overscroll-behavior: contain;
   scrollbar-color: transparent transparent;
   scrollbar-width: thin;
+}
+
+/* Keep the right rail in the desktop layout even when a page has no outline.
+   This prevents the article column from changing width between routes. */
+.next-docs__outline[data-empty="true"] {
+  visibility: hidden;
 }
 
 html {
@@ -631,6 +641,10 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   .next-docs__outline {
     position: static;
     max-block-size: none;
+  }
+
+  .next-docs__outline[data-empty="true"] {
+    display: none;
   }
 }
 

@@ -26,6 +26,9 @@ The `flex` component provides a declarative way to create flexible one-dimension
 ### Item Alignment
 - `align`: Align-items alignment (default: `stretch`)
   - Values: `stretch`, `flex-start`, `flex-end`, `center`, `baseline`
+- `align-content`: Distribution of wrapped flex lines (default: `stretch`)
+  - Values: `stretch`, `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly`
+  - Has an effect only when wrapping creates multiple lines and the container has spare cross-axis space
 
 ### Spacing
 - `gap`: Gap between flex items (default: `1.5rem`)

@@ -118,8 +118,13 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
             </aside>
 
             <layout-sidebar side="right" side-width="12.5rem" content-min-width="min(100%, 36rem)" gap="var(--docs-content-gap)">
-              {outline.length > 0 && (
-                <aside data-layout-sidebar-aside class="next-docs__outline">
+              <aside
+                data-layout-sidebar-aside
+                class="next-docs__outline"
+                data-empty={outline.length === 0 ? "true" : undefined}
+                aria-hidden={outline.length === 0 ? "true" : undefined}
+              >
+                {outline.length > 0 && (
                   <nav aria-label="On this page">
                     <strong>On this page</strong>
                     <ul data-list-navigation data-variant="flush">
@@ -128,8 +133,8 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
                       ))}
                     </ul>
                   </nav>
-                </aside>
-              )}
+                )}
+              </aside>
 
               <main id="main-content" tabindex="-1" data-pagefind-body class="next-docs__content">
                 <slot />
