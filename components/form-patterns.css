@@ -115,7 +115,38 @@ input[type="checkbox"][role="switch"]:disabled {
   z-index: 1;
 }
 
+/* Attached actions remain visually joined to their neighboring controls. */
+:is(input-group, [data-input-group], .input-group) > :is(button, .form-button):is(:hover, :active) {
+  transform: var(--input-group-button-transform, none);
+}
+
 @media (max-width: 30rem) {
+  :is(input-group, [data-input-group], .input-group)[data-stack="auto"] {
+    flex-direction: column;
+  }
+
+  :is(input-group, [data-input-group], .input-group)[data-stack="auto"] > * {
+    margin: 0 0 calc(-1 * var(--input-group-border-overlap, var(--border-width, 1px)));
+    inline-size: 100%;
+    flex: 0 1 auto;
+    border-radius: 0;
+  }
+
+  :is(input-group, [data-input-group], .input-group)[data-stack="auto"] > :first-child {
+    border-start-start-radius: var(--input-group-radius, var(--radius-md, 0.5rem));
+    border-start-end-radius: var(--input-group-radius, var(--radius-md, 0.5rem));
+  }
+
+  :is(input-group, [data-input-group], .input-group)[data-stack="auto"] > :last-child {
+    margin-block-end: 0;
+    border-end-start-radius: var(--input-group-radius, var(--radius-md, 0.5rem));
+    border-end-end-radius: var(--input-group-radius, var(--radius-md, 0.5rem));
+  }
+}
+
+/* The same adaptive contract works inside an opted-in layout container, so
+   embedded panels and resizable examples do not depend on viewport width. */
+@container layout-container (max-width: 30rem) {
   :is(input-group, [data-input-group], .input-group)[data-stack="auto"] {
     flex-direction: column;
   }
@@ -167,6 +198,10 @@ input[type="checkbox"][role="switch"]:disabled {
 :is(search-input, [data-search-input], .search-input):focus-within {
   border-color: var(--outline-focus);
   box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+}
+
+:is(search-input, [data-search-input], .search-input):hover:not(:focus-within) {
+  border-color: var(--search-input-hover-border-color, var(--outline-overt));
 }
 
 :is(search-input, [data-search-input], .search-input) > :is(svg, [data-search-icon]) {

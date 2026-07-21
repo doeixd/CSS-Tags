@@ -104,7 +104,11 @@ The available visual state classes are `.input-error` and `.input-success`. They
   </layout-cluster>
 </LiveExample>
 
-Variants set `--bg` and `--fg`: `.btn-primary`, `.btn-secondary`, `.btn-success`, `.btn-warning`, and `.btn-error`.
+Variants set the button-local `--bg` and `--fg` aliases: `.btn-primary`,
+`.btn-secondary`, `.btn-success`, `.btn-warning`, and `.btn-error`. For direct
+theme customization, prefer `--form-button-background` and
+`--form-button-color`; `.form-button` isolates those values from an ancestor's
+generic surface colors.
 
 ## Public API
 
@@ -124,6 +128,7 @@ icon needs more or less separation from the value.
 ## Useful tokens
 
 - `--spacing-sm`, `--spacing-md`, `--spacing-lg`
+- `--form-button-background`, `--form-button-color`
 - `--form-select-icon-gap`
 - `--surface-default`, `--text-default`, `--text-muted`
 - `--outline-default`, `--outline-overt`, `--outline-focus`

@@ -79,6 +79,9 @@
 }
 
 .form-button {
+  --bg: var(--form-button-background, var(--accent));
+  --fg: var(--form-button-color, var(--text-on-accent, white));
+
   display: inline-flex;
   align-items: center;
   justify-content: center;

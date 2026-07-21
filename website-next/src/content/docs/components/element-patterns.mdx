@@ -44,39 +44,53 @@ label-oriented cap/alphabetic trimming.
 
 ## Input group and search
 
-<LiveExample title="Connected controls">
-  <layout-stack gap="var(--space-md)">
-    <label>
-      <span>Project address</span>
+<LiveExample title="Connected fields that adapt">
+  <layout-stack container-query gap="var(--space-lg)">
+    <div class="form-field">
+      <label for="project-slug">Project URL</label>
       <input-group data-stack="auto">
         <span class="input-affix">https://</span>
-        <input class="form-input" aria-label="Project subdomain" value="atlas" />
-        <span class="input-affix">.example.com</span>
-        <button class="form-button" type="button">Save</button>
+        <input id="project-slug" class="form-input" value="atlas" />
+        <span class="input-affix">.css-tags.dev</span>
+        <button class="form-button" type="button">Create</button>
       </input-group>
-    </label>
-    <search-input>
-      <span aria-hidden="true">⌕</span>
-      <input type="search" aria-label="Search projects" placeholder="Search projects" />
-    </search-input>
+      <small class="form-help">Use a short, memorable project name.</small>
+    </div>
+
+    <form class="form-field" role="search">
+      <label for="project-search">Search projects</label>
+      <search-input>
+        <svg data-search-icon aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
+        <input id="project-search" type="search" placeholder="Try “grid” or “tabs”" />
+        <kbd aria-hidden="true">⌘ K</kbd>
+      </search-input>
+    </form>
   </layout-stack>
 </LiveExample>
 
 ```html
-<input-group data-stack="auto">
-  <span class="input-affix">https://</span>
-  <input class="form-input" aria-label="Project subdomain">
-  <button class="form-button">Save</button>
-</input-group>
+<layout-stack container-query>
+  <input-group data-stack="auto">
+    <span class="input-affix">https://</span>
+    <input class="form-input" aria-label="Project name">
+    <button class="form-button">Create</button>
+  </input-group>
 
-<search-input>
-  <span aria-hidden="true">⌕</span>
-  <input type="search" aria-label="Search projects">
-</search-input>
+  <search-input>
+    <svg data-search-icon aria-hidden="true"><!-- search icon --></svg>
+    <input type="search" aria-label="Search projects">
+    <kbd aria-hidden="true">⌘ K</kbd>
+  </search-input>
+</layout-stack>
 ```
 
 Input groups connect adjacent controls. Search input provides leading and
-trailing content slots around a native `input type="search"`.
+trailing content slots around a native `input type="search"`. With
+`data-stack="auto"`, a group stacks at narrow viewport widths or inside an
+opted-in `layout-container`, as the resizable preview demonstrates.
 
 ## File dropzone
 

@@ -186,6 +186,12 @@
   --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
 
+  /* Explicit form actions must not inherit the generic surface `--bg`/`--fg`
+     context used by boxes and pages. */
+  --form-button-background: var(--accent);
+  --form-button-color: var(--text-on-accent);
+  --input-group-button-transform: none;
+
   /* Badge emphasis uses a wider, scheme-safe contrast ramp than the general
      surface hierarchy so compact labels remain visibly distinct. */
   --badge-background-muted: color-mix(in oklch, var(--text-default) 5%, var(--base));
