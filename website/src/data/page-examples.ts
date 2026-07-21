@@ -79,10 +79,10 @@ const examples: Record<string, PageExampleDefinition> = {
         code: `<ul data-list>\n  <li data-list-item type="✓" marker-color="var(--success)">\n    Semantic structure\n  </li>\n  <li data-list-item type="✓" marker-color="var(--success)">\n    Shared spacing tokens\n  </li>\n</ul>`,
     },
     "components/masonry": {
-        title: "A responsive masonry-like collection",
-        description: "The same host API is available as a custom element, data attribute, or class.",
-        preview: `<masonry-layout cols="repeat(auto-fit, minmax(8rem, 1fr))" gap="var(--space-sm)"><div class="example-tile">Short</div><div class="example-tile">A taller card<br><br>with more content</div><div class="example-tile">Medium<br>card</div><div class="example-tile">Another<br><br><br>item</div></masonry-layout>`,
-        code: `<masonry-layout\n  cols="repeat(auto-fit, minmax(12rem, 1fr))"\n  gap="var(--space-md)"\n>\n  <article>Short card</article>\n  <article>Card with more content...</article>\n  <article>Another card</article>\n</masonry-layout>`,
+        title: "A real waterfall in every browser",
+        description: "The multi-column baseline packs unequal articles today; supporting browsers enhance the same markup with Grid Lanes.",
+        preview: `<masonry-layout column-width="12rem" cols="repeat(auto-fit,minmax(min(100%,12rem),1fr))" gap="var(--space-sm)"><article class="example-tile"><strong>Quick note</strong><p class="example-muted">Two useful lines.</p></article><article class="example-tile"><span class="caption">Case study</span><h4>Fewer layout queries</h4><p class="example-muted">A minimum column width lets the collection adapt inside any container, including this resizable preview.</p></article><article class="example-tile"><strong>Quote</strong><blockquote>Good defaults make the simple path dependable.</blockquote></article><article class="example-tile"><span class="caption">API</span><h4>One gap</h4><p class="example-muted">The same value spaces columns and stacked items.</p></article><article class="example-tile"><strong>Tiny</strong></article><article class="example-tile"><span class="caption">Progressive</span><h4>Grid Lanes ready</h4><p class="example-muted">When native shortest-lane placement arrives, this markup upgrades without a rewrite.</p></article><article class="example-tile"><strong>Semantic content</strong><p class="example-muted">Articles remain articles.</p></article></masonry-layout>`,
+        code: `<masonry-layout\n  column-width="14rem"\n  cols="repeat(auto-fit, minmax(min(100%, 14rem), 1fr))"\n  gap="var(--space-md)"\n>\n  <article>Short card</article>\n  <article>Card with more content...</article>\n  <article>Another card</article>\n</masonry-layout>`,
     },
     "components/navigation": {
         title: "Responsive navigation on a native nav element",

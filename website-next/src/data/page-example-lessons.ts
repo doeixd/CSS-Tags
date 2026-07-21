@@ -289,9 +289,19 @@ export const supplementalExamples: Record<string, PageExampleLesson[]> = {
     }],
     "components/masonry": [{
         title: "Source order remains the reading order",
-        description: "Variable-height articles pack visually where supported while the DOM stays logical in every browser.",
-        preview: `<section data-masonry cols="repeat(auto-fit,minmax(9rem,1fr))" gap="var(--space-sm)">${tile("1 · Short")}${tile("2 · A taller item<br><br>with supporting copy")}${tile("3 · Medium<br>content")}${tile("4 · Final item")}</section>`,
-        code: `<section data-masonry cols="repeat(auto-fit, minmax(14rem, 1fr))">\n  <article>1 · First in reading order</article>\n  <article>2 · Second, with more content</article>\n  <article>3 · Third in reading order</article>\n</section>`,
+        description: "Numbering exposes the fallback's down-then-across flow while keeping the DOM and keyboard sequence authoritative.",
+        preview: `<section data-masonry column-width="9rem" gap="var(--space-sm)">${tile("1 · First")}${tile("2 · Second, with enough supporting copy to become taller")}${tile("3 · Third")}${tile("4 · Fourth, with a second line")}${tile("5 · Fifth")}${tile("6 · Sixth and final")}</section>`,
+        code: `<section data-masonry column-width="14rem">\n  <article>1 · First in reading order</article>\n  <article>2 · Second, with more content</article>\n  <article>3 · Third in reading order</article>\n</section>`,
+    }, {
+        title: "Cap columns without losing responsiveness",
+        description: "columns sets a maximum while column-width still lets the layout reduce its count as the preview narrows.",
+        preview: `<section class="masonry-layout" columns="3" column-width="8rem" gap="var(--space-sm)">${tile("Maximum three columns")}${tile("This card is taller because it explains the responsive cap in a little more detail.")}${tile("Resize the right edge")}${tile("No media query")}${tile("One column when needed")}</section>`,
+        code: `<section\n  class="masonry-layout"\n  columns="3"\n  column-width="12rem"\n  gap="var(--space-sm)"\n>\n  ...\n</section>`,
+    }, {
+        title: "Theme the layout through component tokens",
+        description: "Hierarchical variables provide a reusable recipe while attributes remain available for one-off instances.",
+        preview: `<section data-masonry style="--masonry-column-width:10rem;--masonry-gap:var(--space-xs);--masonry-fill:balance">${tile("Compact")}${tile("A denser gallery recipe with a smaller shared gap")}${tile("Token first")}${tile("Still responsive")}${tile("Customizable")}</section>`,
+        code: `.compact-waterfall {\n  --masonry-column-width: 10rem;\n  --masonry-gap: var(--space-xs);\n  --masonry-fill: balance;\n}`,
     }],
     "components/modal": [{
         title: "Theme the surface without replacing dialog behavior",

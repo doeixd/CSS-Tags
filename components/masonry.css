@@ -1,48 +1,83 @@
 /**
  * masonry.css
  *
- * A declarative component and mixin for the experimental CSS Masonry Layout.
+ * A declarative waterfall layout with a broadly supported multi-column
+ * baseline and progressive enhancement to CSS Grid Lanes.
  * ------------------------------------------------------------------------------
- * ⚠️ IMPORTANT: EXPERIMENTAL FEATURE - Requires browser flag in Edge/Chrome 140+.
- *
- * @feature {CSS Masonry} - For creating packed, brick-like layouts.
+ * @feature {CSS Multi-column Layout} - Provides useful packing today.
+ * @feature {CSS Grid Lanes} (Experimental) - Uses shortest-track placement
+ * when the browser supports the current CSS Grid Level 3 syntax.
  */
 
 /* 1. MIXIN (for use in CSS) */
 @mixin --masonry(
-  --direction type(*): 'column',
-  --tracks type(*): 'repeat(auto-fill, auto)',
-  --gap type(*): 1.5rem
+  --tracks type(*): repeat(auto-fit, minmax(min(100%, 14rem), 1fr)),
+  --column-width type(*): 14rem,
+  --gap type(*): 1.5rem,
+  --flow-tolerance type(*): normal
 ) {
-  display: masonry;
-  masonry-direction: var(--direction);
-  gap: var(--gap);
-  @when (var(--direction) = 'column') { grid-template-columns: var(--tracks); }
-  @when (var(--direction) = 'row') { grid-template-rows: var(--tracks); }
-}
+  column-width: var(--column-width);
+  column-gap: var(--gap);
 
-/* 2. COMPONENT (for use in HTML)
- * Standard grid is the baseline. Browsers with masonry support enhance it. */
-:is(masonry-layout, [data-masonry], .masonry-layout) {
-  display: grid;
-  masonry-direction: attr(direction type(*), column);
-  gap: attr(gap type(*), 1.5rem);
-  item-tolerance: attr(tolerance type(*), 0);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  grid-template-columns: attr(cols type(*), repeat(auto-fit, minmax(min(100%, 16rem), 1fr)));
-  grid-template-rows: attr(rows type(*), none);
-  grid-auto-flow: dense;
-}
-
-@supports (display: masonry) {
-  :is(masonry-layout, [data-masonry], .masonry-layout) {
-    display: masonry;
-    grid-auto-flow: initial;
+  @supports (display: grid-lanes) {
+    display: grid-lanes;
+    grid-template-columns: var(--tracks);
+    gap: var(--gap);
+    flow-tolerance: var(--flow-tolerance);
   }
 }
 
-/* Item spanning for the component */
+/* 2. COMPONENT (for use in HTML)
+ * Multi-column layout is the baseline so unequal items visibly pack instead of
+ * stretching into equal Grid rows. Grid Lanes upgrades placement where present. */
+:is(masonry-layout, [data-masonry], .masonry-layout) {
+  --masonry-column-width: 14rem;
+  --masonry-column-width: attr(column-width type(*), 14rem);
+  --masonry-columns: auto;
+  --masonry-columns: attr(columns type(*), auto);
+  --masonry-gap: var(--space-md, 1rem);
+  --masonry-gap: attr(gap type(*), var(--space-md, 1rem));
+  --masonry-fill: balance;
+  --masonry-fill: attr(fill type(*), balance);
+  --masonry-tracks: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  --masonry-tracks: attr(cols type(*), repeat(auto-fit, minmax(min(100%, 14rem), 1fr)));
+  --masonry-rows: none;
+  --masonry-rows: attr(rows type(*), none);
+  --masonry-flow-tolerance: normal;
+  --masonry-flow-tolerance: attr(tolerance type(*), normal);
+  --masonry-flow-tolerance: attr(flow-tolerance type(*), attr(tolerance type(*), normal));
+
+  display: block;
+  column-width: var(--masonry-column-width);
+  column-count: var(--masonry-columns);
+  column-fill: var(--masonry-fill);
+  column-gap: var(--masonry-gap);
+}
+
+/* Keep each item intact and use the same token for both axes in the fallback. */
 :is(masonry-layout, [data-masonry], .masonry-layout) > * {
-  grid-column: attr(col type(*), auto);
-  grid-row: attr(row type(*), auto);
+  box-sizing: border-box;
+  inline-size: 100%;
+  margin-block-end: var(--masonry-gap);
+  break-inside: avoid;
+}
+
+@supports (display: grid-lanes) {
+  :is(masonry-layout, [data-masonry], .masonry-layout) {
+    display: grid-lanes;
+    column-width: auto;
+    column-count: auto;
+    grid-template-columns: var(--masonry-tracks);
+    grid-template-rows: var(--masonry-rows);
+    gap: var(--masonry-gap);
+    flow-tolerance: var(--masonry-flow-tolerance);
+  }
+
+  :is(masonry-layout, [data-masonry], .masonry-layout) > * {
+    inline-size: auto;
+    margin-block-end: 0;
+    break-inside: auto;
+    grid-column: attr(col type(*), auto);
+    grid-row: attr(row type(*), auto);
+  }
 }

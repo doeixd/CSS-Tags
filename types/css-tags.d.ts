@@ -285,8 +285,12 @@ declare global {
       direction?: CSSValue;
       cols?: CSSValue;
       rows?: CSSValue;
+      columns?: CSSValue;
+      "column-width"?: CSSValue;
       gap?: CSSValue;
+      fill?: CSSValue;
       tolerance?: CSSValue;
+      "flow-tolerance"?: CSSValue;
     }
 
     interface NavbarAttributes extends GlobalAttributes {
