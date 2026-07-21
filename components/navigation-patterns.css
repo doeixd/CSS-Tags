@@ -1,6 +1,8 @@
 /** Compact and rich navigation/control groups. */
 
 :is(tool-bar, [data-toolbar], .toolbar) {
+  --_toolbar-background: var(--toolbar-background, var(--surface-default));
+  --bg: var(--_toolbar-background);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -10,7 +12,7 @@
   border: var(--toolbar-border-width, var(--border-width, 1px)) solid
     var(--toolbar-border-color, var(--outline-subtle));
   border-radius: var(--toolbar-radius, var(--radius-md, 0.5rem));
-  background: var(--toolbar-background, var(--surface-default));
+  background: var(--_toolbar-background);
 }
 
 :is([data-toolbar-group], .toolbar-group) {
@@ -44,6 +46,8 @@
 
 :is(nav-list, [data-list-navigation], .list-navigation)
   :is(a, button, [data-list-navigation-item], .list-navigation-item) {
+  --_list-navigation-background: var(--list-navigation-background, var(--surface-default));
+  --bg: var(--_list-navigation-background);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
@@ -54,7 +58,7 @@
   border: var(--list-navigation-border-width, var(--border-width, 1px)) solid
     var(--list-navigation-border-color, var(--outline-subtle));
   border-radius: var(--list-navigation-radius, var(--radius-md, 0.5rem));
-  background: var(--list-navigation-background, var(--surface-default));
+  background: var(--_list-navigation-background);
   color: var(--list-navigation-color, var(--text-default));
   text-align: start;
   text-decoration: none;
@@ -62,14 +66,16 @@
 
 :is(nav-list, [data-list-navigation], .list-navigation)
   :is(a, button, [data-list-navigation-item], .list-navigation-item):is(:hover, :focus-visible) {
+  --bg: var(--list-navigation-hover-background, var(--surface-subtle));
   border-color: var(--list-navigation-hover-border-color, var(--outline-overt));
-  background: var(--list-navigation-hover-background, var(--surface-subtle));
+  background: var(--bg);
 }
 
 :is(nav-list, [data-list-navigation], .list-navigation)
   :is(a, button, [data-list-navigation-item], .list-navigation-item)[aria-current="page"] {
+  --bg: var(--list-navigation-current-background, var(--accent-subtle));
   border-color: var(--list-navigation-current-border-color, var(--accent));
-  background: var(--list-navigation-current-background, var(--accent-subtle));
+  background: var(--bg);
   color: var(--list-navigation-current-color, var(--text-overt));
 }
 
@@ -81,6 +87,11 @@
   --list-navigation-hover-background: var(--surface-muted);
   --list-navigation-current-background: var(--surface-subtle);
   --list-navigation-radius: var(--radius-sm, 0.25rem);
+}
+
+:is(nav-list[variant="flush"], [data-list-navigation][data-variant="flush"], .list-navigation.is-flush)
+  :is(a, button, [data-list-navigation-item], .list-navigation-item):not(:hover, :focus-visible, [aria-current="page"]) {
+  --bg: inherit;
 }
 
 @media (forced-colors: active) {
@@ -102,6 +113,8 @@
 }
 
 :is(icon-rail, [data-icon-rail], .icon-rail) {
+  --_icon-rail-background: var(--icon-rail-background, var(--surface-default));
+  --bg: var(--_icon-rail-background);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,10 +124,11 @@
   border: var(--icon-rail-border-width, var(--border-width, 1px)) solid
     var(--icon-rail-border-color, var(--outline-subtle));
   border-radius: var(--icon-rail-radius, var(--radius-lg, 0.75rem));
-  background: var(--icon-rail-background, var(--surface-default));
+  background: var(--_icon-rail-background);
 }
 
 :is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button) {
+  --bg: inherit;
   display: grid;
   place-items: center;
   inline-size: var(--icon-rail-item-size, 2.75rem);
@@ -128,7 +142,8 @@
 
 :is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button):is(:hover, :focus-visible),
 :is(icon-rail, [data-icon-rail], .icon-rail) :is(a, button)[aria-current="page"] {
-  background: var(--icon-rail-active-background, var(--accent-subtle));
+  --bg: var(--icon-rail-active-background, var(--accent-subtle));
+  background: var(--bg);
   color: var(--icon-rail-active-color, var(--text-overt));
 }
 
@@ -231,7 +246,7 @@
 :is(nav[data-pagination], nav.pagination) :is(a, button)[aria-current="page"] {
   border-color: var(--pagination-current-border-color, var(--pagination-current-background, var(--accent)));
   background: var(--pagination-current-background, var(--accent));
-  color: var(--pagination-current-color, var(--on-accent, white));
+  color: var(--pagination-current-color, var(--text-on-accent, white));
 }
 
 :is(nav[data-pagination], nav.pagination) :is(a, button)[aria-disabled="true"],

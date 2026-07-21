@@ -119,7 +119,7 @@
 }
 
 :is(.prose, [data-prose]) :is(li > ul, li > ol) {
-  margin-block-start: var(--space-list-item, 0.5em);
+  margin-block-start: var(--space-list-nested-top, var(--space-list-item, 0.5em));
   margin-block-end: 0;
 }
 

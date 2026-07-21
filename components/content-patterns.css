@@ -157,6 +157,8 @@
 }
 
 :is(empty-state, [data-empty-state], .empty-state) {
+  --_empty-state-background: var(--empty-state-background, var(--surface-subtle));
+  --bg: var(--_empty-state-background);
   display: grid;
   justify-items: var(--empty-state-align, center);
   inline-size: 100%;
@@ -168,7 +170,7 @@
     var(--empty-state-border-style, dashed)
     var(--empty-state-border-color, var(--outline-subtle));
   border-radius: var(--empty-state-radius, var(--radius-lg, 0.75rem));
-  background: var(--empty-state-background, var(--surface-subtle));
+  background: var(--_empty-state-background);
   color: var(--empty-state-color, var(--text-default));
   text-align: var(--empty-state-text-align, center);
 }

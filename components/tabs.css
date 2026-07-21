@@ -63,11 +63,12 @@
 }
 
 :is([role="tabpanel"], [data-tabpanel], .tabpanel) {
+  --bg: var(--tabs-panel-background, var(--surface-default));
   padding: var(--tabs-panel-padding, 1rem);
   border: var(--tabs-panel-border, 1px solid var(--outline-subtle));
   border-block-start: 0;
   border-radius: 0 0 var(--tabs-panel-radius, var(--radius-md, 0.5rem)) var(--tabs-panel-radius, var(--radius-md, 0.5rem));
-  background: var(--tabs-panel-background, var(--surface-default));
+  background: var(--bg);
   color: var(--tabs-panel-color, inherit);
 }
 

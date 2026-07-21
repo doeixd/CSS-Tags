@@ -153,14 +153,16 @@
 }
 
 .form-button:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--form-button-hover-background, oklch(from var(--bg, var(--accent)) calc(l - 0.08) c h));
+  --bg: var(--form-button-hover-background, oklch(from var(--form-button-background, var(--accent)) calc(l - 0.08) c h));
+  background: var(--bg);
   transform: var(--transform-button-hover, translateY(-1px));
   box-shadow: var(--shadow-button-hover, none);
 }
 
 .form-button:active:not(:disabled):not([aria-disabled="true"]) {
+  --bg: var(--form-button-active-background, oklch(from var(--form-button-background, var(--accent)) calc(l - 0.14) c h));
   transform: var(--transform-button-active, translateY(0) scale(0.98));
-  background: var(--form-button-active-background, oklch(from var(--bg, var(--accent)) calc(l - 0.14) c h));
+  background: var(--bg);
   box-shadow: var(--shadow-button-active, var(--shadow-inner));
 }
 

@@ -14,7 +14,7 @@
   border: var(--skip-link-border, 1px solid currentColor);
   border-radius: var(--skip-link-radius, var(--border-radius-md, 0.5rem));
   background: var(--skip-link-background, var(--accent, CanvasText));
-  color: var(--skip-link-color, var(--on-accent, Canvas));
+  color: var(--skip-link-color, var(--text-on-accent, Canvas));
   box-shadow: var(--skip-link-shadow, var(--shadow-md, 0 0.25rem 0.75rem rgb(0 0 0 / 0.2)));
   font-weight: var(--skip-link-font-weight, var(--font-weight-semibold, 600));
   line-height: var(--line-height-tight, 1.25);

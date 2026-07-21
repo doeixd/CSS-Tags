@@ -47,6 +47,7 @@ details {
   --_radius:       var(--disclosure-radius, var(--radius-md, 0.5rem));
   --_padding:      var(--disclosure-padding, 1rem);
   --_transition:   var(--disclosure-transition, 200ms);
+  --bg: var(--_bg);
 
   border: var(--_border-width) solid var(--_border-color);
   border-radius: var(--_radius);
@@ -235,7 +236,8 @@ details[data-disclosure="bordered"] {
 }
 
 details[data-disclosure="bordered"] > summary {
-  background: var(--surface-subtle);
+  --bg: var(--surface-subtle);
+  background: var(--bg);
   border-block-end: var(--disclosure-border-width, var(--border-width-thick, 2px)) solid var(--disclosure-border-color, var(--outline-default));
   font-weight: var(--font-weight-semibold, 600);
 }
@@ -245,7 +247,8 @@ details[data-disclosure="bordered"]:not([open]) > summary {
 }
 
 details[data-disclosure="bordered"] > :not(summary) {
-  background: var(--disclosure-content-bg, var(--surface-default, transparent));
+  --bg: var(--disclosure-content-bg, var(--surface-default, transparent));
+  background: var(--bg);
 }
 
 

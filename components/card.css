@@ -12,12 +12,14 @@
   --_card-radius: var(--card-radius, var(--radius-lg, 0.75rem));
   --_card-padding: var(--card-padding, var(--space-lg, 1.5rem));
   --_card-gap: var(--card-gap, var(--space-sm, 0.75rem));
+  --bg: var(--_card-background);
 
   container: card-container / inline-size;
   display: flex;
   min-inline-size: 0;
   flex-direction: column;
   overflow: hidden;
+  padding: 0;
   border: var(--_card-border-width) solid var(--_card-border-color);
   border-radius: var(--_card-radius);
   background: var(--_card-background);

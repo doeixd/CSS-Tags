@@ -13,6 +13,7 @@
   --_badge-padding-inline: var(--badge-padding-inline, var(--chip-padding-inline, 0.55em));
   --_badge-padding-block: var(--badge-padding-block, var(--chip-padding-block, 0.15em));
   --_badge-gap: var(--badge-gap, var(--chip-gap, var(--space-2xs, 0.25rem)));
+  --bg: var(--_badge-background);
 
   display: inline-flex;
   align-items: center;

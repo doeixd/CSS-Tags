@@ -7,13 +7,15 @@
  */
 
 :is(dialog[data-modal], dialog.modal, modal-dialog) {
+  --_modal-background: var(--modal-bg, var(--surface-default, Canvas));
+  --bg: var(--_modal-background);
   width: min(var(--modal-width, 36rem), calc(100% - 2rem));
   max-height: min(var(--modal-max-height, 85dvh), calc(100% - 2rem));
   margin: auto;
   padding: var(--modal-padding, var(--space-lg, 1.5rem));
   overflow: auto;
   color: var(--modal-text, var(--text-default, CanvasText));
-  background: var(--modal-bg, var(--surface-default, Canvas));
+  background: var(--_modal-background);
   border: var(--modal-border-width, 1px) solid
     var(--modal-border-color, var(--outline-default, currentColor));
   border-radius: var(--modal-radius, var(--radius-lg, 0.75rem));
@@ -47,12 +49,14 @@
 }
 
 :is([data-modal-overlay], .modal-overlay) > :is(.modal__panel, [data-modal-panel]) {
+  --_modal-background: var(--modal-bg, var(--surface-default, Canvas));
+  --bg: var(--_modal-background);
   width: min(var(--modal-width, 36rem), 100%);
   max-height: var(--modal-max-height, 85dvh);
   padding: var(--modal-padding, var(--space-lg, 1.5rem));
   overflow: auto;
   color: var(--modal-text, var(--text-default, CanvasText));
-  background: var(--modal-bg, var(--surface-default, Canvas));
+  background: var(--_modal-background);
   border: var(--modal-border-width, 1px) solid
     var(--modal-border-color, var(--outline-default, currentColor));
   border-radius: var(--modal-radius, var(--radius-lg, 0.75rem));

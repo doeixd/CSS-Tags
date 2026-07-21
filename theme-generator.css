@@ -184,6 +184,7 @@
   --secondary-muted: oklch(from var(--secondary) calc(l + 0.15) calc(c - 0.05) h);
   --secondary-subtle: oklch(from var(--secondary) calc(l + 0.05) calc(c - 0.02) h);
   --secondary-overt: oklch(from var(--secondary) calc(l - 0.1) calc(c + 0.05) h);
+  --text-on-secondary: oklch(from var(--secondary) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
 
   /* Tertiary colors */
   --tertiary: oklch(var(--accent-l) var(--accent-c) var(--tertiary-h));
@@ -584,6 +585,7 @@ Customization:
   --secondary-muted: oklch(from var(--secondary) calc(l + 0.15) calc(c - 0.05) h);
   --secondary-subtle: oklch(from var(--secondary) calc(l + 0.05) calc(c - 0.02) h);
   --secondary-overt: oklch(from var(--secondary) calc(l - 0.1) calc(c + 0.05) h);
+  --text-on-secondary: oklch(from var(--secondary) clamp(0.1, (0.65 / l - 1) * 999, 0.98) min(c, 0.08) h);
 
   /* Tertiary colors */
   --tertiary: oklch(var(--accent-l) var(--accent-c) var(--tertiary-h));
@@ -798,7 +800,7 @@ Customization:
 .button-secondary {
   background-color: var(--button-secondary);
   border-color: var(--secondary);
-  color: var(--secondary-on-base);
+  color: var(--text-on-secondary);
 }
 .button-secondary:hover { background-color: var(--button-secondary-hover); }
 .button-secondary:active { background-color: var(--button-secondary-active); }

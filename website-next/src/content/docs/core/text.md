@@ -47,6 +47,11 @@ Line-height values use the `leading` attribute:
 
 Auto-contrast is the default. The primitive reads the inherited `--bg` value and derives readable text; no `contrast` attribute is required.
 
+Surface-owning components such as cards, alerts, dialogs, tabs, navigation, and
+site chrome establish their own `--bg` context. Transparent boxes and layout
+primitives intentionally inherit the nearest context. If you create a custom
+surface, set its painted background and `--bg` to the same color.
+
 Use semantic color roles when a specific meaning or emphasis is needed:
 
 - Contrast roles: `muted`, `subtle`, `default`, `overt`

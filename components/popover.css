@@ -14,6 +14,7 @@
   --b-bc: var(--outline-default);
   --b-r: var(--radius-lg, 0.75rem);
   --b-p: var(--spacing-lg, 1.5rem);
+  --bg: var(--b-bg);
   background: var(--b-bg);
   color: var(--auto-contrast-text, oklch(from var(--b-bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
   border: var(--b-bw) solid var(--b-bc);

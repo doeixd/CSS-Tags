@@ -78,7 +78,7 @@
   ul { list-style: var(--list-style-unordered, disc); }
   ol { list-style: var(--list-style-ordered, decimal); }
   li { margin-block-end: var(--space-list-item, 0.5em); }
-  li > ul, li > ol { margin-block-start: var(--space-list-item, 0.5em); margin-block-end: 0; }
+  li > ul, li > ol { margin-block-start: var(--space-list-nested-top, var(--space-list-item, 0.5em)); margin-block-end: 0; }
   dt { font-weight: var(--font-weight-medium, 500); color: var(--text-overt); } /* UPDATED */
   dd { padding-inline-start: var(--space-list-indent, 1.5em); color: var(--text-subtle); } /* UPDATED */
   dd + dt { margin-block-start: var(--space-md, 1rem); }
@@ -167,6 +167,7 @@
 
   /* Button Structure - Colors applied via utilities in @utilities */
   button, input[type="button"], input[type="submit"], input[type="reset"] {
+    --bg: var(--button-background, var(--surface-default));
     padding: var(--space-button-y, 0.7em) var(--space-button-x, 1.3em);
     border-radius: var(--radius-md, 6px);
     font-family: var(--font-family-ui, inherit);
@@ -176,7 +177,7 @@
     border-width: var(--border-width-button, 1px);
     border-style: solid;
     border-color: var(--button-border-color, var(--outline-default));
-    background-color: var(--button-background, var(--surface-default));
+    background-color: var(--bg);
     color: var(--button-color, var(--text-default));
     cursor: pointer;
     transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
@@ -190,15 +191,17 @@
   }
   /* Hover/Active structure - styles may be overridden by utilities */
   :is(button, input[type="button"], input[type="submit"], input[type="reset"]):hover:not(:disabled):not([aria-disabled="true"]) {
+    --bg: var(--button-hover-background, var(--surface-subtle));
     border-color: var(--button-hover-border-color, var(--outline-overt));
-    background-color: var(--button-hover-background, var(--surface-subtle));
+    background-color: var(--bg);
     color: var(--button-hover-color, var(--text-overt));
     transform: var(--transform-button-hover, translateY(-1px));
     box-shadow: var(--shadow-button-hover, none);
   }
   :is(button, input[type="button"], input[type="submit"], input[type="reset"]):active:not(:disabled):not([aria-disabled="true"]) {
+    --bg: var(--button-active-background, var(--surface-muted));
     border-color: var(--button-active-border-color, var(--outline-active));
-    background-color: var(--button-active-background, var(--surface-muted));
+    background-color: var(--bg);
     color: var(--button-active-color, var(--text-overt));
     transform: var(--transform-button-active, translateY(0) scale(0.98));
     box-shadow: var(--shadow-button-active, var(--shadow-inner));
@@ -336,10 +339,11 @@
 
   /* Basic Button Styling (Structure in defaults, base style here) */
   :is(.button, .btn) {
+    --bg: var(--button-background, var(--surface-default));
     display: inline-flex; align-items: center; justify-content: center;
     padding: 0.6em 1.2em; border-radius: var(--radius-md);
     border: var(--border-width) solid var(--button-border-color, var(--outline-default));
-    background-color: var(--button-background, var(--surface-default));
+    background-color: var(--bg);
     color: var(--button-color, var(--text-default));
     font-family: var(--font-family-ui, inherit);
     font-size: var(--font-size-control, 1rem);
@@ -352,15 +356,17 @@
     user-select: none; line-height: var(--line-height-ui, 1.375);
   }
    :is(.button, .btn):hover:not([disabled]):not([aria-disabled="true"]) {
+     --bg: var(--button-hover-background, var(--surface-subtle));
      border-color: var(--button-hover-border-color, var(--outline-overt));
-     background-color: var(--button-hover-background, var(--surface-subtle));
+     background-color: var(--bg);
      color: var(--button-hover-color, var(--text-overt));
      transform: var(--transform-button-hover, translateY(-1px));
      box-shadow: var(--shadow-button-hover, none);
    }
   :is(.button, .btn):active:not([disabled]):not([aria-disabled="true"]) {
+    --bg: var(--button-active-background, var(--surface-muted));
     border-color: var(--button-active-border-color, var(--outline-active));
-    background-color: var(--button-active-background, var(--surface-muted));
+    background-color: var(--bg);
     color: var(--button-active-color, var(--text-overt));
     transform: var(--transform-button-active, translateY(0) scale(0.98));
     box-shadow: var(--shadow-button-active, var(--shadow-inner));
@@ -451,17 +457,6 @@
     border-color: var(--accent-overt);
   }
 
-  /* Basic card structure */
-  .card {
-     --bg: var(--surface-default); /* Set local --bg */
-     background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
-      color: var(--auto-contrast-text, oklch(from var(--bg, currentColor) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h)); /* Use auto-contrast */
-     border-radius: var(--radius-lg);
-     padding: 1.5rem;
-     border: var(--border-width) solid var(--outline-subtle);
-     box-shadow: 0 2px 5px oklch(from var(--base) calc(l - 50%) 0.02 h / 0.1);
-  }
-
   /* Code block styling */
   pre {
     background-color: var(--code-block-bg);
@@ -475,7 +470,7 @@
   }
   /* Blockquote styling */
   blockquote {
-    border-inline-start-color: var(--blockquote-border);
+    border-inline-start-color: var(--blockquote-border-color, var(--outline-default, currentColor));
     color: var(--text-subtle);
   }
   /* Horizontal Rule styling */

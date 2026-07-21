@@ -1,6 +1,8 @@
 /** Application and feed patterns built on semantic content. */
 
 :is(message-bubble, [data-bubble], .bubble) {
+  --_bubble-background: var(--bubble-background, var(--surface-subtle));
+  --bg: var(--_bubble-background);
   display: grid;
   inline-size: fit-content;
   max-inline-size: var(--bubble-max-width, min(42rem, 85%));
@@ -9,14 +11,15 @@
   border: var(--bubble-border-width, var(--border-width, 1px)) solid
     var(--bubble-border-color, var(--outline-subtle));
   border-radius: var(--bubble-radius, var(--radius-lg, 0.75rem));
-  background: var(--bubble-background, var(--surface-subtle));
+  background: var(--_bubble-background);
   color: var(--bubble-color, var(--text-default));
 }
 
 :is(message-bubble, [data-bubble], .bubble):is([data-sender="self"], .bubble-self) {
+  --_bubble-background: var(--bubble-self-background, var(--accent));
   justify-self: end;
   border-end-end-radius: var(--bubble-tail-radius, var(--radius-xs, 0.25rem));
-  background: var(--bubble-self-background, var(--accent));
+  background: var(--_bubble-background);
   color: var(--bubble-self-color, var(--text-on-accent));
 }
 
@@ -48,23 +51,26 @@
 }
 
 :is(log-card, [data-log-card], .log-card) {
+  --_log-card-background: var(--log-card-background, var(--surface-default));
+  --bg: var(--_log-card-background);
   display: grid;
   overflow: hidden;
   border: var(--log-card-border-width, var(--border-width, 1px)) solid
     var(--log-card-border-color, var(--outline-subtle));
   border-radius: var(--log-card-radius, var(--radius-lg, 0.75rem));
-  background: var(--log-card-background, var(--surface-default));
+  background: var(--_log-card-background);
   color: var(--log-card-color, var(--text-default));
 }
 
 :is([data-log-header], .log-card-header) {
+  --bg: var(--log-card-header-background, var(--surface-subtle));
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--log-card-gap, var(--space-sm, 0.75rem));
   padding: var(--log-card-header-padding, var(--space-sm, 0.75rem) var(--space-md, 1rem));
   border-block-end: var(--border-width, 1px) solid var(--log-card-border-color, var(--outline-subtle));
-  background: var(--log-card-header-background, var(--surface-subtle));
+  background: var(--bg);
 }
 
 :is([data-log-body], .log-card-body) {

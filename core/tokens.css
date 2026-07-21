@@ -124,6 +124,13 @@
   --contrast-ratio-medium: 4.5;
   --contrast-ratio-high: 7;
 
+  /* Shared interaction defaults. Components may expose narrower aliases, but
+     these values keep native elements and composed primitives in sync. */
+  --transition-duration: 150ms;
+  --transition-timing: ease-out;
+  --transition-fast: var(--transition-duration);
+  --opacity-disabled: 0.5;
+
   /* Max Chroma per Lightness Band */
   --max-chroma-0: 0.04;
   --max-chroma-1: 0.08;
@@ -181,7 +188,7 @@
   --button-active-color: var(--text-overt);
   --button-transition-duration: 140ms;
   --button-transition-timing: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --button-disabled-opacity: 0.5;
+  --button-disabled-opacity: var(--opacity-disabled);
   --shadow-button: none;
   --shadow-button-hover: none;
   --shadow-button-active: var(--shadow-inner);
@@ -208,9 +215,9 @@
   --form-control-disabled-background: var(--surface-muted);
   --form-control-disabled-color: var(--text-muted);
   --form-control-disabled-border-color: var(--outline-subtle);
-  --form-control-disabled-opacity: var(--opacity-disabled, 0.5);
-  --form-control-transition-duration: 150ms;
-  --form-control-transition-timing: ease-out;
+  --form-control-disabled-opacity: var(--opacity-disabled);
+  --form-control-transition-duration: var(--transition-duration);
+  --form-control-transition-timing: var(--transition-timing);
   --form-textarea-min-block-size: 6rem;
   --form-textarea-resize: vertical;
 
@@ -418,6 +425,15 @@
   --space-flow: 1em;
   --space-heading-top: 1.8em;
   --space-heading-bottom: 0.65em;
+  --space-list-indent: 1.5em;
+  --space-list-item: 0.5em;
+  --space-list-nested-top: var(--space-list-item);
+  --space-code-block-x: 1em;
+  --space-code-block-y: 0.8em;
+  --space-blockquote-margin-inline: 1em;
+  --space-blockquote-pad: 1em;
+  --border-width-blockquote: 3px;
+  --blockquote-border-color: var(--outline-default);
   --space-eyebrow-bottom: 0.5rem;
   --space-rich-block: 1.5em;
   --space-figure-caption-top: 0.5rem;
@@ -472,8 +488,8 @@
   --pagination-background: transparent;
   --pagination-hover-background: var(--surface-subtle);
   --pagination-current-background: var(--accent);
-  --pagination-current-color: var(--on-accent, white);
-  --pagination-disabled-opacity: 0.5;
+  --pagination-current-color: var(--text-on-accent, white);
+  --pagination-disabled-opacity: var(--opacity-disabled);
 
   /* Site shell */
   --site-header-min-height: 4rem;
@@ -560,11 +576,13 @@
 
   /* Space Scale */
   --density-factor: 1;
+  --space-2xs: calc(0.25rem * var(--density-factor));
   --space-xs: calc(0.5rem * var(--density-factor));
   --space-sm: calc(0.75rem * var(--density-factor));
   --space-md: calc(1.5rem * var(--density-factor));
   --space-lg: calc(2rem * var(--density-factor));
   --space-xl: calc(3rem * var(--density-factor));
+  --space-2xl: calc(4rem * var(--density-factor));
 
   /* Z-Index Scale */
   --z-index-0: 0;

@@ -6,6 +6,7 @@
  */
 
 :is(header[data-site-header], header.site-header, site-header) {
+  --bg: var(--site-header-background);
   display: block;
   container: site-header / inline-size;
   min-block-size: var(--site-header-min-height);
@@ -104,6 +105,7 @@
 }
 
 :is(footer[data-site-footer], footer.site-footer, site-footer) {
+  --bg: var(--site-footer-background);
   display: block;
   padding-block: var(--site-footer-padding-block);
   background: var(--site-footer-background);

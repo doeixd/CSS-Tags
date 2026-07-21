@@ -51,6 +51,7 @@
 }
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger) {
+  --bg: var(--carousel-trigger-background, var(--surface-default));
   position: absolute;
   z-index: 2;
   inset-block-start: 50%;
@@ -68,7 +69,7 @@
   transform: translateY(-50%);
   border: 1px solid var(--carousel-trigger-border-color, var(--outline-subtle));
   border-radius: 50%;
-  background: var(--carousel-trigger-background, var(--surface-default));
+  background: var(--bg);
   color: var(--carousel-trigger-color, var(--text-overt));
   box-shadow: var(--carousel-trigger-shadow, var(--shadow-sm));
   font: inherit;
@@ -130,8 +131,9 @@
 }
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):is(:hover, :focus-visible) {
+  --bg: var(--carousel-trigger-hover-background, var(--base));
   border-color: var(--carousel-trigger-hover-border-color, var(--outline-overt));
-  background: var(--carousel-trigger-hover-background, var(--base));
+  background: var(--bg);
 }
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):focus-visible {

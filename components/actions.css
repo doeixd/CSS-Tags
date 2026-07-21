@@ -2,6 +2,8 @@
 
 :is(button[data-icon-button], button.icon-button, icon-button,
     button[data-fab], button.fab, floating-action) {
+  --_icon-button-background: var(--icon-button-background, var(--surface-default));
+  --bg: var(--_icon-button-background);
   --_icon-button-size: var(--icon-button-size, 2.75rem);
 
   box-sizing: border-box;
@@ -18,7 +20,7 @@
   border: var(--icon-button-border-width, var(--border-width, 1px)) solid
     var(--icon-button-border-color, var(--outline-default));
   border-radius: var(--icon-button-radius, var(--radius-md, 0.5rem));
-  background: var(--icon-button-background, var(--surface-default));
+  background: var(--_icon-button-background);
   color: var(--icon-button-color, var(--text-default));
   font: inherit;
   font-size: var(--icon-button-font-size, var(--icon-button-icon-size, 1.25rem));
@@ -46,7 +48,8 @@
 
 :is(button[data-icon-button], button.icon-button, icon-button,
     button[data-fab], button.fab, floating-action):is(:hover, :focus-visible) {
-  background: var(--icon-button-hover-background, var(--surface-subtle));
+  --bg: var(--icon-button-hover-background, var(--surface-subtle));
+  background: var(--bg);
   border-color: var(--icon-button-hover-border-color, var(--outline-overt));
 }
 
