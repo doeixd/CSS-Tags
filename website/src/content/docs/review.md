@@ -1,102 +1,78 @@
 ---
 title: Library Review
-description: A comprehensive review of the CSS Tags library, its strengths, weaknesses, and recommendations.
+description: A current review of CSS Tags' architecture, strengths, constraints, and next quality investments.
 ---
 
-# CSS Library Review and Improvement Suggestions
+CSS Tags is a token-first CSS library built around native HTML, semantic state,
+and optional declarative hosts. The public entry point has an explicit cascade:
+tokens → theme → defaults and typography → components → layouts → utilities.
 
-## Overview
-This is a modern, comprehensive CSS component library featuring design tokens, theme engine, utilities, layouts, and components. It leverages advanced CSS features like OKLCH colors, CSS layers, custom properties, container queries, and @scope for a robust, maintainable system.
+## What is working well
 
-## Strengths
-- **Comprehensive Design System**: Extensive token system with color scales, typography, spacing, shadows.
-- **Modern CSS Features**: Uses @property, @layer, container queries, @scope effectively.
-- **Theme Support**: Built-in light/dark mode and high contrast support.
-- **Component Architecture**: Self-contained components with semantic naming.
-- **Layout Primitives**: Declarative layout components using custom elements.
-- **Accessibility Considerations**: Includes focus states, contrast handling.
+- **One themeable system:** semantic color, type, spacing, radius, motion, focus,
+  form, feedback, and component tokens are shared rather than hardcoded per
+  demo.
+- **Native behavior first:** dialog, details, form controls, progress, meter,
+  links, tables, and ARIA state remain the behavior-bearing APIs.
+- **Flexible hosts:** public visual primitives support custom tags, `data-*`
+  attributes, and classes where each form is practical.
+- **Progressive enhancement:** Popover, Anchor Positioning, customizable select,
+  container queries, and View Transitions retain useful fallbacks.
+- **Logical responsive CSS:** layouts and corner utilities account for writing
+  direction, container size, long content, and reduced motion.
+- **Documentation as verification:** live examples use the shipped `index.css`
+  API, can be resized, and are checked across 83 generated routes.
 
-## Issues Identified
-Based on review of core files, components, and existing issues.md:
+## Resolved structural findings
 
-1. **Import Typos**: `view-transitions.css` should be `view-transition.css`.
-2. **Naming Inconsistencies**: `view-transition.css/js` vs internal references to plural.
-3. **Redundant Imports**: `components.css` and `utilities.css` imported generally but also individually.
-4. **Missing Files**: `components.css` and `utilities.css` not present but imported.
-5. **Inconsistent Layering**: Some files use explicit `layer()`, others don't.
-6. **Unused Files**: `main.css` not imported.
+Earlier reviews reported broken view-transition imports, missing aggregate
+stylesheets, inconsistent layers, and nonexistent TypeScript support. Those
+findings no longer describe the repository:
 
-## Improvement Suggestions
+- `index.css` imports existing files from the organized `core/`,
+  `components/`, `layouts/`, `utilities/`, and `themes/` directories.
+- Every import is assigned to the declared cascade.
+- View-transition CSS and JavaScript use the singular file names consistently.
+- `types/css-tags.d.ts` covers the shipped custom tags and finite attributes.
+- GitHub Pages runs the production build and route/API audit before deployment.
 
-### 1. Fix Existing Issues
-- Correct import typo in `index.css` for `view-transition.css`.
-- Rename `view-transition.css` and `view-transition.js` to `view-transitions.css/js` for consistency.
-- Remove or create `components.css` and `utilities.css`; if creating, make them aggregate imports for their categories.
-- Ensure all imports use explicit `layer()` for consistency.
-- Investigate and integrate or remove `main.css`.
+See [Issues and Constraints](../issues/) for current compatibility notes rather
+than the superseded import report.
 
-### 2. Organization and Structure
-- **Subdirectories**: Organize files into folders:
-  - `core/` for `tokens.css`, `engine.css`, `theme.css`, `palette.css`, `reset.css`, `base.css`, `mixins.css`.
-  - `components/` for all component files (`card.css`, `modal.css`, etc.).
-  - `utilities/` for `utilities.css`, `utilities-extra.css`.
-  - `layouts/` for `layout.css`, `layout-extra.css`, etc.
-  - `themes/` for `theme-packs.css`, `example-brand.css`.
-- **Modular Imports**: Update `index.css` to import from subdirectories, e.g., `@import url("core/tokens.css") layer(tokens);`.
-- **File Splitting**: Break large files like `palette.css` into color-family specific files (e.g., `palette-neutral.css`, `palette-accent.css`) and aggregate in a main `palette.css`.
+## Remaining quality investments
 
-### 3. Performance Optimizations
-- **Critical CSS**: Extract critical styles for above-the-fold content.
-- **Unused Code Removal**: Audit for unused tokens or components; remove if not needed.
-- **Minification**: Add a build step with PostCSS or similar for production minification.
-- **Lazy Loading**: For large components, consider CSS loading strategies if applicable.
+### Browser and accessibility regression coverage
 
-### 4. Accessibility Enhancements
-- **ARIA Support**: Add ARIA attributes to components like `modal` (e.g., `role="dialog"`, `aria-labelledby`).
-- **Focus Management**: Implement focus trapping in modals and ensure keyboard navigation.
-- **Screen Reader Testing**: Verify color contrasts and text alternatives.
-- **High Contrast Improvements**: Expand high contrast mode coverage to all components.
+The build audit verifies routes, imports, API contracts, and representative
+markup. The next leverage point is an automated browser matrix for computed
+layout, keyboard paths, forced-colors, RTL, 200% text, and screenshot
+regressions.
 
-### 5. Documentation and Examples
-- **README.md**: Create a comprehensive README with:
-  - Installation instructions.
-  - Usage examples for each component and utility.
-  - Token customization guide.
-  - Browser support notes (e.g., @property support in Chromium-based browsers).
-- **API Documentation**: Document custom elements in `layout.css` with props, attrs, examples.
-- **Demo Page**: Enhance `demo.html` with interactive examples of all components.
-- **Changelog**: Track changes in a CHANGELOG.md.
+### Compatibility lifecycle
 
-### 6. Best Practices and Standards
-- **CSS Validation**: Ensure all CSS validates; fix any syntax issues.
-- **Semantic Naming**: Use more descriptive class names where generic (e.g., `.modal__panel` is good).
-- **CSS Comments**: Add more inline comments for complex calculations in `theme.css`.
-- **Versioning**: Adopt semantic versioning for releases.
-- **Linter Integration**: Add stylelint for consistent formatting.
+Legacy button and form-control aliases intentionally remain functional. A
+versioned deprecation policy and changelog would make it clearer when aliases
+can move from recommended, to compatibility-only, to removable.
 
-### 7. Testing and Quality Assurance
-- **Visual Regression Tests**: Use tools like Percy or Chromatic for component snapshots.
-- **CSS Testing**: Add tests for custom properties and theme calculations.
-- **Browser Testing**: Test in multiple browsers, especially for modern features.
-- **Accessibility Auditing**: Regular runs with axe-core or Lighthouse.
+### Optional delivery profiles
 
-### 8. Build and Tooling
-- **Build Script**: Add a simple build process (e.g., via npm scripts) for:
-  - Concatenating/splitting files.
-  - Generating CSS from tokens if needed.
-  - Running lints and tests.
-- **Package.json**: If not present, add for dependency management.
-- **CI/CD**: Set up GitHub Actions for automated testing and building.
+The single `index.css` entry is the clearest default. Projects with strict CSS
+budgets could also benefit from documented component-category entry points,
+provided those profiles preserve layer order and token dependencies.
 
-### 9. Future Enhancements
-- **TypeScript Definitions**: If expanding to JS components, add TS support.
-- **Framework Integration**: Provide guides for React/Vue/Svelte wrappers.
-- **Plugin System**: Allow users to extend themes or add custom tokens.
-- **Internationalization**: Support for RTL languages if needed.
+### Documentation source ownership
 
-## Implementation Priority
-1. **High Priority**: Fix existing issues (typos, missing files) to ensure functionality.
-2. **Medium Priority**: Improve organization and add documentation.
-3. **Low Priority**: Advanced features like build tooling and testing.
+The current and compatibility documentation trees are kept aligned. Continuing
+to strengthen the sync/audit path will prevent examples and API prose from
+drifting as components evolve.
 
-This review aims to make the library more maintainable, performant, and user-friendly while preserving its innovative approach to modern CSS.
+## Review standard
+
+Future changes should be evaluated against five questions:
+
+1. Does semantic HTML or ARIA state carry the behavior?
+2. Is repeated customization expressed as a token rather than a one-off value?
+3. Do canonical and compatibility hosts share one implementation?
+4. Does the pattern survive narrow containers, RTL, dark mode, forced colors,
+   reduced motion, and long content?
+5. Is the shipped API demonstrated and guarded by the build audit?

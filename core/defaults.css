@@ -431,33 +431,6 @@
     }
   }
 
-  /* Input field styling */
-  .input-field {
-    display: block; width: 100%; padding: 0.6em 0.8em;
-    border-radius: var(--radius-md);
-    border: var(--border-width) solid var(--outline-default);
-    background-color: var(--surface-subtle);
-    color: var(--text-default);
-    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
-  }
-  .input-field::placeholder { color: var(--text-muted); opacity: 1; }
-  .input-field:hover:not([disabled]) { border-color: var(--outline-overt); }
-  .input-field:focus, .input-field:focus-visible {
-    outline: none; border-color: var(--outline-focus);
-    box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--outline-focus) l c h / 0.3);
-  }
-  .input-field[disabled] { opacity: 0.6; background-color: var(--surface-muted); border-color: var(--outline-subtle); cursor: not-allowed; }
-  .input-field:invalid { border-color: var(--error); box-shadow: 0 0 0 var(--border-width-thick) oklch(from var(--error) l c h / 0.3); }
-
-  /* Custom Select Arrow */
-  select.input-field {
-    background-image: linear-gradient(45deg, transparent 50%, var(--text-subtle) 50%), linear-gradient(135deg, var(--text-subtle) 50%, transparent 50%);
-    background-position: right 0.8em top 55%, right calc(0.8em + 5px) top 55%;
-    background-size: 5px 5px, 5px 5px;
-    background-repeat: no-repeat;
-  }
-  select.input-field:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--text-default); }
-
   /* Checkbox/Radio Theming */
   :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
     border-color: var(--choice-control-border-color, var(--outline-default));

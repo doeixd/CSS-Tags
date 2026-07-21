@@ -1,134 +1,78 @@
-# Library Review (`review.md`)
+---
+title: Library Review
+description: A current review of CSS Tags' architecture, strengths, constraints, and next quality investments.
+---
 
-This file contains a comprehensive review of the CSS framework library, including strengths assessment, identified issues, and detailed improvement suggestions.
+CSS Tags is a token-first CSS library built around native HTML, semantic state,
+and optional declarative hosts. The public entry point has an explicit cascade:
+tokens → theme → defaults and typography → components → layouts → utilities.
 
-## Recent Updates & Improvements (Latest)
+## What is working well
 
-### ✅ Anchor Positioning System
-- **Added comprehensive anchor positioning utilities** in `utilities/utilities.css`
-- **Added anchor positioning CSS custom properties** with `@property` declarations in `core/theme.css`
-- **Enhanced tooltip component** with proper anchor positioning and fallbacks
-- **Updated demo implementations** to use modern anchor positioning
+- **One themeable system:** semantic color, type, spacing, radius, motion, focus,
+  form, feedback, and component tokens are shared rather than hardcoded per
+  demo.
+- **Native behavior first:** dialog, details, form controls, progress, meter,
+  links, tables, and ARIA state remain the behavior-bearing APIs.
+- **Flexible hosts:** public visual primitives support custom tags, `data-*`
+  attributes, and classes where each form is practical.
+- **Progressive enhancement:** Popover, Anchor Positioning, customizable select,
+  container queries, and View Transitions retain useful fallbacks.
+- **Logical responsive CSS:** layouts and corner utilities account for writing
+  direction, container size, long content, and reduced motion.
+- **Documentation as verification:** live examples use the shipped `index.css`
+  API, can be resized, and are checked across 83 generated routes.
 
-### ✅ Layout System Improvements
-- **Added missing layout properties** (`--l-gutters`, `--l-max-width`) with `@property` declarations in `layouts/layout.css`
+## Resolved structural findings
 
-### ✅ Typography & Defaults Enhancements
-- **Added font smoothing properties** (`--font-smoothing-moz`, `--font-smoothing-webkit`) with `@property` declarations in `core/defaults.css`
-- **Added scroll behavior property** (`--scroll-behavior`) with `@property` declaration
-- **Added body line height property** (`--body-line-height`) with `@property` declaration
+Earlier reviews reported broken view-transition imports, missing aggregate
+stylesheets, inconsistent layers, and nonexistent TypeScript support. Those
+findings no longer describe the repository:
 
-### ✅ Interactive Utilities
-- **Added enhanced interactive state utilities** (`.hover-highlight`, `.active-press`, `.focus-ring`) in `utilities/utilities.css`
+- `index.css` imports existing files from the organized `core/`,
+  `components/`, `layouts/`, `utilities/`, and `themes/` directories.
+- Every import is assigned to the declared cascade.
+- View-transition CSS and JavaScript use the singular file names consistently.
+- `types/css-tags.d.ts` covers the shipped custom tags and finite attributes.
+- GitHub Pages runs the production build and route/API audit before deployment.
 
-### ✅ Demo Fixes
-- **Fixed Google Fonts URL** in `examples/demo2.html`
-- **Corrected JavaScript file references** in `examples/demo2.html`
-- **Fixed tooltip implementations** in both demo files to use proper anchor positioning
-- **Added missing img-container.js** script reference
+See [Issues and Constraints](../issues/) for current compatibility notes rather
+than the superseded import report.
 
-### ✅ Documentation Updates
-- **Updated utilities.md** with new anchor positioning and interactive utilities
-- **Updated theme.md** with new anchor positioning properties
-- **Updated layout.md** with new layout properties
-- **Updated defaults.md** with new typography properties
-- **Updated tooltips.md** to reflect production-ready status
+## Remaining quality investments
 
-## Key Improvements Summary
+### Browser and accessibility regression coverage
 
-1. **Anchor Positioning**: Complete system for tethering elements with automatic collision detection
-2. **Enhanced Interactivity**: Better hover, focus, and active state utilities
-3. **Robust Typography**: Configurable font smoothing, scroll behavior, and line heights
-4. **Layout Flexibility**: Additional layout properties for better responsive design
-5. **Production Ready**: All components now have proper fallbacks and browser support
+The build audit verifies routes, imports, API contracts, and representative
+markup. The next leverage point is an automated browser matrix for computed
+layout, keyboard paths, forced-colors, RTL, 200% text, and screenshot
+regressions.
 
-## Overview
+### Compatibility lifecycle
 
-The review evaluates the library as a modern, comprehensive CSS component system featuring advanced features like OKLCH colors, CSS layers, design tokens, and declarative layout components.
+Legacy button and form-control aliases intentionally remain functional. A
+versioned deprecation policy and changelog would make it clearer when aliases
+can move from recommended, to compatibility-only, to removable.
 
-## Review Structure
+### Optional delivery profiles
 
-### Strengths
-- Comprehensive design token system
-- Modern CSS feature adoption (@property, @layer, container queries, @scope)
-- Built-in theme support (light/dark mode, high contrast)
-- Self-contained component architecture
-- Declarative layout primitives
-- Accessibility considerations
+The single `index.css` entry is the clearest default. Projects with strict CSS
+budgets could also benefit from documented component-category entry points,
+provided those profiles preserve layer order and token dependencies.
 
-### Issues Identified
-1. Import typos (`view-transitions.css` vs `view-transition.css`)
-2. Naming inconsistencies (singular vs plural file references)
-3. Redundant imports in `index.css`
-4. Missing files (`components.css`, `utilities.css`)
-5. Inconsistent layer assignments
-6. Unused files (`main.css`)
+### Documentation source ownership
 
-### Improvement Suggestions
+The current and compatibility documentation trees are kept aligned. Continuing
+to strengthen the sync/audit path will prevent examples and API prose from
+drifting as components evolve.
 
-#### 1. Fix Existing Issues
-- Correct import typos and naming inconsistencies
-- Resolve redundant/missing imports
-- Standardize layer assignments
+## Review standard
 
-#### 2. Organization and Structure
-- Implement subdirectories (`core/`, `components/`, `utilities/`, `layouts/`, `themes/`)
-- Update import paths in `index.css`
-- Split large files (e.g., `palette.css` into color-family files)
+Future changes should be evaluated against five questions:
 
-#### 3. Performance Optimizations
-- Extract critical CSS
-- Remove unused code
-- Add minification build step
-- Consider lazy loading strategies
-
-#### 4. Accessibility Enhancements
-- Add ARIA attributes to components
-- Implement focus management and trapping
-- Expand high contrast mode coverage
-- Conduct screen reader testing
-
-#### 5. Documentation and Examples
-- Create comprehensive README.md
-- Document component APIs
-- Enhance demo pages
-- Add changelog
-
-#### 6. Best Practices and Standards
-- CSS validation and linting
-- Semantic naming conventions
-- Inline code comments
-- Semantic versioning
-
-#### 7. Testing and Quality Assurance
-- Visual regression testing
-- Cross-browser testing
-- Accessibility auditing
-- CSS property testing
-
-#### 8. Build and Tooling
-- Build scripts for concatenation/minification
-- Package.json for dependency management
-- CI/CD pipeline setup
-
-#### 9. Future Enhancements
-- TypeScript definitions
-- Framework integration guides
-- Plugin system for extensibility
-- Internationalization support
-
-## Implementation Priority
-
-1. **High**: Fix existing issues for functionality
-2. **Medium**: Improve organization and documentation
-3. **Low**: Advanced features and tooling
-
-## Purpose
-
-This review serves as a roadmap for library improvement, focusing on maintainability, performance, accessibility, and developer experience while preserving the library's innovative modern CSS approach.
-
-## Related Files
-
-- `issues.md`: Detailed issue documentation
-- `index.css`: Main entry point with import issues
-- All files mentioned in the review
+1. Does semantic HTML or ARIA state carry the behavior?
+2. Is repeated customization expressed as a token rather than a one-off value?
+3. Do canonical and compatibility hosts share one implementation?
+4. Does the pattern survive narrow containers, RTL, dark mode, forced colors,
+   reduced motion, and long content?
+5. Is the shipped API demonstrated and guarded by the build audit?

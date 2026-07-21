@@ -192,6 +192,28 @@
   --form-button-color: var(--text-on-accent);
   --input-group-button-transform: none;
 
+  /* Text inputs, selects, and textareas share one semantic control contract.
+     The component layer maps canonical and legacy hosts to these tokens. */
+  --form-control-padding-block: var(--spacing-sm, 0.625rem);
+  --form-control-padding-inline: var(--spacing-md, 1rem);
+  --form-control-border-width: var(--border-width, 1px);
+  --form-control-border-color: var(--outline-default);
+  --form-control-radius: var(--radius-md, 0.5rem);
+  --form-control-background: var(--surface-default);
+  --form-control-color: var(--text-default);
+  --form-control-placeholder-color: var(--text-muted);
+  --form-control-hover-border-color: var(--outline-overt);
+  --form-control-focus-border-color: var(--outline-focus);
+  --form-control-focus-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+  --form-control-disabled-background: var(--surface-muted);
+  --form-control-disabled-color: var(--text-muted);
+  --form-control-disabled-border-color: var(--outline-subtle);
+  --form-control-disabled-opacity: var(--opacity-disabled, 0.5);
+  --form-control-transition-duration: 150ms;
+  --form-control-transition-timing: ease-out;
+  --form-textarea-min-block-size: 6rem;
+  --form-textarea-resize: vertical;
+
   /* Native checkbox and radio controls share a themeable choice-control base. */
   --choice-control-size: 1.125rem;
   --choice-control-background: var(--surface-subtle);

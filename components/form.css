@@ -1,11 +1,23 @@
 /**
  * form.css
  *
- * Explicit class hooks for native form controls. Classes are placed directly
- * on the semantic element so the public API works without scope-root quirks.
+ * Hooks for native form controls. The `.form-*` names are canonical; older
+ * aliases and `[data-form-control]` intentionally share the same contract.
+ * Place a hook directly on a semantic input, select, textarea, or button.
  */
 
-:is(.form-input, .form-button, .form-select, .form-textarea) {
+:is(
+  .form-input,
+  .form-button,
+  .form-select,
+  .form-textarea,
+  .input-field,
+  .input,
+  .select,
+  .textarea,
+  .form-control,
+  [data-form-control]
+) {
   box-sizing: border-box;
   font-family: var(--font-family-ui, inherit);
   font-size: var(--font-size-control, var(--font-size-base, 1rem));
@@ -13,18 +25,45 @@
   line-height: var(--line-height-control, var(--line-height-normal, 1.5));
 }
 
-:is(.form-input, .form-select, .form-textarea) {
+:is(
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .input-field,
+  .input,
+  .select,
+  .textarea,
+  .form-control,
+  [data-form-control]
+) {
   display: block;
   inline-size: 100%;
-  padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-  border: var(--border-width, 1px) solid var(--form-control-border-color, var(--outline-default, var(--outline, currentColor)));
-  border-radius: var(--radius-md, 6px);
+  padding: var(--form-control-padding-block, var(--spacing-sm, 0.625rem))
+           var(--form-control-padding-inline, var(--spacing-md, 1rem));
+  border: var(--form-control-border-width, var(--border-width, 1px)) solid
+          var(--form-control-border-color, var(--outline-default));
+  border-radius: var(--form-control-radius, var(--radius-md, 0.5rem));
   background: var(--form-control-background, var(--surface-default));
   color: var(--form-control-color, var(--text-default));
-  transition: border-color 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
+  transition: border-color var(--form-control-transition-duration, 150ms) var(--form-control-transition-timing, ease-out),
+              box-shadow var(--form-control-transition-duration, 150ms) var(--form-control-transition-timing, ease-out),
+              background-color var(--form-control-transition-duration, 150ms) var(--form-control-transition-timing, ease-out);
 }
 
-:where(.form-field, label:has(> :is(.form-input, .form-select, .form-textarea))) {
+:where(
+  .form-field,
+  label:has(> :is(
+    .form-input,
+    .form-select,
+    .form-textarea,
+    .input-field,
+    .input,
+    .select,
+    .textarea,
+    .form-control,
+    [data-form-control]
+  ))
+) {
   display: grid;
   inline-size: 100%;
   gap: var(--form-field-gap, var(--space-xs, 0.5rem));
@@ -32,28 +71,40 @@
   font-weight: var(--form-label-weight, var(--font-weight-medium, 500));
 }
 
-:where(.form-field, label:has(> :is(.form-input, .form-select, .form-textarea))) > :is(small, .form-help) {
+:where(
+  .form-field,
+  label:has(> :is(
+    .form-input,
+    .form-select,
+    .form-textarea,
+    .input-field,
+    .input,
+    .select,
+    .textarea,
+    .form-control,
+    [data-form-control]
+  ))
+) > :is(small, .form-help) {
   color: var(--text-muted);
   font-weight: var(--font-weight-normal, 400);
 }
 
-.form-input::placeholder,
-.form-textarea::placeholder {
-  color: var(--text-muted);
+:is(.form-input, .form-textarea, .input-field, .input, .textarea, .form-control, [data-form-control])::placeholder {
+  color: var(--form-control-placeholder-color, var(--text-muted));
   opacity: 1;
 }
 
-:is(.form-input, .form-select, .form-textarea):hover:not(:disabled, :focus) {
-  border-color: var(--outline-overt);
+:is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]):hover:not(:disabled, [aria-disabled="true"], :focus) {
+  border-color: var(--form-control-hover-border-color, var(--outline-overt));
 }
 
-:is(.form-input, .form-select, .form-textarea):focus-visible {
-  border-color: var(--outline-focus);
+:is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]):focus-visible {
+  border-color: var(--form-control-focus-border-color, var(--outline-focus));
   outline: none;
-  box-shadow: 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color);
+  box-shadow: var(--form-control-focus-shadow, 0 0 0 var(--focus-ring-width, 2px) var(--focus-ring-color, var(--outline-focus)));
 }
 
-.form-select {
+:is(.form-select, .select, select.input-field, select.form-control, select[data-form-control]) {
   cursor: pointer;
 }
 
@@ -61,21 +112,21 @@
  * Preserve the inline selected-content/picker-icon arrangement instead of
  * inheriting the generic block layout used by text fields. */
 @supports (appearance: base-select) {
-  .form-select {
+  :is(.form-select, .select, select.input-field, select.form-control, select[data-form-control]) {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .form-select::picker-icon {
+  :is(.form-select, .select, select.input-field, select.form-control, select[data-form-control])::picker-icon {
     flex: 0 0 auto;
     margin-inline-start: var(--form-select-icon-gap, var(--space-xs, 0.5rem));
   }
 }
 
-.form-textarea {
-  min-block-size: 6rem;
-  resize: vertical;
+:is(.form-textarea, .textarea, textarea.input-field, textarea.form-control, textarea[data-form-control]) {
+  min-block-size: var(--form-textarea-min-block-size, 6rem);
+  resize: var(--form-textarea-resize, vertical);
 }
 
 .form-button {
@@ -118,7 +169,15 @@
   outline-offset: var(--focus-ring-offset, 2px);
 }
 
-:is(.form-input, .form-select, .form-textarea, .form-button):is(:disabled, [aria-disabled="true"]) {
+:is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]):is(:disabled, [aria-disabled="true"]) {
+  border-color: var(--form-control-disabled-border-color, var(--outline-subtle));
+  background: var(--form-control-disabled-background, var(--surface-muted));
+  color: var(--form-control-disabled-color, var(--text-muted));
+  opacity: var(--form-control-disabled-opacity, var(--opacity-disabled, 0.5));
+  cursor: not-allowed;
+}
+
+.form-button:is(:disabled, [aria-disabled="true"]) {
   opacity: var(--opacity-disabled, 0.5);
   cursor: not-allowed;
 }
@@ -131,10 +190,10 @@
 .btn-error { --bg: var(--error); --fg: var(--text-on-error); }
 
 /* Visual state follows semantic state when available. */
-:is(.form-input, .form-select, .form-textarea):is(.input-error, [aria-invalid="true"]) {
+:is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]):is(.input-error, [aria-invalid="true"], :user-invalid) {
   border-color: var(--outline-error, var(--error));
 }
 
-:is(.form-input, .form-select, .form-textarea).input-success {
+:is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]).input-success {
   border-color: var(--outline-success, var(--success));
 }

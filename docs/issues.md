@@ -1,98 +1,46 @@
-# Issues Documentation (`issues.md`)
+---
+title: Issues and Constraints
+description: Current constraints, compatibility notes, and the status of previously reported CSS Tags issues.
+---
 
-This file contains a comprehensive analysis of issues identified within the CSS framework library, focusing on structural problems, naming inconsistencies, and import errors.
+The import and naming problems previously listed on this page are resolved.
+`index.css` imports the singular `components/view-transition.css` path, every
+public stylesheet is assigned to an explicit cascade layer, and the Pages build
+audits the assembled site on every deployment.
 
-## Overview
+## Current constraints
 
-`issues.md` documents 7 major issues found during code review, including:
+### Custom tags do not create semantics
 
-- File naming inconsistencies
-- Broken import statements
-- Redundant imports
-- Missing files
-- Layer assignment inconsistencies
-- Unused files
+Names such as `card`, `layout-stack`, and `badge` are styling hosts, not
+registered web components. Use a native element when its behavior or landmark
+semantics matter, or add the appropriate role and accessible name. Most public
+components also support a class and a `data-*` host.
 
-## Documented Issues
+### Modern features are progressive enhancements
 
-### 1. Typo in index.css for view-transitions.css import
+Anchor Positioning, customizable selects, container queries, Popover, and View
+Transitions enhance supporting browsers. The documented patterns retain normal
+layout, native controls, links, disclosure, or navigation behavior when an
+enhancement is unavailable.
 
-**Problem**: `index.css` imports `view-transitions.css` (plural) but file is `view-transition.css` (singular)
+### Legacy aliases remain supported
 
-**Impact**: Broken import prevents view transition styles from loading
+Older button and form-control names are compatibility aliases. The canonical
+APIs are `.button` and the role-specific `.form-input`, `.form-select`, and
+`.form-textarea` classes. Aliases share the same tokens and state rules, but
+new code should prefer the canonical names because they communicate intent.
 
-**Recommendation**: Correct import to match actual filename
+### CSS cannot provide every interaction
 
-### 2. Inconsistent Naming in view-transition.css
+ARIA tabs, carousel controls, drag-state file summaries, and cross-document
+View Transitions need small JavaScript enhancements. Their markup and CSS
+fallbacks remain usable without those enhancements; the component pages state
+where behavior changes.
 
-**Problem**: File named singular but internal comments use plural
+## Reporting a problem
 
-**Impact**: Developer confusion when navigating codebase
-
-**Recommendation**: Rename file to `view-transitions.css` for consistency
-
-### 3. Inconsistent Naming in view-transition.js
-
-**Problem**: Similar naming inconsistency in JavaScript file
-
-**Impact**: Continued developer confusion
-
-**Recommendation**: Rename to `view-transitions.js`
-
-### 4. Redundant components.css and utilities.css Imports
-
-**Problem**: General imports followed by specific component imports
-
-**Impact**: Unnecessary redundancy and potential cascade issues
-
-**Recommendation**: Remove redundant imports or restructure import hierarchy
-
-### 5. Missing components.css and utilities.css Files
-
-**Problem**: Imported files don't exist in filesystem
-
-**Impact**: Broken imports prevent intended styles from loading
-
-**Recommendation**: Create files or remove imports
-
-### 6. Inconsistent Layering for base.css and mixins.css
-
-**Problem**: Some files use explicit layer() while others don't
-
-**Impact**: Unclear cascade order and inconsistent patterns
-
-**Recommendation**: Use explicit layer assignments consistently
-
-### 7. Potential for Unused Files (main.css)
-
-**Problem**: `main.css` exists but isn't imported
-
-**Impact**: Potentially unused or orphaned styles
-
-**Recommendation**: Investigate and either import or remove
-
-## Structure
-
-The document follows a consistent format for each issue:
-
-1. **Problem**: Clear description of the issue
-2. **Impact**: Potential consequences
-3. **Recommendation**: Suggested fix
-
-## Purpose
-
-This file serves as:
-
-- **Code Review Output**: Results of systematic analysis
-- **Maintenance Guide**: Issues to address for library health
-- **Developer Reference**: Known problems and their solutions
-
-## Status
-
-Issues are documented but may not be resolved. Check current codebase for fixes.
-
-## Related Files
-
-- `index.css`: File with import issues
-- `view-transition.css` / `view-transitions.css`: Inconsistently named files
-- All files mentioned in the issues
+When filing an issue, include the browser and version, the smallest semantic
+HTML example that reproduces it, the imported CSS entry point, and whether the
+problem occurs in light and dark schemes. A resizable documentation example is
+usually the fastest reproduction.

@@ -5,12 +5,12 @@ description: Accessible native form controls styled through focused class hooks,
 
 import LiveExample from '../../../components/LiveExample.astro';
 
-The form layer styles native controls through `.form-input`, `.form-select`, `.form-textarea`, and `.form-button`. Use real `input`, `select`, `textarea`, and `button` elements so browser behavior and accessibility remain intact.
+The form layer styles native controls through `.form-input`, `.form-select`, `.form-textarea`, and `.form-button`. Use real `input`, `select`, `textarea`, and `button` elements so browser behavior and accessibility remain intact. The older `.input-field`, `.input`, `.select`, `.textarea`, and `.form-control` hooks remain compatible and now use the same tokens and states.
 
 ## Complete settings form
 
 <LiveExample title="Profile settings" description="Tab through the form to see the shipped focus states.">
-  <form class="example-panel">
+  <form>
     <layout-stack gap="var(--space-md)">
       <label>
         <span>Display name</span>
@@ -112,14 +112,20 @@ generic surface colors.
 
 ## Public API
 
-The current form API is class-based:
+Use the role-specific classes when you can:
 
 - `.form-input` on text-like native inputs
 - `.form-select` on `select`
 - `.form-textarea` on `textarea`
 - `.form-button` on `button` or button-like inputs
 
-Custom tags such as `<form-input>` are not shipped and should not be used. Native controls nested inside a scoped form class may inherit some rules, but putting the class directly on each control is the clearest and most reliable API.
+For attribute-oriented markup, `[data-form-control]` applies the same field contract; the native element supplies select and textarea behavior. The legacy `.input-field`, `.input`, `.select`, `.textarea`, and `.form-control` aliases are retained for compatibility. Custom tags such as `<form-input>` are not shipped: keeping the native control preserves its built-in semantics and behavior.
+
+```html
+<input class="form-input" aria-label="Canonical class">
+<input data-form-control aria-label="Data attribute">
+<input class="input-field" aria-label="Legacy alias">
+```
 
 In browsers with customizable selects, `.form-select` keeps the selected value
 and picker icon aligned on one line. Override `--form-select-icon-gap` when the
@@ -127,7 +133,12 @@ icon needs more or less separation from the value.
 
 ## Useful tokens
 
-- `--spacing-sm`, `--spacing-md`, `--spacing-lg`
+- `--form-control-padding-block`, `--form-control-padding-inline`
+- `--form-control-background`, `--form-control-color`, `--form-control-border-color`
+- `--form-control-radius`, `--form-control-hover-border-color`
+- `--form-control-focus-border-color`, `--form-control-focus-shadow`
+- `--form-control-disabled-background`, `--form-control-disabled-color`, `--form-control-disabled-opacity`
+- `--form-textarea-min-block-size`, `--form-textarea-resize`
 - `--form-button-background`, `--form-button-color`
 - `--form-select-icon-gap`
 - `--surface-default`, `--text-default`, `--text-muted`

@@ -190,7 +190,7 @@ Basic structure for page transitions:
 
 ### Component Classes
 - `.button`: Base button styling
-- `.input-field`: Form input styling
+- `.input-field`: Legacy form-control alias normalized by `components/form.css`
 - `.card`: Basic card structure
 - `.contrast-pair`: Auto-contrast text on colored backgrounds
 

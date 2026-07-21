@@ -270,38 +270,6 @@
   :is(.button-text, .btn-text):is(:disabled, [aria-disabled="true"]) { color: var(--text-muted); }
 
   /* ============================================ */
-  /* IMPROVED FORM ELEMENTS                      */
-  /* ============================================ */
-
-  :is(.input, .textarea, .select, .form-control) {
-    padding: 0.5rem;
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    border: var(--border-width) solid var(--outline);
-    border-radius: var(--border-radius-md);
-    background-color: var(--surface);
-    color: var(--text-on-surface);
-    transition: border-color 0.15s ease;
-  }
-
-  :is(.input, .textarea, .select, .form-control):focus-visible {
-    outline: none;
-    border-color: var(--outline-focus);
-    box-shadow: 0 0 0 2px var(--outline-focus);
-  }
-
-  :is(.input, .textarea, .select, .form-control):hover:not(:disabled, [aria-disabled="true"]) {
-    border-color: var(--outline-overt);
-  }
-
-  :is(.input, .textarea, .select, .form-control):is(:disabled, [aria-disabled="true"]) {
-    background-color: var(--surface-muted);
-    color: var(--text-muted);
-    cursor: not-allowed;
-  }
-
-  /* ============================================ */
   /* IMPROVED FOCUS STATES                       */
   /* ============================================ */
 
@@ -557,7 +525,6 @@
   .grid-cols-6 { grid-template-columns: var(--grid-cols-6); }
   .grid-cols-12 { grid-template-columns: var(--grid-cols-12); }
 
-  /* Legacy button aliases share the canonical defaults/variants, and
-     `.form-control` is grouped with the input aliases above. These are real
-     browser selectors, not preprocessor directives. */
+  /* Legacy button aliases share the canonical defaults/variants. Legacy form
+     control aliases are normalized in components/form.css. */
 }
