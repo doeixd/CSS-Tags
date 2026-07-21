@@ -111,7 +111,19 @@
 }
 
 :is(.prose, [data-prose]) > :is(h1, h2, h3, h4, h5, h6) + :is(p, ul, ol) {
-  margin-block-start: 0;
+  margin-block-start: var(--space-heading-to-content, 0);
+}
+
+:is(.prose, [data-prose])
+  > :is(h1, h2, h3, h4, h5, h6)
+  + :is(.lead, [data-lead], text[variant="lead"]) {
+  margin-block-start: var(--space-heading-to-lead, var(--space-heading-to-content, 0));
+}
+
+:is(.prose, [data-prose])
+  > :is(.lead, [data-lead], text[variant="lead"])
+  + :is(p, ul, ol, dl, blockquote) {
+  margin-block-start: var(--space-lead-to-content, var(--space-flow, 1em));
 }
 
 :is(.prose, [data-prose]) :is(ul, ol) {
@@ -318,7 +330,7 @@
 
 :is(.callout-title, [data-callout-title]) {
   display: block;
-  margin-block-end: var(--space-xs, 0.5rem);
+  margin-block-end: var(--callout-title-gap, var(--space-xs, 0.5rem));
   color: var(--text-overt);
   font-weight: var(--font-weight-semibold);
 }

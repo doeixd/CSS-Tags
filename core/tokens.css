@@ -425,6 +425,9 @@
   --space-flow: 1em;
   --space-heading-top: 1.8em;
   --space-heading-bottom: 0.65em;
+  --space-heading-to-content: 0;
+  --space-heading-to-lead: var(--space-heading-to-content);
+  --space-lead-to-content: var(--space-flow);
   --space-list-indent: 1.5em;
   --space-list-item: 0.5em;
   --space-list-nested-top: var(--space-list-item);
@@ -439,6 +442,7 @@
   --space-figure-caption-top: 0.5rem;
   --space-callout-pad-x: 1rem;
   --space-callout-pad-y: 1rem;
+  --callout-title-gap: var(--space-xs);
   --letter-spacing-eyebrow: var(--letter-spacing-widest);
   --prose-heading-scroll-margin: calc(var(--site-header-min-height, 0px) + var(--space-lg, 2rem));
   --prose-link-wrap: anywhere;

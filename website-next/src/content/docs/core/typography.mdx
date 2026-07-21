@@ -105,8 +105,13 @@ semantic heading intentionally departs from that scale.
 These control how content blocks interact.
 
 - `--space-flow`
+- `--space-rich-block`
 - `--space-heading-top`
 - `--space-heading-bottom`
+- `--space-heading-to-content`
+- `--space-heading-to-lead`
+- `--space-lead-to-content`
+- `--space-eyebrow-bottom`
 - `--space-list-indent`
 - `--space-list-item`
 - `--space-list-nested-top`
@@ -119,6 +124,13 @@ These control how content blocks interact.
 - `--blockquote-border-color`
 - `--space-callout-pad-x`
 - `--space-callout-pad-y`
+- `--callout-title-gap`
+
+`--space-flow` controls the normal sibling rhythm. `--space-rich-block` controls
+the shared vertical rhythm for code blocks, figures, blockquotes, rules, and
+callouts. Relationship tokens then handle the places where unlike elements
+should sit closer together, without creating separate top and bottom variables
+for every element type.
 
 ## Prose Containers
 For longform content, use:
@@ -268,10 +280,10 @@ Forward-looking mixins are available for teams experimenting with native CSS mix
   --measure-heading: 16ch;
 
   --space-heading-top: 2.2em;
-  --space-code-block-top: 1.5em;
-  --space-code-block-bottom: 1.5em;
+  --space-rich-block: 1.5em;
+  --space-lead-to-content: 1.2em;
 
-  --typography-code-bg: var(--surface-overt);
+  --code-block-bg: var(--surface-overt);
   --blockquote-border-color: var(--secondary);
   --callout-info-border: var(--info);
 }

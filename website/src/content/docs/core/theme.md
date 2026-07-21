@@ -67,8 +67,8 @@ Both default to `1`. The preferred radius names are `--radius-xs`,
 `--radius-full`; the longer `--border-radius-*` names remain compatible
 aliases.
 
-The preferred spacing family for new component APIs is `--space-xs` through
-`--space-xl`. The tighter `--spacing-*` family remains available for existing
+The preferred spacing family for new component APIs is `--space-2xs` through
+`--space-2xl`. The tighter `--spacing-*` family remains available for existing
 utilities and compact controls; both families now respond to
 `--density-factor`.
 
