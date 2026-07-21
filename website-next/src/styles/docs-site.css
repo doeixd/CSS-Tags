@@ -662,7 +662,8 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   --card-padding: var(--space-md);
   --card-gap: var(--space-sm);
   margin-block: var(--space-lg);
-  background: var(--base);
+  background: transparent;
+  --card-background: transparent;
   box-shadow: none;
   transform: none;
 }
