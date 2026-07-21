@@ -314,7 +314,7 @@
   inline-size: 100%;
   min-block-size: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-xs, 0.25rem);
   margin: 0;
   padding: var(--table-cell-padding-block, var(--space-sm, 0.5rem))
@@ -341,6 +341,10 @@
 }
 
 [data-sort-icon]::before { content: "◇"; }
+[data-sort-icon] {
+  flex: none;
+  margin-inline-start: var(--space-xs, 0.25rem);
+}
 th[aria-sort="ascending"] [data-sort-icon]::before { content: "▲"; }
 th[aria-sort="descending"] [data-sort-icon]::before { content: "▼"; }
 
