@@ -293,6 +293,21 @@ declare global {
       "flow-tolerance"?: CSSValue;
     }
 
+    interface DataTableAttributes extends GlobalAttributes {
+      striped?: BooleanAttribute;
+      hover?: BooleanAttribute;
+      bordered?: BooleanAttribute;
+      borderless?: BooleanAttribute;
+      density?: "compact" | "spacious";
+      "sticky-header"?: BooleanAttribute;
+      "data-striped"?: BooleanAttribute;
+      "data-hover"?: BooleanAttribute;
+      "data-bordered"?: BooleanAttribute;
+      "data-borderless"?: BooleanAttribute;
+      "data-density"?: "compact" | "spacious";
+      "data-sticky-header"?: BooleanAttribute;
+    }
+
     interface NavbarAttributes extends GlobalAttributes {
       sticky?: BooleanAttribute;
     }
@@ -396,7 +411,7 @@ declare global {
       "carousel-trigger": CarouselTriggerAttributes;
       tooltip: TooltipAttributes;
       "masonry-layout": MasonryAttributes;
-      "data-table": GlobalAttributes;
+      "data-table": DataTableAttributes;
       "modal-dialog": ModalDialogAttributes;
       "nav-navbar": NavbarAttributes;
       "site-header": SiteHeaderAttributes;

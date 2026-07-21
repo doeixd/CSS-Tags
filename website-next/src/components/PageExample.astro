@@ -163,6 +163,45 @@ const additionalExamples = example.additionalExamples
         });
     }
 
+    function initializeSortableTables(root: Document | ShadowRoot | HTMLElement) {
+        root.querySelectorAll<HTMLTableElement>("table[data-sortable]").forEach((table) => {
+            if (table.dataset.sortReady === "true") return;
+            table.dataset.sortReady = "true";
+
+            table.querySelectorAll<HTMLButtonElement>("thead button[data-table-sort]").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const header = button.closest<HTMLTableCellElement>("th");
+                    const body = table.tBodies.item(0);
+                    if (!header || !body || !header.parentElement) return;
+
+                    const columnIndex = Array.from(header.parentElement.cells).indexOf(header);
+                    const direction = header.getAttribute("aria-sort") === "ascending"
+                        ? "descending"
+                        : "ascending";
+                    const factor = direction === "ascending" ? 1 : -1;
+                    const numeric = button.dataset.sortType === "number";
+                    const rows = Array.from(body.rows);
+
+                    table.querySelectorAll("thead th[aria-sort]").forEach((candidate) => {
+                        candidate.removeAttribute("aria-sort");
+                    });
+                    header.setAttribute("aria-sort", direction);
+
+                    rows.sort((left, right) => {
+                        const leftCell = left.cells.item(columnIndex);
+                        const rightCell = right.cells.item(columnIndex);
+                        const leftValue = leftCell?.dataset.sortValue ?? leftCell?.textContent?.trim() ?? "";
+                        const rightValue = rightCell?.dataset.sortValue ?? rightCell?.textContent?.trim() ?? "";
+                        if (numeric) return (Number(leftValue) - Number(rightValue)) * factor;
+                        return leftValue.localeCompare(rightValue, undefined, { numeric: true }) * factor;
+                    });
+
+                    body.append(...rows);
+                });
+            });
+        });
+    }
+
     function setupQuickExamples() {
         document.querySelectorAll<HTMLElement>("css-tags-example").forEach((host) => {
             const root = host.shadowRoot;
@@ -171,6 +210,7 @@ const additionalExamples = example.additionalExamples
             initializeCarousels(root);
             initializeViewTransitions(root);
             initializeTabs(root);
+            initializeSortableTables(root);
 
             root.querySelectorAll<HTMLElement>("[data-doc-nav]").forEach((nav) => {
                 if (nav.dataset.ready === "true") return;

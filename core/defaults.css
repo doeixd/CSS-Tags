@@ -485,11 +485,6 @@
     background-color: var(--table-heading-background);
     color: var(--text-overt); /* Use overt text for header */
    }
-  tbody tr:hover {
-    --bg: var(--table-hover-background); /* Set local --bg */
-    background-color: var(--bg); color: var(--auto-contrast-text, oklch(from var(--bg) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h));
-     color: var(--auto-contrast-text, oklch(from var(--bg, currentColor) clamp(0.1, (var(--l-threshold, 0.65) / l - 1) * 999, 0.98) min(c, var(--c-threshold, 0.08)) h)); /* Auto contrast on hover */
-  }
   /* Enhanced Form Focus States */
   input:focus-visible, select:focus-visible, textarea:focus-visible {
     outline: var(--input-focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);

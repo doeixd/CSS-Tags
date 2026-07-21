@@ -1,95 +1,185 @@
 ---
 title: Data Table
-description: Token-driven native tables with captions, row states, and a responsive overflow strategy that preserves table semantics.
+description: Native tables with responsive overflow, density and border variants, sortable headers, row states, totals, and sticky headers.
 ---
 
 import LiveExample from '../../../components/LiveExample.astro';
 
-CSS Tags enhances native tables instead of replacing their accessibility model. Add `data-table` or `.data-table` to a `<table>`. For narrow containers, wrap it in `<data-table>`, `[data-table-scroll]`, or `.table-scroll`.
+CSS Tags enhances native table elements instead of replacing their accessibility
+model. Keep `<table>`, `<caption>`, `<th>`, and `<td>` in the markup; use the
+component API for presentation and overflow.
 
-Tables and their optional scroll wrappers fill the available inline size by
-default. The shipped surface, header, stripe, divider, and hover colors are
-intentionally quiet; increase them through table tokens only when the dataset
-needs stronger separation.
+## Host model
 
-<LiveExample title="Responsive data table" description="On narrow screens, the table scrolls horizontally without turning cells into unrelated blocks.">
-  <data-table tabindex="0" aria-label="Scrollable deployment table">
-    <table data-table class="table-hover">
-      <caption>Recent deployments</caption>
-      <thead>
-        <tr><th scope="col">Environment</th><th scope="col">Version</th><th scope="col">Status</th><th scope="col">Updated</th></tr>
-      </thead>
-      <tbody>
-        <tr><th scope="row">Production</th><td>v2.8.0</td><td><badge status="success">Healthy</badge></td><td>4 minutes ago</td></tr>
-        <tr><th scope="row">Staging</th><td>v2.9.0-rc.1</td><td><badge status="warning">Testing</badge></td><td>18 minutes ago</td></tr>
-        <tr><th scope="row">Preview</th><td>feat/docs</td><td><badge status="info">Ready</badge></td><td>1 hour ago</td></tr>
-      </tbody>
-    </table>
-  </data-table>
-</LiveExample>
+Use `data-table` or `.data-table` directly on a small native table. When a data
+set needs horizontal overflow, keyboard scrolling, or a sticky header, put the
+native table inside any of the equivalent wrapper hosts:
 
 ```html
-<data-table tabindex="0" aria-label="Scrollable deployment table">
-  <table data-table class="table-hover">
-    <caption>Recent deployments</caption>
-    <thead>
-      <tr>
-        <th scope="col">Environment</th>
-        <th scope="col">Version</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">Production</th>
-        <td>v2.8.0</td>
-        <td>Healthy</td>
-      </tr>
-    </tbody>
+<data-table tabindex="0" aria-label="Scrollable orders">
+  <table>...</table>
+</data-table>
+
+<div data-table-scroll tabindex="0" aria-label="Scrollable orders">
+  <table>...</table>
+</div>
+
+<div class="table-scroll" tabindex="0" aria-label="Scrollable orders">
+  <table>...</table>
+</div>
+```
+
+Each wrapper now styles its direct table automatically. Add `tabindex="0"` only
+when overflow is possible, and provide a label when nearby text does not already
+name the region.
+
+<LiveExample title="Small datasets fit without forced overflow" description="The default minimum width is now 100%, so a simple table uses its container instead of becoming 36rem wide.">
+  <table data-table class="table-borderless">
+    <caption>Feature rollout</caption>
+    <thead><tr><th scope="col">Feature</th><th scope="col">Audience</th><th scope="col" data-numeric>Enabled</th></tr></thead>
+    <tbody><tr><th scope="row">New billing</th><td>Team plans</td><td data-numeric>82%</td></tr><tr><th scope="row">Search v2</th><td>All accounts</td><td data-numeric>100%</td></tr></tbody>
   </table>
+</LiveExample>
+
+## Responsive overflow
+
+Set `--table-min-width` only when wrapping would make a wide data set difficult
+to scan. The wrapper owns scrolling while the table keeps its native display:
+
+```html
+<data-table
+  tabindex="0"
+  aria-label="Scrollable order history"
+  style="--table-min-width: 48rem"
+>
+  <table>...</table>
 </data-table>
 ```
 
-## Why the wrapper matters
-
-Changing every cell to `display: block` can obscure row and column relationships and requires duplicated `data-label` content. CSS Tags keeps the native table intact and makes only its wrapper scroll. `tabindex="0"` lets keyboard users reach the scroll region; use an accessible label when the surrounding heading does not already describe it.
-
-For a table used directly without a wrapper, CSS Tags provides a small-screen overflow fallback:
-
-```html
-<table class="data-table table-striped">
-  <!-- normal table structure -->
-</table>
-```
+The wrapper has a visible focus ring, contained overscroll, and a themeable thin
+scrollbar. A direct `table[data-table]` still receives a small-screen overflow
+fallback when a wrapper cannot be added.
 
 ## Variants
 
-- `.table-striped` adds alternating row surfaces.
-- `.table-hover` highlights the row under the pointer.
-- `.table-bordered` uses the thick border token.
-- `.table-borderless` removes the outer border and row dividers.
+Variants work on either the table or wrapper and have custom-attribute,
+`data-*`, and class forms.
+
+| Purpose | Custom host | Data host | Class host |
+| --- | --- | --- | --- |
+| Alternating rows | `striped` | `data-striped` | `.table-striped` |
+| Pointer and focus-within row highlight | `hover` | `data-hover` | `.table-hover` |
+| Cell grid and strong outer border | `bordered` | `data-bordered` | `.table-bordered` |
+| No outer border or dividers | `borderless` | `data-borderless` | `.table-borderless` |
+| Compact density | `density="compact"` | `data-density="compact"` | `.table-compact` |
+| Spacious density | `density="spacious"` | `data-density="spacious"` | `.table-spacious` |
+| Sticky header wrapper | `sticky-header` | `data-sticky-header` | `.table-sticky-header` |
+
+Hover is opt-in and only activates on devices that actually support hover.
+Rows containing keyboard focus receive the same treatment.
+
+## Cell and row hooks
+
+- `data-numeric` / `.table-numeric` aligns values to the inline end and uses
+  tabular figures.
+- `data-actions` / `.table-actions` keeps a narrow action column aligned to the
+  inline end.
+- `data-nowrap` / `.table-nowrap` protects dates, identifiers, and short status
+  values from wrapping.
+- `data-table-message` styles a spanning empty, loading, or error cell.
+- A body row containing a checked checkbox or radio receives the selected-row
+  surface. `data-selected` is available when application state is mirrored in
+  the DOM.
+- `<tfoot>` receives a stronger separator and summary surface automatically.
+
+## Sorting
+
+Put the current sort direction on the header cell, not the button. The button
+owns interaction; an `aria-hidden` icon reflects the header state:
+
+```html
+<th scope="col" aria-sort="descending">
+  <button type="button" data-table-sort>
+    Revenue
+    <span data-sort-icon aria-hidden="true"></span>
+  </button>
+</th>
+```
+
+CSS Tags makes that button fill the header cell and supplies distinct unsorted,
+ascending, and descending icons. Your application must reorder the rows and
+move `aria-sort` to the active header. The interactive revenue example above
+does both. Only one header should carry `aria-sort` at a time, following the
+[WAI sortable table pattern](https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/).
+
+```js
+document.querySelectorAll("table[data-sortable]").forEach((table) => {
+  table.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-table-sort]");
+    if (!button) return;
+
+    const header = button.closest("th");
+    const column = header.cellIndex;
+    const direction = header.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+    const factor = direction === "ascending" ? 1 : -1;
+    const rows = [...table.tBodies[0].rows];
+    const value = (row) => row.cells[column].dataset.sortValue
+      ?? row.cells[column].textContent.trim();
+
+    table.querySelectorAll("th[aria-sort]").forEach((cell) => cell.removeAttribute("aria-sort"));
+    header.setAttribute("aria-sort", direction);
+    rows.sort((a, b) => value(a).localeCompare(value(b), undefined, { numeric: true }) * factor);
+    table.tBodies[0].append(...rows);
+  });
+});
+```
+
+## Sticky headers
+
+Sticky headers require a vertically constrained scroll wrapper. Set its maximum
+height with `--table-max-block-size`:
+
+```html
+<data-table
+  sticky-header
+  tabindex="0"
+  aria-label="Scrollable inventory"
+  style="--table-max-block-size: 20rem; --table-min-width: 42rem"
+>
+  <table>...</table>
+</data-table>
+```
 
 ## Theme tokens
 
 ```css
 .billing-table {
   --table-min-width: 44rem;
+  --table-layout: auto;
   --table-cell-padding-block: 0.75rem;
   --table-cell-padding-inline: 1rem;
   --table-heading-bg: var(--table-heading-background);
-  --table-stripe-bg: var(--table-stripe-background);
   --table-row-hover-bg: var(--table-hover-background);
+  --table-row-selected-bg: var(--table-selected-background);
+  --table-footer-bg: var(--table-footer-background);
+  --table-max-block-size: 24rem;
 }
 ```
 
-The global defaults are `--table-background`, `--table-border-color`,
-`--table-divider-color`, `--table-heading-background`,
-`--table-stripe-background`, and `--table-hover-background`. The shorter
-component aliases shown above are useful for styling one table.
+Additional component tokens include `--table-bg`, `--table-text`,
+`--table-border-width`, `--table-border-color`, `--table-divider-width`,
+`--table-divider-color`, `--table-radius`, `--table-font-size`,
+`--table-line-height`, `--table-caption-*`, `--table-heading-*`,
+`--table-stripe-bg`, `--table-scrollbar-*`, and `--table-message-*`.
 
 ## Accessibility checklist
 
 - Use `<caption>` when a visible name helps identify the dataset.
-- Add `scope="col"` to column headers and `scope="row"` to row headers.
-- Keep sorting controls as real buttons inside header cells and expose direction with `aria-sort`.
-- Do not use a table for visual page layout.
+- Add `scope="col"` and `scope="row"` for simple tables; use `colgroup`,
+  `rowgroup`, `id`, and `headers` for more complex relationships.
+- Keep sorting controls as real buttons and update `aria-sort` with the rendered
+  order.
+- Give selection checkboxes an accessible name that identifies their row.
+- Make scroll wrappers keyboard reachable and visibly focused.
+- Do not use a table for page layout or replace native table structure with
+  responsive card markup when the content remains tabular.

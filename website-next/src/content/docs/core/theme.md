@@ -286,7 +286,11 @@ Text colors automatically adjust for readability:
 --table-border-color: color-mix(in oklch, var(--outline-subtle) 65%, transparent);
 --table-divider-color: color-mix(in oklch, var(--outline-subtle) 55%, transparent);
 --table-heading-background: color-mix(in oklch, var(--surface-subtle) 55%, var(--base));
+--table-stripe-background: color-mix(in oklch, var(--surface-muted) 40%, var(--base));
 --table-hover-background: color-mix(in oklch, var(--surface-subtle) 75%, var(--base));
+--table-selected-background: color-mix(in oklch, var(--accent-muted) 72%, var(--base));
+--table-footer-background: color-mix(in oklch, var(--surface-subtle) 35%, var(--base));
+--table-scrollbar-color: var(--outline-default);
 ```
 
 ### Code Blocks

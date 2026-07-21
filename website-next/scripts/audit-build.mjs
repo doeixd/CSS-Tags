@@ -103,7 +103,7 @@ const sourceContracts = [
   ["core/tokens.css", "--space-lead-to-content", "lead-to-content rhythm token"],
   ["core/typography.css", "--callout-title-gap", "callout title relationship token"],
   ["core/tokens.css", "--table-heading-background", "subtle semantic table tokens"],
-  ["components/table.css", "min-inline-size: max(100%", "full-width responsive tables"],
+  ["components/table.css", "min-inline-size: var(--table-min-width, 100%)", "content-sized responsive tables with an opt-in minimum"],
   ["components/table.css", "overflow-y: hidden", "horizontal-only responsive table overflow"],
   ["core/defaults.css", '[aria-disabled="true"]', "ARIA-disabled button state"],
   ["core/defaults.css", "field-sizing: fixed", "fixed native choice-control geometry"],

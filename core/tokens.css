@@ -265,6 +265,9 @@
   --table-heading-background: color-mix(in oklch, var(--surface-subtle) 55%, var(--base));
   --table-stripe-background: color-mix(in oklch, var(--surface-muted) 40%, var(--base));
   --table-hover-background: color-mix(in oklch, var(--surface-subtle) 75%, var(--base));
+  --table-selected-background: color-mix(in oklch, var(--accent-muted) 72%, var(--base));
+  --table-footer-background: color-mix(in oklch, var(--surface-subtle) 35%, var(--base));
+  --table-scrollbar-color: var(--outline-default);
 
   /* Carousel */
   --carousel-radius: var(--radius-lg, 0.75rem);

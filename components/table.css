@@ -1,95 +1,389 @@
 /**
- * Responsive data tables.
+ * Responsive native data tables.
  *
- * Prefer a native table with `data-table` or `.data-table`. A custom
- * `<data-table>` can be used as an overflow wrapper around a native table;
- * keeping `<table>`, `<th>`, and `<td>` preserves browser table semantics.
+ * Prefer a native table with `data-table` or `.data-table`. The optional
+ * `<data-table>`, `[data-table-scroll]`, and `.table-scroll` hosts provide a
+ * keyboard-reachable overflow region without replacing table semantics.
  */
 
+/* Scroll host ------------------------------------------------------------- */
 :is(data-table, [data-table-scroll], .table-scroll) {
   display: block;
   inline-size: 100%;
-  max-width: 100%;
+  max-inline-size: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   border-radius: var(--table-radius, var(--radius-md, 0.5rem));
   overscroll-behavior-inline: contain;
+  scrollbar-gutter: var(--table-scrollbar-gutter, auto);
+  scrollbar-width: var(--table-scrollbar-width, thin);
+  scrollbar-color: var(--table-scrollbar-color, var(--outline-default, currentColor))
+    var(--table-scrollbar-track, transparent);
 }
 
-:is(table[data-table], table.data-table, data-table > table) {
+:is(data-table, [data-table-scroll], .table-scroll)::-webkit-scrollbar {
+  block-size: var(--table-scrollbar-size, 0.625rem);
+}
+
+:is(data-table, [data-table-scroll], .table-scroll)::-webkit-scrollbar-thumb {
+  background: var(--table-scrollbar-color, var(--outline-default, currentColor));
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill, 999px);
+  background-clip: padding-box;
+}
+
+:is(data-table, [data-table-scroll], .table-scroll):focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, Highlight);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+/* Native table surface ---------------------------------------------------- */
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) {
   inline-size: 100%;
-  min-inline-size: max(100%, var(--table-min-width, 36rem));
+  min-inline-size: var(--table-min-width, 100%);
   border-spacing: 0;
   border-collapse: separate;
+  table-layout: var(--table-layout, auto);
   overflow: hidden;
+  isolation: isolate;
   color: var(--table-text, var(--text-default, inherit));
   background: var(--table-bg, var(--table-background, var(--surface-default, Canvas)));
   border: var(--table-border-width, 1px) solid
     var(--table-border-color, var(--outline-subtle, currentColor));
   border-radius: var(--table-radius, var(--radius-md, 0.5rem));
   font-size: var(--table-font-size, var(--font-size-sm, 0.875rem));
+  line-height: var(--table-line-height, var(--line-height-normal, 1.5));
 }
 
-:is(table[data-table], table.data-table, data-table > table) caption {
-  padding-block-end: var(--table-caption-gap, var(--space-sm, 0.5rem));
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) caption {
+  caption-side: var(--table-caption-side, top);
+  padding-block: var(--table-caption-padding-block, 0)
+    var(--table-caption-gap, var(--space-sm, 0.5rem));
   color: var(--table-caption-color, var(--text-subtle, currentColor));
-  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--table-caption-font-size, inherit);
+  font-weight: var(--table-caption-weight, var(--font-weight-medium, 500));
   text-align: start;
 }
 
-:is(table[data-table], table.data-table, data-table > table) :is(th, td) {
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) :is(th, td) {
   padding: var(--table-cell-padding-block, var(--space-sm, 0.5rem))
     var(--table-cell-padding-inline, var(--space-md, 1rem));
-  border-block-end: 1px solid
+  border-block-end: var(--table-divider-width, 1px) solid
     var(--table-divider-color, var(--outline-subtle, currentColor));
   text-align: start;
-  vertical-align: middle;
+  vertical-align: var(--table-cell-vertical-align, middle);
 }
 
-:is(table[data-table], table.data-table, data-table > table) th {
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) th {
   color: var(--table-heading-color, var(--text-overt, inherit));
-  background: var(--table-heading-bg, var(--table-heading-background, var(--surface-subtle, transparent)));
   font-weight: var(--font-weight-semibold, 600);
 }
 
-:is(table[data-table], table.data-table, data-table > table) tbody tr:last-child > * {
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) thead th {
+  background: var(--table-heading-bg, var(--table-heading-background, var(--surface-subtle, transparent)));
+  border-block-end-width: var(--table-heading-divider-width, 1px);
+  vertical-align: bottom;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) tbody th {
+  background: var(--table-row-heading-bg, transparent);
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) tbody tr:last-child > * {
   border-block-end: 0;
 }
 
-:is(table[data-table], table.data-table, data-table > table, .table-striped)
-  tbody tr:nth-child(even) {
-  background: var(--table-stripe-bg, var(--table-stripe-background, var(--surface-muted, transparent)));
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) tfoot > tr:first-child > * {
+  border-block-start: var(--table-footer-divider-width, 2px) solid
+    var(--table-divider-color, var(--outline-subtle, currentColor));
 }
 
-:is(table[data-table], table.data-table, data-table > table, .table-hover)
-  tbody tr:hover {
-  background: var(--table-row-hover-bg, var(--table-hover-background, var(--surface-subtle, transparent)));
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) tfoot > tr:last-child > * {
+  border-block-end: 0;
+  background: var(--table-footer-bg, var(--table-footer-background, transparent));
+  font-weight: var(--table-footer-weight, var(--font-weight-semibold, 600));
 }
 
-:is(table[data-table], table.data-table, data-table > table) :is(a, button):focus-visible {
-  outline: var(--focus-ring-width, 2px) solid
-    var(--focus-ring-color, Highlight);
-  outline-offset: var(--focus-ring-offset, 2px);
+/* Density and border variants may live on the table or its wrapper. */
+:is(
+  table[data-table], table.data-table,
+  data-table, [data-table-scroll], .table-scroll
+):is([density="compact"], [data-density="compact"], .table-compact) {
+  --table-cell-padding-block: var(--space-xs, 0.25rem);
+  --table-cell-padding-inline: var(--space-sm, 0.5rem);
 }
 
-.table-bordered {
+:is(
+  table[data-table], table.data-table,
+  data-table, [data-table-scroll], .table-scroll
+):is([density="spacious"], [data-density="spacious"], .table-spacious) {
+  --table-cell-padding-block: var(--space-md, 1rem);
+  --table-cell-padding-inline: var(--space-lg, 1.5rem);
+}
+
+:is(
+  table[data-table], table.data-table,
+  data-table, [data-table-scroll], .table-scroll
+):is([bordered], [data-bordered], .table-bordered) {
   --table-border-width: var(--border-width-thick, 2px);
 }
 
-.table-borderless {
+:is(
+  table[data-table], table.data-table,
+  data-table, [data-table-scroll], .table-scroll
+):is([borderless], [data-borderless], .table-borderless) {
   --table-border-width: 0;
   --table-divider-color: transparent;
 }
 
+:is(
+  table[data-table]:is([bordered], [data-bordered], .table-bordered),
+  table.data-table:is([bordered], [data-bordered], .table-bordered),
+  data-table:is([bordered], [data-bordered], .table-bordered) > table,
+  [data-table-scroll]:is([bordered], [data-bordered], .table-bordered) > table,
+  .table-scroll:is([bordered], [data-bordered], .table-bordered) > table
+) :is(th, td):not(:last-child) {
+  border-inline-end: var(--table-divider-width, 1px) solid
+    var(--table-divider-color, var(--outline-subtle, currentColor));
+}
+
+/* Row presentation -------------------------------------------------------- */
+:is(
+  table[data-table]:is([striped], [data-striped], .table-striped),
+  table.data-table:is([striped], [data-striped], .table-striped),
+  data-table:is([striped], [data-striped], .table-striped) > table,
+  [data-table-scroll]:is([striped], [data-striped], .table-striped) > table,
+  .table-scroll:is([striped], [data-striped], .table-striped) > table
+) tbody tr:nth-child(even) {
+  background: var(--table-stripe-bg, var(--table-stripe-background, var(--surface-muted, transparent)));
+}
+
+@media (hover: hover) {
+  :is(
+    table[data-table]:is([hover], [data-hover], .table-hover),
+    table.data-table:is([hover], [data-hover], .table-hover),
+    data-table:is([hover], [data-hover], .table-hover) > table,
+    [data-table-scroll]:is([hover], [data-hover], .table-hover) > table,
+    .table-scroll:is([hover], [data-hover], .table-hover) > table
+  ) tbody tr:hover {
+    background: var(--table-row-hover-bg, var(--table-hover-background, var(--surface-subtle, transparent)));
+  }
+}
+
+:is(
+  table[data-table]:is([hover], [data-hover], .table-hover),
+  table.data-table:is([hover], [data-hover], .table-hover),
+  data-table:is([hover], [data-hover], .table-hover) > table,
+  [data-table-scroll]:is([hover], [data-hover], .table-hover) > table,
+  .table-scroll:is([hover], [data-hover], .table-hover) > table
+) tbody tr:focus-within {
+  background: var(--table-row-hover-bg, var(--table-hover-background, var(--surface-subtle, transparent)));
+}
+
+/* Selection remains visible when a selected row is hovered or contains focus. */
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) tbody tr:is([data-selected], :has(:is(input[type="checkbox"], input[type="radio"]):checked)) {
+  background: var(--table-row-selected-bg, var(--table-selected-background, var(--accent-muted, transparent)));
+}
+
+/* Cell utilities ---------------------------------------------------------- */
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) :is([data-numeric], .table-numeric) {
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) :is([data-actions], .table-actions) {
+  inline-size: 1%;
+  text-align: end;
+  white-space: nowrap;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) :is([data-nowrap], .table-nowrap) {
+  white-space: nowrap;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) [data-table-message] {
+  padding-block: var(--table-message-padding-block, var(--space-xl, 2rem));
+  color: var(--table-message-color, var(--text-subtle, currentColor));
+  text-align: center;
+}
+
+/* Sort buttons keep native button behavior and expose aria-sort on the th. */
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) th:has(> :is(button[data-table-sort], button.table-sort)) {
+  padding: 0;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) th > :is(button[data-table-sort], button.table-sort) {
+  display: inline-flex;
+  inline-size: 100%;
+  min-block-size: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs, 0.25rem);
+  margin: 0;
+  padding: var(--table-cell-padding-block, var(--space-sm, 0.5rem))
+    var(--table-cell-padding-inline, var(--space-md, 1rem));
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) th > :is(button[data-table-sort], button.table-sort):is(:hover, :focus-visible) {
+  background: var(--table-sort-hover-bg, var(--table-hover-background, transparent));
+}
+
+[data-sort-icon]::before { content: "◇"; }
+th[aria-sort="ascending"] [data-sort-icon]::before { content: "▲"; }
+th[aria-sort="descending"] [data-sort-icon]::before { content: "▼"; }
+
+/* Sticky headers belong on a vertically constrained scroll host. */
+:is(data-table, [data-table-scroll], .table-scroll):is(
+  [sticky-header], [data-sticky-header], .table-sticky-header
+) {
+  max-block-size: var(--table-max-block-size, 24rem);
+  overflow: auto;
+  scrollbar-gutter: var(--table-scrollbar-gutter, stable);
+}
+
+:is(data-table, [data-table-scroll], .table-scroll):is(
+  [sticky-header], [data-sticky-header], .table-sticky-header
+) > table thead th {
+  position: sticky;
+  z-index: 2;
+  inset-block-start: var(--table-sticky-offset, 0);
+  box-shadow: 0 1px 0 var(--table-divider-color, var(--outline-subtle, currentColor));
+}
+
+:is(
+  table[data-table],
+  table.data-table,
+  data-table > table,
+  [data-table-scroll] > table,
+  .table-scroll > table
+) :is(a, button, input, select):focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, Highlight);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+/* A direct table remains usable when a wrapper cannot be added. */
 @media (max-width: 40rem) {
   :is(table[data-table], table.data-table):not(
     :is(data-table, [data-table-scroll], .table-scroll) > table
   ) {
     display: block;
-    max-width: 100%;
+    max-inline-size: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
   }
 
   :is(data-table, [data-table-scroll], .table-scroll)
