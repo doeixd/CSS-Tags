@@ -214,9 +214,24 @@ Component-specific variables make local theming explicit. This changes one discl
 
 The repository also includes full-page demos in `examples/`. They are useful for testing whole themes and many components together. For learning and copying a focused pattern, start with the live recipes above.
 
-- `examples/demo-landing-library-only.html` is a complete landing page with no `<style>`, inline styles, or scripts. It uses only `index.css` and public library APIs.
-- `examples/demo-element-patterns.html` exercises every element added by the Graffiti UI gap implementation with no demo-only CSS or JavaScript.
-- `examples/demo-fluid-type.html` demonstrates bounded, container-relative typography and the keyboard skip link.
-- `examples/demo-navigation-patterns.html` provides focused breadcrumbs and responsive pagination examples with semantic HTML and no JavaScript.
-- `examples/demo-site-shell.html` builds a responsive native header, content region, and footer using only the shipped library entry point.
-- `examples/demo-landing.html` adds product-specific art direction on top of the same primitives.
+Every repository HTML demo is published as an Astro route. Open one as a full page:
+
+- [Library-only landing page](/examples/demo-landing-library-only/) uses only `index.css` and public library APIs.
+- [Art-directed landing page](/examples/demo-landing/) adds product-specific styling to those primitives.
+- [Beacon product page](/examples/demo-beacon/) combines navigation, pricing, calls to action, and a long-form footer.
+- [Component catalog](/examples/demo-components/) collects cards, navigation, sidebar, and smaller components.
+- [Complete component playground](/examples/demo/) exercises the broad component API and its JavaScript enhancements.
+- [Alternate component playground](/examples/demo2/) demonstrates another full composition and theme.
+- [Automatic semantic styling](/examples/demo-auto-styling/) shows context-aware defaults.
+- [Color-scheme controls](/examples/demo-color-scheme/) demonstrates light, dark, and system color schemes.
+- [Content patterns](/examples/demo-content-patterns/) covers metadata, quotes, statistics, and content groupings.
+- [Element patterns](/examples/demo-element-patterns/) exercises the native and declarative element APIs.
+- [Fluid typography](/examples/demo-fluid-type/) demonstrates bounded, container-relative type.
+- [Navigation patterns](/examples/demo-navigation-patterns/) provides breadcrumbs and responsive pagination.
+- [Full palette editor](/examples/demo-palette-full/) exposes the complete palette controls.
+- [Palette layout gallery](/examples/demo-palette-layouts/) applies palette controls to composed layouts.
+- [Site shell](/examples/demo-site-shell/) builds a native header, content region, and footer.
+- [Theme controls](/examples/demo-theme/) demonstrates token-driven theme editing.
+- [Typography specimen](/examples/demo-typography/) exercises headings, prose, figures, and rich text.
+
+The source remains in `examples/*.html`; Astro imports it at build time, bundles the library stylesheet and enhancement scripts, and rewrites links between demos for the deployed base path.

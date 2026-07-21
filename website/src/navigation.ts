@@ -21,6 +21,7 @@ export const navigation: NavItem[] = [
 			label: 'Guides',
 			items: [
 			{ label: 'Color System', slug: 'guides/color-system' },
+			{ label: 'Styling Default HTML', slug: 'guides/default-html' },
 			{ label: 'CMS and Markdown', slug: 'guides/cms-markdown' },
 			{ label: 'Common Footguns', slug: 'guides/common-footguns' },
 			{ label: 'Graffiti UI Gap Analysis', slug: 'guides/graffiti-ui-elements-gap-analysis' },

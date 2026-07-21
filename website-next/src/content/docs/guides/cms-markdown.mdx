@@ -9,14 +9,36 @@ CSS Tags styles semantic renderer output through `.prose` or
 `[data-prose]`. It does not require a Markdown runtime or replace native
 content elements.
 
+<LiveExample title="Semantic article defaults" description="No renderer-specific classes are needed: the prose scope styles ordinary headings, paragraphs, and lists as a coherent article.">
+  <section data-prose aria-labelledby="cms-semantic-title">
+    <h1 id="cms-semantic-title">Building resilient content systems</h1>
+    <p>Well-structured HTML gives a CMS useful typography before any custom blocks or application code are involved.</p>
+    <h2>What the content model provides</h2>
+    <p>Authors can express hierarchy and relationships with familiar native elements:</p>
+    <ul>
+      <li><strong>Headings</strong> create a navigable document outline.</li>
+      <li><strong>Paragraphs</strong> inherit a readable measure and rhythm.</li>
+      <li>
+        <strong>Lists</strong> support nested ideas without custom wrappers.
+        <ul>
+          <li>Ordered and unordered lists share the prose rhythm.</li>
+          <li>Long items wrap inside the article measure.</li>
+        </ul>
+      </li>
+    </ul>
+    <h3>Start with the source</h3>
+    <p>The same fragment remains useful in Markdown previews, CMS pages, feeds, and print styles.</p>
+  </section>
+</LiveExample>
+
 ## Rendered CMS fragment
 
 <LiveExample title="Markdown-style article output" description="This is ordinary semantic HTML using hooks emitted by common Markdown and CMS renderers.">
   <article data-prose="compact">
-    <h2 id="cms-demo-release">
+    <h1 id="cms-demo-release">
       Release checklist
       <a data-heading-anchor href="#cms-demo-release" aria-label="Link to Release checklist">#</a>
-    </h2>
+    </h1>
     <p>A renderer can compose tasks, definitions, quotations, tables, disclosure, and footnotes without component wrappers.</p>
     <ul class="contains-task-list">
       <li class="task-list-item"><input type="checkbox" checked disabled /> API reviewed</li>
@@ -108,4 +130,3 @@ navigation. A wrapped table needs overflow on its wrapper or the richer
 4. Provide media alternatives, captions, or transcripts.
 5. Test long URLs, missing media, nested lists, 200% text, RTL, dark mode, and
    narrow containers.
-

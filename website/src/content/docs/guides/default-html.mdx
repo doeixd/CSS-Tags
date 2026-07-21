@@ -1,0 +1,188 @@
+---
+title: Styling Default HTML
+description: Token-driven defaults for semantic documents, rich content, forms, tables, disclosure, and long-form typography.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+CSS Tags gives native HTML a coherent visual hierarchy before you introduce a
+component abstraction. Headings, paragraphs, lists, links, quotes, code,
+tables, forms, and disclosure elements consume the same theme and typography
+tokens as the component layer.
+
+## Full semantic document
+
+<LiveExample title="A complete semantic HTML article" description="This example uses native content elements inside one prose scope. Resize it, tab through the controls, open the disclosure, and inspect the generated markup.">
+  <article data-prose="wide">
+    <header>
+      <p><small>Field guide · Updated <time datetime="2026-07-21">July 21, 2026</time></small></p>
+      <h1>Designing content that survives its interface</h1>
+      <p>Semantic HTML carries structure, meaning, and useful browser behavior before a design system adds its visual voice.</p>
+    </header>
+
+    <section aria-labelledby="default-html-foundations">
+      <h2 id="default-html-foundations">Start with durable foundations</h2>
+      <p>A document can combine <a href="#default-html-checklist">navigable links</a>, <mark>highlighted context</mark>, and abbreviations such as <abbr title="Cascading Style Sheets">CSS</abbr> without inventing presentation-only wrappers.</p>
+      <ul>
+        <li><strong>Headings</strong> expose the document hierarchy.</li>
+        <li><strong>Paragraphs</strong> inherit readable measure and rhythm.</li>
+        <li>
+          <strong>Lists</strong> preserve relationships between ideas.
+          <ul>
+            <li>Nested items retain their indentation.</li>
+            <li>Long labels wrap without widening the article.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="default-html-checklist" aria-labelledby="default-html-steps">
+      <h2 id="default-html-steps">A practical publishing sequence</h2>
+      <ol>
+        <li>Write the content in source order.</li>
+        <li>Choose elements for their meaning and native behavior.</li>
+        <li>Add component hooks only where the content model needs them.</li>
+      </ol>
+      <blockquote>
+        <p>The strongest default is one that remains useful when every optional enhancement is removed.</p>
+        <footer><cite>CSS Tags design principle</cite></footer>
+      </blockquote>
+    </section>
+
+    <section aria-labelledby="default-html-reference">
+      <h2 id="default-html-reference">Reference content</h2>
+      <dl>
+        <dt>Semantic HTML</dt>
+        <dd>Elements chosen for structure, meaning, and built-in interaction.</dd>
+        <dt>Prose scope</dt>
+        <dd>A readable measure and vertical rhythm applied with <code>.prose</code> or <code>[data-prose]</code>.</dd>
+      </dl>
+
+      <figure>
+        <pre><code>article[data-prose] &#123;
+  --measure-prose: 68ch;
+  --space-flow: 1em;
+&#125;</code></pre>
+        <figcaption>A prose scope can be themed without changing the authored markup.</figcaption>
+      </figure>
+
+      <table>
+        <caption>Native elements and their jobs</caption>
+        <thead>
+          <tr><th scope="col">Element</th><th scope="col">Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>blockquote</code></th><td>A quotation from another source.</td></tr>
+          <tr><th scope="row"><code>figure</code></th><td>Self-contained media or referenced content.</td></tr>
+          <tr><th scope="row"><code>details</code></th><td>Native disclosure without JavaScript.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <details open>
+      <summary>Why use a prose scope?</summary>
+      <p>Application shells and authored documents need different measures and spacing. The scope lets native content opt into long-form rhythm without changing its semantics.</p>
+    </details>
+
+    <hr />
+
+    <section aria-labelledby="default-html-form">
+      <h2 id="default-html-form">Native form controls</h2>
+      <form>
+        <fieldset>
+          <legend>Article feedback</legend>
+          <label>
+            Your name
+            <input name="name" autocomplete="name" placeholder="Ada Lovelace" />
+          </label>
+          <label>
+            Topic
+            <select name="topic">
+              <option>Typography</option>
+              <option>Accessibility</option>
+              <option>Content modeling</option>
+            </select>
+          </label>
+          <label>
+            Notes
+            <textarea name="notes" rows="3" placeholder="What should we improve?"></textarea>
+          </label>
+          <button type="button">Send feedback</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <footer>
+      <address>Published by the CSS Tags documentation team.</address>
+    </footer>
+  </article>
+</LiveExample>
+
+## Global defaults and prose scopes
+
+Importing `index.css` includes the reset, theme, defaults, typography, and
+component layers in their intended order. Native elements receive accessible
+focus treatments, semantic colors, type tokens, and resilient overflow rules.
+
+Use a prose scope for an authored document inside an application shell:
+
+```html
+<article data-prose>...</article>
+<article data-prose="compact">...</article>
+<article data-prose="wide">...</article>
+<article class="prose prose-unbounded">...</article>
+```
+
+The scope controls measure and relationships between unlike elements. It does
+not replace their native semantics or behavior.
+
+## What is styled
+
+- Body copy and the `h1`–`h6` hierarchy
+- Paragraphs, links, emphasis, strong text, marks, and abbreviations
+- Ordered, unordered, nested, task, and definition lists
+- Inline code, preformatted blocks, keyboard input, and sample output
+- Blockquotes, figures, captions, horizontal rules, and callouts
+- Native tables, captions, headings, and overflow behavior
+- Fieldsets, legends, labels, inputs, selects, textareas, and buttons
+- Details/summary disclosure, progress, meter, media, and footnotes
+
+<LiveExample title="Native status and technical output" description="Progress, measurement, keyboard input, sample output, and live status keep their browser semantics while sharing the document's typography and color tokens.">
+  <section data-prose="compact" aria-labelledby="default-html-status-title">
+    <h2 id="default-html-status-title">Publication check</h2>
+    <p><label for="default-html-progress">Indexing pages</label></p>
+    <progress id="default-html-progress" value="42" max="60">42 of 60 pages</progress>
+    <p><label for="default-html-quality">Content quality</label></p>
+    <meter id="default-html-quality" min="0" max="100" low="60" high="85" optimum="100" value="92">92%</meter>
+    <p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to open search. A successful run reports <samp>Build audit passed</samp>.</p>
+    <p role="status">Result: <output>All semantic checks passed.</output></p>
+  </section>
+</LiveExample>
+
+## Theme the system, not the fragment
+
+Prefer semantic and hierarchy tokens over selectors tied to one CMS template:
+
+```css
+:root {
+  --font-size-h1: clamp(2.5rem, 7vw, 4.5rem);
+  --measure-prose: 68ch;
+  --line-height-prose: 1.7;
+  --space-flow: 1.05em;
+  --space-heading-top: 1.8em;
+  --prose-link-wrap: anywhere;
+}
+```
+
+This keeps Markdown, CMS, hand-authored HTML, and framework-rendered content on
+the same typographic system.
+
+## Authoring checklist
+
+1. Preserve a logical heading order; do not choose headings by visual size.
+2. Use lists for related items, tables for tabular relationships, and
+   definitions for term/value content.
+3. Associate every form control with a visible label.
+4. Give tables captions and meaningful row/column headings.
+5. Provide captions, alternatives, or transcripts for media.
+6. Test narrow containers, 200% text, keyboard navigation, RTL, and dark mode.

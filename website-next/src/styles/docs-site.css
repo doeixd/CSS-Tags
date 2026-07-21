@@ -660,7 +660,7 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
 /* The canvas is documentation tooling; component visuals remain in the shadow-loaded library. */
 .example-workbench {
   --card-padding: var(--space-md);
-  --card-gap: var(--space-sm);
+  --card-gap: 0;
   margin-block: var(--space-lg);
   background: transparent;
   --card-background: transparent;

@@ -4,6 +4,7 @@ description: Semantic ARIA-first tabs styling using role=tablist, role=tab, and 
 ---
 
 import TabsExample from '../../../components/TabsExample.astro';
+import LiveExample from '../../../components/LiveExample.astro';
 
 ## Overview
 Tabs are styled semantically from ARIA roles rather than a required custom component wrapper.
@@ -68,3 +69,30 @@ Tabs are styled semantically from ARIA roles rather than a required custom compo
 - Toggle the panel's `hidden` attribute when selection changes.
 
 The live example above includes this behavior. CSS alone intentionally does not change ARIA state.
+
+## No-JavaScript option
+
+When the content must remain interactive without JavaScript, use the native
+disclosure-driven pattern instead of assigning ARIA tab roles without their
+required behavior. A shared `name` keeps one panel open at a time in supporting
+browsers; elsewhere it remains a useful group of ordinary disclosures.
+
+<LiveExample title="Native disclosure tabs" description="Disable JavaScript and the summaries still open their associated content.">
+  <div data-tabs-details style="--tab-count: 3">
+    <details name="tabs-no-js" open style="--n: 1">
+      <summary>Overview</summary>
+      <p>Native details provide activation, focus behavior, and open state.</p>
+    </details>
+    <details name="tabs-no-js" style="--n: 2">
+      <summary>API</summary>
+      <p>Set <code>--tab-count</code> on the host and <code>--n</code> on each item.</p>
+    </details>
+    <details name="tabs-no-js" style="--n: 3">
+      <summary>Fallback</summary>
+      <p>The same markup falls back to stacked disclosure widgets.</p>
+    </details>
+  </div>
+</LiveExample>
+
+Use formal ARIA tabs when arrow-key tab semantics are required. Use this native
+pattern when resilient no-script interaction is the priority.

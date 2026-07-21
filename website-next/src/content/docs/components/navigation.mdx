@@ -9,7 +9,7 @@ import LiveExample from '../../../components/LiveExample.astro';
 The `navigation` component provides responsive navbar and sidebar components with mobile-first design. It uses container queries for responsive behavior and scoped styling to prevent conflicts.
 
 ## Key Features
-- **Scoped Styling**: Uses `@scope` to isolate navigation styles
+- **Public host aliases**: Custom elements, `data-*` hosts, and classes share one API
 - **Responsive Design**: Container queries for mobile adaptation
 - **Two Variants**: Navbar and sidebar layouts
 - **Mobile Menu**: Collapsible navigation for small screens
@@ -19,6 +19,18 @@ The `navigation` component provides responsive navbar and sidebar components wit
 
 ### Navbar (`nav-navbar`)
 Horizontal navigation bar with brand, links, and mobile toggle.
+
+<LiveExample title="Responsive navigation bar" description="Resize the preview: links wrap into a full-width column while remaining available without JavaScript.">
+  <nav-navbar aria-label="Product navigation">
+    <a class="nav-brand" href="#northstar">Northstar</a>
+    <ul class="nav-links">
+      <li><a class="nav-link" aria-current="page" href="#overview">Overview</a></li>
+      <li><a class="nav-link" href="#projects">Projects</a></li>
+      <li><a class="nav-link" href="#team">Team</a></li>
+      <li><a class="nav-link" href="#settings">Settings</a></li>
+    </ul>
+  </nav-navbar>
+</LiveExample>
 
 #### Features
 - **Optional Sticky Positioning**: Add `data-sticky`, `.is-sticky`, or `sticky`
@@ -30,20 +42,33 @@ Horizontal navigation bar with brand, links, and mobile toggle.
 ### Sidebar (`nav-sidebar`)
 Vertical navigation sidebar with scrollable content.
 
+<LiveExample title="Scrollable application sidebar" description="The host owns its height and scrolls independently when its navigation is longer than the available space.">
+  <nav-sidebar aria-label="Workspace" style="--sidebar-width: 100%; --sidebar-height: 14rem; --sidebar-max-height: 14rem; position: relative;">
+    <ul class="sidebar-nav">
+      <li><a class="sidebar-link sidebar-link-active" aria-current="page" href="#dashboard">Dashboard</a></li>
+      <li class="sidebar-section">Workspace</li>
+      <li><a class="sidebar-link" href="#projects">Projects</a></li>
+      <li><a class="sidebar-link" href="#members">Members</a></li>
+      <li><a class="sidebar-link" href="#integrations">Integrations</a></li>
+      <li class="sidebar-section">Administration</li>
+      <li><a class="sidebar-link" href="#security">Security</a></li>
+      <li><a class="sidebar-link" href="#billing">Billing</a></li>
+    </ul>
+  </nav-sidebar>
+</LiveExample>
+
 #### Features
-- **Fixed Width**: Configurable width (default: 250px)
+- **Configurable Width**: `--sidebar-width` defaults to `250px`
 - **Scrollable**: Auto-scroll for long navigation lists
 - **Section Grouping**: Support for navigation sections
 - **Link Styling**: Hover effects and active states
 
-## Attributes
+## Host options
 
-### Navbar Attributes
-- `container-type`: `inline-size` (set internally)
-- `container-name`: `navbar-container` (set internally)
-
-### Sidebar Attributes
-- `width`: Sidebar width (default: `250px`)
+- Navbar: `<nav-navbar>`, `[data-navbar]`, `.navbar`, or `.nav-navbar`
+- Sidebar: `<nav-sidebar>`, `[data-sidebar]`, `.sidebar`, or `.nav-sidebar`
+- Sticky navbar: `sticky`, `[data-sticky]`, or `.is-sticky`
+- Collapsible enhancement: `[data-collapsible]` or `.is-collapsible`
 
 ## Structure
 
@@ -65,7 +90,7 @@ Vertical navigation sidebar with scrollable content.
   <ul class="sidebar-nav">
     <li><a href="#" class="sidebar-link">Dashboard</a></li>
     <li><a href="#" class="sidebar-link">Settings</a></li>
-    <div class="sidebar-section">Admin</div>
+    <li class="sidebar-section">Admin</li>
     <li><a href="#" class="sidebar-link">Users</a></li>
   </ul>
 </nav-sidebar>
@@ -102,30 +127,33 @@ Vertical navigation sidebar with scrollable content.
 - **Position**: Sticky top with border right
 - **Overflow**: Auto-scroll for content
 
-## CSS Custom Properties Used
-- `--spacing-md`, `--spacing-sm`, `--spacing-xs`: Spacing values
-- `--bg`: Background colors
-- `--surface-default`: Default surface color
-- `--outline-subtle`: Subtle border color
-- `--z-index-50`: Z-index value (default: 50)
-- `--font-size-lg`: Large font size
-- `--font-weight-bold`: Bold font weight
-- `--text-overt`: Overt text color
-- `--text-default`: Default text color
-- `--radius-md`: Border radius
-- `--highlight-bg-subtle`: Subtle highlight background
-- `--highlight-bg-muted`: Muted highlight background
-- `--accent-subtle`: Subtle accent color
+## Component tokens
+
+Navbar geometry and surfaces:
+
+- `--nav-min-height`, `--nav-padding`, `--nav-radius`
+- `--nav-background`, `--nav-border-color`, `--nav-z-index`
+- `--nav-links-gap`, `--nav-link-padding-block`, `--nav-link-padding-inline`
+- `--nav-link-color`, `--nav-link-hover-color`, `--nav-link-hover-background`
+- `--nav-menu-background`, `--nav-menu-border-color`
+
+Sidebar sizing and navigation:
+
+- `--sidebar-width` or `--width`
+- `--sidebar-height`, `--sidebar-max-height`
+- `--nav-sidebar-padding`, `--nav-sidebar-background`, `--nav-sidebar-border-color`
+- `--sidebar-link-color`, `--sidebar-link-hover-color`, `--sidebar-link-hover-background`
+- `--sidebar-section-color`, `--sidebar-section-margin-top`
 
 ## Utility Classes
 - `.nav-link-active`: Active navigation link styling
 - `.nav-links.active`: Shows mobile menu (JavaScript-controlled)
 
-## Browser Support
-- **@scope**: Chrome 118+, Firefox 128+ (limited support)
-- **Container Queries**: Chrome 105+, Firefox 110+, Safari 16+
-- **CSS Nesting**: Modern browsers
-- **Fallback**: Basic styling without scoping in unsupported browsers
+## Browser support
+
+The responsive navbar uses container queries and CSS nesting. In browsers
+without container-query support, it remains a usable horizontal, wrapping
+navigation list; the semantic links do not depend on the responsive styling.
 
 ## JavaScript Integration
 Only the opt-in `data-collapsible` mobile menu requires JavaScript. Without that attribute, links remain visible at every width. Enhancement should:
@@ -137,7 +165,7 @@ Only the opt-in `data-collapsible` mobile menu requires JavaScript. Without that
 - **Keyboard Navigation**: Focus management for mobile menu
 - **Screen Readers**: Proper semantic structure
 - **Focus Indicators**: Visible focus outlines
-- **ARIA**: May need `aria-expanded` for toggle button
+- **ARIA**: Collapsible toggles must keep `aria-expanded` synchronized with the menu
 
 ## Use Cases
 - **Website Navigation**: Main site navigation

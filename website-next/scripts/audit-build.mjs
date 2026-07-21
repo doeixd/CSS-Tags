@@ -26,6 +26,15 @@ const routes = new Set(pages.map(routeForPage));
 const pageHtmlByRoute = new Map(await Promise.all(
   pages.map(async (page) => [routeForPage(page), await readFile(page, "utf8")]),
 ));
+const exampleFiles = (await readdir(path.join(libraryRoot, "examples")))
+  .filter((file) => file.endsWith(".html"));
+const standaloneExampleRoutes = new Set(
+  exampleFiles.map((file) => `/examples/${file.replace(/\.html$/, "")}/`),
+);
+
+for (const route of standaloneExampleRoutes) {
+  if (!routes.has(route)) failures.push(`Missing standalone example route: ${route}.`);
+}
 
 if (pages.length < 64) failures.push(`Expected at least 64 routes; found ${pages.length}.`);
 
@@ -122,6 +131,15 @@ for (const page of pages) {
   const requireText = (needle, label) => {
     if (!html.includes(needle)) failures.push(`${route}: missing ${label}.`);
   };
+
+  if (standaloneExampleRoutes.has(route)) {
+    requireText('name="css-tags-example"', "Astro standalone-example marker");
+    if (html.includes('../index.css')) failures.push(`${route}: retains a repository-relative stylesheet link.`);
+    if (/<script\b[^>]*\bsrc=["']\.\.?\//i.test(html)) {
+      failures.push(`${route}: retains a repository-relative script link.`);
+    }
+    continue;
+  }
 
   requireText('class="skip-link"', "skip link");
   requireText('class="site-header"', "library site header");

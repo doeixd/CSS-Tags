@@ -1,0 +1,73 @@
+---
+import "../../../../index.css";
+import "../../../../examples/demo-controls.css";
+import { standaloneExamples } from "../../data/standalone-examples";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return standaloneExamples.map((entry) => ({
+    params: { demo: entry.slug },
+    props: entry,
+  }));
+}
+
+const { slug, source } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const demoSlugs = new Set(standaloneExamples.map((entry) => entry.slug));
+
+const documentLanguage = source.match(/<html\b[^>]*\blang=["']([^"']+)["']/i)?.[1] ?? "en";
+const headSource = source.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
+const bodyMatch = source.match(/<body\b([^>]*)>([\s\S]*?)<\/body>/i);
+const bodyAttributes = bodyMatch?.[1] ?? "";
+const bodyId = bodyAttributes.match(/\bid=["']([^"']+)["']/i)?.[1];
+const bodyClass = bodyAttributes.match(/\bclass=["']([^"']+)["']/i)?.[1];
+
+const rewriteLinks = (markup) => markup
+  .replace(
+    /<link\b[^>]*\bhref=["'](?:\.\.\/index\.css|\.\/demo-controls\.css)["'][^>]*>\s*/gi,
+    "",
+  )
+  .replace(
+    /<script\b[^>]*\bsrc=["'](?:\.\.?\/)[^"']+["'][^>]*>\s*<\/script>\s*/gi,
+    "",
+  )
+  .replace(/href=(["'])(?:\.\/)?([^"'\/]+)\.html(#[^"']*)?\1/gi, (match, quote, target, hash = "") => (
+    demoSlugs.has(target)
+      ? `href=${quote}${base}examples/${target}/${hash}${quote}`
+      : match
+  ))
+  .replace(/href=(["'])\.\.\/README\.md\1/gi, `href=$1${base}guides/getting-started/$1`)
+  .replace(/href=(["'])\.\.\/API\.md\1/gi, `href=$1${base}reference/api/$1`)
+  .replace(/href=(["'])\.\.\/docs\/guides\/introduction\.md\1/gi, `href=$1${base}guides/introduction/$1`);
+
+const headMarkup = rewriteLinks(headSource);
+const bodyMarkup = rewriteLinks(bodyMatch?.[2] ?? source);
+---
+
+<!doctype html>
+<html lang={documentLanguage}>
+  <head>
+    <Fragment set:html={headMarkup} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="css-tags-example" content={slug} />
+  </head>
+  <body id={bodyId} class={bodyClass}>
+    <Fragment set:html={bodyMarkup} />
+    <script>
+      import { initializeCarousels } from "../../../../carousel.js";
+      import { initializeViewTransitions } from "../../../../view-transition.js";
+      import { initializeImageContainers } from "../../../../components/img-container.js";
+      import { initializeDemoNavigation } from "../../../../examples/demo-navigation.js";
+      import { initializeRangeReadouts } from "../../../../examples/demo-controls.js";
+
+      initializeCarousels();
+      initializeViewTransitions();
+      initializeImageContainers();
+      initializeDemoNavigation();
+      initializeRangeReadouts();
+    </script>
+  </body>
+</html>

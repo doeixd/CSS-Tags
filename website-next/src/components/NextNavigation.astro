@@ -42,7 +42,7 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 </nav>
 
 <script>
-  let sidebarScrollPosition: number | null = null;
+  const sidebarScrollKey = "css-tags:docs-sidebar-scroll";
 
   function revealCurrentNavigationItem() {
     const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
@@ -59,23 +59,54 @@ const base = normalizeBase(import.meta.env.BASE_URL);
 
   function saveSidebarScrollPosition() {
     const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
-    if (sidebar) sidebarScrollPosition = sidebar.scrollTop;
+    if (!sidebar) return;
+    try {
+      sessionStorage.setItem(sidebarScrollKey, String(sidebar.scrollTop));
+    } catch {
+      // Navigation still works when storage is unavailable.
+    }
   }
 
   function restoreSidebarScrollPosition() {
-    if (sidebarScrollPosition === null) return;
-    const savedPosition = sidebarScrollPosition;
+    let savedPosition: number | null = null;
+    try {
+      const stored = sessionStorage.getItem(sidebarScrollKey);
+      if (stored !== null) savedPosition = Number.parseFloat(stored);
+    } catch {
+      return;
+    }
+    if (savedPosition === null || !Number.isFinite(savedPosition)) return;
+    const position = savedPosition;
 
-    requestAnimationFrame(() => {
+    const apply = () => {
       const sidebar = document.querySelector<HTMLElement>(".next-docs__sidebar");
-      if (sidebar) sidebar.scrollTop = savedPosition;
-      sidebarScrollPosition = null;
+      if (sidebar) sidebar.scrollTop = position;
+    };
+
+    // Apply immediately, then again after disclosure/layout measurement has
+    // settled so the browser cannot overwrite the restored position.
+    apply();
+    requestAnimationFrame(() => {
+      apply();
+      requestAnimationFrame(apply);
     });
   }
 
   // On a direct visit, place the current page within view. During client-side
   // navigation, preserve the reader's exact position instead of re-centering it.
-  revealCurrentNavigationItem();
-  document.addEventListener("astro:before-swap", saveSidebarScrollPosition);
-  document.addEventListener("astro:after-swap", restoreSidebarScrollPosition);
+  let hasSavedSidebarPosition = false;
+  try {
+    hasSavedSidebarPosition = sessionStorage.getItem(sidebarScrollKey) !== null;
+  } catch {
+    // Use the direct-visit behavior when storage is unavailable.
+  }
+  if (hasSavedSidebarPosition) restoreSidebarScrollPosition();
+  else revealCurrentNavigationItem();
+
+  if (document.documentElement.dataset.docsSidebarScrollReady !== "true") {
+    document.documentElement.dataset.docsSidebarScrollReady = "true";
+    document.addEventListener("astro:before-swap", saveSidebarScrollPosition);
+    document.addEventListener("astro:after-swap", restoreSidebarScrollPosition);
+    document.addEventListener("astro:page-load", restoreSidebarScrollPosition);
+  }
 </script>

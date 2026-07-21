@@ -75,7 +75,11 @@
   }
 
   /* Headings / text outside of the normal places should look like normal text  */
-  :where(*:not(:is(main, body, .prose, .app, .root, #root)) > :is(h1, h2, h3, h4, h5, h6)), :where(p) { 
+  :where(
+    *:not(:is(main, body, .prose, [data-prose], .app, .root, #root)):not(:is(.prose, [data-prose]) *)
+      > :is(h1, h2, h3, h4, h5, h6)
+  ),
+  :where(p) {
     font-size: inherit; 
     font-weight: inherit; 
     overflow-wrap: break-word;
