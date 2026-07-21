@@ -93,6 +93,8 @@ const sourceContracts = [
   ["components/view-transition.css", "view-fade-in", "fade-only view transition"],
   ["components/carousel.css", "flex: 0 0 100%", "full-width carousel slides"],
   ["components/carousel.css", "data-carousel-initialized", "progressively enhanced carousel controls"],
+  ["components/carousel.css", "--carousel-trigger-chevron-inline-size", "centered geometric carousel chevrons"],
+  ["components/actions.css", "--text-box-icon", "icon-button text-box centering"],
   ["carousel.js", "toggleAttribute('inert'", "inactive carousel slide focus management"],
   ["website-next/src/components/PageExample.astro", "initializeCarousels(root)", "shipped carousel demo behavior"],
   ["website-next/src/components/PageExample.astro", "markupSource={example.code}", "formatted page-example source"],

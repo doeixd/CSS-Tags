@@ -54,6 +54,9 @@
   position: absolute;
   z-index: 2;
   inset-block-start: 50%;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
   display: grid;
   inline-size: var(--carousel-trigger-size, 2.75rem);
   block-size: var(--carousel-trigger-size, 2.75rem);
@@ -71,6 +74,9 @@
   font: inherit;
   font-size: var(--carousel-trigger-icon-size, 1.75rem);
   line-height: 1;
+  text-box: var(--text-box-icon, normal);
+  text-box-trim: var(--text-box-trim-icon, none);
+  text-box-edge: var(--text-box-edge-icon, auto);
   cursor: pointer;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -83,6 +89,44 @@
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"] {
   inset-inline-end: var(--carousel-trigger-inset, 0.75rem);
+}
+
+/* Text chevrons inherit font-specific side bearings and rarely look optically
+ * centered. When no explicit icon element is supplied, draw a geometric
+ * chevron from currentColor. Custom SVG, image, and data-icon children remain
+ * untouched. */
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)
+  > :is(svg, img, [data-icon]) {
+  display: block;
+  inline-size: var(--carousel-trigger-icon-size, 1.25rem);
+  block-size: var(--carousel-trigger-icon-size, 1.25rem);
+  object-fit: contain;
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):not(:has(> :is(svg, img, [data-icon]))) {
+  font-size: 0;
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):not(:has(> :is(svg, img, [data-icon])))::before {
+  content: "";
+  display: block;
+  inline-size: var(--carousel-trigger-chevron-inline-size, 0.625rem);
+  block-size: var(--carousel-trigger-chevron-block-size, 1rem);
+  background: currentColor;
+  clip-path: polygon(100% 0, 38% 50%, 100% 100%, 62% 100%, 0 50%, 62% 0);
+  transform: scaleX(var(--_carousel-chevron-scale, 1));
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"] {
+  --_carousel-chevron-scale: -1;
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="prev"]:dir(rtl) {
+  --_carousel-chevron-scale: -1;
+}
+
+:is(carousel-trigger, [data-carousel-trigger], .carousel-trigger)[direction="next"]:dir(rtl) {
+  --_carousel-chevron-scale: 1;
 }
 
 :is(carousel-trigger, [data-carousel-trigger], .carousel-trigger):is(:hover, :focus-visible) {

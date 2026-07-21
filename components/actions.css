@@ -5,8 +5,11 @@
   --_icon-button-size: var(--icon-button-size, 2.75rem);
 
   box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
   display: inline-grid;
   place-items: center;
+  place-content: center;
   flex: 0 0 auto;
   inline-size: var(--_icon-button-size);
   block-size: var(--_icon-button-size);
@@ -17,7 +20,14 @@
   border-radius: var(--icon-button-radius, var(--radius-md, 0.5rem));
   background: var(--icon-button-background, var(--surface-default));
   color: var(--icon-button-color, var(--text-default));
+  font: inherit;
+  font-size: var(--icon-button-font-size, var(--icon-button-icon-size, 1.25rem));
   line-height: 1;
+  text-align: center;
+  text-indent: 0;
+  text-box: var(--text-box-icon, normal);
+  text-box-trim: var(--text-box-trim-icon, none);
+  text-box-edge: var(--text-box-edge-icon, auto);
 }
 
 :is(button[data-icon-button], button.icon-button, icon-button,
@@ -25,7 +35,13 @@
   > :is(svg, img, [data-icon]) {
   inline-size: var(--icon-button-icon-size, 1.25rem);
   block-size: var(--icon-button-icon-size, 1.25rem);
+  display: grid;
+  place-items: center;
   object-fit: contain;
+  line-height: 1;
+  text-box: var(--text-box-icon, normal);
+  text-box-trim: var(--text-box-trim-icon, none);
+  text-box-edge: var(--text-box-edge-icon, auto);
 }
 
 :is(button[data-icon-button], button.icon-button, icon-button,

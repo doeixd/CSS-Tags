@@ -85,6 +85,8 @@ Use `carousel`, `[data-carousel]`, or `.carousel` for the host. The data-host fo
 - `--carousel-trigger-background`, `--carousel-trigger-hover-background`
 - `--carousel-trigger-border-color`, `--carousel-trigger-hover-border-color`
 - `--carousel-trigger-color`, `--carousel-trigger-shadow`
+- `--carousel-trigger-icon-size` for explicit SVG, image, or `[data-icon]` children
+- `--carousel-trigger-chevron-inline-size`, `--carousel-trigger-chevron-block-size` for the centered fallback chevron
 
 ## Progressive Enhancement
 The carousel works without JavaScript using native scroll snap behavior. When JavaScript loads (from `carousel.js`), it enhances with:

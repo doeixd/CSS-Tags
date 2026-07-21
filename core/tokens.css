@@ -226,6 +226,8 @@
   --carousel-trigger-border-color: var(--outline-subtle);
   --carousel-trigger-hover-border-color: var(--outline-overt);
   --carousel-trigger-color: var(--text-overt);
+  --carousel-trigger-chevron-inline-size: 0.625rem;
+  --carousel-trigger-chevron-block-size: 1rem;
 
   /* ========== SPACING SYSTEM ========== */
   /* Spacing Scale */
@@ -478,6 +480,12 @@
   --text-box-button: var(--text-box-ui);
   --text-box-trim-button: var(--text-box-trim-ui);
   --text-box-edge-button: var(--text-box-edge-ui);
+
+  /* Icon glyphs need their complete line box; cap/alphabetic trimming is
+   * intended for labels and can make symbols appear off-center. */
+  --text-box-icon: normal;
+  --text-box-trim-icon: none;
+  --text-box-edge-icon: auto;
 
   --text-box-badge: var(--text-box-ui);
   --text-box-trim-badge: var(--text-box-trim-ui);
