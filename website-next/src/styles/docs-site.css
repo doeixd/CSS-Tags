@@ -664,6 +664,7 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   margin-block: var(--space-lg);
   background: transparent;
   --card-background: transparent;
+  --tabs-panel-background: transparent;
   box-shadow: none;
   transform: none;
 }
@@ -702,6 +703,15 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   padding: clamp(var(--space-md), 4cqi, var(--space-xl));
   overflow: auto;
   background: transparent;
+}
+
+.example-workbench :is(
+  [data-workbench-preview-panel],
+  .example-workbench__canvas,
+  .example-workbench__viewport,
+  css-tags-example
+) {
+  background: transparent !important;
 }
 
 .example-workbench__viewport {

@@ -4,17 +4,21 @@ input[type="checkbox"][role="switch"] {
   --_switch-width: var(--switch-width, 2.75rem);
   --_switch-height: var(--switch-height, 1.5rem);
   --_switch-padding: var(--switch-padding, 0.1875rem);
-  --_switch-thumb: calc(var(--_switch-height) - (2 * var(--_switch-padding)));
+  --_switch-border-width: var(--switch-border-width, var(--border-width, 1px));
+  --_switch-thumb: calc(var(--_switch-height) - (2 * var(--_switch-padding)) - (2 * var(--_switch-border-width)));
+  --_switch-travel: calc(var(--_switch-width) - var(--_switch-height));
 
   appearance: none;
   box-sizing: border-box;
-  display: inline-grid;
-  place-items: center start;
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
   inline-size: var(--_switch-width);
   block-size: var(--_switch-height);
   padding: var(--_switch-padding);
   margin: 0;
-  border: var(--switch-border-width, var(--border-width, 1px)) solid
+  border: var(--_switch-border-width) solid
     var(--switch-border-color, var(--outline-overt));
   border-radius: var(--switch-radius, var(--radius-full, 9999px));
   background: var(--switch-background, var(--surface-overt));
@@ -24,11 +28,15 @@ input[type="checkbox"][role="switch"] {
 
 input[type="checkbox"][role="switch"]::before {
   content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--_switch-padding);
   inline-size: var(--_switch-thumb);
   block-size: var(--_switch-thumb);
   border-radius: 50%;
   background: var(--switch-thumb-background, var(--surface-default));
   box-shadow: var(--switch-thumb-shadow, var(--shadow-sm));
+  transform: translateY(-50%);
   transition: transform 160ms ease-out;
 }
 
@@ -38,11 +46,11 @@ input[type="checkbox"][role="switch"]:checked {
 }
 
 input[type="checkbox"][role="switch"]:checked::before {
-  transform: none;
+  transform: translateX(var(--_switch-travel)) translateY(-50%);
 }
 
-input[type="checkbox"][role="switch"]:checked {
-  justify-items: end;
+input[type="checkbox"][role="switch"]:dir(rtl):checked::before {
+  transform: translateX(calc(-1 * var(--_switch-travel))) translateY(-50%);
 }
 
 input[type="checkbox"][role="switch"]:focus-visible {

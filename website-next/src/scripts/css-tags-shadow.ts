@@ -26,6 +26,7 @@ const exampleHelpers = `
         --font-weight-heading: inherit;
         --letter-spacing-heading: inherit;
         color: var(--text-default, inherit);
+        background: transparent;
     }
 
     .example-panel {

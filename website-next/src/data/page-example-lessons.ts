@@ -356,8 +356,8 @@ export const supplementalExamples: Record<string, PageExampleLesson[]> = {
     "guides/philosophy": [{
         title: "ARIA state can be the component API",
         description: "A switch communicates and styles its state through aria-checked instead of duplicating state in a visual class.",
-        preview: `<layout-stack gap="var(--space-sm)"><button role="switch" aria-checked="false">Email notifications</button><button role="switch" aria-checked="true">Security alerts</button></layout-stack>`,
-        code: `<button role="switch" aria-checked="false">Email notifications</button>\n<button role="switch" aria-checked="true">Security alerts</button>`,
+        preview: `<layout-stack gap="var(--space-sm)"><label class="stack-intrinsic"><span>Email notifications</span><input type="checkbox" role="switch"></label><label class="stack-intrinsic"><span>Security alerts</span><input type="checkbox" role="switch" checked></label></layout-stack>`,
+        code: `<label>\n  <span>Email notifications</span>\n  <input type="checkbox" role="switch">\n</label>\n<label>\n  <span>Security alerts</span>\n  <input type="checkbox" role="switch" checked>\n</label>`,
     }],
     "guides/theming": [{
         title: "Override semantic roles at the narrowest boundary",
