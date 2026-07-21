@@ -189,12 +189,18 @@
   --_track: var(--scrollbar-track, oklch(from var(--theme-bg) l c h / 0.5));
 
   display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   gap: var(--_gap, var(--l-gap));
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x;
   scrollbar-width: thin;
   scrollbar-color: var(--_thumb) var(--_track);
 
-  & > * { flex-shrink: 0; }
+  & > * { flex: 0 0 auto; }
   &[no-scrollbar] { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
 }
 
