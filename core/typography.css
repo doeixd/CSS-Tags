@@ -17,7 +17,7 @@
   --font-size-step-3-preferred: calc(1.22rem + 0.75cqi);
   --font-size-step-4-preferred: calc(1.32rem + 1.25cqi);
   --font-size-step-5-preferred: calc(1.5rem + 1.9cqi);
-  --font-size-step-6-preferred: calc(1.8rem + 2.8cqi);
+  --font-size-step-6-preferred: calc(1.65rem + 2.1cqi);
   --font-size-step-7-preferred: calc(2.1rem + 3.6cqi);
   --font-size-step-1: clamp(var(--font-size-step-1-min), var(--font-size-step-1-preferred), var(--font-size-step-1-max));
   --font-size-step-2: clamp(var(--font-size-step-2-min), var(--font-size-step-2-preferred), var(--font-size-step-2-max));
@@ -40,7 +40,7 @@
   --font-size-h3: var(--font-size-4xl);
   --font-size-h4: var(--font-size-3xl);
   --font-size-h5: var(--font-size-2xl);
-  --font-size-h6: var(--font-size-lg);
+  --font-size-h6: var(--font-size-xl);
 }
 
 :is(.lead, [data-lead], text[variant="lead"]) {

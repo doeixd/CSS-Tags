@@ -99,6 +99,7 @@
     order: 3;
     flex-basis: 100%;
     inline-size: 100%;
+    padding-block-end: var(--site-header-wrapped-navigation-padding-block-end);
   }
 }
 

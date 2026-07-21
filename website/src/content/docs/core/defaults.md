@@ -59,8 +59,9 @@ h6 { font-size: var(--font-size-h6, 1.0rem); }
 
 ### Checkbox/Radio
 - **Custom Appearance**: Removed native styling
-- **Sizing**: Consistent dimensions
-- **Indicators**: Pseudo-element checkmarks
+- **Sizing**: Fixed square geometry without inheriting text-input padding
+- **Indicators**: A checkmark for checkboxes and a centered dot for radios
+- **Tokens**: `--choice-control-*`, `--checkbox-indicator-*`, and `--radio-indicator-size` control geometry and color
 
 ## Layout Components
 
@@ -231,5 +232,6 @@ Override default variables to customize:
   --font-size-h1: 3rem; /* Larger headings */
   --space-container-padding: 2rem; /* More side padding */
   --radius-md: 8px; /* Rounder corners */
+  --choice-control-size: 1.25rem; /* Larger checkboxes and radios */
 }
 ```

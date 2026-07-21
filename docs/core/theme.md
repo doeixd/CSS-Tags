@@ -54,7 +54,7 @@ tokens:
 
 ```css
 :root {
-  --density-factor: 0.85; /* Scales --space-xs through --space-xl. */
+  --density-factor: 0.85; /* Scales --space-* and compatibility --spacing-* tokens. */
   --radius-factor: 1.25;  /* Scales the non-pill radius hierarchy. */
 }
 ```
@@ -63,6 +63,11 @@ Both default to `1`. The preferred radius names are `--radius-xs`,
 `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, and
 `--radius-full`; the longer `--border-radius-*` names remain compatible
 aliases.
+
+The preferred spacing family for new component APIs is `--space-xs` through
+`--space-xl`. The tighter `--spacing-*` family remains available for existing
+utilities and compact controls; both families now respond to
+`--density-factor`.
 
 The documentation header's collapsed **Theme** panel edits the important root
 inputs live, persists explicit overrides locally, and generates copyable

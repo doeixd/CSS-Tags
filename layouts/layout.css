@@ -180,13 +180,18 @@
 /**
  * <layout-reel>
  * A horizontally scrolling container.
- * @prop --l-gap, --scrollbar-thumb, --scrollbar-track
- * @attr gap, no-scrollbar
+ * @prop --l-gap, --l-reel-item-size, --l-reel-scroll-padding,
+ *   --l-reel-scrollbar-thumb, --l-reel-scrollbar-track, --l-reel-scrollbar-size
+ * @attr gap, item-size, scroll-padding, scrollbar, snap, no-scrollbar
  */
 :is(layout-reel, [data-layout-reel], .layout-reel) {
   --_gap: attr(gap type(*), var(--l-gap));
-  --_thumb: var(--scrollbar-thumb, oklch(from var(--theme-primary) l c h / 0.5));
-  --_track: var(--scrollbar-track, oklch(from var(--theme-bg) l c h / 0.5));
+  --_item-size: attr(item-size type(*), attr(data-item-size type(*), var(--l-reel-item-size, auto)));
+  --_scroll-padding: attr(scroll-padding type(*), attr(data-scroll-padding type(*), var(--l-reel-scroll-padding, 0px)));
+  --_thumb: var(--l-reel-scrollbar-thumb, var(--scrollbar-thumb, oklch(from var(--theme-primary) l c h / 0.5)));
+  --_thumb-hover: var(--l-reel-scrollbar-thumb-hover, var(--scrollbar-thumb-hover, var(--_thumb)));
+  --_track: var(--l-reel-scrollbar-track, var(--scrollbar-track, oklch(from var(--theme-bg) l c h / 0.5)));
+  --_scrollbar-size: var(--l-reel-scrollbar-size, var(--scrollbar-size, 0.75rem));
 
   display: flex;
   inline-size: 100%;
@@ -196,12 +201,53 @@
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  touch-action: pan-x;
-  scrollbar-width: thin;
+  scroll-padding-inline: var(--_scroll-padding);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: auto;
   scrollbar-color: var(--_thumb) var(--_track);
 
-  & > * { flex: 0 0 auto; }
-  &[no-scrollbar] { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+  & > * {
+    flex: 0 0 var(--_item-size);
+  }
+
+  &::-webkit-scrollbar {
+    block-size: var(--_scrollbar-size);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--_track);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--_thumb);
+    background-clip: padding-box;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--_thumb-hover);
+    background-clip: padding-box;
+  }
+
+  &:is([snap], [data-snap], .is-snapping) {
+    scroll-snap-type: inline proximity;
+  }
+
+  &:is([snap], [data-snap], .is-snapping) > * {
+    scroll-snap-align: start;
+  }
+
+  &:is([scrollbar="thin"], [data-scrollbar="thin"], .reel-scrollbar-thin) {
+    --_scrollbar-size: var(--l-reel-scrollbar-size-thin, 0.5rem);
+    scrollbar-width: thin;
+  }
+
+  &:is([scrollbar="hidden"], [data-scrollbar="hidden"], [no-scrollbar], [data-no-scrollbar], .reel-scrollbar-hidden) {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 /**

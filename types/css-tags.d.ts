@@ -78,6 +78,10 @@ declare global {
     }
 
     interface LayoutReelAttributes extends LayoutAttributes {
+      "item-size"?: CSSValue;
+      "scroll-padding"?: CSSValue;
+      scrollbar?: "auto" | "thin" | "hidden";
+      snap?: BooleanAttribute;
       "no-scrollbar"?: BooleanAttribute;
     }
 

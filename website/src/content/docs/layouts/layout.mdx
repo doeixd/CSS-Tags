@@ -210,30 +210,50 @@ Groups items that wrap onto new lines, useful for tags or buttons.
 
 ### `<layout-reel>`
 
-A horizontally scrolling container.
+A horizontally scrolling container. Set an item size so the overflow is
+intentional, keep the native scrollbar visible by default, and add `tabindex="0"`
+when the reel itself should be keyboard-scrollable.
 
-<LiveExample title="Scrollable navigation reel" description="The children stay intrinsic-width; scroll horizontally when the row is too wide.">
-  <layout-reel gap="var(--space-sm)" no-scrollbar aria-label="Project sections">
-    <a class="example-panel" style="min-inline-size: 12rem;" href="#overview">Overview</a>
-    <a class="example-panel" style="min-inline-size: 12rem;" href="#activity">Activity</a>
-    <a class="example-panel" style="min-inline-size: 12rem;" href="#integrations">Integrations</a>
-    <a class="example-panel" style="min-inline-size: 12rem;" href="#permissions">Permissions</a>
-    <a class="example-panel" style="min-inline-size: 12rem;" href="#audit-log">Audit log</a>
+<LiveExample title="Visible scrollbar and themed track" description="Every card has a fixed track size, so the row reliably overflows. Drag the scrollbar, shift-wheel, swipe, or focus the reel and use the arrow keys.">
+  <layout-reel gap="var(--space-sm)" item-size="13rem" scroll-padding="var(--space-sm)" tabindex="0" aria-label="Release highlights" style="--l-reel-scrollbar-track: var(--surface-subtle); --l-reel-scrollbar-thumb: var(--accent);">
+    <article class="example-panel"><eyebrow>Foundation</eyebrow><strong>Semantic defaults</strong><p>Native elements inherit the same token system.</p></article>
+    <article class="example-panel"><eyebrow>Components</eyebrow><strong>Three host forms</strong><p>Use custom tags, classes, or data attributes.</p></article>
+    <article class="example-panel"><eyebrow>Layout</eyebrow><strong>Container aware</strong><p>Components adapt to the space they actually receive.</p></article>
+    <article class="example-panel"><eyebrow>Platform</eyebrow><strong>Progressive first</strong><p>Modern features enhance a resilient baseline.</p></article>
+    <article class="example-panel"><eyebrow>Theming</eyebrow><strong>Token controlled</strong><p>Change intent once instead of patching selectors.</p></article>
   </layout-reel>
+</LiveExample>
+
+<LiveExample title="Snapping reel with a hidden scrollbar" description="The data-attribute host uses the same API. Hiding the bar changes only its presentation; touch, wheel, and keyboard scrolling still work.">
+  <div data-layout-reel data-item-size="clamp(13rem, 72%, 18rem)" data-scrollbar="hidden" data-snap data-scroll-padding="var(--space-sm)" gap="var(--space-sm)" tabindex="0" aria-label="Setup steps">
+    <section class="example-panel"><eyebrow>Step 1</eyebrow><strong>Choose a semantic host</strong><p>Start with the native element that already carries the right meaning.</p></section>
+    <section class="example-panel"><eyebrow>Step 2</eyebrow><strong>Add the component contract</strong><p>Apply the custom tag, data attribute, or matching class.</p></section>
+    <section class="example-panel"><eyebrow>Step 3</eyebrow><strong>Theme with tokens</strong><p>Override the smallest semantic variable that expresses your intent.</p></section>
+    <section class="example-panel"><eyebrow>Step 4</eyebrow><strong>Enhance when supported</strong><p>Layer in snapping or modern platform behavior without losing the baseline.</p></section>
+  </div>
 </LiveExample>
 
 **CSS Properties:**
 - `--l-gap`: Gap between items
-- `--scrollbar-thumb`: Scrollbar thumb color
-- `--scrollbar-track`: Scrollbar track color
+- `--l-reel-item-size`: Shared flex basis for direct children
+- `--l-reel-scroll-padding`: Logical inline scroll padding, especially useful with snapping
+- `--l-reel-scrollbar-thumb`: Scrollbar thumb color
+- `--l-reel-scrollbar-thumb-hover`: Hovered thumb color
+- `--l-reel-scrollbar-track`: Scrollbar track color
+- `--l-reel-scrollbar-size`: WebKit scrollbar track height
+- `--l-reel-scrollbar-size-thin`: Track height for the thin variant
 
 **HTML Attributes:**
 - `gap`: Override gap
-- `no-scrollbar`: Hide scrollbars
+- `item-size`: Direct-child flex basis, such as `14rem` or `clamp(12rem, 75%, 20rem)`
+- `scroll-padding`: Logical inline scroll padding
+- `scrollbar="auto|thin|hidden"`: Choose the native scrollbar presentation
+- `snap`: Opt into proximity snapping at each direct child
+- `no-scrollbar`: Legacy alias for `scrollbar="hidden"`
 
 **Usage:**
 ```html
-<layout-reel gap="1rem">
+<layout-reel item-size="14rem" gap="1rem" scrollbar="thin" snap tabindex="0">
   <div>Item 1</div>
   <div>Item 2</div>
   <div>Item 3</div>

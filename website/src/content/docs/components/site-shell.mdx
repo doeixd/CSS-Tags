@@ -25,6 +25,15 @@ navigation, actions, and layout primitives.
       </div>
     </container>
   </header>
+  <main>
+    <layout-pad padding-x="var(--space-md)" padding-y="var(--space-lg)">
+      <layout-stack gap="var(--space-xs)">
+        <eyebrow>Documentation</eyebrow>
+        <strong>Build a clear, resilient interface.</strong>
+        <p>The content starts with deliberate space below the site navigation.</p>
+      </layout-stack>
+    </layout-pad>
+  </main>
 </LiveExample>
 
 ```html
@@ -90,7 +99,9 @@ Equivalent hosts are `footer.site-footer`, `footer[data-site-footer]`, and
 Header customization starts with `--site-header-background`,
 `--site-header-color`, `--site-header-border`, `--site-header-min-height`,
 `--site-header-padding-inline`, `--site-header-gap`, and
-`--site-header-actions-gap`.
+`--site-header-actions-gap`. At the wrapped breakpoint,
+`--site-header-wrapped-navigation-padding-block-end` preserves breathing room
+beneath the second navigation row.
 
 Footer customization starts with `--site-footer-background`,
 `--site-footer-color`, `--site-footer-padding-block`, `--site-footer-gap`,

@@ -3,6 +3,8 @@ title: Utilities (`utilities/utilities.css`)
 description: This file provides comprehensive utility classes for styling, including colors, spacing, typography, layout, and interactive states. It combines core utilities 
 ---
 
+import LiveExample from '../../../components/LiveExample.astro';
+
 This file provides comprehensive utility classes for styling, including colors, spacing, typography, layout, and interactive states. It combines core utilities with additional helpers for complete design system coverage.
 
 ## Background Utilities
@@ -37,7 +39,9 @@ Border color utilities using outline tokens.
 - `.border-default`: Default border color
 - `.border-overt`: Overt border color
 
-**CSS:** `border-color: var(--outline-[level]) !important;`
+**CSS:** `border-color: var(--outline-[level]);`. Utilities are intentionally
+last in the public cascade, so they can override component and layout defaults
+without `!important`.
 
 ## Focus Ring Utility
 
@@ -72,6 +76,50 @@ Padding and margin utilities using the spacing scale.
 **Token Dependencies:**
 - `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`
 
+These utilities retain the compact compatibility scale. It now responds to
+`--density-factor` like the preferred `--space-*` component and layout scale.
+
+## Border Radius Utilities
+
+Size utilities apply a radius to every corner:
+
+- `.rounded-sm`, `.rounded`, `.rounded-md`, `.rounded-lg`, `.rounded-xl`
+- `.rounded-full`
+- `.rounded-none` removes every radius
+
+Logical reset utilities remove one corner or a related pair. They follow the
+document writing direction, so components remain correct in right-to-left and
+vertical layouts.
+
+- Single corners: `.rounded-start-start-none`, `.rounded-start-end-none`,
+  `.rounded-end-start-none`, `.rounded-end-end-none`
+- Block edges: `.rounded-block-start-none`, `.rounded-block-end-none`
+- Inline edges: `.rounded-inline-start-none`, `.rounded-inline-end-none`
+
+<LiveExample title="Remove a pair of corners" description="Start with one radius utility, then flatten the logical edge that connects to an adjacent surface.">
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <div class="rounded-xl rounded-block-start-none bg-surface-overt text-on-surface-overt p-md">No block-start corners</div>
+    <div class="rounded-xl rounded-block-end-none bg-surface-overt text-on-surface-overt p-md">No block-end corners</div>
+    <div class="rounded-xl rounded-inline-start-none bg-surface-overt text-on-surface-overt p-md">No inline-start corners</div>
+    <div class="rounded-xl rounded-inline-end-none bg-surface-overt text-on-surface-overt p-md">No inline-end corners</div>
+  </layout-grid>
+</LiveExample>
+
+<LiveExample title="Compose individual logical corners" description="Stack single-corner utilities for diagonal or application-specific shapes. Inline start automatically mirrors in RTL.">
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <div class="rounded-xl rounded-start-start-none rounded-end-end-none bg-accent text-on-accent p-md">Diagonal corners removed</div>
+    <div dir="ltr" class="rounded-xl rounded-inline-start-none bg-secondary text-on-secondary p-md">LTR inline start</div>
+    <div dir="rtl" class="rounded-xl rounded-inline-start-none bg-secondary text-on-secondary p-md">RTL inline start</div>
+  </layout-grid>
+</LiveExample>
+
+```html
+<section class="rounded-xl rounded-block-start-none">...</section>
+
+<!-- Any combination is possible by stacking single-corner resets. -->
+<section class="rounded-xl rounded-start-end-none rounded-end-start-none">...</section>
+```
+
 ## Typography Utilities
 
 Font size utilities using the typography scale.
@@ -82,9 +130,10 @@ Font size utilities using the typography scale.
 - `.text-lg`: Large text
 - `.text-xl`: Extra large text
 - `.text-2xl`: 2X large text
+- `.text-3xl` through `.text-6xl`: Display-scale text
 
 **Token Dependencies:**
-- `--font-size-xs` through `--font-size-2xl`
+- `--font-size-xs` through `--font-size-6xl`
 
 ## Interactive State Utilities
 
@@ -92,13 +141,13 @@ Enhanced interactive state utilities for better user experience.
 
 - `.hover-highlight:hover`: Subtle background highlight on hover
 - `.active-press:active`: Scale-down effect on active/press
-- `.focus-ring:focus`: Proper focus ring with theme colors
+- `.focus-ring:focus-visible`: Proper keyboard focus ring with theme colors
 
 **CSS:**
 ```css
 .hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
 .active-press:active { transform: scale(0.98); }
-.focus-ring:focus { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.focus-ring:focus-visible { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 ```
 
 ## Outline and Ring Utilities
@@ -170,38 +219,11 @@ Control positioning relative to anchors:
 - `.scrim`: Semi-transparent dark overlay
 - `.scrim-light`: Light scrim overlay
 
-## Box Model Utilities
-
-Advanced box styling utilities that set multiple CSS custom properties for use with box components.
-
-### Surface Boxes
-- `.box-surface-muted`: Muted surface with subtle border
-- `.box-surface-default`: Default surface with default border
-- `.box-surface-overt`: Overt surface with overt border and text
-
-**Sets Properties:**
-- `--b-bg`: Background color
-- `--b-bc`: Border color
-- `--b-fg`: Text color (overt only)
-
-### Border Radius
-- `.box-rounded`: Medium border radius
-- `.box-rounded-lg`: Large border radius
-
-**Sets Property:** `--b-r`: Border radius value
-
-### Elevation/Shadows
-- `.box-elev-1`: Small shadow
-- `.box-elev-2`: Medium shadow
-- `.box-elev-3`: Large shadow
-
-**Sets Property:** `--b-shadow`: Shadow value
-
 ## Usage Examples
 
 ```html
 <!-- Surface with elevation -->
-<div class="box-surface-default box-rounded box-elev-2">
+<div class="bg-surface-default rounded-lg shadow-md p-md">
   <p class="text-default">Content</p>
 </div>
 
@@ -217,7 +239,7 @@ Advanced box styling utilities that set multiple CSS custom properties for use w
 ## Browser Support
 
 - All modern browsers with CSS custom properties support
-- `!important` used on borders for specificity
+- Utilities rely on cascade-layer order instead of `!important`
 - Hover/active states work on interactive elements
 
 ## Integration Notes

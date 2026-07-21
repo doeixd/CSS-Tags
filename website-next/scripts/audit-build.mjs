@@ -66,6 +66,9 @@ for (const file of baselineFiles) {
   if (withoutComments.includes("@apply")) {
     failures.push(`${file}: baseline styling must not depend on experimental @apply syntax.`);
   }
+  if (withoutComments.includes("@extend")) {
+    failures.push(`${file}: shipped CSS must not depend on preprocessor-only @extend syntax.`);
+  }
 }
 
 const sourceContracts = [
@@ -80,6 +83,11 @@ const sourceContracts = [
   ["types/css-tags.d.ts", "interface ThemeOverrides", "typed theme override contract"],
   ["core/tokens.css", "--font-size-prose", "contextual prose typography input"],
   ["core/tokens.css", "--font-size-ui", "contextual UI typography input"],
+  ["core/tokens.css", "--font-size-step-6-max: 2.875rem", "restrained shared 5xl scale"],
+  ["core/tokens.css", "--font-size-h2: var(--font-size-5xl)", "scale-aligned semantic h2 alias"],
+  ["core/tokens.css", "--font-size-h6: var(--font-size-xl)", "consecutive semantic heading scale"],
+  ["core/tokens.css", "--font-size-ui: var(--font-size-sm)", "scale-aligned contextual UI type"],
+  ["core/tokens.css", "--spacing-md: calc(1rem * var(--density-factor, 1))", "density-aware compatibility spacing"],
   ["core/tokens.css", "--scrollbar-thumb-hover", "semantic scrollbar tokens"],
   ["core/theme.css", "--surface-lightness-shift", "scheme-safe surface lightness input"],
   ["core/theme.css", "--surface-contrast", "surface hierarchy contrast input"],
@@ -88,6 +96,9 @@ const sourceContracts = [
   ["components/table.css", "min-inline-size: max(100%", "full-width responsive tables"],
   ["components/table.css", "overflow-y: hidden", "horizontal-only responsive table overflow"],
   ["core/defaults.css", '[aria-disabled="true"]', "ARIA-disabled button state"],
+  ["core/defaults.css", "field-sizing: fixed", "fixed native choice-control geometry"],
+  ["core/defaults.css", "clip-path: polygon", "recognizable native checkbox indicator"],
+  ["core/tokens.css", "--choice-control-size", "themeable native choice controls"],
   ["core/tokens.css", "--code-inline-border: transparent", "borderless inline code default"],
   ["components/navigation-patterns.css", "[data-variant=\"flush\"]", "flush list-navigation variant"],
   ["components/view-transition.css", "view-fade-in", "fade-only view transition"],
@@ -106,6 +117,20 @@ const sourceContracts = [
   ["website-next/public/sw.js", "staleWhileRevalidate(request, NAVIGATION_CACHE)", "cached documentation navigation"],
   ["website-next/astro.config.mjs", "inlineStylesheets: 'never'", "cacheable shared stylesheets"],
   ["layouts/layout.css", "eyebrow, text, [data-eyebrow]", "centered semantic text primitives"],
+  ["layouts/layout.css", "--l-reel-item-size", "explicit reel item sizing"],
+  ["layouts/layout.css", '[data-scrollbar="hidden"]', "reel scrollbar presentation variants"],
+  ["layouts/layout.css", "scroll-snap-type: inline proximity", "optional reel snapping"],
+  ["components/site-shell.css", "--site-header-wrapped-navigation-padding-block-end", "wrapped header navigation spacing"],
+  ["utilities/utilities.css", ".rounded-start-start-none", "logical single-corner radius reset"],
+  ["utilities/utilities.css", ".rounded-block-start-none", "logical paired-corner radius reset"],
+  ["utilities/utilities.css", ".bg-surface-default", "consistent default surface utility alias"],
+  ["utilities/utilities.css", ".text-default", "consistent default text utility"],
+  ["utilities/utilities.css", ".text-on-accent", "matching accent contrast utility"],
+  ["utilities/utilities.css", ".border-default", "consistent default border utility alias"],
+  ["utilities/utilities.css", ".focus-ring:focus-visible", "keyboard-appropriate focus utility"],
+  ["core/defaults.css", ":is(.button, .btn):focus-visible", "single canonical button focus contract"],
+  ["utilities/utilities.css", "Button structure and interaction live in core/defaults.css", "variant-only button utilities"],
+  ["index.css", "components, layouts, utilities", "utility-last public cascade order"],
   ["website-next/src/scripts/css-tags-shadow.ts", "--accent-h: inherit", "example theme inheritance"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-lightness-shift", "surface lightness theme control"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-contrast", "surface contrast theme control"],
@@ -175,6 +200,9 @@ for (const page of pages) {
     requireText("data-footnotes", "CMS footnote output");
     requireText("data-heading-anchor", "CMS heading permalink output");
     requireText("<caption>Renderer support</caption>", "CMS table caption");
+    if (html.includes('<h1 id="cms-demo-release"><p>')) {
+      failures.push(`${route}: rendered CMS heading contains an invalid paragraph wrapper.`);
+    }
   }
 
   if (route === "/guides/npm/") {

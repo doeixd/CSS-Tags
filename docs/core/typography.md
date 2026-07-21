@@ -42,6 +42,7 @@ Convenience aliases:
 - `--font-size-4xl`
 - `--font-size-5xl`
 - `--font-size-6xl`
+- `--font-size-6xl`
 
 Default behavior:
 - `xs`, `sm`, and `base` stay stable for readable body copy
@@ -77,6 +78,11 @@ Default behavior:
 - `--letter-spacing-heading`
 - `--letter-spacing-display`
 - `--letter-spacing-eyebrow`
+
+The default hierarchy stays on the shared scale: H1 uses `6xl`, H2 uses `5xl`,
+H3 uses `4xl`, H4 uses `3xl`, H5 uses `2xl`, and H6 uses `xl`. Adjust a shared
+step when the whole scale needs tuning; override `--font-size-h*` only when a
+semantic heading intentionally departs from that scale.
 
 ### Code and Rich Content
 - `--font-size-code`

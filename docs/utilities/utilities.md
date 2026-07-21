@@ -9,7 +9,7 @@ Semantic background colors using surface tokens.
 ### Surface Backgrounds
 - `.bg-surface-muted`: Muted surface background
 - `.bg-surface-subtle`: Subtle surface background  
-- `.bg-surface`: Default surface background
+- `.bg-surface` / `.bg-surface-default`: Default surface background
 - `.bg-surface-overt`: Overt surface background (high contrast)
 
 **CSS:** `background-color: var(--bg);` where `--bg` is set to the appropriate surface token.
@@ -34,7 +34,7 @@ Border color utilities using outline tokens.
 - `.border-default`: Default border color
 - `.border-overt`: Overt border color
 
-**CSS:** `border-color: var(--outline-[level]) !important;`
+Utilities are last in the public cascade and do not require `!important`.
 
 ## Focus Ring Utility
 
@@ -69,6 +69,37 @@ Padding and margin utilities using the spacing scale.
 **Token Dependencies:**
 - `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`
 
+These utilities retain the compact compatibility scale. It responds to
+`--density-factor` like the preferred `--space-*` component and layout scale.
+
+## Border Radius Utilities
+
+Use `.rounded-sm`, `.rounded`, `.rounded-md`, `.rounded-lg`, `.rounded-xl`, or
+`.rounded-full` to apply a radius to every corner. `.rounded-none` removes all
+corner radii.
+
+Logical reset utilities remove individual corners:
+
+- `.rounded-start-start-none`
+- `.rounded-start-end-none`
+- `.rounded-end-start-none`
+- `.rounded-end-end-none`
+
+Edge-pair utilities remove both corners on one logical edge:
+
+- `.rounded-block-start-none`
+- `.rounded-block-end-none`
+- `.rounded-inline-start-none`
+- `.rounded-inline-end-none`
+
+The utilities follow writing direction. Stack single-corner resets to produce
+any other combination.
+
+```html
+<section class="rounded-xl rounded-block-start-none">...</section>
+<section class="rounded-xl rounded-start-end-none rounded-end-start-none">...</section>
+```
+
 ## Typography Utilities
 
 Font size utilities using the typography scale.
@@ -79,9 +110,10 @@ Font size utilities using the typography scale.
 - `.text-lg`: Large text
 - `.text-xl`: Extra large text
 - `.text-2xl`: 2X large text
+- `.text-3xl` through `.text-6xl`: Display-scale text
 
 **Token Dependencies:**
-- `--font-size-xs` through `--font-size-2xl`
+- `--font-size-xs` through `--font-size-6xl`
 
 ## Interactive State Utilities
 
@@ -89,13 +121,13 @@ Enhanced interactive state utilities for better user experience.
 
 - `.hover-highlight:hover`: Subtle background highlight on hover
 - `.active-press:active`: Scale-down effect on active/press
-- `.focus-ring:focus`: Proper focus ring with theme colors
+- `.focus-ring:focus-visible`: Proper keyboard focus ring with theme colors
 
 **CSS:**
 ```css
 .hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
 .active-press:active { transform: scale(0.98); }
-.focus-ring:focus { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+.focus-ring:focus-visible { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
 ```
 
 ## Outline and Ring Utilities
@@ -187,7 +219,7 @@ Control positioning relative to anchors:
 ## Browser Support
 
 - All modern browsers with CSS custom properties support
-- `!important` used on borders for specificity
+- Utilities rely on cascade-layer order instead of `!important`
 - Hover/active states work on interactive elements
 
 ## Integration Notes
@@ -198,7 +230,6 @@ Control positioning relative to anchors:
 
 ## Notes
 
-- the current utility surface classes are `.bg-surface-*`, not `.bg-surface-default`
 - the current utilities file does not ship `box-surface-*` or `box-elev-*` helper classes
 - use utility backgrounds with normal border/radius/shadow utilities or component APIs instead
 ## Related Files

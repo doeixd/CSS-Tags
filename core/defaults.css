@@ -210,25 +210,39 @@
   }
 
   /* Checkbox/Radio structure - Colors handled in @components */
-  input[type="checkbox"], input[type="radio"] {
+  :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
     appearance: var(--appearance-checkbox-radio, none);
     -webkit-appearance: none; -moz-appearance: none;
+    box-sizing: border-box;
+    field-sizing: fixed;
+    inline-size: var(--choice-control-size, var(--size-checkbox-radio, 1.125rem));
+    block-size: var(--choice-control-size, var(--size-checkbox-radio, 1.125rem));
+    padding: 0;
     border-width: var(--border-width, 1px); border-style: solid;
-    width: var(--size-checkbox-radio, 1.1em); height: var(--size-checkbox-radio, 1.1em);
     margin-inline-end: var(--space-checkbox-radio-label-gap, 0.5em);
     vertical-align: middle; position: relative; display: inline-grid; place-content: center;
     /* border-color: handled in @components */
   }
-  input[type="checkbox"] { border-radius: var(--radius-sm, 3px); }
+  input[type="checkbox"]:not([role="switch"]) { border-radius: var(--checkbox-radius, var(--radius-sm, 3px)); }
   input[type="radio"] { border-radius: 50%; }
   /* Indicator structure */
-  input[type="checkbox"]::before, input[type="radio"]::before {
-    content: ''; width: 60%; height: 60%; transform: scale(0);
+  :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"])::before {
+    content: '';
+    background: var(--choice-control-indicator-color, var(--text-on-accent));
+    transform: scale(0);
     transition: transform 100ms ease-in-out;
-    /* background/box-shadow color: handled in @components */
   }
-  input[type="radio"]::before { border-radius: 50%; }
-  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before { transform: scale(1); }
+  input[type="checkbox"]:not([role="switch"])::before {
+    inline-size: var(--checkbox-indicator-inline-size, 0.6875rem);
+    block-size: var(--checkbox-indicator-block-size, 0.5625rem);
+    clip-path: polygon(14% 44%, 0 60%, 40% 100%, 100% 18%, 84% 0, 38% 68%);
+  }
+  input[type="radio"]::before {
+    inline-size: var(--radio-indicator-size, 0.5625rem);
+    block-size: var(--radio-indicator-size, 0.5625rem);
+    border-radius: 50%;
+  }
+  :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]):checked::before { transform: scale(1); }
 
   /* Disabled State Opacity */
   button[disabled], input[disabled], select[disabled], textarea[disabled], fieldset[disabled] {
@@ -321,7 +335,7 @@
   }
 
   /* Basic Button Styling (Structure in defaults, base style here) */
-  .button {
+  :is(.button, .btn) {
     display: inline-flex; align-items: center; justify-content: center;
     padding: 0.6em 1.2em; border-radius: var(--radius-md);
     border: var(--border-width) solid var(--button-border-color, var(--outline-default));
@@ -337,26 +351,26 @@
                 transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
     user-select: none; line-height: var(--line-height-ui, 1.375);
   }
-   .button:hover:not([disabled]):not([aria-disabled="true"]) {
+   :is(.button, .btn):hover:not([disabled]):not([aria-disabled="true"]) {
      border-color: var(--button-hover-border-color, var(--outline-overt));
      background-color: var(--button-hover-background, var(--surface-subtle));
      color: var(--button-hover-color, var(--text-overt));
      transform: var(--transform-button-hover, translateY(-1px));
      box-shadow: var(--shadow-button-hover, none);
    }
-  .button:active:not([disabled]):not([aria-disabled="true"]) {
+  :is(.button, .btn):active:not([disabled]):not([aria-disabled="true"]) {
     border-color: var(--button-active-border-color, var(--outline-active));
     background-color: var(--button-active-background, var(--surface-muted));
     color: var(--button-active-color, var(--text-overt));
     transform: var(--transform-button-active, translateY(0) scale(0.98));
     box-shadow: var(--shadow-button-active, var(--shadow-inner));
   }
-  .button:focus-visible {
+  :is(.button, .btn):focus-visible {
      outline: var(--border-width-thick) solid var(--outline-focus);
      outline-offset: 2px;
      border-color: transparent; /* Hide border when outline is visible */
   }
-  .button:is([disabled], [aria-disabled="true"]) {
+  :is(.button, .btn):is([disabled], [aria-disabled="true"]) {
     opacity: var(--button-disabled-opacity, 0.5); cursor: not-allowed;
     background-color: var(--highlight-bg-muted);
     border-color: var(--outline-muted);
@@ -394,7 +408,8 @@
     input[type="button"],
     input[type="submit"],
     input[type="reset"],
-    .button {
+    .button,
+    .btn {
       text-box: var(--text-box-button, var(--text-box-ui));
     }
   }
@@ -409,7 +424,8 @@
     input[type="button"],
     input[type="submit"],
     input[type="reset"],
-    .button {
+    .button,
+    .btn {
       text-box-trim: var(--text-box-trim-button, var(--text-box-trim-ui));
       text-box-edge: var(--text-box-edge-button, var(--text-box-edge-ui));
     }
@@ -443,29 +459,23 @@
   select.input-field:-moz-focusring { color: transparent; text-shadow: 0 0 0 var(--text-default); }
 
   /* Checkbox/Radio Theming */
-  input[type="checkbox"], input[type="radio"] {
-    border-color: var(--outline-default);
-    background-color: var(--surface-subtle);
+  :is(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+    border-color: var(--choice-control-border-color, var(--outline-default));
+    background-color: var(--choice-control-background, var(--surface-subtle));
   }
-  input[type="checkbox"]:hover:not(:checked):not([disabled]),
+  input[type="checkbox"]:not([role="switch"]):hover:not(:checked):not([disabled]),
   input[type="radio"]:hover:not(:checked):not([disabled]) {
-    border-color: var(--outline-overt);
-    background-color: var(--highlight-bg-subtle);
+    border-color: var(--choice-control-hover-border-color, var(--outline-overt));
+    background-color: var(--choice-control-hover-background, var(--highlight-bg-subtle));
   }
-  input[type="checkbox"]:checked, input[type="radio"]:checked {
-    background-color: var(--accent);
-    border-color: var(--accent);
+  input[type="checkbox"]:not([role="switch"]):checked, input[type="radio"]:checked {
+    background-color: var(--choice-control-checked-background, var(--accent));
+    border-color: var(--choice-control-checked-border-color, var(--accent));
   }
-  input[type="checkbox"]:checked:hover:not([disabled]),
+  input[type="checkbox"]:not([role="switch"]):checked:hover:not([disabled]),
   input[type="radio"]:checked:hover:not([disabled]) {
     background-color: var(--accent-overt);
     border-color: var(--accent-overt);
-  }
-  input[type="checkbox"]::before, input[type="radio"]::before {
-    box-shadow: inset 1em 1em var(--text-on-accent); /* Use contrast text */
-  }
-  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
-     /* Style for the checkmark/dot */
   }
 
   /* Basic card structure */

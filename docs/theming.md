@@ -56,7 +56,7 @@ Defines the core design tokens and scales:
 - **Alpha Scale (0-8)**: `--alpha-0: 0` to `--alpha-8: 1`
 
 #### Design System Scales
-- **Spacing**: `--spacing-xs: 0.25rem` to `--spacing-3xl: 3rem`
+- **Spacing**: preferred `--space-*` layout tokens plus compact compatibility `--spacing-*` tokens; both honor `--density-factor`
 - **Typography**: Font sizes, weights, line heights, letter spacing
 - **Shadows**: Multi-layer shadow system with semantic assignments
 - **Breakpoints**: Container query breakpoints for responsive design
@@ -332,7 +332,7 @@ Three core variables define a brand:
   --surface-saturation: 0.012; /* Subtle surfaces */
 
   /* Custom spacing */
-  --spacing-md: 1.25rem;  /* Custom medium spacing */
+  --space-md: 1.25rem;    /* Preferred component/layout spacing */
 }
 ```
 

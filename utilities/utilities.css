@@ -15,7 +15,10 @@
   .bg-bedrock { background-color: var(--bedrock); --bg: var(--bedrock); }
   .bg-surface-muted { background-color: var(--surface-muted); --bg: var(--surface-muted); }
   .bg-surface-subtle { background-color: var(--surface-subtle); --bg: var(--surface-subtle); }
-  .bg-surface { background-color: var(--surface); --bg: var(--surface); }
+  :is(.bg-surface, .bg-surface-default) {
+    background-color: var(--surface-default, var(--surface));
+    --bg: var(--surface-default, var(--surface));
+  }
   .bg-surface-overt { background-color: var(--surface-overt); --bg: var(--surface-overt); }
 
   /* Legacy framework compatibility */
@@ -29,6 +32,7 @@
 
   .text-muted { color: var(--text-muted); }
   .text-subtle { color: var(--text-subtle); }
+  .text-default { color: var(--text-default, var(--text)); }
   /* `.text` is the class host for core/text.css. Its default color is
      derived from the inherited --bg value rather than duplicated here. */
   .text-overt { color: var(--text-overt); }
@@ -67,11 +71,11 @@
    }
 
    /* On dark bedrock background, buttons need light text */
-   .bg-bedrock .button {
+   .bg-bedrock :is(.button, .btn) {
      color: var(--text-on-bedrock);
      border-color: var(--outline-overt);
    }
-   .bg-bedrock .button-primary {
+   .bg-bedrock :is(.button-primary, .btn-primary) {
      color: var(--text-on-bedrock);
    }
 
@@ -83,11 +87,11 @@
    }
 
    /* On accent background, buttons need appropriate colors */
-   .bg-accent .button {
+   .bg-accent :is(.button, .btn) {
      color: var(--accent-on-base);
      border-color: var(--accent-overt);
    }
-   .bg-accent .button-primary {
+   .bg-accent :is(.button-primary, .btn-primary) {
      color: var(--accent-on-base);
    }
 
@@ -98,11 +102,11 @@
       color: var(--text-on-secondary);
     }
 
-    .bg-secondary .button {
+    .bg-secondary :is(.button, .btn) {
       color: var(--text-on-secondary);
       border-color: var(--secondary-overt);
     }
-    .bg-secondary .button-secondary {
+    .bg-secondary :is(.button-secondary, .btn-secondary) {
       color: var(--text-on-secondary);
     }
 
@@ -113,11 +117,11 @@
       color: var(--text-on-tertiary);
     }
 
-    .bg-tertiary .button {
+    .bg-tertiary :is(.button, .btn) {
       color: var(--text-on-tertiary);
       border-color: var(--tertiary-overt);
     }
-    .bg-tertiary .button-secondary {
+    .bg-tertiary :is(.button-secondary, .btn-secondary) {
       color: var(--text-on-tertiary);
     }
 
@@ -127,7 +131,7 @@
 
   .border-muted { border-color: var(--outline-muted); }
   .border-subtle { border-color: var(--outline-subtle); }
-  .border { border-color: var(--outline); }
+  :is(.border, .border-default) { border-color: var(--outline-default, var(--outline)); }
   .border-overt { border-color: var(--outline-overt); }
   .border-focus { border-color: var(--outline-focus); }
   .border-active { border-color: var(--outline-active); }
@@ -164,6 +168,7 @@
   .text-accent-on-base { color: var(--accent-on-base); }
   .text-accent-on-bedrock { color: var(--accent-on-bedrock); }
   .text-accent-on-surface { color: var(--accent-on-surface); }
+  .text-on-accent { color: var(--text-on-accent, var(--accent-on-base)); }
 
   /* ============================================ */
   /* SECONDARY COLORS                            */
@@ -216,103 +221,59 @@
   .border-error { border-color: var(--outline-error); }
   .border-info { border-color: var(--outline-info); }
 
-  /* ============================================ */
-  /* IMPROVED BUTTON SYSTEM                      */
-  /* ============================================ */
-
-  .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-family: var(--font-family);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    border: var(--border-width) solid var(--outline);
-    border-radius: var(--border-radius-md);
-    background-color: var(--surface);
-    color: var(--text-on-surface);
-    cursor: pointer;
-    transition: background-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
-                border-color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
-                color var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
-                box-shadow var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out),
-                transform var(--button-transition-duration, 140ms) var(--button-transition-timing, ease-out);
-    text-decoration: none;
-  }
-
-  .button:hover:not(:disabled):not([aria-disabled="true"]) {
-    background-color: var(--button-hover-background, var(--highlight-subtle));
-    border-color: var(--button-hover-border-color, var(--outline-overt));
-    color: var(--button-hover-color, var(--text-overt));
-    transform: var(--transform-button-hover, translateY(-1px));
-    box-shadow: var(--shadow-button-hover, none);
-  }
-  .button:active:not(:disabled):not([aria-disabled="true"]) {
-    background-color: var(--button-active-background, var(--highlight-overt));
-    border-color: var(--button-active-border-color, var(--outline-active));
-    color: var(--button-active-color, var(--text-overt));
-    transform: var(--transform-button-active, translateY(0) scale(0.98));
-    box-shadow: var(--shadow-button-active, var(--shadow-inner));
-  }
-  .button:is(:disabled, [aria-disabled="true"]) {
-    background-color: var(--surface-muted);
-    cursor: not-allowed;
-    opacity: var(--button-disabled-opacity, 0.5);
-  }
-
-  .button-primary {
+  /* Button structure and interaction live in core/defaults.css. Utilities
+     only provide visual variants so `.button` and legacy `.btn` cannot drift. */
+  :is(.button-primary, .btn-primary) {
     background-color: var(--accent);
     border-color: var(--accent);
     color: var(--text-on-accent);
   }
-  .button-primary:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-overt); color: var(--text-on-accent); }
-  .button-primary:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-highlight); color: var(--text-on-accent); }
-  .button-primary:disabled { background-color: var(--accent-muted); color: var(--text-on-accent); }
+  :is(.button-primary, .btn-primary):hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-overt); color: var(--text-on-accent); }
+  :is(.button-primary, .btn-primary):active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--accent-highlight); color: var(--text-on-accent); }
+  :is(.button-primary, .btn-primary):is(:disabled, [aria-disabled="true"]) { background-color: var(--accent-muted); color: var(--text-on-accent); }
 
-  .button-secondary {
+  :is(.button-secondary, .btn-secondary) {
     background-color: var(--secondary);
     border-color: var(--secondary);
     color: var(--text-on-secondary);
   }
-  .button-secondary:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-overt); color: var(--text-on-secondary); }
-  .button-secondary:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-highlight); color: var(--text-on-secondary); }
-  .button-secondary:disabled { background-color: var(--secondary-muted); color: var(--text-on-secondary); }
+  :is(.button-secondary, .btn-secondary):hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-overt); color: var(--text-on-secondary); }
+  :is(.button-secondary, .btn-secondary):active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--secondary-highlight); color: var(--text-on-secondary); }
+  :is(.button-secondary, .btn-secondary):is(:disabled, [aria-disabled="true"]) { background-color: var(--secondary-muted); color: var(--text-on-secondary); }
 
-  .button-outline {
+  :is(.button-outline, .btn-outline) {
     background-color: transparent;
     border-color: var(--outline);
     color: var(--text);
   }
-  .button-outline:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
-  .button-outline:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
-  .button-outline:disabled { background-color: transparent; }
+  :is(.button-outline, .btn-outline):hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
+  :is(.button-outline, .btn-outline):active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
+  :is(.button-outline, .btn-outline):is(:disabled, [aria-disabled="true"]) { background-color: transparent; }
 
-  .button-ghost {
+  :is(.button-ghost, .btn-ghost) {
     background-color: transparent;
     border-color: transparent;
     color: var(--text);
   }
-  .button-ghost:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
-  .button-ghost:active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
-  .button-ghost:disabled { background-color: transparent; }
+  :is(.button-ghost, .btn-ghost):hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-subtle); }
+  :is(.button-ghost, .btn-ghost):active:not(:disabled):not([aria-disabled="true"]) { background-color: var(--highlight-overt); }
+  :is(.button-ghost, .btn-ghost):is(:disabled, [aria-disabled="true"]) { background-color: transparent; }
 
-  .button-text {
+  :is(.button-text, .btn-text) {
     background-color: transparent;
     border-color: transparent;
     color: var(--accent);
     padding: 0.5rem 1rem;
   }
-  .button-text:hover:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-overt); }
-  .button-text:active:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-highlight); }
-  .button-text:disabled { color: var(--text-muted); }
+  :is(.button-text, .btn-text):hover:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-overt); }
+  :is(.button-text, .btn-text):active:not(:disabled):not([aria-disabled="true"]) { color: var(--accent-highlight); }
+  :is(.button-text, .btn-text):is(:disabled, [aria-disabled="true"]) { color: var(--text-muted); }
 
   /* ============================================ */
   /* IMPROVED FORM ELEMENTS                      */
   /* ============================================ */
 
-  .input, .textarea, .select {
+  :is(.input, .textarea, .select, .form-control) {
     padding: 0.5rem;
     font-family: var(--font-family);
     font-size: var(--font-size-base);
@@ -324,17 +285,17 @@
     transition: border-color 0.15s ease;
   }
 
-  .input:focus, .textarea:focus, .select:focus {
+  :is(.input, .textarea, .select, .form-control):focus-visible {
     outline: none;
     border-color: var(--outline-focus);
     box-shadow: 0 0 0 2px var(--outline-focus);
   }
 
-  .input:hover, .textarea:hover, .select:hover {
+  :is(.input, .textarea, .select, .form-control):hover:not(:disabled, [aria-disabled="true"]) {
     border-color: var(--outline-overt);
   }
 
-  .input:disabled, .textarea:disabled, .select:disabled {
+  :is(.input, .textarea, .select, .form-control):is(:disabled, [aria-disabled="true"]) {
     background-color: var(--surface-muted);
     color: var(--text-muted);
     cursor: not-allowed;
@@ -344,12 +305,12 @@
   /* IMPROVED FOCUS STATES                       */
   /* ============================================ */
 
-  .focus-ring:focus {
+  .focus-ring:focus-visible {
     outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
   }
 
-  .focus-ring-inset:focus {
+  .focus-ring-inset:focus-visible {
     outline: none;
     box-shadow: inset 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
   }
@@ -394,12 +355,42 @@
   /* IMPROVED BORDER RADIUS                      */
   /* ============================================ */
 
-  .rounded-sm { border-radius: var(--border-radius-sm); }
-  .rounded { border-radius: var(--border-radius-md); }
-  .rounded-md { border-radius: var(--border-radius-md); }
-  .rounded-lg { border-radius: var(--border-radius-lg); }
-  .rounded-xl { border-radius: var(--border-radius-xl); }
-  .rounded-full { border-radius: var(--border-radius-full); }
+  .rounded-sm { border-radius: var(--radius-sm, var(--border-radius-sm)); }
+  .rounded { border-radius: var(--radius-md, var(--border-radius-md)); }
+  .rounded-md { border-radius: var(--radius-md, var(--border-radius-md)); }
+  .rounded-lg { border-radius: var(--radius-lg, var(--border-radius-lg)); }
+  .rounded-xl { border-radius: var(--radius-xl, var(--border-radius-xl)); }
+  .rounded-full { border-radius: var(--radius-full, var(--border-radius-full)); }
+
+  /* Radius removal uses logical corners so the same markup follows writing
+     direction. Edge utilities reset a pair; corner utilities can be combined
+     for any other shape. */
+  .rounded-none { border-radius: 0; }
+
+  .rounded-start-start-none { border-start-start-radius: 0; }
+  .rounded-start-end-none { border-start-end-radius: 0; }
+  .rounded-end-start-none { border-end-start-radius: 0; }
+  .rounded-end-end-none { border-end-end-radius: 0; }
+
+  .rounded-block-start-none {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+  }
+
+  .rounded-block-end-none {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .rounded-inline-start-none {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  .rounded-inline-end-none {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
 
   /* ============================================ */
   /* IMPROVED SHADOWS                            */
@@ -461,7 +452,9 @@
 
    .hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
    .active-press:active { transform: scale(0.98); }
-   .focus-ring:focus { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+   @media (prefers-reduced-motion: reduce) {
+     .active-press:active { transform: none; }
+   }
 
    /* ============================================ */
    /* IMPROVED ANCHOR POSITIONING UTILITIES       */
@@ -564,17 +557,7 @@
   .grid-cols-6 { grid-template-columns: var(--grid-cols-6); }
   .grid-cols-12 { grid-template-columns: var(--grid-cols-12); }
 
-  /* ============================================ */
-  /* LEGACY FRAMEWORK COMPATIBILITY              */
-  /* ============================================ */
-
-  /* Map to original framework class names */
-  .btn { @extend .button; }
-  .btn-primary { @extend .button-primary; }
-  .btn-secondary { @extend .button-secondary; }
-  .btn-outline { @extend .button-outline; }
-  .btn-ghost { @extend .button-ghost; }
-  .btn-text { @extend .button-text; }
-
-  .form-control { @extend .input; }
+  /* Legacy button aliases share the canonical defaults/variants, and
+     `.form-control` is grouped with the input aliases above. These are real
+     browser selectors, not preprocessor directives. */
 }

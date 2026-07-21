@@ -99,16 +99,23 @@ A horizontally scrolling container.
 
 **Properties:**
 - `--l-gap`: Gap between items (default: var(--space-md)).
-- `--l-scrollbar-thumb`: Scrollbar thumb color.
-- `--l-scrollbar-track`: Scrollbar track color.
+- `--l-reel-item-size`: Shared flex basis for direct children.
+- `--l-reel-scroll-padding`: Logical inline scroll padding.
+- `--l-reel-scrollbar-thumb`: Scrollbar thumb color.
+- `--l-reel-scrollbar-track`: Scrollbar track color.
+- `--l-reel-scrollbar-size`: WebKit scrollbar track height.
 
 **Attributes:**
 - `gap`: Length, e.g., "1rem".
-- `no-scrollbar`: Boolean, hides scrollbar.
+- `item-size`: Direct-child flex basis.
+- `scroll-padding`: Logical inline scroll padding.
+- `scrollbar`: `auto`, `thin`, or `hidden`.
+- `snap`: Boolean, enables proximity snapping.
+- `no-scrollbar`: Legacy alias for `scrollbar="hidden"`.
 
 **Example:**
 ```html
-<layout-reel gap="1rem" no-scrollbar>
+<layout-reel gap="1rem" item-size="14rem" scrollbar="thin" snap tabindex="0">
   <img src="1.jpg">
   <img src="2.jpg">
 </layout-reel>

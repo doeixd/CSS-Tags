@@ -137,20 +137,28 @@ Groups items that wrap onto new lines, useful for tags or buttons.
 
 ### `<layout-reel>`
 
-A horizontally scrolling container.
+A horizontally scrolling container with explicit item sizing, scrollbar
+presentation, and optional scroll snapping.
 
 **CSS Properties:**
 - `--l-gap`: Gap between items
-- `--scrollbar-thumb`: Scrollbar thumb color
-- `--scrollbar-track`: Scrollbar track color
+- `--l-reel-item-size`: Shared flex basis for direct children
+- `--l-reel-scroll-padding`: Logical inline scroll padding
+- `--l-reel-scrollbar-thumb`: Scrollbar thumb color
+- `--l-reel-scrollbar-track`: Scrollbar track color
+- `--l-reel-scrollbar-size`: WebKit scrollbar track height
 
 **HTML Attributes:**
 - `gap`: Override gap
-- `no-scrollbar`: Hide scrollbars
+- `item-size`: Direct-child flex basis
+- `scroll-padding`: Logical inline scroll padding
+- `scrollbar="auto|thin|hidden"`: Scrollbar presentation
+- `snap`: Enable proximity snapping
+- `no-scrollbar`: Legacy alias for `scrollbar="hidden"`
 
 **Usage:**
 ```html
-<layout-reel gap="1rem">
+<layout-reel gap="1rem" item-size="14rem" scrollbar="thin" snap tabindex="0">
   <div>Item 1</div>
   <div>Item 2</div>
   <div>Item 3</div>
