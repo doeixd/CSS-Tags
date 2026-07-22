@@ -1,0 +1,76 @@
+---
+title: Border and Radius Utilities
+description: Compose logical edges, semantic colors, token-driven widths and styles, and writing-mode-aware corner radii.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Border utilities separate presence, width, style, color, and radius. Class
+order in HTML does not affect the result.
+
+## Border anatomy
+
+- Presence: `.border` / `.border-all`, `.border-block`, `.border-inline`,
+  `.border-block-start`, `.border-block-end`, `.border-inline-start`, and
+  `.border-inline-end`
+- Width: `.border-thin`, `.border-thick`, `.border-heavy`, and `.border-0`
+- Style: `.border-solid`, `.border-dashed`, `.border-dotted`, `.border-double`,
+  and `.border-none`
+- Contrast: `.border-muted`, `.border-subtle`, `.border-default`, and
+  `.border-overt`
+- Brand and state: `.border-accent`, `.border-secondary`, `.border-tertiary`,
+  `.border-focus`, `.border-active`, `.border-success`, `.border-warning`,
+  `.border-error`, and `.border-info`
+- Context: `.border-current`, `.border-inherit`, and `.border-transparent`
+
+<LiveExample title="Compose border anatomy" description="Presence, width, style, and semantic color are independent token-driven choices.">
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <article class="border border-subtle rounded-md p-md"><strong>Default</strong><p class="caption">Thin and solid</p></article>
+    <article class="border border-thick border-accent rounded-md p-md"><strong>Emphasized</strong><p class="caption">Thick accent</p></article>
+    <article class="border border-heavy border-double border-warning rounded-md p-md"><strong>Attention</strong><p class="caption">Heavy double</p></article>
+    <article class="border border-dashed border-info rounded-md p-md"><strong>Drop zone</strong><p class="caption">Dashed info</p></article>
+  </layout-grid>
+</LiveExample>
+
+## Logical edges
+
+Logical utilities follow writing mode and direction. They are preferable to
+top/right/bottom/left helpers for reusable components.
+
+<LiveExample title="Let inline start follow direction" description="The success edge moves from left in LTR to right in RTL without changing classes.">
+  <layout-grid min-item-size="12rem" gap="var(--space-sm)">
+    <section dir="ltr" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">LTR inline start</section>
+    <section dir="rtl" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">RTL inline start</section>
+    <section class="border-block border-thick border-accent bg-surface-subtle p-md">Both block edges</section>
+  </layout-grid>
+</LiveExample>
+
+Remove an existing logical edge with `.border-block-none`,
+`.border-inline-none`, `.border-block-start-none`, `.border-block-end-none`,
+`.border-inline-start-none`, or `.border-inline-end-none`.
+
+## Radius scale and corner removal
+
+Use `.rounded-sm`, `.rounded`, `.rounded-md`, `.rounded-lg`, `.rounded-xl`,
+`.rounded-full`, or `.rounded-none`. Logical reset utilities flatten one corner
+or an edge pair without replacing the starting radius.
+
+<LiveExample title="Connect adjacent surfaces" description="Start with one radius, then flatten only the logical edge touching the neighboring surface.">
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <div class="rounded-xl rounded-block-start-none bg-surface-overt text-on-surface-overt p-md">No block-start corners</div>
+    <div class="rounded-xl rounded-block-end-none bg-surface-overt text-on-surface-overt p-md">No block-end corners</div>
+    <div class="rounded-xl rounded-inline-start-none bg-accent text-on-accent p-md">No inline-start corners</div>
+    <div class="rounded-xl rounded-inline-end-none bg-secondary text-on-secondary p-md">No inline-end corners</div>
+  </layout-grid>
+</LiveExample>
+
+Single-corner resets are `.rounded-start-start-none`,
+`.rounded-start-end-none`, `.rounded-end-start-none`, and
+`.rounded-end-end-none`.
+
+## Theme inputs
+
+`--border-width-thin`, `--border-width`, `--border-width-thick`,
+`--border-width-heavy`, `--border-style`, and `--border-color` control the
+system. Widths increase automatically under `prefers-contrast: high`.
+

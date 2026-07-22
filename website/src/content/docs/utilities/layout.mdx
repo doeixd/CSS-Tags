@@ -1,0 +1,62 @@
+---
+title: Layout Utilities
+description: Use small display, flex, grid, positioning, and overflow helpers for local layout adjustments.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Layout utilities solve local, orthogonal adjustments. For reusable layout
+algorithms with content-driven wrapping and dedicated tokens, prefer the
+[layout primitives](/layouts/layout/).
+
+## Display and flexbox
+
+- Display: `.d-block`, `.d-inline`, `.d-inline-block`, `.d-flex`, `.d-grid`,
+  and `.d-none`
+- Direction: `.flex-row` and `.flex-col`
+- Wrapping: `.flex-wrap`
+- Alignment: `.items-center`
+- Distribution: `.justify-center`, `.justify-between`, `.justify-around`, and
+  `.justify-end`
+
+<LiveExample title="Build a wrapping action row" description="Display, wrapping, alignment, and distribution remain independent choices.">
+  <div class="d-flex flex-row flex-wrap items-center justify-between gap-x-md gap-y-sm border border-subtle rounded-md p-md">
+    <div><strong>3 selected</strong><p class="caption">Bulk actions are available</p></div>
+    <div class="d-flex flex-wrap gap-x-sm gap-y-sm"><button type="button">Archive</button><button type="button" class="btn-primary">Export</button></div>
+  </div>
+</LiveExample>
+
+## Grid columns and axis gaps
+
+`.grid-cols-1`, `.grid-cols-2`, `.grid-cols-3`, `.grid-cols-4`,
+`.grid-cols-6`, and `.grid-cols-12` set fixed track counts. Pair them with
+`.d-grid` and the `.gap-x-*` / `.gap-y-*` utilities.
+
+<LiveExample title="Create a compact dashboard grid" description="Fixed column shorthands are useful when the track count is intentional; resize the preview to test its limits.">
+  <div class="d-grid grid-cols-3 gap-x-md gap-y-md">
+    <article class="bg-surface-subtle rounded-md p-md"><span class="caption">Revenue</span><strong class="d-block text-xl">$48.2k</strong></article>
+    <article class="bg-surface-subtle rounded-md p-md"><span class="caption">Orders</span><strong class="d-block text-xl">1,284</strong></article>
+    <article class="bg-surface-subtle rounded-md p-md"><span class="caption">Conversion</span><strong class="d-block text-xl">4.8%</strong></article>
+  </div>
+</LiveExample>
+
+Use `<layout-grid min-item-size="…">` when columns should collapse based on
+available space rather than remain fixed.
+
+## Position and overflow
+
+- Position: `.pos-static`, `.pos-relative`, `.pos-absolute`, `.pos-fixed`, and
+  `.pos-sticky`
+- Overflow: `.overflow-auto`, `.overflow-hidden`, `.overflow-scroll`, and
+  `.overflow-visible`
+
+<LiveExample title="Contain positioned and overflowing content" description="The utilities establish behavior; component-specific inset and size values remain explicit inputs.">
+  <div class="pos-relative overflow-hidden border border-subtle rounded-lg bg-surface-subtle p-md" style="min-block-size:10rem">
+    <span class="pos-absolute bg-accent text-on-accent rounded-full p-sm" style="inset-block-start:var(--space-sm);inset-inline-end:var(--space-sm)">New</span>
+    <strong>Release notes</strong>
+    <div class="overflow-auto bg-surface-default rounded-md p-sm" style="max-block-size:5rem;margin-block-start:var(--space-md)">
+      <p>Scrollable content stays within the local panel.</p><p>Additional details remain available without expanding the entire page.</p><p>The surrounding radius clips positioned decoration.</p>
+    </div>
+  </div>
+</LiveExample>
+

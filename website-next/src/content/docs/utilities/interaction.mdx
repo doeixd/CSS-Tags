@@ -1,0 +1,55 @@
+---
+title: Interaction Utilities
+description: Add accessible focus treatment, explicit outlines and rings, and reduced-motion-aware pointer feedback.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Interaction utilities enhance an element that already has the correct native
+or ARIA semantics. They do not turn a `div` into a button or add keyboard
+behavior.
+
+## Keyboard focus
+
+`.focus-ring` adds the shared external focus treatment on `:focus-visible`.
+`.focus-ring-inset` draws the same token-driven emphasis inside the element.
+
+<LiveExample title="Choose focus placement by clipping context" description="Use the ordinary ring in open space and the inset version where overflow clipping would hide an outer outline. Tab into the controls to compare them.">
+  <layout-cluster gap="var(--space-md)">
+    <button type="button" class="focus-ring">External focus ring</button>
+    <button type="button" class="focus-ring-inset overflow-hidden">Inset focus ring</button>
+    <input class="focus-ring" aria-label="Focusable text field" value="Keyboard focus" />
+  </layout-cluster>
+</LiveExample>
+
+The inputs are `--focus-ring-width`, `--focus-ring-style`,
+`--focus-ring-color`, and `--focus-ring-offset`.
+
+## Explicit outlines and rings
+
+Use `.outline-thin`, `.outline`, or `.outline-thick` when an outline is part of
+the resting visual treatment. `.ring-1`, `.ring-2`, and `.ring-3` create
+one-, two-, and three-pixel focus-color rings using box shadow.
+
+<LiveExample title="Compare outline and ring primitives" description="Outlines do not consume layout space; rings can layer with borders and radii.">
+  <layout-grid min-item-size="8rem" gap="var(--space-lg)">
+    <div class="outline border border-subtle rounded-md p-md">Standard outline</div>
+    <div class="ring-1 border border-subtle rounded-md p-md">Ring 1</div>
+    <div class="ring-2 border border-subtle rounded-md p-md">Ring 2</div>
+    <div class="ring-3 border border-subtle rounded-md p-md">Ring 3</div>
+  </layout-grid>
+</LiveExample>
+
+## Pointer feedback
+
+`.hover-highlight` applies the semantic subtle highlight on hover.
+`.active-press` scales slightly while active and automatically removes that
+motion under `prefers-reduced-motion: reduce`.
+
+<LiveExample title="Layer state feedback onto semantic controls" description="Hover and press utilities augment the native button; they do not replace its component styling or disabled behavior.">
+  <layout-cluster gap="var(--space-sm)">
+    <button type="button" class="hover-highlight">Hover highlight</button>
+    <button type="button" class="active-press btn-primary">Press feedback</button>
+    <button type="button" class="focus-ring hover-highlight active-press">Combined states</button>
+  </layout-cluster>
+</LiveExample>

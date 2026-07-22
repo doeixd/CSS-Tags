@@ -1,0 +1,53 @@
+---
+title: Anchor Positioning Utilities
+description: Progressively tether positioned elements to named anchors and provide viewport-aware fallback positions.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Anchor utilities expose CSS Anchor Positioning directly. The relationship is
+progressive enhancement: keep source order useful and provide an ordinary
+positioning fallback for browsers without support.
+
+## Name and reference an anchor
+
+Anchor names are `.anchor-name-top`, `.anchor-name-bottom`,
+`.anchor-name-left`, `.anchor-name-right`, and `.anchor-name-center`. The
+matching `.position-anchor-*` utility connects the positioned element.
+
+<LiveExample title="Tether a panel below a control" description="The button owns a named anchor; the panel references it and chooses the bottom position area.">
+  <div class="pos-relative border border-subtle rounded-lg bg-surface-muted p-lg" style="min-block-size:12rem">
+    <button type="button" class="anchor-name-bottom btn-primary">Account actions</button>
+    <div class="pos-absolute position-anchor-bottom position-area-bottom bg-surface-default border border-subtle rounded-md shadow-lg p-md" style="z-index:1">
+      <layout-stack gap="var(--space-xs)"><strong>Signed in</strong><a href="#anchor-profile">View profile</a><a href="#anchor-settings">Settings</a></layout-stack>
+    </div>
+  </div>
+</LiveExample>
+
+## Choose a position area
+
+Use `.position-area-top`, `.position-area-bottom`, `.position-area-left`,
+`.position-area-right`, the four corner variants, or `.position-area-center`.
+These rules are emitted only when `position-area` is supported.
+
+<LiveExample title="Place contextual help beside its field" description="The same named relationship can choose a right-side area instead of encoding viewport coordinates.">
+  <div class="pos-relative border border-subtle rounded-lg p-lg" style="min-block-size:11rem">
+    <label class="d-block anchor-name-right"><span class="font-medium">Workspace name</span><input value="Design systems" /></label>
+    <aside class="pos-absolute position-anchor-right position-area-right position-try-fallback bg-info text-info border border-info rounded-md p-sm" style="max-inline-size:14rem;z-index:1">Used in invitations and page titles.</aside>
+  </div>
+</LiveExample>
+
+## Viewport fallback positions
+
+`.position-try-fallback` applies the library's `--fallback-positions` rule,
+which tries bottom, top, right, and left placements as available space changes.
+
+```html
+<button class="anchor-name-center">Open help</button>
+<aside class="pos-absolute position-anchor-center position-area-bottom position-try-fallback">
+  Help content
+</aside>
+```
+
+The utility handles placement only. Use native Popover API or an appropriate
+component for dismissal, focus management, and interactive behavior.

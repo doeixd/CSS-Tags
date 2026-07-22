@@ -156,6 +156,7 @@
   </style>
 </head>
 <body id="top">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <layout-page min-height="100vh">
     <header slot="header" class="landing-header">
       <layout-center max-width="var(--landing-measure)">
@@ -177,7 +178,7 @@
       </layout-center>
     </header>
 
-    <main slot="main" class="landing-main">
+    <main id="main-content" slot="main" class="landing-main" tabindex="-1">
       <layout-center max-width="var(--landing-measure)">
         <layout-stack class="landing-sections">
           <section class="landing-section">
@@ -192,7 +193,7 @@
                 </layout-cluster>
                 <layout-cluster gap="0.65rem">
                   <badge status="success" size="md">Progressively enhanced</badge>
-                  <badge role="subtle" size="md">Token-first styling</badge>
+                  <badge variant="subtle" size="md">Token-first styling</badge>
                 </layout-cluster>
               </layout-stack>
 
@@ -264,42 +265,42 @@
             <layout-grid class="landing-card-grid" min-item-size="320px" gap="1.25rem">
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">01</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">01</badge>
                   <h3>Token-first theming</h3>
                   <p class="text-subtle">Adjust page character with semantic tokens instead of rewriting section styles.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">02</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">02</badge>
                   <h3>Semantic interactions</h3>
                   <p class="text-subtle">Use native `details` for FAQ and plain anchors styled as buttons for conversion points.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">03</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">03</badge>
                   <h3>Responsive by default</h3>
                   <p class="text-subtle">Sections collapse cleanly through layout primitives without extra breakpoint CSS.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">04</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">04</badge>
                   <h3>Flexible surfaces</h3>
                   <p class="text-subtle">Cards, pricing plans, and small dashboard panels can all be composed from the same primitives.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">05</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">05</badge>
                   <h3>Readable content rhythm</h3>
                   <p class="text-subtle">The page leans on the library's readable defaults instead of custom type scales.</p>
                 </layout-stack>
               </box>
               <box p="1.5rem" bg="var(--surface-default)" border="1px solid var(--outline-subtle)" radius="var(--radius-lg)">
                 <layout-stack gap="0.75rem">
-                  <badge class="stack-intrinsic" role="subtle" size="sm">06</badge>
+                  <badge class="stack-intrinsic" variant="subtle" size="sm">06</badge>
                   <h3>Copy-first composition</h3>
                   <p class="text-subtle">This demo is now a cleaner showcase of the library itself rather than extra decorative CSS.</p>
                 </layout-stack>
@@ -489,11 +490,11 @@
             <hr class="landing-footer-divider">
 
             <layout-split fraction="1fr 12rem" gap="1rem">
-              <p class="text-subtle text-caption">© 2026 Graffiti Cloud. Demo content only.</p>
+              <p class="text-subtle caption">© 2026 Graffiti Cloud. Demo content only.</p>
               <layout-cluster justify="flex-end" gap="1rem">
-                <a href="#top" class="text-subtle text-caption">Twitter</a>
-                <a href="https://github.com/doeixd/CSS-Tags" class="text-subtle text-caption">GitHub</a>
-                <a href="#top" class="text-subtle text-caption">Discord</a>
+                <a href="#top" class="text-subtle caption">Twitter</a>
+                <a href="https://github.com/doeixd/CSS-Tags" class="text-subtle caption">GitHub</a>
+                <a href="#top" class="text-subtle caption">Discord</a>
               </layout-cluster>
             </layout-split>
           </layout-stack>

@@ -1,0 +1,49 @@
+---
+title: Spacing Utilities
+description: Apply compact token-driven padding, margin, and axis-specific gaps that respond to the shared density setting.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Spacing utilities use the compatibility `--spacing-*` scale, which is mapped
+to the canonical density-aware spacing system.
+
+## Padding and margin
+
+Padding utilities are `.p-xs`, `.p-sm`, `.p-md`, `.p-lg`, and `.p-xl`. Margin
+utilities use the same suffixes: `.m-xs` through `.m-xl`.
+
+<LiveExample title="Compare the padding scale" description="Each step comes from the shared spacing scale and changes with --density-factor.">
+  <layout-grid min-item-size="8rem" gap="var(--space-sm)" align-items="start">
+    <div class="p-xs bg-accent-muted border border-accent rounded-md">XS</div>
+    <div class="p-sm bg-accent-muted border border-accent rounded-md">SM</div>
+    <div class="p-md bg-accent-muted border border-accent rounded-md">MD</div>
+    <div class="p-lg bg-accent-muted border border-accent rounded-md">LG</div>
+    <div class="p-xl bg-accent-muted border border-accent rounded-md">XL</div>
+  </layout-grid>
+</LiveExample>
+
+<LiveExample title="Use margin for an intentional local offset" description="Margin utilities are useful at integration boundaries; layout gaps remain preferable for repeated sibling rhythm.">
+  <div class="border border-subtle rounded-md bg-surface-muted">
+    <div class="m-xs p-sm bg-surface-default rounded-sm">XS outer space</div>
+    <div class="m-md p-sm bg-surface-default rounded-sm">MD outer space</div>
+    <div class="m-xl p-sm bg-surface-default rounded-sm">XL outer space</div>
+  </div>
+</LiveExample>
+
+## Axis gaps
+
+Use `.gap-x-xs` through `.gap-x-xl` for column gaps and `.gap-y-xs` through
+`.gap-y-xl` for row gaps. They work with grid, flexbox, and the CSS Tags layout
+primitives.
+
+<LiveExample title="Tune row and column rhythm independently" description="This grid uses a large column gap and a small row gap without hardcoded lengths.">
+  <div class="d-grid grid-cols-3 gap-x-xl gap-y-sm">
+    <div class="bg-secondary-muted rounded-sm p-sm">One</div><div class="bg-secondary-muted rounded-sm p-sm">Two</div><div class="bg-secondary-muted rounded-sm p-sm">Three</div>
+    <div class="bg-secondary-muted rounded-sm p-sm">Four</div><div class="bg-secondary-muted rounded-sm p-sm">Five</div><div class="bg-secondary-muted rounded-sm p-sm">Six</div>
+  </div>
+</LiveExample>
+
+For responsive, content-driven spacing between children, prefer the
+[`gap` inputs on layout primitives](/layouts/layout/).
+

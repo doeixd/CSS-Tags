@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../index.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to demo</a>
     <layout-page min-height="100dvh">
       <header data-site-header slot="header">
         <container>
@@ -21,7 +22,7 @@
         </container>
       </header>
 
-      <main slot="main">
+      <main id="main-content" slot="main" tabindex="-1">
         <container>
           <layout-stack gap="var(--space-xl)">
             <header>

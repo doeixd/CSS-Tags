@@ -32,8 +32,41 @@ const standaloneExampleRoutes = new Set(
   exampleFiles.map((file) => `/examples/${file.replace(/\.html$/, "")}/`),
 );
 
+const forbiddenStandaloneExamplePatterns = [
+  [/<badge\b[^>]*\srole=["'](?:subtle|default|muted|overt)["']/i, "deprecated badge role variant"],
+  [/\bdata-theme=["']dark["']/i, "deprecated dark theme switch"],
+  [/\bbutton-filled-[\w-]+/i, "retired filled-button utility"],
+  [/\bl-(?:stack|sidebar)(?:__aside)?\b/i, "retired layout utility"],
+  [/\bgap-(?:sm|md|lg|xl)\b/i, "retired spacing utility"],
+  [/\btext-caption\b/i, "retired caption utility"],
+];
+for (const file of exampleFiles) {
+  const source = await readFile(path.join(libraryRoot, "examples", file), "utf8");
+  if (!/<main\b/i.test(source)) failures.push(`examples/${file}: missing a main landmark.`);
+  if (!/<h1\b/i.test(source)) failures.push(`examples/${file}: missing a page-level heading.`);
+  if (!/class=["'][^"']*\bskip-link\b/i.test(source)) failures.push(`examples/${file}: missing a skip link.`);
+  for (const [pattern, label] of forbiddenStandaloneExamplePatterns) {
+    if (pattern.test(source)) failures.push(`examples/${file}: contains ${label}.`);
+  }
+}
+
 for (const route of standaloneExampleRoutes) {
   if (!routes.has(route)) failures.push(`Missing standalone example route: ${route}.`);
+}
+
+const utilityDocumentationRoutes = [
+  "/utilities/utilities/",
+  "/utilities/colors/",
+  "/utilities/borders/",
+  "/utilities/spacing/",
+  "/utilities/typography/",
+  "/utilities/layout/",
+  "/utilities/effects/",
+  "/utilities/interaction/",
+  "/utilities/anchor-positioning/",
+];
+for (const route of utilityDocumentationRoutes) {
+  if (!routes.has(route)) failures.push(`Missing utility documentation route: ${route}.`);
 }
 
 if (pages.length < 64) failures.push(`Expected at least 64 routes; found ${pages.length}.`);

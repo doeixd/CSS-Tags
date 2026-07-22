@@ -9,6 +9,7 @@
 </head>
 <body id="top">
   <!-- This page intentionally contains no custom CSS or inline styles. -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <layout-page min-height="100vh">
     <header slot="header">
       <box py="1rem" bg="var(--surface-subtle)">
@@ -26,7 +27,7 @@
       </box>
     </header>
 
-    <main slot="main">
+    <main id="main-content" slot="main" tabindex="-1">
       <box py="4rem">
         <layout-center max-width="72rem">
           <layout-stack gap="6rem">
@@ -42,7 +43,7 @@
                   </layout-cluster>
                   <layout-cluster gap="0.5rem">
                     <badge status="success" size="md">No custom CSS</badge>
-                    <badge role="subtle" size="md">Token-first</badge>
+                    <badge variant="subtle" size="md">Token-first</badge>
                   </layout-cluster>
                 </layout-stack>
 
@@ -115,42 +116,42 @@
                 <layout-grid min-item-size="18rem" gap="1rem">
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">01</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">01</badge></layout-cluster>
                       <card-header>Token-first theming</card-header>
                       <card-content><p>Change the system's character through semantic variables instead of rewriting every component.</p></card-content>
                     </card-body>
                   </card>
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">02</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">02</badge></layout-cluster>
                       <card-header>Semantic interactions</card-header>
                       <card-content><p>Start with native links, buttons, details, lists, and ARIA states before adding behavior.</p></card-content>
                     </card-body>
                   </card>
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">03</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">03</badge></layout-cluster>
                       <card-header>Responsive layouts</card-header>
                       <card-content><p>Grid, split, cluster, and switcher primitives adapt without page-specific media queries.</p></card-content>
                     </card-body>
                   </card>
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">04</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">04</badge></layout-cluster>
                       <card-header>Composable surfaces</card-header>
                       <card-content><p>Use cards for structured content and boxes for declarative one-off surfaces.</p></card-content>
                     </card-body>
                   </card>
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">05</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">05</badge></layout-cluster>
                       <card-header>Readable defaults</card-header>
                       <card-content><p>Semantic typography establishes a useful hierarchy before custom art direction is added.</p></card-content>
                     </card-body>
                   </card>
                   <card>
                     <card-body>
-                      <layout-cluster><badge role="subtle" size="sm">06</badge></layout-cluster>
+                      <layout-cluster><badge variant="subtle" size="sm">06</badge></layout-cluster>
                       <card-header>Progressive enhancement</card-header>
                       <card-content><p>Modern platform features enhance a page while its core content remains available.</p></card-content>
                     </card-body>

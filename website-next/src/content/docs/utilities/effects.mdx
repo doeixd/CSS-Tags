@@ -1,0 +1,43 @@
+---
+title: Effect Utilities
+description: Add token-driven elevation and scrims without disconnecting surfaces from the active theme.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Effect utilities cover elevation and overlays. Border radius lives with the
+[border utilities](/utilities/borders/) because connected-corner composition
+depends on logical edges.
+
+## Elevation
+
+Use `.shadow-sm`, `.shadow` / `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or
+`.shadow-inner`. Every value comes from the theme shadow scale.
+
+<LiveExample title="Choose elevation by relationship" description="Small shadows separate controls, medium shadows lift cards, and large shadows suit temporary floating surfaces.">
+  <layout-grid min-item-size="9rem" gap="var(--space-lg)">
+    <article class="bg-surface-default border border-subtle rounded-lg shadow-sm p-md"><strong>Raised control</strong><p class="caption">shadow-sm</p></article>
+    <article class="bg-surface-default border border-subtle rounded-lg shadow-md p-md"><strong>Card</strong><p class="caption">shadow-md</p></article>
+    <article class="bg-surface-default border border-subtle rounded-lg shadow-xl p-md"><strong>Floating panel</strong><p class="caption">shadow-xl</p></article>
+  </layout-grid>
+</LiveExample>
+
+<LiveExample title="Use an inner shadow for a recessed region" description="Inset elevation communicates a well or viewport without adding another wrapper API.">
+  <div class="shadow-inner bg-surface-muted border border-subtle rounded-lg p-lg">
+    <layout-stack gap="var(--space-sm)"><strong>Upload queue</strong><p class="text-muted">Files dropped here appear inside the recessed workspace.</p><button type="button">Choose files</button></layout-stack>
+  </div>
+</LiveExample>
+
+## Scrims
+
+`.scrim` uses the standard dark overlay token; `.scrim-light` uses the light
+counterpart. A scrim supplies only color so the owning component remains in
+control of positioning and stacking.
+
+<LiveExample title="Layer a scrim over media" description="The overlay utility contributes the theme color while ordinary positioning defines the composition.">
+  <div class="pos-relative overflow-hidden rounded-lg" style="min-block-size:12rem;background:linear-gradient(135deg,var(--accent),var(--tertiary))">
+    <div class="scrim pos-absolute" style="inset:0"></div>
+    <layout-stack class="pos-relative text-on-bedrock p-lg" gap="var(--space-sm)" style="z-index:1"><span class="eyebrow">Featured</span><strong class="text-2xl">Readable text over changing media</strong><button type="button" class="btn-primary">Open story</button></layout-stack>
+  </div>
+</LiveExample>
+

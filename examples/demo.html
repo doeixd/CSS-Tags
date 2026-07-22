@@ -1,641 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Tags Component Demo</title>
-    
-    <!-- 
-      Import the main index file.
-      Assumes this file is in a folder sibling to 'src'.
-    -->
-    <link rel="stylesheet" href="../index.css">
-
-    <!-- Demo-specific styles (minimal, just using the library's own tokens) -->
-    <style>
-        /* Using the library's tokens for the demo page body */
-        body {
-            padding-block: var(--space-xl);
-        }
-        h1 {
-             color: var(--theme-primary);
-        }
-        h2 {
-            margin-top: var(--space-2xl);
-            padding-bottom: var(--space-sm);
-            border-bottom: 1px solid var(--outline-subtle);
-            color: var(--text-overt);
-        }
-        .section-desc {
-            color: var(--text-subtle);
-            margin-bottom: var(--space-lg);
-        }
-        /* Visually separate examples */
-        .example-block {
-            border: 1px solid var(--outline-subtle);
-            padding: var(--space-lg);
-            border-radius: var(--radius-lg);
-            background-color: var(--surface-subtle);
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Tags — Component workbench</title>
+  <link rel="stylesheet" href="../index.css">
 </head>
-<body id="demo-top">
+<body>
+  <a class="skip-link" href="#main-content">Skip to component workbench</a>
 
-    <!-- Using <layout-center> to contain the entire demo page -->
-    <layout-center max-width="1200px">
-        
-        <header>
-            <layout-stack gap="1rem">
-                <h1>CSS Tags Component Demo</h1>
-                <p>A focused showcase of components, overlays, carousels, and view transitions.</p>
-                
-                <!-- THEME SWITCHER -->
-                <flex gap="0.5rem" align="center" wrap="wrap">
-                    <strong>Try a theme:</strong>
-                    <button onclick="document.documentElement.dataset.theme=''">Default</button>
-                    <button onclick="document.documentElement.dataset.theme='ocean'">Ocean</button>
-                    <button onclick="document.documentElement.dataset.theme='sunrise'">Sunrise</button>
-                    <button onclick="document.documentElement.dataset.theme='forest'">Forest</button>
-                </flex>
-            </layout-stack>
+  <main id="main-content" tabindex="-1">
+    <container>
+      <layout-stack gap="var(--space-3xl)">
+        <header data-prose>
+          <eyebrow>Component workbench</eyebrow>
+          <h1>Practical interface patterns, composed</h1>
+          <p class="lead">This is a focused integration test for forms, feedback, disclosure, data display, carousels, and native interaction states.</p>
+          <layout-cluster gap="var(--space-sm)">
+            <badge status="success">Semantic HTML</badge>
+            <badge variant="subtle">Progressive enhancement</badge>
+            <badge variant="subtle">Token driven</badge>
+          </layout-cluster>
         </header>
 
-        <main>
-
-            <!-- ================================================================== -->
-            <!-- SECTION 4: UI COMPONENTS -->
-            <!-- ================================================================== -->
-            <section>
-                <h2>1. UI Components</h2>
-                <p class="section-desc">Common UI patterns built with modern CSS.</p>
-
-                 <layout-stack gap="2rem">
-
-                    <div class="example-block">
-                        <h3>Card Components</h3>
-                        <p>Beautiful, responsive cards with container queries, hover effects, and flexible layouts.</p>
-
-                        <layout-stack gap="2rem">
-
-                            <div>
-                                <h4>Basic Card Grid</h4>
-                                <layout-grid min-item-size="300px" gap="1.5rem">
-                                    <card style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                                        <card-media>
-                                            <img src="https://picsum.photos/400/250?random=1" alt="Beautiful landscape">
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Serene Mountains</card-header>
-                                            <card-content>
-                                                Discover the breathtaking beauty of mountain landscapes that inspire and rejuvenate the soul.
-                                            </card-content>
-                                            <card-footer>Explore Nature →</card-footer>
-                                        </card-body>
-                                    </card>
-                                    <card style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                                        <card-media>
-                                            <img src="https://picsum.photos/400/250?random=2" alt="Urban architecture">
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Modern Architecture</card-header>
-                                            <card-content>
-                                                Innovative designs that blend functionality with aesthetic excellence in urban environments.
-                                            </card-content>
-                                            <card-footer>View Projects →</card-footer>
-                                        </card-body>
-                                    </card>
-                                    <card style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
-                                        <card-media>
-                                            <img src="https://picsum.photos/400/250?random=3" alt="Ocean waves">
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Ocean Adventures</card-header>
-                                            <card-content>
-                                                Embark on unforgettable journeys across vast oceans and discover hidden underwater worlds.
-                                            </card-content>
-                                            <card-footer>Start Journey →</card-footer>
-                                        </card-body>
-                                    </card>
-                                </layout-grid>
-                            </div>
-
-                            <div>
-                                <h4>Horizontal Cards (Wide Layout)</h4>
-                                <layout-stack gap="1rem">
-                                    <card style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                                        <card-media>
-                                            <img src="https://picsum.photos/200/150?random=4" alt="Technology">
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Innovation Hub</card-header>
-                                            <card-content>
-                                                Cutting-edge technology solutions that drive progress and transform industries. Our team of experts delivers unparalleled innovation.
-                                            </card-content>
-                                            <card-footer>Learn More →</card-footer>
-                                        </card-body>
-                                    </card>
-                                    <card style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
-                                        <card-media>
-                                            <img src="https://picsum.photos/200/150?random=5" alt="Creative workspace">
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Creative Studio</card-header>
-                                            <card-content>
-                                                Where imagination meets execution. We craft compelling visual stories that captivate and inspire audiences worldwide.
-                                            </card-content>
-                                            <card-footer>View Portfolio →</card-footer>
-                                        </card-body>
-                                    </card>
-                                </layout-stack>
-                            </div>
-
-                            <div>
-                                <h4>Compact Cards</h4>
-                                <layout-grid min-item-size="250px" gap="1rem">
-                                    <card style="--card-radius: 0.5rem; --card-background: #f0f9ff;">
-                                        <card-body style="padding: 1rem;">
-                                            <card-header style="font-size: 1rem;">Quick Tip</card-header>
-                                            <card-content style="font-size: 0.875rem;">
-                                                Small changes can lead to big improvements in productivity and well-being.
-                                            </card-content>
-                                            <card-footer style="font-size: 0.75rem;">Read More →</card-footer>
-                                        </card-body>
-                                    </card>
-                                    <card style="--card-radius: 0.5rem; --card-background: #fef3c7;">
-                                        <card-body style="padding: 1rem;">
-                                            <card-header style="font-size: 1rem;">Daily Inspiration</card-header>
-                                            <card-content style="font-size: 0.875rem;">
-                                                Every day is a new opportunity to create something amazing and meaningful.
-                                            </card-content>
-                                            <card-footer style="font-size: 0.75rem;">Get Inspired →</card-footer>
-                                        </card-body>
-                                    </card>
-                                    <card style="--card-radius: 0.5rem; --card-background: #e0f2fe;">
-                                        <card-body style="padding: 1rem;">
-                                            <card-header style="font-size: 1rem;">Tech Update</card-header>
-                                            <card-content style="font-size: 0.875rem;">
-                                                Stay ahead with the latest developments in web technology and design trends.
-                                            </card-content>
-                                            <card-footer style="font-size: 0.75rem;">Stay Updated →</card-footer>
-                                        </card-body>
-                                    </card>
-                                </layout-grid>
-                            </div>
-
-                            <div>
-                                <h4>Feature Cards with Actions</h4>
-                                <layout-grid min-item-size="280px" gap="1.5rem">
-                                    <card style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
-                                        <card-media style="background: linear-gradient(135deg, var(--hue-blue), var(--hue-purple)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
-                                            <span style="font-size: 2rem;">🚀</span>
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Premium Plan</card-header>
-                                            <card-content>
-                                                Unlock advanced features and priority support with our premium subscription.
-                                            </card-content>
-                                            <flex gap="0.5rem" style="margin-top: 1rem;">
-                                                <button class="button" style="flex: 1;">Upgrade</button>
-                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Learn More</button>
-                                            </flex>
-                                        </card-body>
-                                    </card>
-                                    <card style="background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);">
-                                        <card-media style="background: linear-gradient(135deg, var(--hue-green), var(--hue-emerald)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
-                                            <span style="font-size: 2rem;">📊</span>
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Analytics Dashboard</card-header>
-                                            <card-content>
-                                                Comprehensive insights and data visualization to drive informed decisions.
-                                            </card-content>
-                                            <flex gap="0.5rem" style="margin-top: 1rem;">
-                                                <button class="button" style="flex: 1;">View Dashboard</button>
-                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Demo</button>
-                                            </flex>
-                                        </card-body>
-                                    </card>
-                                    <card style="background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);">
-                                        <card-media style="background: linear-gradient(135deg, var(--hue-orange), var(--hue-red)); height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
-                                            <span style="font-size: 2rem;">🎨</span>
-                                        </card-media>
-                                        <card-body>
-                                            <card-header>Design System</card-header>
-                                            <card-content>
-                                                Consistent, scalable design components that maintain brand integrity across platforms.
-                                            </card-content>
-                                            <flex gap="0.5rem" style="margin-top: 1rem;">
-                                                <button class="button" style="flex: 1;">Explore</button>
-                                                <button class="button" style="background: transparent; border: 1px solid var(--theme-primary);">Documentation</button>
-                                            </flex>
-                                        </card-body>
-                                    </card>
-                                </layout-grid>
-                            </div>
-
-                        </layout-stack>
-                    </div>
-
-                    <div class="example-block">
-                        <h3><code>&lt;img-container&gt;</code></h3>
-                        <p>Advanced image container with aspect ratios, lazy loading, and responsive features.</p>
-
-                        <layout-stack gap="2rem">
-
-                            <div>
-                                <h4>Basic Aspect Ratios</h4>
-                                <layout-grid min-item-size="200px" gap="1rem">
-                                    <img-container aspect-ratio="16/9" radius="0.5rem">
-                                        <img src="https://picsum.photos/400/225?random=10" alt="Landscape image" />
-                                    </img-container>
-                                    <img-container aspect-ratio="1" radius="0.5rem">
-                                        <img src="https://picsum.photos/400/400?random=11" alt="Square image" />
-                                    </img-container>
-                                    <img-container aspect-ratio="4/3" radius="0.5rem">
-                                        <img src="https://picsum.photos/400/300?random=12" alt="Portrait image" />
-                                    </img-container>
-                                </layout-grid>
-                            </div>
-
-                            <div>
-                                <h4>Object Fit Options</h4>
-                                <layout-grid min-item-size="150px" gap="1rem">
-                                    <div>
-                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Cover</p>
-                                        <img-container aspect-ratio="1" object-fit="cover" radius="0.25rem">
-                                            <img src="https://picsum.photos/200/300?random=13" alt="Cover fit" />
-                                        </img-container>
-                                    </div>
-                                    <div>
-                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Contain</p>
-                                        <img-container aspect-ratio="1" object-fit="contain" bg="#f5f5f5" radius="0.25rem">
-                                            <img src="https://picsum.photos/200/300?random=13" alt="Contain fit" />
-                                        </img-container>
-                                    </div>
-                                    <div>
-                                        <p style="font-size: 0.75rem; margin-bottom: 0.5rem;">Fill</p>
-                                        <img-container aspect-ratio="1" object-fit="fill" radius="0.25rem">
-                                            <img src="https://picsum.photos/200/300?random=13" alt="Fill fit" />
-                                        </img-container>
-                                    </div>
-                                </layout-grid>
-                            </div>
-
-                            <div>
-                                <h4>Themed Containers</h4>
-                                <layout-grid min-item-size="200px" gap="1rem">
-                                    <img-container theme="card" aspect-ratio="3/4">
-                                        <img src="https://picsum.photos/300/400?random=14" alt="Card theme" />
-                                    </img-container>
-                                    <img-container theme="hero" aspect-ratio="21/9">
-                                        <img src="https://picsum.photos/600/286?random=15" alt="Hero theme" />
-                                    </img-container>
-                                    <img-container theme="thumbnail" aspect-ratio="1">
-                                        <img src="https://picsum.photos/200/200?random=16" alt="Thumbnail theme" />
-                                    </img-container>
-                                </layout-grid>
-                            </div>
-
-                            <div>
-                                <h4>Lazy Loading</h4>
-                                <p>Scroll down to see images load lazily.</p>
-                                <layout-grid min-item-size="250px" gap="1rem">
-                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
-                                        <img data-src="https://picsum.photos/400/225?random=17" alt="Lazy loaded 1" />
-                                    </img-container>
-                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
-                                        <img data-src="https://picsum.photos/400/225?random=18" alt="Lazy loaded 2" />
-                                    </img-container>
-                                    <img-container aspect-ratio="16/9" lazy radius="0.5rem">
-                                        <img data-src="https://picsum.photos/400/225?random=19" alt="Lazy loaded 3" />
-                                    </img-container>
-                                </layout-grid>
-                            </div>
-
-                        </layout-stack>
-                    </div>
-
+        <section aria-labelledby="support-title">
+          <layout-switcher threshold="42rem" gap="var(--space-xl)">
+            <card>
+              <card-body>
+                <form>
+                  <layout-stack gap="var(--space-lg)">
+                    <div><p class="eyebrow">Support request</p><h2 id="support-title">Tell us what happened</h2><p class="text-subtle">Native labels and validation remain the accessibility contract.</p></div>
+                    <label>Work email<input class="form-input" type="email" placeholder="you@company.com" required></label>
+                    <label>Area<select class="form-select"><option>Billing</option><option>Account access</option><option>Bug report</option></select></label>
+                    <label>Summary<textarea class="form-textarea" placeholder="Include what you expected and what happened."></textarea><small>Do not include passwords or API keys.</small></label>
+                    <file-dropzone>
+                      <strong>Drop screenshots here or choose files</strong>
+                      <small>PNG, JPG, or WebP up to 10 MB</small>
+                      <input type="file" multiple accept="image/png,image/jpeg,image/webp" aria-label="Attach screenshots">
+                    </file-dropzone>
+                    <layout-cluster justify="flex-end"><button class="button-ghost" type="reset">Clear</button><button class="form-button" type="submit">Send request</button></layout-cluster>
                   </layout-stack>
-              </section>
+                </form>
+              </card-body>
+            </card>
 
-             <!-- ================================================================== -->
-             <!-- SECTION 5: NEW COMPONENTS -->
-             <!-- ================================================================== -->
-             <section>
-                 <h2>2. Tables, Forms, and Navigation</h2>
-                 <p class="section-desc">Recently added components for data display, user input, and site navigation.</p>
+            <layout-stack gap="var(--space-md)">
+              <div class="alert" status="success" role="status"><span class="alert__icon" aria-hidden="true">✓</span><div><strong class="alert__title">Workspace connected</strong><p class="alert__body">Diagnostics can include the current release automatically.</p></div></div>
+              <div class="alert" status="warning" role="note"><span class="alert__icon" aria-hidden="true">!</span><div><strong class="alert__title">Response times</strong><p class="alert__body">Priority requests currently take about two hours.</p></div></div>
+              <card>
+                <card-body>
+                  <layout-stack gap="var(--space-md)">
+                    <div><p class="eyebrow">Current environment</p><h2>Production</h2></div>
+                    <dl>
+                      <div><dt>Release</dt><dd><code>2026.07.22</code></dd></div>
+                      <div><dt>Region</dt><dd>US East</dd></div>
+                      <div><dt>Status</dt><dd><badge status="success">Healthy</badge></dd></div>
+                    </dl>
+                  </layout-stack>
+                </card-body>
+              </card>
+            </layout-stack>
+          </layout-switcher>
+        </section>
 
-                 <layout-stack gap="2rem">
+        <section aria-labelledby="workflow-title">
+          <layout-stack gap="var(--space-lg)">
+            <header data-prose><h2 id="workflow-title">A no-JavaScript workflow explainer</h2><p>These tab-like panels are native disclosures. They remain operable if enhancement scripts never load.</p></header>
+            <div data-tabs-details style="--tab-count: 3">
+              <details name="support-workflow" open style="--n: 1"><summary>Report</summary><div class="p-lg"><h3>Start with context</h3><p>Describe the affected task and include a minimal reproduction when possible.</p></div></details>
+              <details name="support-workflow" style="--n: 2"><summary>Triage</summary><div class="p-lg"><h3>We reproduce the issue</h3><p>Semantic state and release metadata help route the request quickly.</p></div></details>
+              <details name="support-workflow" style="--n: 3"><summary>Resolve</summary><div class="p-lg"><h3>Track the outcome</h3><p>The resolution includes impact, workarounds, and the release containing the fix.</p></div></details>
+            </div>
+          </layout-stack>
+        </section>
 
-                     <div class="example-block">
-                         <h3><code>&lt;table&gt;</code> with Responsive Design</h3>
-                         <p>Responsive table that stacks on small screens using container queries.</p>
-                         <data-table>
-                             <table>
-                                 <thead>
-                                     <tr>
-                                         <th>Name</th>
-                                         <th>Email</th>
-                                         <th>Role</th>
-                                         <th>Status</th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                         <td data-label="Name">John Doe</td>
-                                         <td data-label="Email">john@example.com</td>
-                                         <td data-label="Role">Developer</td>
-                                         <td data-label="Status">Active</td>
-                                     </tr>
-                                     <tr>
-                                         <td data-label="Name">Jane Smith</td>
-                                         <td data-label="Email">jane@example.com</td>
-                                         <td data-label="Role">Designer</td>
-                                         <td data-label="Status">Pending</td>
-                                     </tr>
-                                 </tbody>
-                             </table>
-                         </data-table>
-                     </div>
+        <section aria-labelledby="requests-title">
+          <layout-stack gap="var(--space-lg)">
+            <layout-cluster justify="space-between"><div><p class="eyebrow">Queue</p><h2 id="requests-title">Recent requests</h2></div><button type="button" class="button-outline">Export CSV</button></layout-cluster>
+            <div data-table-scroll tabindex="0" aria-label="Recent support requests">
+              <table>
+                <thead><tr><th scope="col">Request</th><th scope="col">Owner</th><th scope="col">Priority</th><th scope="col">Status</th><th scope="col">Updated</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Invoice address</th><td>Mina</td><td>Normal</td><td><badge status="success">Resolved</badge></td><td>8 min ago</td></tr>
+                  <tr><th scope="row">Cannot invite member</th><td>Chris</td><td>High</td><td><badge status="warning">Investigating</badge></td><td>24 min ago</td></tr>
+                  <tr><th scope="row">Webhook retries</th><td>Jo</td><td>Normal</td><td><badge status="info">Waiting</badge></td><td>1 hr ago</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </layout-stack>
+        </section>
 
-                     <div class="example-block">
-                         <h3>Form Components</h3>
-                         <p>Accessible form elements with focus states and variants.</p>
-                         <form>
-                             <layout-stack gap="1rem">
-                                  <input type="text" class="form-input" placeholder="Enter your name" required>
-                                  <input type="email" class="form-input" placeholder="Enter your email" required>
-                                  <select class="form-select">
-                                      <option>Select role</option>
-                                      <option>Developer</option>
-                                      <option>Designer</option>
-                                  </select>
-                                  <textarea class="form-textarea" placeholder="Your message"></textarea>
-                                  <flex gap="1rem">
-                                      <button type="submit" class="form-button btn-primary">Submit</button>
-                                      <button type="reset" class="form-button btn-secondary">Reset</button>
-                                  </flex>
-                             </layout-stack>
-                         </form>
-                     </div>
-
-                     <div class="example-block">
-                         <h3>Navigation Components</h3>
-                         <p>Responsive navbar and sidebar for site navigation.</p>
-                          <nav class="navbar" data-collapsible>
-                              <div class="nav-brand">My Site</div>
-                              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="kitchen-sink-nav-links">Menu</button>
-                              <ul class="nav-links" id="kitchen-sink-nav-links">
-                                  <li><a href="#demo-top" class="nav-link" aria-current="page">Home</a></li>
-                                  <li><a href="#interactivity-demo" class="nav-link">About</a></li>
-                                  <li><a href="#carousel-demo" class="nav-link">Contact</a></li>
-                              </ul>
-                          </nav>
-                          <div class="sidebar-layout" style="margin-top: 1rem;">
-                              <aside class="sidebar">
-                                  <div class="sidebar-section">Menu</div>
-                                  <ul class="sidebar-nav">
-                                      <li><a href="#demo-top" class="sidebar-link" aria-current="page">Dashboard</a></li>
-                                      <li><a href="#interactivity-demo" class="sidebar-link">Profile</a></li>
-                                      <li><a href="#carousel-demo" class="sidebar-link">Settings</a></li>
-                                  </ul>
-                              </aside>
-                              <main>Main content area</main>
-                          </div>
-                     </div>
-
-                 </layout-stack>
-             </section>
-
-            <!-- ================================================================== -->
-            <!-- SECTION 5: MODERN INTERACTIVE -->
-            <!-- ================================================================== -->
-            <section id="interactivity-demo">
-                <h2>3. Interactivity and Overlays</h2>
-                <p class="section-desc">Using the native Popover API and Anchor Positioning. No JS required for the basic functionality.</p>
-
-                <layout-stack gap="2rem">
-
-                    <div class="example-block">
-                        <h3>Native Popover</h3>
-                         <button popovertarget="demo-popover" class="button">Open Popover</button>
-                         <div id="demo-popover" popover>
-                            <h3>Hello!</h3>
-                            <p>I am a native <code>popover</code> element, styled by the library. Click outside or press Escape to close me.</p>
-                            <p>I automatically appear in the top layer and have built-in entry/exit animations.</p>
-                         </div>
-                    </div>
-
-                    <div class="example-block">
-                        <h3>Advanced Tooltip</h3>
-                        <p>Uses <b>Anchor Positioning</b> to tether to its button, and the <b>Popover API</b> to appear on top.</p>
-                         <flex gap="2rem" wrap="wrap" justify="center" style="padding: 3rem;">
-
-                             <button aria-describedby="tt-top" class="button">
-                                 Top Tooltip
-                                 <tooltip id="tt-top" position="top" arrow>I'm tethered to the top!</tooltip>
-                             </button>
-
-                              <button aria-describedby="tt-right" class="button">
-                                 Right Tooltip
-                                 <tooltip id="tt-right" position="right" variant="info" arrow>Info on the right.</tooltip>
-                             </button>
-
-                              <button aria-describedby="tt-bottom" class="button">
-                                 Bottom Tooltip
-                                 <tooltip id="tt-bottom" position="bottom" variant="success" arrow>Success on the bottom.</tooltip>
-                             </button>
-
-                         </flex>
-                    </div>
-                    
-                    <div class="example-block">
-                        <h3>Modal</h3>
-                        <button onclick="document.getElementById('demo-modal').style.display='grid'" class="button">Open Modal</button>
-                        
-                        <!-- Simple Modal structure -->
-                        <div id="demo-modal" class="modal" style="display: none;">
-                            <div class="modal__panel">
-                                <h3>Modal Title</h3>
-                                <p>This is the modal content. The backdrop is handled by the <code>.modal</code> wrapper.</p>
-                                <flex justify="end" gap="1rem" style="margin-top: 2rem;">
-                                    <button onclick="document.getElementById('demo-modal').style.display='none'" class="button">Close</button>
-                                </flex>
-                            </div>
-                        </div>
-                    </div>
-
-                </layout-stack>
+        <section aria-labelledby="stories-title">
+          <layout-stack gap="var(--space-lg)">
+            <header data-prose><h2 id="stories-title">Customer stories</h2><p>The carousel works as a touch-friendly scroll-snap reel before JavaScript adds its buttons.</p></header>
+            <section data-carousel radius="var(--radius-xl)" aria-label="Customer stories">
+              <div data-carousel-slides>
+                <article data-carousel-item><div class="bg-surface-subtle p-xl"><blockquote>“The semantic defaults gave our team a common language without hiding the platform.”</blockquote><p><strong>Priya Shah</strong><br><span class="text-subtle">Design systems lead, Arc</span></p></div></article>
+                <article data-carousel-item><div class="bg-accent p-xl"><blockquote>“We replaced a pile of wrappers with native elements and a handful of tokens.”</blockquote><p><strong>Mateo Ruiz</strong><br><span class="text-subtle">Frontend engineer, Relay</span></p></div></article>
+                <article data-carousel-item><div class="bg-surface-overt p-xl"><blockquote>“Layouts now respond to their container, so the same module works everywhere.”</blockquote><p><strong>Alex Kim</strong><br><span class="text-subtle">Product engineer, Fieldwork</span></p></div></article>
+              </div>
+              <button type="button" data-carousel-trigger direction="prev" aria-label="Previous story">‹</button>
+              <button type="button" data-carousel-trigger direction="next" aria-label="Next story">›</button>
             </section>
-
-            <!-- ================================================================== -->
-            <!-- SECTION 6: ADVANCED LAYOUTS -->
-            <!-- ================================================================== -->
-            <section id="carousel-demo">
-                <h2>4. Advanced Layouts</h2>
-                <p class="section-desc">Experimental or slightly enhanced layouts.</p>
-
-                 <layout-stack gap="2rem">
-                    <div class="example-block">
-                        <h3>Carousel Components</h3>
-                        <p>Responsive carousels with touch support, scroll-snap fallback, and customizable animations.</p>
-
-                        <layout-stack gap="2rem">
-
-                            <div>
-                                <h4>Basic Carousel</h4>
-                                <carousel>
-                                    <div class="carousel-slides">
-                                        <carousel-item><box bg="var(--hue-blue)" p="4rem" align="center" color="white">Slide 1</box></carousel-item>
-                                        <carousel-item><box bg="var(--hue-green)" p="4rem" align="center" color="white">Slide 2</box></carousel-item>
-                                        <carousel-item><box bg="var(--hue-red)" p="4rem" align="center" color="white">Slide 3</box></carousel-item>
-                                    </div>
-                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
-                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
-                                </carousel>
-                            </div>
-
-                            <div>
-                                <h4>Looping Carousel</h4>
-                                <carousel loop>
-                                    <div class="carousel-slides">
-                                        <carousel-item><box bg="var(--hue-purple)" p="4rem" align="center" color="white">Infinite 1</box></carousel-item>
-                                        <carousel-item><box bg="var(--hue-orange)" p="4rem" align="center" color="white">Infinite 2</box></carousel-item>
-                                        <carousel-item><box bg="var(--hue-cyan)" p="4rem" align="center" color="white">Infinite 3</box></carousel-item>
-                                    </div>
-                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
-                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
-                                </carousel>
-                            </div>
-
-                            <div>
-                                <h4>Content Carousel</h4>
-                                <carousel loop duration="300ms">
-                                    <div class="carousel-slides">
-                                        <carousel-item>
-                                            <card>
-                                                <card-header>
-                                                    <h3>Feature One</h3>
-                                                </card-header>
-                                                <card-body>
-                                                    <p>Discover amazing features with smooth transitions.</p>
-                                                </card-body>
-                                            </card>
-                                        </carousel-item>
-                                        <carousel-item>
-                                            <card>
-                                                <card-header>
-                                                    <h3>Feature Two</h3>
-                                                </card-header>
-                                                <card-body>
-                                                    <p>Touch-friendly navigation and responsive design.</p>
-                                                </card-body>
-                                            </card>
-                                        </carousel-item>
-                                        <carousel-item>
-                                            <card>
-                                                <card-header>
-                                                    <h3>Feature Three</h3>
-                                                </card-header>
-                                                <card-body>
-                                                    <p>Built with modern CSS and enhanced with JavaScript.</p>
-                                                </card-body>
-                                            </card>
-                                        </carousel-item>
-                                    </div>
-                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
-                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
-                                </carousel>
-                            </div>
-
-                            <div>
-                                <h4>Image Carousel</h4>
-                                <carousel loop duration="400ms" timing-function="ease-in-out">
-                                    <div class="carousel-slides">
-                                        <carousel-item><img src="https://picsum.photos/600/300?random=1" alt="Random image 1" style="width: 100%; height: auto; display: block;"></carousel-item>
-                                        <carousel-item><img src="https://picsum.photos/600/300?random=2" alt="Random image 2" style="width: 100%; height: auto; display: block;"></carousel-item>
-                                        <carousel-item><img src="https://picsum.photos/600/300?random=3" alt="Random image 3" style="width: 100%; height: auto; display: block;"></carousel-item>
-                                    </div>
-                                    <button type="button" data-carousel-trigger direction="prev" aria-label="Previous slide">←</button>
-                                    <button type="button" data-carousel-trigger direction="next" aria-label="Next slide">→</button>
-                                </carousel>
-                            </div>
-
-                        </layout-stack>
-                    </div>
-
-                    <div class="example-block">
-                        <h3>Masonry Layout (Experimental)</h3>
-                        <p>Requires browser flag enabling. Falls back gracefully if not supported.</p>
-                        <masonry-layout cols="repeat(auto-fill, minmax(150px, 1fr))" gap="1rem">
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 100px;">1</box>
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 200px;">2</box>
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 150px;">3</box>
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 250px;">4</box>
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 120px;">5</box>
-                             <box bg="var(--surface-muted)" p="1rem" style="height: 180px;">6</box>
-                        </masonry-layout>
-                    </div>
-                 </layout-stack>
-            </section>
-
-
-            <!-- ================================================================== -->
-            <!-- SECTION 7: VIEW TRANSITIONS (SPA) -->
-            <!-- ================================================================== -->
-            <section>
-                <h2>5. View Transitions (SPA Example)</h2>
-                <p class="section-desc">A simple router using the View Transitions API for app-like state changes. Click the buttons below.</p>
-
-                 <div class="example-block" style="min-height: 300px;">
-                     
-                     <view-transitions>
-                         
-                         <!-- Page 1 -->
-                         <view-page id="page-1" active>
-                             <box p="2rem" bg="var(--surface-subtle)">
-                                 <h3>Page One</h3>
-                                 <p>This is the first page. Notice the "Hero Element" image below.</p>
-                                 <img src="https://picsum.photos/id/237/100/100" alt="Black dog portrait" style="view-transition-name: hero-element; border-radius: 50%;">
-                                 <box m="2rem 0">
-                                     <button type="button" class="button" data-view-trigger to="page-2" aria-controls="page-2">Go to Page Two →</button>
-                                 </box>
-                             </box>
-                         </view-page>
-
-                         <!-- Page 2 -->
-                         <view-page id="page-2">
-                             <box p="2rem" bg="var(--surface-overt)">
-                                 <h3>Page Two</h3>
-                                 <p>The page slid in, and the "Hero Element" morphed to its new position and size.</p>
-                                  <img src="https://picsum.photos/id/237/300/200" alt="Black dog lying down" style="view-transition-name: hero-element; border-radius: 12px;">
-                                 <box m="2rem 0">
-                                     <button type="button" class="button" data-view-trigger to="page-1" aria-controls="page-1">← Go Back to Page One</button>
-                                 </box>
-                             </box>
-                         </view-page>
-
-                     </view-transitions>
-
-                </div>
-            </section>
-
-
-        </main>
-        
-        <footer>
-             <box p="3rem 0" align="center" color="var(--text-subtle)">
-                 CSS Tags Demo
-             </box>
-        </footer>
-
-    </layout-center>
-
-      <!-- Import required JavaScript -->
-      <script type="module" src="../carousel.js"></script>
-      <script type="module" src="../view-transition.js"></script>
-      <script type="module" src="../components/img-container.js"></script>
-      <script type="module" src="./demo-navigation.js"></script>
-
-    </body>
-  </html>
+          </layout-stack>
+        </section>
+      </layout-stack>
+    </container>
+  </main>
+</body>
+</html>

@@ -11,6 +11,7 @@
 </head>
 
 <body id="top">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <layout-page gap="0" min-height="100vh">
     <!-- ╔══════════════════════════════════════════════════════════════════════════╗
          ║  NAVIGATION                                                          ║
@@ -39,22 +40,22 @@
     <!-- ╔══════════════════════════════════════════════════════════════════════════╗
          ║  MAIN CONTENT AREA                                                   ║
          ╚══════════════════════════════════════════════════════════════════════════╝ -->
-    <main slot="main">
+    <main id="main-content" slot="main" tabindex="-1">
       <layout-stack gap="0">
 
         <!-- ── Hero Section (Stripe) ── -->
         <box bg="linear-gradient(180deg, var(--base) 0%, var(--surface-subtle) 100%)" py="8rem">
           <layout-center max-width="1200px">
             <layout-stack gap="2.5rem" center>
-              <badge role="subtle" size="md" class="stack-intrinsic">Beacon 3.0 is now live →</badge>
-              <text size="4xl" weight="black" align="center" leading="tight" style="max-width: 20ch;">
+              <badge variant="subtle" size="md" class="stack-intrinsic">Beacon 3.0 is now live →</badge>
+              <h1 style="max-width: 20ch; text-align: center;">
                 The fastest path from code to global scale.
-              </text>
-              <text color="subtle" align="center" size="xl" style="max-width: 60ch;">
+              </h1>
+              <p class="lead text-subtle" style="max-width: 60ch; text-align: center;">
                 Eliminates configuration files, reduces build times by 80%, and lets your team focus on shipping
                 features
                 instead of fighting infrastructure.
-              </text>
+              </p>
               <flex gap="1.5rem" justify="center">
                 <a href="#pricing" class="button button-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Start
                   Free Trial</a>
@@ -333,7 +334,7 @@
           <layout-center max-width="900px">
             <layout-stack gap="3rem">
               <layout-stack gap="1rem" center>
-                <badge role="subtle" size="md" class="stack-intrinsic">FAQ</badge>
+                <badge variant="subtle" size="md" class="stack-intrinsic">FAQ</badge>
                 <text size="3xl" weight="bold" align="center">Questions teams ask before they switch</text>
                 <text color="subtle" align="center" style="max-width: 60ch;">
                   Everything Beacon needs to be useful on day one, without adding a new deployment platform learning curve.

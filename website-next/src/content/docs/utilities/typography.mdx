@@ -1,0 +1,51 @@
+---
+title: Typography Utilities
+description: Adjust local type size and emphasis while preserving the library's semantic typography hierarchy.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Typography utilities are for local exceptions such as metadata, labels, or a
+display figure. Keep headings semantic—use the appropriate heading element
+before reaching for a size class.
+
+## Size scale
+
+The scale runs from `.text-xs`, `.text-sm`, `.text-base`, `.text-lg`, and
+`.text-xl` through `.text-2xl`, `.text-3xl`, `.text-4xl`, `.text-5xl`, and
+`.text-6xl`.
+
+<LiveExample title="Move through the type scale" description="UI and display steps share the theme's fluid typography tokens.">
+  <layout-stack gap="var(--space-sm)">
+    <p class="text-xs text-muted">Extra-small metadata · Updated 4 minutes ago</p>
+    <p class="text-sm">Small supporting copy for compact interfaces.</p>
+    <p class="text-base">Base text remains the ordinary reading size.</p>
+    <p class="text-xl">Large lead text introduces a section.</p>
+    <p class="text-3xl font-semibold">Display value: 12,480</p>
+  </layout-stack>
+</LiveExample>
+
+## Weight scale
+
+Use `.font-normal`, `.font-medium`, `.font-semibold`, and `.font-bold`.
+
+<LiveExample title="Match weight to information hierarchy" description="The same size can carry different emphasis without pretending ordinary text is a heading.">
+  <layout-grid min-item-size="9rem" gap="var(--space-sm)">
+    <div class="border-block-end border-subtle p-sm"><span class="font-normal">Normal</span><p class="caption">Body copy</p></div>
+    <div class="border-block-end border-subtle p-sm"><span class="font-medium">Medium</span><p class="caption">Control label</p></div>
+    <div class="border-block-end border-subtle p-sm"><span class="font-semibold">Semibold</span><p class="caption">Section label</p></div>
+    <div class="border-block-end border-subtle p-sm"><span class="font-bold">Bold</span><p class="caption">Strong emphasis</p></div>
+  </layout-grid>
+</LiveExample>
+
+## Semantic typography first
+
+```html
+<h2>Semantic section heading</h2>
+<p class="text-sm text-muted">Optional compact metadata</p>
+```
+
+For prose rhythm, heading relationships, captions, eyebrows, and CMS content,
+use the [typography system](/core/typography/) rather than rebuilding those
+relationships with utilities.
+

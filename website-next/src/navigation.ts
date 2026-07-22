@@ -97,6 +97,14 @@ export const navigation: NavItem[] = [
 		collapsed: true,
 		items: [
 			{ label: 'Overview', slug: 'utilities/utilities' },
+			{ label: 'Colors', slug: 'utilities/colors' },
+			{ label: 'Borders and Radius', slug: 'utilities/borders' },
+			{ label: 'Spacing', slug: 'utilities/spacing' },
+			{ label: 'Typography', slug: 'utilities/typography' },
+			{ label: 'Layout', slug: 'utilities/layout' },
+			{ label: 'Effects', slug: 'utilities/effects' },
+			{ label: 'Interaction', slug: 'utilities/interaction' },
+			{ label: 'Anchor Positioning', slug: 'utilities/anchor-positioning' },
 		],
 	},
 	{

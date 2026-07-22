@@ -1,316 +1,62 @@
 ---
-title: Utilities (`utilities/utilities.css`)
-description: This file provides comprehensive utility classes for styling, including colors, spacing, typography, layout, and interactive states. It combines core utilities 
+title: Utility Overview
+description: Small token-driven classes for orthogonal adjustments that compose with semantic HTML, components, and layout primitives.
 ---
 
 import LiveExample from '../../../components/LiveExample.astro';
 
-This file provides comprehensive utility classes for styling, including colors, spacing, typography, layout, and interactive states. It combines core utilities with additional helpers for complete design system coverage.
+Utilities are the final local adjustment layer—not a parallel component
+system. Use semantic HTML first, choose a CSS Tags component or layout when it
+owns behavior, and add utilities for one independent concern at a time.
 
-## Background Utilities
+## Browse by concern
 
-Semantic background colors using surface tokens.
+- [Colors](/utilities/colors/): surfaces, foreground contrast, brand roles,
+  and feedback roles
+- [Borders and radius](/utilities/borders/): logical edges, widths, styles,
+  colors, and connected corners
+- [Spacing](/utilities/spacing/): density-aware padding, margin, and axis gaps
+- [Typography](/utilities/typography/): local size and weight adjustments
+- [Layout](/utilities/layout/): display, flex, grid, position, and overflow
+- [Effects](/utilities/effects/): elevation and scrims
+- [Interaction](/utilities/interaction/): focus, outlines, rings, hover, and
+  reduced-motion-aware press feedback
+- [Anchor positioning](/utilities/anchor-positioning/): named anchors,
+  position areas, and viewport fallbacks
 
-### Surface Backgrounds
-- `.bg-surface-muted`: Muted surface background
-- `.bg-surface-subtle`: Subtle surface background  
-- `.bg-surface-default`: Default surface background
-- `.bg-surface-overt`: Overt surface background (high contrast)
+## Compose orthogonal concerns
 
-**CSS:** `background-color: var(--bg);` where `--bg` is set to the appropriate surface token.
-
-## Text Color Utilities
-
-Semantic text colors for different contrast levels.
-
-- `.text-muted`: Muted text color
-- `.text-subtle`: Subtle text color
-- `.text-default`: Default text color
-- `.text-overt`: Overt/high-contrast text color
-
-**CSS:** `color: var(--text-[level]);`
-
-## Border Utilities
-
-Borders use the same semantic outline hierarchy, status colors, logical writing
-directions, and high-contrast adjustments as the rest of the library. Start
-with `.border` for a complete default border, then compose only the dimensions
-you need.
-
-- Presence: `.border` / `.border-all`, `.border-block`, `.border-inline`,
-  `.border-block-start`, `.border-block-end`, `.border-inline-start`, and
-  `.border-inline-end`
-- Width: `.border-thin`, `.border-thick`, `.border-heavy`, and `.border-0`
-- Style: `.border-solid`, `.border-dashed`, `.border-dotted`, `.border-double`,
-  and `.border-none`
-- Contrast colors: `.border-muted`, `.border-subtle`, `.border-default`, and
-  `.border-overt`
-- Brand colors: `.border-accent`, `.border-secondary`, and `.border-tertiary`
-- State colors: `.border-focus`, `.border-active`, `.border-success`,
-  `.border-warning`, `.border-error`, and `.border-info`
-- Context colors: `.border-current`, `.border-inherit`, and
-  `.border-transparent`
-
-Logical removal utilities make connected surfaces and component overrides
-straightforward: `.border-block-none`, `.border-inline-none`,
-`.border-block-start-none`, `.border-block-end-none`,
-`.border-inline-start-none`, and `.border-inline-end-none`.
-
-<LiveExample title="Compose border anatomy" description="Presence, width, style, and semantic color are independent choices backed by shared theme tokens.">
-  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
-    <article class="border border-subtle rounded-md p-md">
-      <strong>Default</strong>
-      <p class="caption">Thin, solid, subtle</p>
-    </article>
-    <article class="border border-thick border-accent rounded-md p-md">
-      <strong>Emphasized</strong>
-      <p class="caption">Thick accent boundary</p>
-    </article>
-    <article class="border border-heavy border-double border-warning rounded-md p-md">
-      <strong>Attention</strong>
-      <p class="caption">Heavy double warning</p>
-    </article>
-    <article class="border border-dashed border-info rounded-md p-md">
-      <strong>Drop zone</strong>
-      <p class="caption">Dashed informational edge</p>
-    </article>
-  </layout-grid>
+<LiveExample title="Build a status summary from independent roles" description="The article remains semantic while utilities contribute only surface, border, spacing, layout, and text concerns.">
+  <article class="d-flex flex-wrap items-center justify-between gap-x-md gap-y-sm bg-success border border-success rounded-lg shadow-sm p-md">
+    <div><span class="text-success font-semibold">All systems operational</span><p class="text-sm text-muted">Checked less than a minute ago</p></div>
+    <button type="button" class="focus-ring hover-highlight">View history</button>
+  </article>
 </LiveExample>
 
-<LiveExample title="Use logical edges" description="Block and inline utilities follow the writing mode. The same inline-start class moves automatically in RTL.">
-  <layout-stack gap="var(--space-sm)">
-    <section class="border-block border-thick border-accent bg-surface-subtle p-md">
-      Block borders frame this notice above and below.
-    </section>
-    <layout-grid min-item-size="12rem" gap="var(--space-sm)">
-      <section dir="ltr" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">
-        LTR inline start
-      </section>
-      <section dir="rtl" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">
-        RTL inline start
-      </section>
-    </layout-grid>
-  </layout-stack>
+<LiveExample title="Utilities augment a component instead of replacing it" description="The button keeps its native semantics and component variant; focus and active utilities add reusable state feedback.">
+  <layout-cluster gap="var(--space-sm)">
+    <button type="button" class="btn-primary focus-ring active-press">Save changes</button>
+    <button type="button" class="hover-highlight border border-transparent">Preview</button>
+    <span class="bg-surface-subtle text-muted rounded-full p-sm text-sm">Draft</span>
+  </layout-cluster>
 </LiveExample>
 
-The theme inputs are `--border-width-thin`, `--border-width`,
-`--border-width-thick`, `--border-width-heavy`, `--border-style`, and
-`--border-color`. Width tokens grow automatically under
-`prefers-contrast: high`; color utilities resolve through the existing
-`--outline-*`, brand, and feedback tokens.
+## Cascade and theming
 
-```html
-<aside class="border border-thick border-warning border-dashed rounded-lg">
-  Review required
-</aside>
+Utilities are shipped in the `utilities` cascade layer and consume public
+theme tokens. Application CSS loaded after `css-tags` can still make deliberate
+final overrides without `!important`.
 
-<header class="border-block-end border-subtle">...</header>
-```
-
-## Focus Ring Utility
-
-Standardized focus ring for accessibility.
-
-- `.focus-ring`: Applies focus ring styling
-
-**CSS Properties Used:**
-- `--focus-ring-width`: Ring width
-- `--focus-ring-style`: Ring style (solid, etc.)
-- `--focus-ring-color`: Ring color
-- `--focus-ring-offset`: Ring offset
-
-## Spacing Utilities
-
-Padding and margin utilities using the spacing scale.
-
-### Padding
-- `.p-xs`: Extra small padding
-- `.p-sm`: Small padding
-- `.p-md`: Medium padding
-- `.p-lg`: Large padding
-- `.p-xl`: Extra large padding
-
-### Margin
-- `.m-xs`: Extra small margin
-- `.m-sm`: Small margin
-- `.m-md`: Medium margin
-- `.m-lg`: Large margin
-- `.m-xl`: Extra large margin
-
-**Token Dependencies:**
-- `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg`, `--spacing-xl`
-
-These utilities retain the compact compatibility scale. It now responds to
-`--density-factor` like the preferred `--space-*` component and layout scale.
-
-## Border Radius Utilities
-
-Size utilities apply a radius to every corner:
-
-- `.rounded-sm`, `.rounded`, `.rounded-md`, `.rounded-lg`, `.rounded-xl`
-- `.rounded-full`
-- `.rounded-none` removes every radius
-
-Logical reset utilities remove one corner or a related pair. They follow the
-document writing direction, so components remain correct in right-to-left and
-vertical layouts.
-
-- Single corners: `.rounded-start-start-none`, `.rounded-start-end-none`,
-  `.rounded-end-start-none`, `.rounded-end-end-none`
-- Block edges: `.rounded-block-start-none`, `.rounded-block-end-none`
-- Inline edges: `.rounded-inline-start-none`, `.rounded-inline-end-none`
-
-<LiveExample title="Remove a pair of corners" description="Start with one radius utility, then flatten the logical edge that connects to an adjacent surface.">
-  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
-    <div class="rounded-xl rounded-block-start-none bg-surface-overt text-on-surface-overt p-md">No block-start corners</div>
-    <div class="rounded-xl rounded-block-end-none bg-surface-overt text-on-surface-overt p-md">No block-end corners</div>
-    <div class="rounded-xl rounded-inline-start-none bg-surface-overt text-on-surface-overt p-md">No inline-start corners</div>
-    <div class="rounded-xl rounded-inline-end-none bg-surface-overt text-on-surface-overt p-md">No inline-end corners</div>
-  </layout-grid>
-</LiveExample>
-
-<LiveExample title="Compose individual logical corners" description="Stack single-corner utilities for diagonal or application-specific shapes. Inline start automatically mirrors in RTL.">
-  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
-    <div class="rounded-xl rounded-start-start-none rounded-end-end-none bg-accent text-on-accent p-md">Diagonal corners removed</div>
-    <div dir="ltr" class="rounded-xl rounded-inline-start-none bg-secondary text-on-secondary p-md">LTR inline start</div>
-    <div dir="rtl" class="rounded-xl rounded-inline-start-none bg-secondary text-on-secondary p-md">RTL inline start</div>
-  </layout-grid>
-</LiveExample>
-
-```html
-<section class="rounded-xl rounded-block-start-none">...</section>
-
-<!-- Any combination is possible by stacking single-corner resets. -->
-<section class="rounded-xl rounded-start-end-none rounded-end-start-none">...</section>
-```
-
-## Typography Utilities
-
-Font size utilities using the typography scale.
-
-- `.text-xs`: Extra small text
-- `.text-sm`: Small text
-- `.text-base`: Base text size
-- `.text-lg`: Large text
-- `.text-xl`: Extra large text
-- `.text-2xl`: 2X large text
-- `.text-3xl` through `.text-6xl`: Display-scale text
-
-**Token Dependencies:**
-- `--font-size-xs` through `--font-size-6xl`
-
-## Interactive State Utilities
-
-Enhanced interactive state utilities for better user experience.
-
-- `.hover-highlight:hover`: Subtle background highlight on hover
-- `.active-press:active`: Scale-down effect on active/press
-- `.focus-ring:focus-visible`: Proper keyboard focus ring with theme colors
-
-**CSS:**
 ```css
-.hover-highlight:hover { background-color: var(--highlight-bg-subtle); }
-.active-press:active { transform: scale(0.98); }
-.focus-ring:focus-visible { outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color); outline-offset: var(--focus-ring-offset); }
+@import url("css-tags/index.css");
+
+:root {
+  --density-factor: 0.9;
+  --border-width-thick: 0.15rem;
+  --focus-ring-color: var(--accent-overt);
+}
 ```
 
-## Outline and Ring Utilities
-
-- `.outline-thin`: Thin outline (1px solid)
-- `.outline`: Standard outline (2px solid)
-- `.outline-thick`: Thick outline (3px solid)
-- `.ring-1/2/3`: Box-shadow focus rings with increasing width
-
-## Gap Utilities
-
-- `.gap-x-xs/sm/md/lg/xl`: Column gap sizes
-- `.gap-y-xs/sm/md/lg/xl`: Row gap sizes
-
-## Grid Shorthands
-
-- `.grid-cols-1/2/3/4/6/12`: Grid template columns for responsive layouts
-
-## Layout Utilities
-
-### Display
-- `.d-block/inline/inline-block/flex/grid/none`: Display property utilities
-
-### Flexbox
-- `.flex-row/col`: Flex direction
-- `.flex-wrap`: Flex wrap
-- `.items-center`: Align items center
-- `.justify-center/between/around/end`: Justify content options
-
-### Position
-- `.pos-static/relative/absolute/fixed/sticky`: Position property
-
-### Overflow
-- `.overflow-auto/hidden/scroll/visible`: Overflow control
-
-## Anchor Positioning Utilities
-
-CSS Anchor Positioning utilities for creating positioned elements that tether to other elements with automatic collision detection.
-
-### Anchor Name Utilities
-Define elements as anchor references:
-- `.anchor-name-top/bottom/left/right/center`: Creates named anchor points
-
-### Position Anchor Utilities
-Reference anchor elements:
-- `.position-anchor-top/bottom/left/right/center`: Links to named anchors
-
-### Position Area Utilities
-Control positioning relative to anchors:
-- `.position-area-top/bottom/left/right`: Basic positioning
-- `.position-area-top-left/top-right/bottom-left/bottom-right`: Corner positioning
-- `.position-area-center`: Center positioning
-
-### Fallback Positioning
-- `.position-try-fallback`: Automatic repositioning to avoid viewport overflow
-
-**Usage Example:**
-```html
-<button class="anchor-name-tooltip">Hover me</button>
-<div class="position-anchor-tooltip position-area-bottom position-try-fallback">
-  Tooltip content that automatically positions and avoids edges
-</div>
-```
-
-**Browser Support:** Modern browsers with CSS Anchor Positioning support. Falls back gracefully.
-
-## Scrim Utilities
-
-- `.scrim`: Semi-transparent dark overlay
-- `.scrim-light`: Light scrim overlay
-
-## Usage Examples
-
-```html
-<!-- Surface with elevation -->
-<div class="bg-surface-default rounded-lg shadow-md p-md">
-  <p class="text-default">Content</p>
-</div>
-
-<!-- Interactive button -->
-<button class="hover-highlight active-press p-md text-base">
-  Click me
-</button>
-
-<!-- Focus management -->
-<input class="focus-ring border-default p-sm" type="text">
-```
-
-## Browser Support
-
-- All modern browsers with CSS custom properties support
-- Utilities rely on cascade-layer order instead of `!important`
-- Hover/active states work on interactive elements
-
-## Integration Notes
-
-- Import this file in the utilities layer of `index.css`
-- Combine with component classes for complete styling
-- Use semantic utilities over arbitrary values
-## Related Files
-- `core/tokens.css`: Defines all the tokens used by these utilities
-- `components/box.css`: Box component that uses `--b-*` properties
+Import the complete library through `index.css`, or import
+`utilities/utilities.css` after its required core token and theme layers when
+building a custom bundle.

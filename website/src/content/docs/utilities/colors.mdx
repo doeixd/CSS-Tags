@@ -1,0 +1,65 @@
+---
+title: Color Utilities
+description: Apply semantic surfaces, text roles, brand colors, and feedback colors without bypassing the theme system.
+---
+
+import LiveExample from '../../../components/LiveExample.astro';
+
+Color utilities reference the same semantic tokens as components. Theme the
+token once and every matching utility, component, and layout stays aligned.
+
+## Surface and text hierarchy
+
+Use a surface utility on the container and the corresponding `text-on-*`
+utility when the surface needs an explicit foreground role.
+
+- Surfaces: `.bg-base`, `.bg-bedrock`, `.bg-surface-muted`,
+  `.bg-surface-subtle`, `.bg-surface-default`, and `.bg-surface-overt`
+- Text contrast: `.text-muted`, `.text-subtle`, `.text-default`, and
+  `.text-overt`
+- Surface foregrounds: `.text-on-base`, `.text-on-bedrock`,
+  `.text-on-surface-muted`, `.text-on-surface-subtle`, `.text-on-surface`, and
+  `.text-on-surface-overt`
+
+<LiveExample title="Read the surface hierarchy" description="The surfaces progress from quiet context to stronger separation while their paired text roles preserve contrast.">
+  <layout-grid min-item-size="9rem" gap="var(--space-sm)">
+    <article class="bg-surface-muted text-on-surface-muted rounded-md p-md"><strong>Muted</strong><p class="caption">Low emphasis</p></article>
+    <article class="bg-surface-subtle text-on-surface-subtle rounded-md p-md"><strong>Subtle</strong><p class="caption">Grouped content</p></article>
+    <article class="bg-surface-default text-on-surface border border-subtle rounded-md p-md"><strong>Default</strong><p class="caption">Primary surface</p></article>
+    <article class="bg-surface-overt text-on-surface-overt rounded-md p-md"><strong>Overt</strong><p class="caption">Strong separation</p></article>
+  </layout-grid>
+</LiveExample>
+
+## Brand and feedback roles
+
+Brand utilities include accent, secondary, and tertiary families with muted,
+subtle, default, overt, and highlight variants. Feedback utilities use
+success, warning, error, and info roles.
+
+<LiveExample title="Use semantic color instead of named swatches" description="Brand and status roles remain meaningful when the theme hue changes.">
+  <layout-stack gap="var(--space-md)">
+    <layout-cluster gap="var(--space-sm)">
+      <span class="bg-accent text-on-accent rounded-full p-sm">Accent</span>
+      <span class="bg-secondary text-on-secondary rounded-full p-sm">Secondary</span>
+      <span class="bg-tertiary text-on-tertiary rounded-full p-sm">Tertiary</span>
+    </layout-cluster>
+    <layout-grid min-item-size="8rem" gap="var(--space-sm)">
+      <div class="bg-success text-success rounded-md p-md">Success</div>
+      <div class="bg-warning text-warning rounded-md p-md">Warning</div>
+      <div class="bg-error text-error rounded-md p-md">Error</div>
+      <div class="bg-info text-info rounded-md p-md">Information</div>
+    </layout-grid>
+  </layout-stack>
+</LiveExample>
+
+## Common combinations
+
+```html
+<aside class="bg-info text-info rounded-md p-md">Import in progress</aside>
+
+<span class="bg-accent text-on-accent rounded-full p-sm">New</span>
+```
+
+Use the [border utilities](/utilities/borders/) when color belongs to an edge,
+and the [theme guide](/guides/theming/) when defining application-wide roles.
+
