@@ -5,7 +5,7 @@ import { ClientRouter } from "astro:transitions";
 import NextNavigation from "../components/NextNavigation.astro";
 import NextSearch from "../components/NextSearch.astro";
 import NextThemeEditor from "../components/NextThemeEditor.astro";
-import { normalizeBase, buildHref } from "../utils/url";
+import { normalizeBase, buildAssetPath, buildHref } from "../utils/url";
 
 interface Heading {
   depth: number;
@@ -36,7 +36,7 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
     <meta http-equiv="x-dns-prefetch-control" content="on" />
     <meta name="description" content={description ?? "CSS Tags documentation"} />
     <title>{pageTitle}</title>
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="icon" type="image/svg+xml" href={buildAssetPath(base, "favicon.svg")} />
     <link rel="dns-prefetch" href="https://github.com" />
     <script is:inline>
       try {

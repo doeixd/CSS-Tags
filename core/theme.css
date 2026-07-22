@@ -29,8 +29,12 @@
   --surface-lightness-shift: 0%; /* Scheme-safe lift or dimming for every surface */
   --surface-contrast: 65%;       /* Separation between surface hierarchy steps */
   --contrast-factor: 1.0;       /* Overall contrast multiplier */
-  --border-width: 1px;          /* Default border width */
-  --border-width-thick: 2px;    /* Thick border width */
+  --border-width-thin: 1px;     /* Quiet separators and hairlines */
+  --border-width: var(--border-width-thin); /* Default border width */
+  --border-width-thick: 2px;    /* Emphasized boundary */
+  --border-width-heavy: 3px;    /* Strong accent or status boundary */
+  --border-style: solid;        /* Default utility/component border style */
+  --border-color: var(--outline-default); /* Default semantic border color */
 
   /* Border Radius Scale */
   --radius-factor: 1;
@@ -375,8 +379,10 @@
 @media (prefers-contrast: high) {
   :root {
     --contrast-factor: 1.3;
-    --border-width: 2px;
+    --border-width-thin: 2px;
+    --border-width: var(--border-width-thin);
     --border-width-thick: 3px;
+    --border-width-heavy: 4px;
 
     /* Enhanced contrasts */
     --text-subtle: oklch(30% 0.03 var(--neutral-h));

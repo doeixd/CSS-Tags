@@ -61,9 +61,6 @@ export default defineConfig({
 		// the route before a click.
 		defaultStrategy: 'hover',
 	},
-	experimental: {
-		clientPrerender: true,
-	},
 	markdown: {
 		remarkPlugins: [
 			// @ts-ignore

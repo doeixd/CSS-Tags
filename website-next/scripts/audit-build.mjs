@@ -179,7 +179,7 @@ const sourceContracts = [
   ["website-next/src/data/page-example-lessons.ts", '"components/card"', "page-specific teaching examples"],
   ["website-next/src/components/ExampleWorkbench.astro", "example-workbench__source-toolbar", "labeled source toolbar"],
   ["website-next/src/scripts/css-tags-shadow.ts", "adoptedStyleSheets", "shared preview stylesheet parsing"],
-  ["website-next/public/sw.js", "staleWhileRevalidate(request, NAVIGATION_CACHE)", "cached documentation navigation"],
+  ["website-next/public/sw.js", "networkFirst(request, NAVIGATION_CACHE)", "fresh-first documentation navigation"],
   ["website-next/astro.config.mjs", "inlineStylesheets: 'never'", "cacheable shared stylesheets"],
   ["layouts/layout.css", "eyebrow, text, [data-eyebrow]", "centered semantic text primitives"],
   ["layouts/layout.css", "--l-reel-item-size", "explicit reel item sizing"],
@@ -222,6 +222,10 @@ const sourceContracts = [
   ["components/identity.css", "> picture > img", "picture avatar image sizing"],
   ["components/tabs.css", "overflow-y: hidden", "horizontal tablist overflow containment"],
   ["core/tokens.css", "--badge-background-overt", "distinct semantic badge surfaces"],
+  ["core/theme.css", "--border-width-heavy", "semantic border width scale"],
+  ["utilities/utilities.css", ".border-inline-start", "logical border edge utilities"],
+  ["utilities/utilities.css", ".border-dashed", "composable border style utilities"],
+  ["utilities/utilities.css", ".border-accent", "semantic border color utilities"],
   ["website-next/src/components/ExampleWorkbench.astro", "data-workbench-resize-handle", "resizable example previews"],
 ];
 for (const [file, needle, label] of sourceContracts) {

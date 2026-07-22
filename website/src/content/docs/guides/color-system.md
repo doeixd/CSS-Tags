@@ -336,13 +336,13 @@ The framework provides comprehensive color utilities:
 <p class="text-accent">Accent text</p>
 
 <!-- Border colors -->
-<div class="border border-outline-default">Default border</div>
+<div class="border border-default">Default border</div>
 <div class="border border-accent">Accent border</div>
 
-<!-- Color palette scales -->
-<div class="bg-accent-palette-3">Accent palette light</div>
-<div class="bg-accent-palette-6">Accent palette medium</div>
-<div class="bg-accent-palette-9">Accent palette dark</div>
+<!-- Semantic accent surfaces -->
+<div class="bg-accent-muted">Muted accent surface</div>
+<div class="bg-accent-subtle">Subtle accent surface</div>
+<div class="bg-accent-overt text-on-accent">Overt accent surface</div>
 ```
 
 ## Auto-Contrast Text Utilities
@@ -351,12 +351,12 @@ The framework includes utilities for auto-contrast text:
 
 ```html
 <!-- Automatically determines text color based on background -->
-<div class="bg-accent text-contrast-on-accent">
+<div class="bg-accent text-on-accent">
   Text with auto contrast on accent background
 </div>
 
-<div class="bg-error text-contrast-on-error">
-  Text with auto contrast on error background
+<div class="bg-secondary text-on-secondary">
+  Text with auto contrast on secondary background
 </div>
 ```
 

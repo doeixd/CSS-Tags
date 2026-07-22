@@ -107,6 +107,15 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   --list-navigation-hover-background: var(--surface-muted);
   --list-navigation-current-background: color-mix(in oklch, var(--accent) 11%, var(--base));
   --list-navigation-current-color: var(--accent-overt);
+  /* Open navigation groups are present in the server HTML. Prevent the
+     disclosure entry animation from replaying when Astro swaps that HTML,
+     which otherwise collapses and re-expands the entire sidebar. */
+  --disclosure-transition: 0ms;
+}
+
+.next-docs__sidebar details > :not(summary),
+.next-docs__sidebar details::details-content {
+  transition: none;
 }
 
 .next-docs__sidebar > details,

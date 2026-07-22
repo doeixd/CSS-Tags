@@ -32,16 +32,80 @@ Semantic text colors for different contrast levels.
 
 ## Border Utilities
 
-Border color utilities using outline tokens.
+Borders use the same semantic outline hierarchy, status colors, logical writing
+directions, and high-contrast adjustments as the rest of the library. Start
+with `.border` for a complete default border, then compose only the dimensions
+you need.
 
-- `.border-muted`: Muted border color
-- `.border-subtle`: Subtle border color
-- `.border-default`: Default border color
-- `.border-overt`: Overt border color
+- Presence: `.border` / `.border-all`, `.border-block`, `.border-inline`,
+  `.border-block-start`, `.border-block-end`, `.border-inline-start`, and
+  `.border-inline-end`
+- Width: `.border-thin`, `.border-thick`, `.border-heavy`, and `.border-0`
+- Style: `.border-solid`, `.border-dashed`, `.border-dotted`, `.border-double`,
+  and `.border-none`
+- Contrast colors: `.border-muted`, `.border-subtle`, `.border-default`, and
+  `.border-overt`
+- Brand colors: `.border-accent`, `.border-secondary`, and `.border-tertiary`
+- State colors: `.border-focus`, `.border-active`, `.border-success`,
+  `.border-warning`, `.border-error`, and `.border-info`
+- Context colors: `.border-current`, `.border-inherit`, and
+  `.border-transparent`
 
-**CSS:** `border-color: var(--outline-[level]);`. Utilities are intentionally
-last in the public cascade, so they can override component and layout defaults
-without `!important`.
+Logical removal utilities make connected surfaces and component overrides
+straightforward: `.border-block-none`, `.border-inline-none`,
+`.border-block-start-none`, `.border-block-end-none`,
+`.border-inline-start-none`, and `.border-inline-end-none`.
+
+<LiveExample title="Compose border anatomy" description="Presence, width, style, and semantic color are independent choices backed by shared theme tokens.">
+  <layout-grid min-item-size="10rem" gap="var(--space-sm)">
+    <article class="border border-subtle rounded-md p-md">
+      <strong>Default</strong>
+      <p class="caption">Thin, solid, subtle</p>
+    </article>
+    <article class="border border-thick border-accent rounded-md p-md">
+      <strong>Emphasized</strong>
+      <p class="caption">Thick accent boundary</p>
+    </article>
+    <article class="border border-heavy border-double border-warning rounded-md p-md">
+      <strong>Attention</strong>
+      <p class="caption">Heavy double warning</p>
+    </article>
+    <article class="border border-dashed border-info rounded-md p-md">
+      <strong>Drop zone</strong>
+      <p class="caption">Dashed informational edge</p>
+    </article>
+  </layout-grid>
+</LiveExample>
+
+<LiveExample title="Use logical edges" description="Block and inline utilities follow the writing mode. The same inline-start class moves automatically in RTL.">
+  <layout-stack gap="var(--space-sm)">
+    <section class="border-block border-thick border-accent bg-surface-subtle p-md">
+      Block borders frame this notice above and below.
+    </section>
+    <layout-grid min-item-size="12rem" gap="var(--space-sm)">
+      <section dir="ltr" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">
+        LTR inline start
+      </section>
+      <section dir="rtl" class="border-inline-start border-heavy border-success bg-surface-subtle p-md">
+        RTL inline start
+      </section>
+    </layout-grid>
+  </layout-stack>
+</LiveExample>
+
+The theme inputs are `--border-width-thin`, `--border-width`,
+`--border-width-thick`, `--border-width-heavy`, `--border-style`, and
+`--border-color`. Width tokens grow automatically under
+`prefers-contrast: high`; color utilities resolve through the existing
+`--outline-*`, brand, and feedback tokens.
+
+```html
+<aside class="border border-thick border-warning border-dashed rounded-lg">
+  Review required
+</aside>
+
+<header class="border-block-end border-subtle">...</header>
+```
 
 ## Focus Ring Utility
 

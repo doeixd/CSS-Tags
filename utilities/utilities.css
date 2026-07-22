@@ -126,19 +126,102 @@
     }
 
     /* ============================================ */
-    /* OUTLINE/BORDER COLORS                       */
+    /* BORDER SYSTEM                               */
    /* ============================================ */
 
-  .border-muted { border-color: var(--outline-muted); }
-  .border-subtle { border-color: var(--outline-subtle); }
-  :is(.border, .border-default) { border-color: var(--outline-default, var(--outline)); }
-  .border-overt { border-color: var(--outline-overt); }
-  .border-focus { border-color: var(--outline-focus); }
-  .border-active { border-color: var(--outline-active); }
-  .border-error { border-color: var(--outline-error); }
-  .border-warning { border-color: var(--outline-warning); }
-  .border-success { border-color: var(--outline-success); }
-  .border-info { border-color: var(--outline-info); }
+  /* `.border` creates the default token-driven boundary. The remaining
+     utilities are atomic, so width, style, color, and logical edge choices
+     compose regardless of the order of classes in markup. */
+  :is(.border, .border-all) {
+    border-width: var(--utility-border-width, var(--border-width, 1px));
+    border-style: var(--utility-border-style, var(--border-style, solid));
+    border-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-block {
+    border-block-width: var(--utility-border-width, var(--border-width, 1px));
+    border-block-style: var(--utility-border-style, var(--border-style, solid));
+    border-block-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-inline {
+    border-inline-width: var(--utility-border-width, var(--border-width, 1px));
+    border-inline-style: var(--utility-border-style, var(--border-style, solid));
+    border-inline-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-block-start {
+    border-block-start-width: var(--utility-border-width, var(--border-width, 1px));
+    border-block-start-style: var(--utility-border-style, var(--border-style, solid));
+    border-block-start-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-block-end {
+    border-block-end-width: var(--utility-border-width, var(--border-width, 1px));
+    border-block-end-style: var(--utility-border-style, var(--border-style, solid));
+    border-block-end-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-inline-start {
+    border-inline-start-width: var(--utility-border-width, var(--border-width, 1px));
+    border-inline-start-style: var(--utility-border-style, var(--border-style, solid));
+    border-inline-start-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-inline-end {
+    border-inline-end-width: var(--utility-border-width, var(--border-width, 1px));
+    border-inline-end-style: var(--utility-border-style, var(--border-style, solid));
+    border-inline-end-color: var(--utility-border-color, var(--border-color, var(--outline-default, var(--outline))));
+  }
+
+  .border-0 { --utility-border-width: 0; border-width: 0; }
+  .border-thin { --utility-border-width: var(--border-width-thin, 1px); }
+  .border-thick { --utility-border-width: var(--border-width-thick, 2px); }
+  .border-heavy { --utility-border-width: var(--border-width-heavy, 3px); }
+
+  /* A width utility alone adjusts an existing whole border. When paired with
+     a logical-side utility it feeds that side through --utility-border-width
+     without accidentally drawing the other three sides. */
+  :is(.border-thin, .border-thick, .border-heavy):not(:is(
+    .border-block,
+    .border-inline,
+    .border-block-start,
+    .border-block-end,
+    .border-inline-start,
+    .border-inline-end
+  )) {
+    border-width: var(--utility-border-width);
+  }
+
+  .border-solid { --utility-border-style: solid; border-style: solid; }
+  .border-dashed { --utility-border-style: dashed; border-style: dashed; }
+  .border-dotted { --utility-border-style: dotted; border-style: dotted; }
+  .border-double { --utility-border-style: double; border-style: double; }
+  .border-none { --utility-border-style: none; border-style: none; }
+
+  .border-block-none { border-block-width: 0; }
+  .border-inline-none { border-inline-width: 0; }
+  .border-block-start-none { border-block-start-width: 0; }
+  .border-block-end-none { border-block-end-width: 0; }
+  .border-inline-start-none { border-inline-start-width: 0; }
+  .border-inline-end-none { border-inline-end-width: 0; }
+
+  .border-muted { --utility-border-color: var(--outline-muted); border-color: var(--utility-border-color); }
+  .border-subtle { --utility-border-color: var(--outline-subtle); border-color: var(--utility-border-color); }
+  .border-default { --utility-border-color: var(--outline-default, var(--outline)); border-color: var(--utility-border-color); }
+  .border-overt { --utility-border-color: var(--outline-overt); border-color: var(--utility-border-color); }
+  .border-accent { --utility-border-color: var(--accent); border-color: var(--utility-border-color); }
+  .border-secondary { --utility-border-color: var(--secondary); border-color: var(--utility-border-color); }
+  .border-tertiary { --utility-border-color: var(--tertiary); border-color: var(--utility-border-color); }
+  .border-focus { --utility-border-color: var(--outline-focus); border-color: var(--utility-border-color); }
+  .border-active { --utility-border-color: var(--outline-active); border-color: var(--utility-border-color); }
+  .border-error { --utility-border-color: var(--outline-error); border-color: var(--utility-border-color); }
+  .border-warning { --utility-border-color: var(--outline-warning); border-color: var(--utility-border-color); }
+  .border-success { --utility-border-color: var(--outline-success); border-color: var(--utility-border-color); }
+  .border-info { --utility-border-color: var(--outline-info); border-color: var(--utility-border-color); }
+  .border-current { --utility-border-color: currentColor; border-color: currentColor; }
+  .border-transparent { --utility-border-color: transparent; border-color: transparent; }
+  .border-inherit { --utility-border-color: inherit; border-color: inherit; }
 
   /* ============================================ */
   /* HIGHLIGHT BACKGROUNDS                       */
@@ -215,6 +298,10 @@
   .text-warning { color: var(--text-warning); }
   .text-error { color: var(--text-error); }
   .text-info { color: var(--text-info); }
+  .text-on-success { color: var(--text-on-success); }
+  .text-on-warning { color: var(--text-on-warning); }
+  .text-on-error { color: var(--text-on-error); }
+  .text-on-info { color: var(--text-on-info); }
 
   .border-success { border-color: var(--outline-success); }
   .border-warning { border-color: var(--outline-warning); }

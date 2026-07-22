@@ -1,7 +1,7 @@
 // CSS Tags Documentation - Service Worker
 // Optimized caching strategy for fast, offline-capable documentation
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const STATIC_CACHE = `css-tags-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `css-tags-dynamic-${CACHE_VERSION}`;
 const SEARCH_CACHE = `css-tags-search-${CACHE_VERSION}`;
@@ -19,10 +19,10 @@ const CACHE_STRATEGIES = {
   // Search index: Stale-while-revalidate (pagefind)
   search: /\/pagefind\//,
 
-  // HTML pages: Stale-while-revalidate for faster perceived navigation
+  // HTML pages: Always prefer the current deployment.
   pages: /\.html?$/,
 
-  // Navigation pages: Cache with frequent revalidation
+  // Navigation pages: Always prefer the current deployment.
   navigation: /\/(components|core|guides|js|layouts|themes|utilities|examples|reference)\//,
 };
 
@@ -83,11 +83,12 @@ self.addEventListener('fetch', (event) => {
     // Search index: Stale-while-revalidate
     event.respondWith(staleWhileRevalidate(request, SEARCH_CACHE));
   } else if (CACHE_STRATEGIES.navigation.test(url.pathname)) {
-    // Prefetches warm this cache; navigation can then render immediately while
-    // a fresh response updates the next visit in the background.
-    event.respondWith(staleWhileRevalidate(request, NAVIGATION_CACHE));
+    // Stale HTML can point at CSS and JavaScript from an older deployment,
+    // causing a flash while the client router repairs the page. The browser's
+    // HTTP cache still makes hover-prefetched responses fast.
+    event.respondWith(networkFirst(request, NAVIGATION_CACHE));
   } else if (CACHE_STRATEGIES.pages.test(url.pathname) || url.pathname.endsWith('/')) {
-    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
   } else {
     // Everything else: Network first with cache fallback
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
