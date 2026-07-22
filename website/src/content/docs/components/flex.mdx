@@ -16,17 +16,13 @@ Every flex layout has a **main axis** and a **cross axis**. `direction` chooses 
     <section>
       <p class="caption">row · main axis →</p>
       <flex justify="space-between" align="center" gap="var(--space-sm)" style="min-block-size: 7rem; padding: var(--space-sm); border: 1px dashed var(--outline-overt)">
-        <div class="example-panel">1</div>
-        <div class="example-panel">2</div>
-        <div class="example-panel">3</div>
+        <div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div>
       </flex>
     </section>
     <section>
       <p class="caption">column · main axis ↓</p>
       <flex direction="column" justify="space-between" align="center" gap="var(--space-sm)" style="min-block-size: 16rem; padding: var(--space-sm); border: 1px dashed var(--outline-overt)">
-        <div class="example-panel">1</div>
-        <div class="example-panel">2</div>
-        <div class="example-panel">3</div>
+        <div class="example-panel">1</div><div class="example-panel">2</div><div class="example-panel">3</div>
       </flex>
     </section>
   </layout-stack>
@@ -113,9 +109,7 @@ Use `wrap="wrap-reverse"` when new lines should accumulate toward the opposite c
 The `gap` attribute accepts any valid CSS `gap` value, including separate row and column gaps.
 
 <LiveExample title="Row and column gaps" compact>
-  <flex wrap="wrap" gap="var(--space-lg) var(--space-xs)" style="border: 1px dashed var(--outline-overt); padding: var(--space-sm)">
-    <div class="example-panel" basis="8rem" grow="1">One</div><div class="example-panel" basis="8rem" grow="1">Two</div><div class="example-panel" basis="8rem" grow="1">Three</div><div class="example-panel" basis="8rem" grow="1">Four</div><div class="example-panel" basis="8rem" grow="1">Five</div>
-  </flex>
+  <flex wrap="wrap" gap="var(--space-lg) var(--space-xs)" style="border: 1px dashed var(--outline-overt); padding: var(--space-sm)"><div class="example-panel" basis="8rem" grow="1">One</div><div class="example-panel" basis="8rem" grow="1">Two</div><div class="example-panel" basis="8rem" grow="1">Three</div><div class="example-panel" basis="8rem" grow="1">Four</div><div class="example-panel" basis="8rem" grow="1">Five</div></flex>
 </LiveExample>
 
 ```html
@@ -131,11 +125,7 @@ Item attributes belong on direct children of the flex host. They map to `flex-gr
 `grow` divides leftover main-axis space proportionally. A value of `2` receives twice the share of a sibling with `1`; it does not necessarily make the whole item twice as wide because the starting sizes still count.
 
 <LiveExample title="flex-grow ratios" description="The middle item receives two shares of the available free space.">
-  <flex gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)">
-    <div class="example-panel" grow="1" basis="0">grow 1</div>
-    <div class="example-panel" grow="2" basis="0">grow 2</div>
-    <div class="example-panel" grow="1" basis="0">grow 1</div>
-  </flex>
+  <flex gap="var(--space-xs)" style="border: 1px dashed var(--outline-overt)"><div class="example-panel" grow="1" basis="0">grow 1</div><div class="example-panel" grow="2" basis="0">grow 2</div><div class="example-panel" grow="1" basis="0">grow 1</div></flex>
 </LiveExample>
 
 ### Shrinking under pressure
@@ -143,10 +133,7 @@ Item attributes belong on direct children of the flex host. They map to `flex-gr
 `shrink` controls how items give up space when their requested bases do not fit. Set `shrink="0"` for a genuinely non-shrinking control or media region, then make sure the remaining content can safely become narrower.
 
 <LiveExample title="flex-shrink under pressure" description="The fixed item keeps its 12rem basis while the flexible item absorbs the shortage.">
-  <flex gap="var(--space-xs)" style="max-inline-size: 25rem; border: 1px dashed var(--outline-overt)">
-    <div class="example-panel" basis="12rem" shrink="0">shrink 0</div>
-    <div class="example-panel" basis="20rem" shrink="1">shrink 1 — this item gives up space</div>
-  </flex>
+  <flex gap="var(--space-xs)" style="max-inline-size: 25rem; border: 1px dashed var(--outline-overt)"><div class="example-panel" basis="12rem" shrink="0">shrink 0</div><div class="example-panel" basis="20rem" shrink="1">shrink 1 — this item gives up space</div></flex>
 </LiveExample>
 
 ### Setting the hypothetical size
@@ -165,11 +152,7 @@ Item attributes belong on direct children of the flex host. They map to `flex-gr
 Lower `order` values appear first. This changes visual placement only, not DOM, reading, focus, or screen-reader order.
 
 <LiveExample title="Item ordering" compact>
-  <flex gap="var(--space-xs)">
-    <div class="example-panel" order="3">DOM 1 · order 3</div>
-    <div class="example-panel" order="1">DOM 2 · order 1</div>
-    <div class="example-panel" order="2">DOM 3 · order 2</div>
-  </flex>
+  <flex gap="var(--space-xs)"><div class="example-panel" order="3">DOM 1 · order 3</div><div class="example-panel" order="1">DOM 2 · order 1</div><div class="example-panel" order="2">DOM 3 · order 2</div></flex>
 </LiveExample>
 
 Prefer putting content in the correct source order. Reserve `order` for presentation where the alternate visual sequence does not change meaning or interaction.
@@ -179,12 +162,7 @@ Prefer putting content in the correct source order. Reserve `order` for presenta
 `align-self` overrides the container's `align` value for one item.
 
 <LiveExample title="align-self overrides" description="The container centers by default; the first and last items opt into opposite edges.">
-  <flex align="center" gap="var(--space-xs)" style="min-block-size: 14rem; border: 1px dashed var(--outline-overt)">
-    <div class="example-panel" align-self="flex-start">flex-start</div>
-    <div class="example-panel">auto → center</div>
-    <div class="example-panel" align-self="stretch">stretch</div>
-    <div class="example-panel" align-self="flex-end">flex-end</div>
-  </flex>
+  <flex align="center" gap="var(--space-xs)" style="min-block-size: 14rem; border: 1px dashed var(--outline-overt)"><div class="example-panel" align-self="flex-start">flex-start</div><div class="example-panel">auto → center</div><div class="example-panel" align-self="stretch">stretch</div><div class="example-panel" align-self="flex-end">flex-end</div></flex>
 </LiveExample>
 
 ### Auto margins
@@ -192,13 +170,7 @@ Prefer putting content in the correct source order. Reserve `order` for presenta
 Auto margins absorb free space before alignment distributes it. This native CSS technique is especially useful for pushing one action to the far edge.
 
 <LiveExample title="Auto margin navigation" compact>
-  <nav aria-label="Project">
-    <flex align="center" gap="var(--space-sm)">
-      <a href="#">Overview</a>
-      <a href="#">Activity</a>
-      <a href="#" style="margin-inline-start: auto">Sign out</a>
-    </flex>
-  </nav>
+  <nav aria-label="Project"><flex align="center" gap="var(--space-sm)"><a href="#">Overview</a><a href="#">Activity</a><a href="#" style="margin-inline-start: auto">Sign out</a></flex></nav>
 </LiveExample>
 
 ## Practical compositions
@@ -206,32 +178,15 @@ Auto margins absorb free space before alignment distributes it. This native CSS 
 These examples combine the same primitives into recognizable interface patterns.
 
 <LiveExample title="Responsive navigation" description="Wrapping keeps every destination available without a JavaScript menu.">
-  <nav aria-label="Account">
-    <flex wrap="wrap" justify="space-between" align="center" gap="var(--space-sm)">
-      <strong>Northstar</strong>
-      <flex wrap="wrap" gap="var(--space-sm)">
-        <a href="#">Dashboard</a><a href="#">Reports</a><a href="#">Team</a><button type="button">New project</button>
-      </flex>
-    </flex>
-  </nav>
+  <nav aria-label="Account"><flex wrap="wrap" justify="space-between" align="center" gap="var(--space-sm)"><strong>Northstar</strong><flex wrap="wrap" gap="var(--space-sm)"><a href="#">Dashboard</a><a href="#">Reports</a><a href="#">Team</a><button type="button">New project</button></flex></flex></nav>
 </LiveExample>
 
 <LiveExample title="Media object" description="The avatar does not shrink; the text region grows and remains allowed to become narrow.">
-  <article class="example-panel">
-    <flex align="flex-start" gap="var(--space-md)">
-      <div shrink="0" aria-hidden="true" style="display: grid; inline-size: 4rem; block-size: 4rem; place-items: center; border-radius: 50%; background: var(--accent-muted); color: var(--accent-overt); font-weight: var(--font-weight-bold)">AG</div>
-      <div grow="1" basis="0"><h3 style="margin-block-start: 0">Avery Gray</h3><p class="example-muted">Flexbox is ideal when one region has an intrinsic size and its sibling should take the remaining line.</p></div>
-      <button type="button" shrink="0">Follow</button>
-    </flex>
-  </article>
+  <article class="example-panel"><flex align="flex-start" gap="var(--space-md)"><div shrink="0" aria-hidden="true" style="display: grid; inline-size: 4rem; block-size: 4rem; place-items: center; border-radius: 50%; background: var(--accent-muted); color: var(--accent-overt); font-weight: var(--font-weight-bold)">AG</div><div grow="1" basis="0"><h3 style="margin-block-start: 0">Avery Gray</h3><p class="example-muted">Flexbox is ideal when one region has an intrinsic size and its sibling should take the remaining line.</p></div><button type="button" shrink="0">Follow</button></flex></article>
 </LiveExample>
 
 <LiveExample title="Card row with equal-width items" description="A shared basis and equal grow values produce equal columns; wrapping provides the narrow-screen fallback.">
-  <flex wrap="wrap" align="stretch" gap="var(--space-sm)">
-    <article class="example-panel" basis="12rem" grow="1"><h3>Starter</h3><p class="example-muted">For personal experiments.</p></article>
-    <article class="example-panel" basis="12rem" grow="1"><h3>Team</h3><p class="example-muted">For collaborative projects with shared controls.</p></article>
-    <article class="example-panel" basis="12rem" grow="1"><h3>Scale</h3><p class="example-muted">For larger organizations.</p></article>
-  </flex>
+  <flex wrap="wrap" align="stretch" gap="var(--space-sm)"><article class="example-panel" basis="12rem" grow="1"><h3>Starter</h3><p class="example-muted">For personal experiments.</p></article><article class="example-panel" basis="12rem" grow="1"><h3>Team</h3><p class="example-muted">For collaborative projects with shared controls.</p></article><article class="example-panel" basis="12rem" grow="1"><h3>Scale</h3><p class="example-muted">For larger organizations.</p></article></flex>
 </LiveExample>
 
 ## API reference

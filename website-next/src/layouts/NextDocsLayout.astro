@@ -160,10 +160,10 @@ const outline = headings.filter((heading) => heading.depth === 2 || heading.dept
   const setupNavigationDisclosure = () => {
     const disclosure = document.querySelector<HTMLDetailsElement>(".next-docs__navigation-disclosure");
     if (!disclosure || disclosure.dataset.ready === "true") return;
-    disclosure.dataset.ready = "true";
     const wide = window.matchMedia("(min-width: 64.001rem)");
     const sync = () => { disclosure.open = wide.matches; };
     sync();
+    disclosure.dataset.ready = "true";
     wide.addEventListener("change", sync);
   };
 

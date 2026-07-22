@@ -1,67 +1,85 @@
 ---
-title: Index CSS - Main Entry Point
-description: The main entry point CSS file that imports all framework components with proper cascade layers.
+title: Main CSS Entry Point
+description: What index.css includes, how its cascade layers compose, and when to use a smaller entry point.
 ---
 
-/*
- * Modern CSS Framework - Main Entry Point
- * Revised import structure for clarity and correctness.
- *//**
- * Modern CSS Framework - Main Entry Point
- * Revised import structure for clarity and correctness.
- */
+`index.css` is the complete browser entry point. It loads the token system,
+themes, semantic HTML defaults, components, utilities, and layouts in a stable
+cascade contract.
 
-@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts, website-theme;
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
+```
 
-/* CORE SYSTEM */
-@import url("core/reset.css") layer(reset);
-@import url("core/tokens.css") layer(tokens);
-@import url("core/engine.css") layer(engine);
-@import url("core/theme.css") layer(theme); /* The new canonical theme file */
-@import url("core/palette.css") layer(palette);
-@import url("core/defaults.css") layer(defaults);
-@import url('core/base.css') layer(base);
-@import url('core/mixins.css') layer(base);
-@import url('core/text.css') layer(components);
-/* THEMES */
-@import url("themes/theme-packs.css") layer(theme);
-@import url("themes/example-brand.css") layer(theme);
+With npm, import the package root:
 
-/* LAYOUTS & UTILITIES */
-@import url("utilities/utilities.css") layer(utilities); /* The new canonical utilities file */
-@import url("layouts/layout.css") layer(layouts);
-@import url("layouts/layout-extra.css") layer(layouts);
-@import url("layouts/layout-extras-helpers.css") layer(layouts);
+```css
+@import "css-tags";
+```
 
-/* COMPONENTS */
-@import url('components/accessibility.css') layer(components);
-@import url('components/container.css') layer(components);
-@import url('components/grid.css') layer(components);
-@import url('components/flex.css') layer(components);
-@import url('components/card.css') layer(components);
-@import url('components/box.css') layer(components);
-@import url('components/box-extra.css') layer(components);
-@import url('components/badge.css') layer(components);
-@import url('components/alert.css') layer(components);
-@import url('components/modal.css') layer(components);
-@import url('components/tooltip.css') layer(components);
-@import url('components/list.css') layer(components);
-@import url('components/divider.css') layer(components);
-@import url('components/carousel.css') layer(components);
-@import url('components/popover.css') layer(components);
-@import url('components/view-transition.css') layer(components); /* Corrected path */
-@import url('components/table.css') layer(components);
-@import url('components/form.css') layer(components);
-@import url('components/actions.css') layer(components);
-@import url('components/form-patterns.css') layer(components);
-@import url('components/identity.css') layer(components);
-@import url('components/navigation.css') layer(components);
-@import url('components/navigation-patterns.css') layer(components);
-@import url('components/site-shell.css') layer(components);
-@import url('components/application-patterns.css') layer(components);
-@import url('components/content-patterns.css') layer(components);
-@import url('components/masonry.css') layer(components);
-@import url('components/img-container.css') layer(components);
+## Cascade contract
 
-/* Optional Theme Generator */
-/* @import url("theme-generator.css"); */
+The public layer order is:
+
+```css
+@layer base, reset, tokens, engine, theme, palette, defaults,
+       components, utilities, layouts, website-theme;
+```
+
+That order is intentional:
+
+- **tokens and theme** establish customizable inputs;
+- **defaults** style semantic HTML without requiring classes;
+- **components** add opt-in patterns and state contracts;
+- **utilities** make small, explicit visual overrides;
+- **layouts** own layout behavior and their declarative attributes.
+
+Unlayered application CSS still wins over every library layer. If you prefer to
+keep application overrides layered, declare your layer after the import:
+
+```css
+@import "css-tags";
+
+@layer app {
+  :root {
+    --accent: oklch(62% 0.2 275);
+  }
+
+  .checkout-card {
+    --card-max-width: 34rem;
+  }
+}
+```
+
+## What the full entry includes
+
+- resets, tokens, palette, theme, and typography;
+- native element defaults for content and forms;
+- all component styles;
+- utilities, including semantic colors and logical-corner helpers;
+- the standard and extended layout primitives;
+- optional example theme packs shipped with the package.
+
+The exact import list lives in the package's `index.css`; this page describes
+the contract instead of duplicating that list and becoming stale.
+
+## Smaller imports
+
+Package subpaths are exported for projects that want tighter ownership. For
+example:
+
+```css
+@import "css-tags/core/tokens.css";
+@import "css-tags/core/theme.css";
+@import "css-tags/core/defaults.css";
+@import "css-tags/components/card.css";
+@import "css-tags/layouts/layout.css";
+```
+
+When assembling subpaths yourself, preserve the dependency order: tokens before
+theme, theme before defaults/components, and component dependencies before the
+component that consumes them. The root entry remains the supported zero-config
+choice when request count or custom bundling is not a concern.
+
+See [Browser Support](/CSS-Tags/guides/browser-support/) for the baseline used by
+the shipped CSS.

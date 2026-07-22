@@ -212,11 +212,11 @@ Basic structure for page transitions:
 Components can respond to global breakpoint state set in `base.css`.
 
 ## Browser Support
-- **CSS Layers**: All modern browsers
-- **CSS Custom Properties**: All modern browsers
-- **Container Queries**: Chrome 105+, Firefox 110+, Safari 16+
-- **Logical Properties**: All modern browsers
-- **Fallback**: Graceful degradation to basic styling
+
+The defaults layer follows the shared [Browser
+Support](/CSS-Tags/guides/browser-support/) baseline. Container-responsive
+enhancements retain their ordinary block or inline layout when a particular
+query does not apply.
 
 ## Integration with Framework
 This layer provides the structural foundation that other layers enhance:

@@ -113,10 +113,11 @@ Typed properties prevent invalid values:
 ```
 
 ## Browser Support
-- **@property**: Chrome 85+, Firefox 128+ (limited)
-- **Container Queries**: Chrome 105+, Firefox 110+, Safari 16+
-- **OKLCH**: Chrome 111+, Firefox 113+, Safari 15.4+
-- **Fallback**: Basic functionality in older browsers
+
+`base.css` is part of the complete core contract, so it uses the shared
+[Browser Support](/CSS-Tags/guides/browser-support/) baseline. Individual
+features listed on this page are not separate promises that the full theme runs
+in an older browser.
 
 ## Integration with Framework Layers
 This file establishes the foundation that other layers build upon:

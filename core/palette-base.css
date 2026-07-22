@@ -2,8 +2,8 @@
  /* Additional Hues */
  --hue-brown: 55;
  --hue-gold: 85;
- --hue-olive: 95;
- --hue-magenta: 320;
+ --hue-olive: 110;
+ --hue-magenta: 330;
  /* Max Chroma Clamps */
  --clamp-max-c-0: var(--max-chroma-0); --clamp-max-c-1: var(--max-chroma-1);
  --clamp-max-c-2: var(--max-chroma-2); --clamp-max-c-3: var(--max-chroma-3);
@@ -30,19 +30,33 @@
  --palette-brown-chroma-11: 0.044;
  --palette-brown-chroma-12: 0.033;
  /* Gold */
- --palette-gold-chroma-0: 0.022;
- --palette-gold-chroma-1: 0.044;
- --palette-gold-chroma-2: 0.066;
- --palette-gold-chroma-3: 0.088;
- --palette-gold-chroma-4: 0.11;
- --palette-gold-chroma-5: 0.165;
- --palette-gold-chroma-6: 0.198;
- --palette-gold-chroma-7: 0.22;
- --palette-gold-chroma-8: 0.18;
- --palette-gold-chroma-9: 0.165;
- --palette-gold-chroma-10: 0.11;
- --palette-gold-chroma-11: 0.088;
- --palette-gold-chroma-12: 0.06;
+ --palette-gold-chroma-0: 0.012;
+ --palette-gold-chroma-1: 0.024;
+ --palette-gold-chroma-2: 0.04;
+ --palette-gold-chroma-3: 0.06;
+ --palette-gold-chroma-4: 0.08;
+ --palette-gold-chroma-5: 0.105;
+ --palette-gold-chroma-6: 0.125;
+ --palette-gold-chroma-7: 0.135;
+ --palette-gold-chroma-8: 0.12;
+ --palette-gold-chroma-9: 0.1;
+ --palette-gold-chroma-10: 0.075;
+ --palette-gold-chroma-11: 0.05;
+ --palette-gold-chroma-12: 0.03;
+ /* Olive */
+ --palette-olive-chroma-0: 0.008;
+ --palette-olive-chroma-1: 0.016;
+ --palette-olive-chroma-2: 0.025;
+ --palette-olive-chroma-3: 0.035;
+ --palette-olive-chroma-4: 0.05;
+ --palette-olive-chroma-5: 0.07;
+ --palette-olive-chroma-6: 0.085;
+ --palette-olive-chroma-7: 0.1;
+ --palette-olive-chroma-8: 0.085;
+ --palette-olive-chroma-9: 0.07;
+ --palette-olive-chroma-10: 0.05;
+ --palette-olive-chroma-11: 0.035;
+ --palette-olive-chroma-12: 0.025;
  /* Orange */
  --palette-orange-chroma-0: 0.023;
  --palette-orange-chroma-1: 0.046;

@@ -10,7 +10,7 @@ The palette system provides a comprehensive, perceptually uniform color system u
 
 <ColorPaletteViewer />
 
-Open **Live token editor** to change palette inputs in place. The editor writes overrides to the explorer's isolated token host, so you can safely tune brand and feedback hues, shared lightness/chroma values, gamut clamps, and the six named-family chroma profiles. The generated `:root` block contains only the values you changed; **Reset selected** and **Reset all** remove those overrides.
+Open **Live token editor** to change palette inputs in place. The editor writes overrides to the explorer's isolated token host, so you can safely tune brand and feedback hues, shared lightness/chroma values, gamut clamps, and the seven named-family chroma profiles. The generated `:root` block contains only the values you changed; **Reset selected** and **Reset all** remove those overrides.
 
 ## Color Space: OKLCH
 
@@ -44,9 +44,9 @@ Chroma values are clamped to prevent out-of-gamut colors:
 - **Base clamps**: `--clamp-max-c-0` through `--clamp-max-c-6`
 - **Special clamps**: Higher chroma allowed for error/warning colors
 - **Neutral clamps**: Reduced chroma for gray/neutral scales
-- **Named-family profiles**: Brown, gold, orange, yellow, cyan, and slate expose `--palette-[color]-chroma-0` through `--palette-[color]-chroma-12` so each family keeps the expected visual character across the full scale
+- **Named-family profiles**: Brown, gold, olive, orange, yellow, cyan, and slate expose `--palette-[color]-chroma-0` through `--palette-[color]-chroma-12` so each family keeps the expected visual character across the full scale
 
-Hue angles are not equally vivid to the eye. For example, Slate deliberately uses a low-chroma blue-gray profile, while Yellow uses a stronger profile so its middle steps remain clear and useful. Override both the hue and chroma-step tokens when creating a substantially different family.
+Hue angles are not equally vivid to the eye. Gold and Olive deliberately use restrained chroma so they read as metallic and earthy instead of duplicating Yellow or Lime; Slate uses a low-chroma blue-gray profile, while Yellow uses a stronger profile. Override both the hue and chroma-step tokens when creating a substantially different family.
 
 ## Palette Categories
 
@@ -189,10 +189,10 @@ Each emits scoped `--palette-step-0` through `--palette-step-12` tokens. `@apply
 - **Efficient resolution**: CSS variable lookups are fast
 
 ## Browser Support
-- **OKLCH**: Chrome 111+, Firefox 113+, Safari 15.4+
-- **CSS Layers**: All modern browsers
-- **CSS Imports**: All browsers
-- **Fallbacks**: If older browsers are required, provide conventional color declarations before the OKLCH declarations you override
+
+The palette uses the library's core browser baseline because the semantic theme
+depends on relative OKLCH colors. See [Browser Support](/CSS-Tags/guides/browser-support/)
+for exact versions and fallback guidance.
 
 ## Integration with Framework
 The palette system integrates with:

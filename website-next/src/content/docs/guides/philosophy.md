@@ -171,17 +171,19 @@ This approach is powerful but opinionated. It may **not** be the best fit if you
 
 ### Need to Support Legacy Browsers
 
-This framework relies heavily on modern CSS features not available in browsers like IE11. Required features include:
-- OKLCH colors (Chrome 111+, Firefox 113+, Safari 15.4+)
-- Container queries (Chrome 105+, Firefox 110+, Safari 16+)
-- :has() selector (Chrome 105+, Firefox 121+, Safari 16+)
-- Cascade layers (Chrome 99+, Firefox 97+, Safari 15.4+)
+This framework deliberately targets a modern baseline. The complete theme
+requires relative color syntax, while component and layout sources use native
+CSS nesting. The supported baseline is Chrome and Edge 119+, Firefox 128+, and
+Safari 16.5+. See [Browser Support](/guides/browser-support/) for the full
+contract and progressive-enhancement features.
 
 If you need IE11 or older browser support, consider alternatives.
 
 ### Require Extreme Bundle Size Optimization
 
-While the file is relatively small (~50KB), utility-first frameworks like Tailwind CSS can achieve smaller final builds with their JIT compilers that only include used classes.
+The complete entry imports the entire component library and design system.
+Projects with strict CSS budgets can use documented subpath imports, but must
+preserve the token dependencies and cascade-layer order from `index.css`.
 
 CSS Tags includes the entire component library and design system upfront. If bundle size is your primary concern and you're shipping to production, a JIT-compiled utility framework might be better.
 

@@ -71,6 +71,49 @@ for (const file of baselineFiles) {
   }
 }
 
+async function findDocumentationSources(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(entries.map((entry) => {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) return findDocumentationSources(target);
+    return /\.mdx?$/.test(entry.name) ? [target] : [];
+  }));
+  return nested.flat();
+}
+
+const documentationSources = [
+  path.join(libraryRoot, "README.md"),
+  ...await findDocumentationSources(path.join(root, "src", "content", "docs")),
+];
+const forbiddenDocumentationPatterns = [
+  [/not currently published|until the library is published/i, "stale unpublished-package guidance"],
+  [/raw\.githubusercontent\.com\/[^\s"']+\/@latest/i, "unpinned GitHub CDN guidance"],
+  [/<body\b[^>]*(?:\sp=|\sbg=)/i, "box-only attributes on body"],
+  [/<button\b[^>]*\sbg=/i, "unsupported bg attribute on button"],
+  [/<badge\b[^>]*\sbg=/i, "unsupported bg attribute on badge"],
+  [/<(?:alert|modal|popover|navigation)(?=[\s>])/i, "unsupported behavior-bearing custom element"],
+  [/Chrome 111\+.*Firefox 113\+.*Safari 15\.4\+/i, "stale partial OKLCH support matrix"],
+  [/Chrome 105\+.*Firefox 110\+.*Safari 16\+?/i, "stale component-level browser matrix"],
+];
+for (const sourceFile of documentationSources) {
+  const source = await readFile(sourceFile, "utf8");
+  for (const [pattern, label] of forbiddenDocumentationPatterns) {
+    if (pattern.test(source)) {
+      failures.push(`${path.relative(libraryRoot, sourceFile)}: contains ${label}.`);
+    }
+  }
+}
+
+const browserSupportSource = await readFile(
+  path.join(root, "src", "content", "docs", "guides", "browser-support.md"),
+  "utf8",
+);
+for (const baseline of ["Chrome / Edge | 119", "Firefox | 128", "Safari | 16.5"]) {
+  if (!browserSupportSource.includes(baseline)) {
+    failures.push(`guides/browser-support.md: missing documented baseline ${baseline}.`);
+  }
+}
+
 const sourceContracts = [
   ["components/badge.css", "[data-status=\"success\"]", "badge data-status alias"],
   ["components/badge.css", ".badge-success", "badge status class alias"],
@@ -117,11 +160,17 @@ const sourceContracts = [
   ["components/carousel.css", "--carousel-trigger-chevron-inline-size", "centered geometric carousel chevrons"],
   ["components/actions.css", "--text-box-icon", "icon-button text-box centering"],
   ["components/form.css", "--form-button-background", "isolated form-button color tokens"],
+  ["components/form.css", "--button-variant-background", "shared button variant state contract"],
   ["components/form.css", "--bg: var(--form-button-hover-background", "state-aware form-button surface context"],
   ["components/form.css", "[data-form-control]", "attribute-hosted native form control"],
   ["components/form.css", ".input-field", "legacy form-control alias normalization"],
   ["components/form.css", ":user-invalid", "interaction-aware native validation state"],
   ["core/tokens.css", "--form-control-focus-shadow", "shared semantic form-control tokens"],
+  ["core/palette-base.css", "--palette-gold-chroma-6: 0.125", "restrained metallic gold profile"],
+  ["core/palette-base.css", "--palette-olive-chroma-6: 0.085", "earthy olive profile"],
+  ["core/palette-base.css", "--hue-magenta: 330", "distinct magenta hue"],
+  ["core/theme.css", "--warning-h: 75", "amber warning hue"],
+  ["core/palette-extended.css", "var(--palette-olive-chroma-6)", "tuned olive scale"],
   ["utilities/utilities.css", "normalized in components/form.css", "single form-control implementation"],
   ["components/form-patterns.css", "@container layout-container", "container-responsive input groups"],
   ["carousel.js", "toggleAttribute('inert'", "inactive carousel slide focus management"],
@@ -155,7 +204,10 @@ const sourceContracts = [
   ["components/modal.css", "--bg: var(--_modal-background)", "modal surface context"],
   ["components/tabs.css", "--bg: var(--tabs-panel-background", "tabpanel surface context"],
   ["utilities/utilities.css", "Button structure and interaction live in core/defaults.css", "variant-only button utilities"],
-  ["index.css", "components, layouts, utilities", "utility-last public cascade order"],
+  ["utilities/utilities.css", ".button-success, .btn-success", "semantic success button hosts"],
+  ["utilities/utilities.css", "--button-active-background", "shared button active-state mapping"],
+  ["index.css", "components, utilities, layouts", "documented public cascade order"],
+  ["website-next/scripts/sync-content.mjs", "const source = path.join(websiteNextRoot", "website-next-owned documentation sync"],
   ["website-next/src/scripts/css-tags-shadow.ts", "--accent-h: inherit", "example theme inheritance"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-lightness-shift", "surface lightness theme control"],
   ["website-next/src/components/NextThemeEditor.astro", "--surface-contrast", "surface contrast theme control"],
@@ -163,6 +215,7 @@ const sourceContracts = [
   ["website-next/src/layouts/NextDocsLayout.astro", "serviceWorker.register", "documentation offline cache"],
   ["website-next/src/layouts/NextDocsLayout.astro", 'aria-current", "location', "active outline location"],
   ["website-next/src/layouts/NextDocsLayout.astro", "data-scroll-active", "auto-hiding documentation scrollbars"],
+  ["website-next/src/styles/docs-site.css", ':not([data-ready="true"]) > :not(summary)', "shift-free mobile navigation initialization"],
   ["website-next/src/scripts/theme-editor.ts", "@layer css-tags-theme", "layered theme export"],
   ["website-next/src/scripts/theme-editor.ts", "data-theme", "named theme export"],
   ["components/divider.css", '[strength="subtle"]', "explicit subtle divider strength"],

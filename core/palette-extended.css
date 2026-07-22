@@ -2,8 +2,20 @@
  /* == Extended Palette (Common Colors) == */
 
 
- /* Olive Scale */
- --olive-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-olive)); --olive-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-olive)); --olive-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-olive)); --olive-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-olive)); --olive-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-olive)); --olive-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-olive)); --olive-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-olive)); --olive-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-olive)); --olive-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-olive)); --olive-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-olive)); --olive-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-olive)); --olive-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-olive)); --olive-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-olive));
+ /* Olive Scale: deliberately muted so it remains earthy rather than lime. */
+ --olive-0: oklch(var(--scale-l-0) var(--palette-olive-chroma-0) var(--hue-olive));
+ --olive-1: oklch(var(--scale-l-1) var(--palette-olive-chroma-1) var(--hue-olive));
+ --olive-2: oklch(var(--scale-l-2) var(--palette-olive-chroma-2) var(--hue-olive));
+ --olive-3: oklch(var(--scale-l-3) var(--palette-olive-chroma-3) var(--hue-olive));
+ --olive-4: oklch(var(--scale-l-4) var(--palette-olive-chroma-4) var(--hue-olive));
+ --olive-5: oklch(var(--scale-l-5) var(--palette-olive-chroma-5) var(--hue-olive));
+ --olive-6: oklch(var(--scale-l-6) var(--palette-olive-chroma-6) var(--hue-olive));
+ --olive-7: oklch(var(--scale-l-7) var(--palette-olive-chroma-7) var(--hue-olive));
+ --olive-8: oklch(var(--scale-l-8) var(--palette-olive-chroma-8) var(--hue-olive));
+ --olive-9: oklch(var(--scale-l-9) var(--palette-olive-chroma-9) var(--hue-olive));
+ --olive-10: oklch(var(--scale-l-10) var(--palette-olive-chroma-10) var(--hue-olive));
+ --olive-11: oklch(var(--scale-l-11) var(--palette-olive-chroma-11) var(--hue-olive));
+ --olive-12: oklch(var(--scale-l-12) var(--palette-olive-chroma-12) var(--hue-olive));
 
  /* Magenta Scale */
  --magenta-0: oklch(var(--scale-l-0) min(var(--scale-c-1), var(--clamp-max-c-0)) var(--hue-magenta)); --magenta-1: oklch(var(--scale-l-1) min(var(--scale-c-2), var(--clamp-max-c-0)) var(--hue-magenta)); --magenta-2: oklch(var(--scale-l-2) min(var(--scale-c-3), var(--clamp-max-c-1)) var(--hue-magenta)); --magenta-3: oklch(var(--scale-l-3) min(var(--scale-c-4), var(--clamp-max-c-1)) var(--hue-magenta)); --magenta-4: oklch(var(--scale-l-4) min(var(--scale-c-5), var(--clamp-max-c-2)) var(--hue-magenta)); --magenta-5: oklch(var(--scale-l-5) min(var(--scale-c-7), var(--clamp-max-c-2)) var(--hue-magenta)); --magenta-6: oklch(var(--scale-l-6) min(var(--scale-c-8), var(--clamp-max-c-3)) var(--hue-magenta)); --magenta-7: oklch(var(--scale-l-7) min(var(--scale-c-9), var(--clamp-max-c-3)) var(--hue-magenta)); --magenta-8: oklch(var(--scale-l-8) min(var(--scale-c-8), var(--clamp-max-c-4)) var(--hue-magenta)); --magenta-9: oklch(var(--scale-l-9) min(var(--scale-c-7), var(--clamp-max-c-4)) var(--hue-magenta)); --magenta-10: oklch(var(--scale-l-10) min(var(--scale-c-5), var(--clamp-max-c-5)) var(--hue-magenta)); --magenta-11: oklch(var(--scale-l-11) min(var(--scale-c-4), var(--clamp-max-c-5)) var(--hue-magenta)); --magenta-12: oklch(var(--scale-l-12) min(var(--scale-c-3), var(--clamp-max-c-6)) var(--hue-magenta));

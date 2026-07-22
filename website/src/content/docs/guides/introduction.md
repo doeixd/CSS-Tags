@@ -20,7 +20,7 @@ Write HTML that describes **what your content is**, not **what it looks like**:
   <card-body>
     <h3>Amazing Product</h3>
     <p>Description of the product...</p>
-    <button bg="var(--accent)">Buy Now</button>
+    <button class="form-button btn-primary">Buy Now</button>
   </card-body>
 </card>
 
@@ -65,7 +65,7 @@ Use custom HTML tags like `<card>`, `<layout-grid>`, and `<badge>` that describe
 Just add one `<link>` tag. No build tools, no JavaScript, no configuration files:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
 ```
 
 That's it. You're ready to build.
@@ -152,13 +152,13 @@ Pre-built, styled components:
 
 - `<card>`: Flexible card containers
 - `<button>`: Accessible buttons
-- `<alert>`: Notification banners
+- `<alert-message>`, `[data-alert]`, or `.alert`: Notification banners
 - `<badge>`: Status indicators
-- `<modal>`: Overlay dialogs
+- `<dialog data-modal>`: Native overlay dialogs
 - `<tooltip>`: Contextual help
-- `<popover>`: Overlay content
+- `[popover]`: Native popover content
 - `<carousel>`: Touch-enabled carousels
-- `<table>`: Responsive tables
+- `<data-table>` around a native `<table>`: Responsive data tables
 - And more...
 
 [View all components →](/components/card/)
@@ -315,7 +315,7 @@ Ready to try CSS Tags? It takes less than 60 seconds:
 
 1. **Add the stylesheet** to your HTML:
    ```html
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
    ```
 
 2. **Write semantic HTML**:
@@ -348,16 +348,9 @@ Ready to try CSS Tags? It takes less than 60 seconds:
 
 ## Browser Support
 
-CSS Tags works in all modern browsers:
-
-| Feature | Chrome | Firefox | Safari | Edge |
-|:---|:---:|:---:|:---:|:---:|
-| **Core Framework** | ✅ 111+ | ✅ 113+ | ✅ 16.4+ | ✅ 111+ |
-| `:has()` Selector | ✅ 105+ | ✅ 121+ | ✅ 16+ | ✅ 105+ |
-| Container Queries | ✅ 105+ | ✅ 110+ | ✅ 16+ | ✅ 105+ |
-| OKLCH Colors | ✅ 111+ | ✅ 113+ | ✅ 15.4+ | ✅ 111+ |
-
-Graceful degradation ensures pages work in older browsers with simplified styling.
+The complete theme supports Chrome and Edge 119+, Firefox 128+, and Safari
+16.5+. See [Browser Support](/guides/browser-support/) for the distinction
+between the core baseline and optional progressive enhancements.
 
 ## Next Steps
 

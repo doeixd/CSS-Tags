@@ -15,7 +15,20 @@ The custom-element form carries the richest declarative typing because it owns i
 
 ## Add the declarations
 
-Until the library is published as an npm package, copy `types/css-tags.d.ts` into your project—for example, `src/types/css-tags.d.ts`. A normal TypeScript configuration that includes `src` will discover it automatically.
+Install the published package and reference its declarations when your
+framework does not discover them automatically:
+
+```bash
+npm install css-tags
+```
+
+```ts
+// src/env.d.ts
+/// <reference types="css-tags" />
+```
+
+A normal TypeScript configuration that includes `src` will discover this
+reference file automatically.
 
 ```json title="tsconfig.json"
 {
@@ -38,7 +51,8 @@ If the file lives outside an included directory, add it explicitly:
 }
 ```
 
-For a small project, a triple-slash reference also works:
+When working directly from a repository checkout rather than the npm package,
+a path reference also works:
 
 ```ts
 /// <reference path="../types/css-tags.d.ts" />
@@ -212,7 +226,7 @@ Add `"DOM"` to `compilerOptions.lib`. Server-only configurations often omit brow
 Types do not load styles. Include the CSS separately:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
 ```
 
 The declaration file and `index.css` should come from the same revision so documented attributes stay aligned with shipped selectors.

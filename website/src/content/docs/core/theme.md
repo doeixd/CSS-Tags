@@ -396,15 +396,10 @@ Components consume theme variables:
 
 ## Browser Support
 
-### Modern Browsers
-- **OKLCH**: Chrome 111+, Firefox 113+, Safari 15.4+
-- **CSS Media Queries**: All browsers
-- **CSS Custom Properties**: All browsers
-
-### Fallback Strategy
-- **Basic Colors**: Graceful degradation to defined fallbacks
-- **Feature Queries**: `@supports` for advanced features
-- **Progressive Enhancement**: Enhanced experience in modern browsers
+The theme's relative OKLCH derivations set the complete [Browser
+Support](/CSS-Tags/guides/browser-support/) baseline. Applications targeting
+older engines must supply static semantic tokens or compile the theme; feature
+queries remain appropriate for optional enhancements.
 
 ## Best Practices
 
@@ -425,6 +420,17 @@ Components consume theme variables:
 
 ## Export from the Theme creator
 
-The replacement documentation Theme creator exports authored color, spacing,
-shape, and typography inputs inside a trailing `css-tags-theme` layer. Load the
-downloaded file after the library to apply it without `!important`.
+Open **Theme** in the site header to edit brand relationships, feedback hues,
+density, radius, prose typography, UI typography, and heading character. Start
+from Clean, Compact, or Editorial, then copy or download the result.
+
+```css
+@import "css-tags";
+@import "./my-theme.css";
+```
+
+The generated file uses `@layer css-tags-theme` and is designed to load after
+CSS Tags. It can target the entire document or a reusable
+`[data-theme="name"]` boundary. The editor exports only authored inputs, not
+hundreds of derived colors, so the library continues to calculate contrast and
+semantic surfaces.

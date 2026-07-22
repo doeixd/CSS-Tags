@@ -120,6 +120,18 @@ const examples: Record<string, PageExampleDefinition> = {
         preview: `<div class="example-scale" aria-label="Accent color scale">${Array.from({ length: 9 }, (_, index) => `<span style="background:color-mix(in oklch,var(--accent) ${15 + index * 10}%,var(--base))"></span>`).join("")}</div>`,
         code: `:root {\n  --accent-h: 280;\n  --accent-c: 0.15;\n  --accent-l: 60%;\n}\n\n.button {\n  background: var(--accent);\n  color: var(--text-on-accent);\n}`,
     },
+    "core/palette": {
+        title: "Semantic roles stay coordinated",
+        description: "Surface, text, outline, accent, and feedback colors are relationships rather than isolated swatches.",
+        preview: `<grid columns="repeat(auto-fit,minmax(8rem,1fr))" gap="var(--space-sm)"><div class="example-swatch" style="background:var(--surface-default);color:var(--text-default);border:1px solid var(--outline-default)">Default</div><div class="example-swatch" style="background:var(--surface-subtle);color:var(--text-subtle);border:1px solid var(--outline-subtle)">Subtle</div><div class="example-swatch" style="background:var(--accent);color:var(--text-on-accent)">Accent</div><div class="example-swatch" style="background:var(--surface-success);color:var(--text-success);border:1px solid var(--outline-success)">Success</div></grid>`,
+        code: `.panel {\n  color: var(--text-default);\n  background: var(--surface-default);\n  border: 1px solid var(--outline-default);\n}\n\n.panel[data-status="success"] {\n  color: var(--text-success);\n  background: var(--surface-success);\n  border-color: var(--outline-success);\n}`,
+        additionalExamples: [{
+            title: "Contrast travels with the fill",
+            description: "Use the matching on-color token whenever a semantic fill becomes a foreground surface.",
+            preview: `<layout-cluster><button class="form-button btn-primary" type="button">Accent</button><button class="form-button btn-success" type="button">Success</button><button class="form-button btn-warning" type="button">Warning</button><button class="form-button btn-error" type="button">Error</button></layout-cluster>`,
+            code: `<button class="form-button btn-primary">Accent</button>\n<button class="form-button btn-success">Success</button>\n<button class="form-button btn-warning">Warning</button>\n<button class="form-button btn-error">Error</button>`,
+        }],
+    },
     "core/mixins": {
         title: "Reusable CSS logic with typed inputs",
         description: "Custom functions turn recurring calculations into a token-friendly API.",
@@ -162,6 +174,31 @@ const examples: Record<string, PageExampleDefinition> = {
             code: `<form>\n  <fieldset>\n    <legend>Project settings</legend>\n    <label>\n      Project name\n      <input name="project" value="Northstar">\n    </label>\n    <label>\n      Visibility\n      <select name="visibility">\n        <option>Private</option>\n        <option>Public</option>\n      </select>\n    </label>\n  </fieldset>\n  <button type="submit">Save settings</button>\n</form>`,
         }],
     },
+    "guides/npm": {
+        title: "The package root is the complete entry point",
+        description: "Install once, then import the layered CSS and optional global declarations from the published package.",
+        preview: `<layout-stack gap="var(--space-sm)"><div data-box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-md)"><code>npm install css-tags</code></div><layout-cluster><badge status="success">index.css exported</badge><badge status="success">types exported</badge></layout-cluster></layout-stack>`,
+        code: `npm install css-tags\n\n/* app.css */\n@import "css-tags";\n\n// env.d.ts\n/// <reference types="css-tags" />`,
+        additionalExamples: [{
+            title: "Use a pinned browser import without a build step",
+            description: "Pinning the package version keeps static prototypes and examples reproducible.",
+            preview: `<div data-box p="var(--space-md)" bg="var(--surface-subtle)" radius="var(--radius-md)"><layout-stack gap="var(--space-xs)"><span eyebrow>Browser entry</span><code style="overflow-wrap:anywhere">https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css</code></layout-stack></div>`,
+            code: `<link\n  rel="stylesheet"\n  href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css"\n>`,
+            compact: true,
+        }],
+    },
+    "guides/browser-support": {
+        title: "Enhance interactions without hiding the baseline",
+        description: "Native disclosure works throughout the supported baseline; newer animation APIs can decorate the same interaction.",
+        preview: `<details><summary>Deployment details</summary><div data-box p="var(--space-md)" bg="var(--surface-subtle)"><p>The content remains reachable if an optional transition or positioning feature is unavailable.</p></div></details>`,
+        code: `<details>\n  <summary>Deployment details</summary>\n  <p>The content works before any optional enhancement.</p>\n</details>`,
+        additionalExamples: [{
+            title: "Scope enhancements with feature queries",
+            description: "Use the fallback first, then opt into a platform feature only where it is implemented.",
+            preview: `<div class="example-panel"><layout-stack gap="var(--space-sm)"><span eyebrow>Fallback first</span><strong>Readable content and ordinary navigation</strong><badge class="stack-intrinsic" status="info">Enhanced when supported</badge></layout-stack></div>`,
+            code: `.popover-panel {\n  /* Normal-flow fallback */\n  margin-block-start: var(--space-sm);\n}\n\n@supports (position-anchor: --trigger) {\n  .popover-panel {\n    position-anchor: --trigger;\n  }\n}`,
+        }],
+    },
     "guides/philosophy": {
         title: "Three hosts, one public primitive",
         description: "Choose the markup that fits the document; each form uses the same component tokens.",
@@ -178,7 +215,7 @@ const examples: Record<string, PageExampleDefinition> = {
         title: "Use the shipped component attribute types",
         description: "Custom tags get JSX completion, and the same interfaces can type adapters and configuration objects.",
         preview: `<layout-stack gap="var(--space-sm)"><layout-cluster><badge status="success">Types loaded</badge><badge status="info">Attributes completed</badge></layout-cluster><div data-box p="var(--space-sm)" bg="var(--surface-subtle)" radius="var(--radius-md)"><code>CSSTags.BadgeAttributes[&quot;status&quot;]</code></div></layout-stack>`,
-        code: `// src/env.d.ts\n/// <reference path="../../types/css-tags.d.ts" />\n\nconst status: CSSTags.BadgeAttributes["status"] = "success";\nconst frame: CSSTags.ImageContainerAttributes = {\n  "aspect-ratio": "16 / 9",\n  "object-fit": "cover",\n};\n\nexport function Dashboard() {\n  return (\n    <layout-grid min-item-size="12rem" gap="var(--space-md)">\n      <badge status={status}>Typed custom element</badge>\n    </layout-grid>\n  );\n}`,
+        code: `// src/env.d.ts\n/// <reference types="css-tags" />\n\nconst status: CSSTags.BadgeAttributes["status"] = "success";\nconst frame: CSSTags.ImageContainerAttributes = {\n  "aspect-ratio": "16 / 9",\n  "object-fit": "cover",\n};\n\nexport function Dashboard() {\n  return (\n    <layout-grid min-item-size="12rem" gap="var(--space-md)">\n      <badge status={status}>Typed custom element</badge>\n    </layout-grid>\n  );\n}`,
     },
     "js/carousel": {
         title: "Initialize controls, looping, and swipe behavior",

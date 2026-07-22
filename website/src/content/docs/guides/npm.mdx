@@ -8,8 +8,17 @@ import LiveExample from '../../../components/LiveExample.astro';
 CSS Tags ships as the `css-tags` package. Its root entry is the complete
 layered stylesheet and exposes the custom-tag DOM and JSX declarations.
 
-<LiveExample title="Package-ready semantic UI">
-  <card><card-body><eyebrow>Installed from npm</eyebrow><card-header>One CSS import, typed custom tags</card-header><badge status="success">Ready</badge></card-body></card>
+<LiveExample title="Package-ready semantic UI" description="The npm entry loads the same real library used by this preview.">
+  <card>
+    <card-body>
+      <layout-stack gap="var(--space-sm)">
+        <eyebrow>Installed from npm</eyebrow>
+        <card-header>One CSS import, typed custom tags</card-header>
+        <card-content><p>Components, layouts, tokens, and semantic defaults share one layered entry point.</p></card-content>
+        <badge class="stack-intrinsic" status="success">Ready</badge>
+      </layout-stack>
+    </card-body>
+  </card>
 </LiveExample>
 
 ## Install
@@ -18,13 +27,49 @@ layered stylesheet and exposes the custom-tag DOM and JSX declarations.
 npm install css-tags
 ```
 
+Import from CSS:
+
 ```css
 @import "css-tags";
 ```
 
+Or from JavaScript when your bundler supports CSS side-effect imports:
+
+```js
+import "css-tags";
+```
+
+For a no-build page:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
+```
+
+## Full type safety
+
+The package root exposes `types/css-tags.d.ts`. If your framework does not
+discover global package declarations automatically, add this once:
+
 ```ts
+// src/env.d.ts
 /// <reference types="css-tags" />
 ```
+
+This types `document.createElement("card")`, global JSX custom tags, and finite
+attributes such as badge status and layout side. Class and `data-*` hosts stay
+native elements and use the framework's normal HTML typings.
+
+## Public entry points
+
+- `css-tags`: complete layered stylesheet and declarations
+- `css-tags/index.css`: explicit complete stylesheet
+- `css-tags/types`: declaration file
+- `css-tags/components/*.css`: component-level CSS
+- `css-tags/core/*.css`, `css-tags/layouts/*.css`, and `css-tags/themes/*.css`
+- `css-tags/carousel.js` and `css-tags/view-transition.js`: optional behavior
+
+Prefer the complete entry point unless you are deliberately reproducing the
+dependency and layer order in `index.css`.
 
 ## Add a generated theme
 
@@ -33,5 +78,13 @@ npm install css-tags
 @import "./my-theme.css";
 ```
 
-The generated file uses a trailing `css-tags-theme` layer so its token
-declarations win without selector escalation.
+The theme creator emits `@layer css-tags-theme`. Loading the generated file
+after the package appends that layer after the library, so the exported tokens
+win without `!important` or selector escalation.
+
+## What gets published
+
+The package includes runtime CSS, optional JavaScript helpers, declarations,
+README, and license. It excludes demos, website source, build output, and
+development scripts. The release check uses `npm pack --dry-run` to inspect the
+exact tarball before publishing.

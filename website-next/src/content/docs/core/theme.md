@@ -396,15 +396,10 @@ Components consume theme variables:
 
 ## Browser Support
 
-### Modern Browsers
-- **OKLCH**: Chrome 111+, Firefox 113+, Safari 15.4+
-- **CSS Media Queries**: All browsers
-- **CSS Custom Properties**: All browsers
-
-### Fallback Strategy
-- **Basic Colors**: Graceful degradation to defined fallbacks
-- **Feature Queries**: `@supports` for advanced features
-- **Progressive Enhancement**: Enhanced experience in modern browsers
+The theme's relative OKLCH derivations set the complete [Browser
+Support](/CSS-Tags/guides/browser-support/) baseline. Applications targeting
+older engines must supply static semantic tokens or compile the theme; feature
+queries remain appropriate for optional enhancements.
 
 ## Best Practices
 

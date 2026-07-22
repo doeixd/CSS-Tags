@@ -338,10 +338,20 @@ Tune individual scale steps without replacing the whole scale:
 
 ## Contextual typography knobs
 
-Use `--font-size-prose`, `--line-height-prose`, and `--measure-prose` for
-long-form content; `--font-size-ui` and `--font-size-control` for application
-chrome; and `--font-weight-heading` plus `--letter-spacing-heading` for heading
-character. Font families have body, heading, UI, and code inputs.
+Scale tokens describe sizes; contextual tokens decide where those sizes are
+used. The Theme creator exposes the most useful prose, UI, control, and heading
+inputs live.
+
+| Context | Tokens |
+| --- | --- |
+| Prose | `--font-size-prose`, `--line-height-prose`, `--measure-prose` |
+| UI | `--font-size-ui`, `--line-height-ui`, `--font-weight-ui`, `--letter-spacing-ui` |
+| Controls | `--font-size-control`, `--line-height-control` |
+| Navigation | `--font-size-navigation`, `--line-height-navigation` |
+| Card titles | `--font-size-card-title`, `--line-height-card-title` |
+| Metadata | `--font-size-meta`, `--line-height-meta` |
+| Headings | `--font-weight-heading`, `--letter-spacing-heading` |
+| Families | `--font-family-body`, `--font-family-heading`, `--font-family-ui`, `--font-family-code` |
 
 ```css
 @layer css-tags-theme {
@@ -349,6 +359,11 @@ character. Font families have body, heading, UI, and code inputs.
     --font-size-prose: 1.0625rem;
     --line-height-prose: 1.725;
     --measure-prose: 62ch;
+    --font-weight-heading: 650;
+    --letter-spacing-heading: -0.025em;
   }
 }
 ```
+
+This lets dense application chrome coexist with comfortable CMS or Markdown
+content without one-off descendant selectors.

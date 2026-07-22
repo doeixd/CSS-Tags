@@ -1,248 +1,106 @@
 ---
-title: API Reference
-description: Comprehensive API documentation for all custom element layout primitives and their properties.
+title: Public API Overview
+description: The host, attribute, state, and customization conventions shared across CSS Tags.
 ---
 
-# API Documentation for Layout Primitives
+CSS Tags is a CSS API, so its public contract is expressed through selectors,
+semantic attributes, and custom properties. Component pages document the exact
+hooks; this page explains how those hooks fit together.
 
-This document details the custom element layout primitives provided by the library. Each layout is declarative, property-driven, and integrates with the design token system.
+## Three practical host forms
 
-## `<layout-grid>`
+Opt-in visual primitives support these forms when the underlying HTML semantics
+allow it:
 
-A responsive grid that automatically fits columns based on item size.
-
-**Properties:**
-- `--l-min-item-size`: Minimum size for each item (default: 16rem).
-- `--l-gap`: Gap between items (default: var(--space-md)).
-
-**Attributes:**
-- `min-item-size`: String, e.g., "200px".
-- `gap`: Length, e.g., "1rem".
-
-**Example:**
 ```html
-<layout-grid min-item-size="200px" gap="1rem">
-  <div>Item 1</div>
-  <div>Item 2</div>
-</layout-grid>
+<card>Custom-element host</card>
+<article data-card>Data-attribute host</article>
+<article class="card">Class host</article>
 ```
 
-## `<layout-split>`
+Choose the semantic native element first. A custom tag is useful for terse
+prototypes, while data and class hosts fit validators, CMS output, and existing
+markup. A component page calls out any form it cannot support.
 
-A two-column layout that stacks on small screens and splits at a breakpoint.
+## Native behavior stays native
 
-**Properties:**
-- `--l-fraction`: Ratio for the first column (default: 1fr).
-- `--l-breakpoint`: Container width to split at (default: var(--bp-md)).
-- `--l-gap`: Gap between columns (default: var(--space-md)).
+Controls and browser features keep their platform elements:
 
-**Attributes:**
-- `fraction`: String, e.g., "2fr".
-- `breakpoint`: Length, e.g., "48em".
-- `gap`: Length, e.g., "1rem".
-- `force-stack`: Boolean, forces stacked layout.
-- `no-stack`: Boolean, forces side-by-side.
-
-**Example:**
 ```html
-<layout-split fraction="1fr 2fr" breakpoint="48em">
-  <aside>Sidebar</aside>
-  <main>Content</main>
-</layout-split>
+<button class="form-button btn-primary">Save</button>
+
+<details>
+  <summary>Advanced options</summary>
+  <p>Native disclosure behavior, styled by the library.</p>
+</details>
+
+<dialog data-modal aria-labelledby="confirm-title">
+  <h2 id="confirm-title">Confirm deletion</h2>
+</dialog>
 ```
 
-## `<layout-stack>`
+Forms use native `input`, `select`, `textarea`, and `button` elements. Modals use
+`dialog`; popovers use the Popover API; loading uses `aria-busy`; switches use
+`role="switch"`; tabs use the ARIA tab roles. CSS Tags styles these contracts
+instead of replacing their semantics.
 
-A vertical stack with consistent spacing.
+## State is part of the API
 
-**Properties:**
-- `--l-gap`: Gap between items (default: var(--space-md)).
-- `--l-align`: Alignment of items (default: stretch).
+Prefer the attribute that already communicates the state:
 
-**Attributes:**
-- `gap`: Length, e.g., "1rem".
-- `align`: String, e.g., "center".
-
-**Example:**
 ```html
-<layout-stack gap="1rem" align="center">
-  <h1>Title</h1>
-  <p>Paragraph</p>
-</layout-stack>
+<button aria-busy="true">Saving</button>
+<input aria-invalid="true" aria-describedby="email-error">
+<badge status="success">Published</badge>
+<button aria-disabled="true">Unavailable</button>
 ```
 
-## `<layout-cluster>`
+Visual-only variants use documented `variant`, `size`, or component-specific
+attributes. State classes are retained where there is no matching platform
+state, but they do not add ARIA semantics for you.
 
-For grouping items that wrap onto new lines.
+## Tokens are the customization boundary
 
-**Properties:**
-- `--l-gap`: Gap between items (default: var(--space-sm)).
-- `--l-justify`: Justification (default: flex-start).
-- `--l-align`: Alignment (default: center).
+Components resolve from specific variables to shared semantic tokens:
 
-**Attributes:**
-- `gap`: Length, e.g., "0.5rem".
-- `justify`: String, e.g., "space-between".
-- `align`: String, e.g., "center".
+```css
+.billing-card {
+  --card-background: var(--surface-subtle);
+  --card-border-color: var(--outline-subtle);
+  --card-radius: var(--radius-lg);
+}
 
-**Example:**
-```html
-<layout-cluster gap="0.5rem" justify="center">
-  <button>Btn1</button>
-  <button>Btn2</button>
-</layout-cluster>
+.danger-zone {
+  --button-variant-background: var(--error);
+  --button-variant-color: var(--text-on-error);
+}
 ```
 
-## `<layout-reel>`
+Set root or theme tokens for system-wide changes. Set component tokens on a
+container or instance for local changes. Generic surface aliases such as `--bg`
+are propagated by components so nested content can inherit a useful context;
+prefer the named component token when directly theming that component.
 
-A horizontally scrolling container.
+## API groups
 
-**Properties:**
-- `--l-gap`: Gap between items (default: var(--space-md)).
-- `--l-reel-item-size`: Shared flex basis for direct children.
-- `--l-reel-scroll-padding`: Logical inline scroll padding.
-- `--l-reel-scrollbar-thumb`: Scrollbar thumb color.
-- `--l-reel-scrollbar-track`: Scrollbar track color.
-- `--l-reel-scrollbar-size`: WebKit scrollbar track height.
+- [Defaults](/CSS-Tags/core/defaults/) and [Typography](/CSS-Tags/core/typography/)
+  cover semantic HTML and rich content.
+- [Form controls](/CSS-Tags/components/form/) preserve native control behavior.
+- [Cards](/CSS-Tags/components/card/), [badges](/CSS-Tags/components/badge/),
+  [alerts](/CSS-Tags/components/alert/), and [tables](/CSS-Tags/components/table/)
+  cover common content surfaces.
+- [Disclosure](/CSS-Tags/components/disclosure/),
+  [tabs](/CSS-Tags/components/tabs/), [modal](/CSS-Tags/components/modal/), and
+  [popover](/CSS-Tags/components/popover/) document interaction contracts.
+- [Layout](/CSS-Tags/layouts/layout/) documents the declarative layout
+  primitives and their raw CSS-value attributes.
+- [Utilities](/CSS-Tags/utilities/utilities/) documents intentional overrides.
 
-**Attributes:**
-- `gap`: Length, e.g., "1rem".
-- `item-size`: Direct-child flex basis.
-- `scroll-padding`: Logical inline scroll padding.
-- `scrollbar`: `auto`, `thin`, or `hidden`.
-- `snap`: Boolean, enables proximity snapping.
-- `no-scrollbar`: Legacy alias for `scrollbar="hidden"`.
+## Progressive enhancement
 
-**Example:**
-```html
-<layout-reel gap="1rem" item-size="14rem" scrollbar="thin" snap tabindex="0">
-  <img src="1.jpg">
-  <img src="2.jpg">
-</layout-reel>
-```
-
-## `<layout-switcher>`
-
-Switches from stack to row when items fit.
-
-**Properties:**
-- `--l-threshold`: Threshold for switching (default: 30rem).
-- `--l-gap`: Gap between items (default: var(--space-md)).
-
-**Attributes:**
-- `threshold`: Length, e.g., "20rem".
-- `gap`: Length, e.g., "1rem".
-
-**Example:**
-```html
-<layout-switcher threshold="20rem">
-  <div>Item 1</div>
-  <div>Item 2</div>
-</layout-switcher>
-```
-
-## `<layout-pad>`
-
-Adds consistent padding.
-
-**Properties:**
-- `--l-padding`: Padding (default: var(--space-md)).
-- `--l-padding-inline`: Inline padding.
-- `--l-padding-block`: Block padding.
-
-**Attributes:**
-- `padding`: Length, e.g., "1rem".
-- `padding-x`: Length, e.g., "1rem".
-- `padding-y`: Length, e.g., "1rem".
-
-**Example:**
-```html
-<layout-pad padding="1rem">
-  <p>Content</p>
-</layout-pad>
-```
-
-## `<layout-center>`
-
-Centers content with max-width.
-
-**Properties:**
-- `--l-max-width`: Max width (default: 65ch).
-- `--l-gutters`: Gutters (default: var(--space-md)).
-
-**Attributes:**
-- `max-width`: Length, e.g., "60ch".
-- `gutters`: Length, e.g., "1rem".
-- `and-text`: Boolean, centers text too.
-
-**Example:**
-```html
-<layout-center max-width="60ch" gutters="1rem" and-text>
-  <h1>Centered Heading</h1>
-</layout-center>
-```
-
-## `<layout-frame>`
-
-Responsive container for media with aspect ratio.
-
-**Properties:**
-- `--l-aspect-ratio`: Aspect ratio (default: 16/9).
-
-**Attributes:**
-- `ratio`: String, e.g., "4/3".
-
-**Example:**
-```html
-<layout-frame ratio="16/9">
-  <img src="video.jpg">
-</layout-frame>
-```
-
-## `<layout-sidebar>`
-
-Sidebar layout that stacks on small screens.
-
-**Properties:**
-- `--l-breakpoint`: Breakpoint (default: var(--bp-md)).
-- `--l-side-width`: Sidebar width (default: 20rem).
-- `--l-content-min`: Min content width (default: 50%).
-- `--l-gap`: Gap (default: var(--space-md)).
-
-**Attributes:**
-- `breakpoint`: Length, e.g., "48em".
-- `side-width`: String, e.g., "15rem".
-- `content-min-width`: String, e.g., "60%".
-- `gap`: Length, e.g., "1rem".
-- `side`: "left" or "right" (default: left).
-
-**Example:**
-```html
-<layout-sidebar side-width="200px" side="left">
-  <aside slot="aside">Sidebar</aside>
-  <main>Content</main>
-</layout-sidebar>
-```
-
-## `<layout-page>`
-
-Standard page layout with header, main, footer.
-
-**Properties:**
-- `--l-min-height`: Min height (default: 100vh).
-- `--l-gap`: Gap (default: 0).
-
-**Attributes:**
-- `min-height`: Length, e.g., "100vh".
-- `gap`: Length, e.g., "1rem".
-
-**Example:**
-```html
-<layout-page>
-  <header slot="header">Header</header>
-  <main slot="main">Main</main>
-  <footer slot="footer">Footer</footer>
-</layout-page>
-```
-
-All layouts pull defaults from global tokens and can be customized via CSS custom properties or HTML attributes.
+Modern browser features are enhancements, not permission to remove basic access
+to content. A popover can remain in normal flow when unsupported; a carousel
+remains horizontally scrollable before JavaScript initializes it; view
+transitions fall back to an immediate update. See [Browser
+Support](/CSS-Tags/guides/browser-support/) for the tested baseline and feature
+expectations.

@@ -5,7 +5,7 @@ description: Copyable, rendered examples built with the same CSS Tags APIs that 
 
 import LiveExample from '../../../components/LiveExample.astro';
 
-Every preview on this page is live. It is rendered by the library stylesheet—not a screenshot or a documentation-only recreation. Copy the HTML beneath a preview into a page that includes `index.css`.
+Every preview on this page is live. It is rendered by the library stylesheet—not a screenshot or a documentation-only recreation. Open an example's **Code** tab to copy the exact markup rendered in its preview.
 
 ## Product cards
 
@@ -38,23 +38,6 @@ Every preview on this page is live. It is rendered by the library stylesheet—n
   </layout-grid>
 </LiveExample>
 
-```html
-<layout-grid min-item-size="15rem" gap="var(--space-md)">
-  <card>
-    <card-body>
-      <layout-cluster gap="var(--space-sm)" justify="space-between">
-        <badge status="primary">Popular</badge>
-        <small>$24</small>
-      </layout-cluster>
-      <card-header>Starter kit</card-header>
-      <card-content><p>Tokens, layouts, and components for a small site.</p></card-content>
-      <card-footer><button type="button">Choose starter</button></card-footer>
-    </card-body>
-  </card>
-  <!-- Add more cards as needed. -->
-</layout-grid>
-```
-
 ## Settings form
 
 Native labels and inputs remain the accessibility API. The layout primitives only control spacing.
@@ -83,22 +66,6 @@ Native labels and inputs remain the accessibility API. The layout primitives onl
   </form>
 </LiveExample>
 
-```html
-<form>
-  <layout-stack gap="var(--space-md)">
-    <label>
-      Display name
-      <input class="form-input" name="display-name">
-    </label>
-    <label>
-      Email address
-      <input class="form-input" type="email" name="email">
-    </label>
-    <button class="form-button stack-intrinsic" type="submit">Save settings</button>
-  </layout-stack>
-</form>
-```
-
 ## Feedback states
 
 Use `role="status"` for a polite update and `role="alert"` when an urgent message should be announced immediately. The `status` attribute is the visual styling hook.
@@ -116,16 +83,6 @@ Use `role="status"` for a polite update and `role="alert"` when an urgent messag
     </div>
   </layout-stack>
 </LiveExample>
-
-```html
-<div class="alert" status="success" role="status">
-  <span class="alert__icon" aria-hidden="true">✓</span>
-  <div>
-    <div class="alert__title">Published</div>
-    <div class="alert__body">The new version is live.</div>
-  </div>
-</div>
-```
 
 ## No-JavaScript disclosure
 
@@ -148,19 +105,6 @@ Native `details` and `summary` provide keyboard behavior and state. CSS Tags add
   </div>
 </LiveExample>
 
-```html
-<div data-accordion>
-  <details open>
-    <summary>Does this need JavaScript?</summary>
-    <p>No. The browser owns disclosure behavior; CSS Tags styles it.</p>
-  </details>
-  <details>
-    <summary>Can I change the spacing?</summary>
-    <p>Set --disclosure-padding in your theme.</p>
-  </details>
-</div>
-```
-
 ## Loading content
 
 `aria-busy` is both the semantic state and the spinner trigger. Skeletons use a small utility hook and an accessible status label.
@@ -178,16 +122,6 @@ Native `details` and `summary` provide keyboard behavior and state. CSS Tags add
   </layout-stack>
 </LiveExample>
 
-```html
-<button aria-busy="true" data-spinner="small" disabled>Saving</button>
-
-<div role="status" aria-label="Loading article">
-  <div class="skeleton box"></div>
-  <div class="skeleton line" style="width: 60%"></div>
-  <div class="skeleton line"></div>
-</div>
-```
-
 ## Customizing a component with tokens
 
 Component-specific variables make local theming explicit. This changes one disclosure without creating another variant system.
@@ -198,17 +132,6 @@ Component-specific variables make local theming explicit. This changes one discl
     <p>The public tokens override this instance while preserving its behavior and semantics.</p>
   </details>
 </LiveExample>
-
-```html
-<details style="
-  --disclosure-radius: 1rem;
-  --disclosure-padding: 1.25rem;
-  --disclosure-border-color: var(--accent);
-">
-  <summary>Theme me where I am used</summary>
-  <p>The public tokens override this instance.</p>
-</details>
-```
 
 ## Standalone demos
 

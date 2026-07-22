@@ -104,11 +104,12 @@ The available visual state classes are `.input-error` and `.input-success`. They
   </layout-cluster>
 </LiveExample>
 
-Variants set the button-local `--bg` and `--fg` aliases: `.btn-primary`,
-`.btn-secondary`, `.btn-success`, `.btn-warning`, and `.btn-error`. For direct
-theme customization, prefer `--form-button-background` and
-`--form-button-color`; `.form-button` isolates those values from an ancestor's
-generic surface colors.
+The `.btn-primary`, `.btn-secondary`, `.btn-success`, `.btn-warning`, and
+`.btn-error` variants share one state contract. They work on native buttons,
+`.button`/`.btn` hosts, and `.form-button`, including hover, active, and disabled
+states. Set `--button-variant-background` and `--button-variant-color` for a
+local palette, then optionally override `--button-variant-hover-background`,
+`--button-variant-active-background`, or `--button-variant-disabled-background`.
 
 ## Public API
 

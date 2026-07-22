@@ -12,8 +12,8 @@ Get your project running with CSS Tags in three simple steps.
 Add the stylesheet to the `<head>` of your HTML file.
 
 ```html
-<!-- CDN (Recommended for prototyping) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+<!-- Published npm package, pinned for predictable output -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
 ```
 
 **Other installation methods:**
@@ -24,18 +24,16 @@ For production use, host the file yourself:
 2. Place it in your project's CSS directory
 3. Link to it: `<link rel="stylesheet" href="your-css-folder/index.css">`
 
-### Pin a version
+### Install from npm
 
-`@latest` is convenient while experimenting, but production sites should pin a commit or release so an upstream change cannot alter a deployed page unexpectedly:
+Install the published package when your project has a build step:
 
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@COMMIT_OR_TAG/index.css">
+```bash
+npm install css-tags
 ```
 
-There is not currently an npm package. If your build imports local CSS, clone or vendor the repository and import its root entry point:
-
 ```css
-@import url("./vendor/css-tags/index.css");
+@import "css-tags";
 ```
 
 ## 2. Write Semantic HTML
@@ -99,9 +97,9 @@ Let's create a complete page to see CSS Tags in action:
   <title>My First CSS Tags Page</title>
 
   <!-- Add CSS Tags -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
 </head>
-<body p="var(--space-lg)">
+<body>
 
   <layout-center max-width="70ch">
     <card>
@@ -109,7 +107,7 @@ Let's create a complete page to see CSS Tags in action:
         <h1>Hello, CSS Tags!</h1>
         <p>This card is automatically styled with responsive design and theme support.</p>
         <layout-cluster gap="var(--space-sm)">
-          <button bg="var(--accent)">Get Started</button>
+          <button class="form-button btn-primary">Get Started</button>
           <button>Learn More</button>
         </layout-cluster>
       </card-body>
@@ -195,9 +193,9 @@ CSS Tags comes with a complete design token system:
 
 ### Colors
 ```html
-<button bg="var(--accent)">Accent Button</button>
-<button bg="var(--success)">Success Button</button>
-<button bg="var(--error)">Error Button</button>
+<button class="form-button btn-primary">Accent Button</button>
+<button class="form-button btn-success">Success Button</button>
+<button class="form-button btn-error">Error Button</button>
 ```
 
 ### Typography
@@ -297,15 +295,15 @@ The previews below use the semantic state attributes that the CSS already unders
 
 ### Alerts
 ```html
-<alert bg="var(--surface-success)">Success message</alert>
-<alert bg="var(--surface-warning)">Warning message</alert>
-<alert bg="var(--surface-error)">Error message</alert>
+<alert-message status="success" role="status">Saved successfully.</alert-message>
+<div data-alert status="warning" role="alert">Payment needs attention.</div>
+<div class="alert alert-error" role="alert">The upload failed.</div>
 ```
 
 ### Badges
 ```html
-<badge bg="var(--success)">New</badge>
-<badge bg="var(--warning)">Beta</badge>
+<badge status="success">New</badge>
+<badge status="warning">Beta</badge>
 ```
 
 ## Customization
@@ -349,13 +347,7 @@ Override design tokens to match your brand:
 
 ## Browser Support
 
-CSS Tags works best in the latest versions of all major browsers:
-
-| Feature | Chrome | Firefox | Safari | Edge |
-|:---|:---:|:---:|:---:|:---:|
-| **Core Framework** | ✅ 111+ | ✅ 113+ | ✅ 16.4+ | ✅ 111+ |
-| `:has()` Selector | ✅ 105+ | ✅ 121+ | ✅ 16+ | ✅ 105+ |
-| Container Queries | ✅ 105+ | ✅ 110+ | ✅ 16+ | ✅ 105+ |
-| OKLCH Colors | ✅ 111+ | ✅ 113+ | ✅ 15.4+ | ✅ 111+ |
-
-The framework includes graceful degradation, so pages will still be usable in older browsers, but layout and colors may be simplified.
+The complete theme supports Chrome and Edge 119+, Firefox 128+, and Safari
+16.5+. Newer platform features remain progressive enhancements. See the
+[browser support contract](/guides/browser-support/) for the baseline,
+fallback expectations, and testing policy.

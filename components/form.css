@@ -184,12 +184,50 @@
   cursor: not-allowed;
 }
 
-/* Button color variants */
-.btn-primary { --bg: var(--accent); --fg: var(--text-on-accent); }
-.btn-secondary { --bg: var(--secondary); --fg: var(--text-on-secondary); }
-.btn-success { --bg: var(--success); --fg: var(--text-on-success); }
-.btn-warning { --bg: var(--warning); --fg: var(--text-on-warning); }
-.btn-error { --bg: var(--error); --fg: var(--text-on-error); }
+/* Button color variants share one state contract. Keeping the palette choice
+ * separate from the state mapping lets a variant compose with `.form-button`
+ * here and with native/`.button` hosts in the utilities layer. */
+:is(.btn-primary, .btn-secondary, .btn-success, .btn-warning, .btn-error) {
+  --form-button-background: var(--button-variant-background);
+  --form-button-color: var(--button-variant-color);
+  --form-button-hover-background: var(
+    --button-variant-hover-background,
+    oklch(from var(--button-variant-background) calc(l - 0.08) c h)
+  );
+  --form-button-active-background: var(
+    --button-variant-active-background,
+    oklch(from var(--button-variant-background) calc(l - 0.14) c h)
+  );
+  --bg: var(--form-button-background);
+  --fg: var(--form-button-color);
+}
+
+.btn-primary {
+  --button-variant-background: var(--accent);
+  --button-variant-color: var(--text-on-accent);
+  --button-variant-hover-background: var(--accent-overt);
+}
+
+.btn-secondary {
+  --button-variant-background: var(--secondary);
+  --button-variant-color: var(--text-on-secondary);
+  --button-variant-hover-background: var(--secondary-overt);
+}
+
+.btn-success {
+  --button-variant-background: var(--success);
+  --button-variant-color: var(--text-on-success);
+}
+
+.btn-warning {
+  --button-variant-background: var(--warning);
+  --button-variant-color: var(--text-on-warning);
+}
+
+.btn-error {
+  --button-variant-background: var(--error);
+  --button-variant-color: var(--text-on-error);
+}
 
 /* Visual state follows semantic state when available. */
 :is(.form-input, .form-select, .form-textarea, .input-field, .input, .select, .textarea, .form-control, [data-form-control]):is(.input-error, [aria-invalid="true"], :user-invalid) {

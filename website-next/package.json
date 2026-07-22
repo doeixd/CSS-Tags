@@ -7,9 +7,11 @@
     "start": "astro dev --port 4322",
     "build": "astro build",
     "audit:build": "node scripts/audit-build.mjs",
-    "check": "npm run build && npm run audit:build",
+    "check": "npm run build && npm run audit:build && npm run check:types && npm run check:legacy-content",
     "preview": "astro preview --port 4322",
-    "sync:content": "node scripts/sync-content.mjs",
+    "check:legacy-content": "node scripts/sync-content.mjs --check",
+    "sync:legacy-content": "node scripts/sync-content.mjs --write",
+    "check:types": "tsc --noEmit --skipLibCheck --lib DOM,ES2022 --jsx preserve ../types/css-tags.type-test.tsx",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
     "terser": "^5.44.1"
   },
   "devDependencies": {
+    "typescript": "^5.9.3",
     "unist-util-visit": "^5.0.0"
   }
 }

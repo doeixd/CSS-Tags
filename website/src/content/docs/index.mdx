@@ -16,9 +16,9 @@ See it for yourself in 60 seconds. Copy this code into an `index.html` file and 
   <title>CSS Tags Demo</title>
 
   <!-- 1. Add the stylesheet. That's the only setup. -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/doeixd/CSS-Tags@latest/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/css-tags@0.1.0/index.css">
 </head>
-<body p="var(--space-lg)">
+<body>
 
   <!-- 2. Write semantic HTML. No classes needed. -->
   <layout-center max-width="70ch">
@@ -28,7 +28,7 @@ See it for yourself in 60 seconds. Copy this code into an `index.html` file and 
         <p>This component is already responsive and adapts to your system's light or dark mode. No build step, no configuration needed.</p>
         <layout-cluster gap="var(--space-sm)">
           <!-- 3. Use design tokens for declarative styling. -->
-          <button bg="var(--accent)">Get Started</button>
+          <button class="form-button btn-primary">Get Started</button>
           <button>Learn More</button>
         </layout-cluster>
       </card-body>
@@ -68,7 +68,7 @@ See it for yourself in 60 seconds. Copy this code into an `index.html` file and 
   <card-body>
     <h3>Amazing Product</h3>
     <p>Description of the product...</p>
-    <button bg="var(--accent)">Buy Now</button>
+    <button class="form-button btn-primary">Buy Now</button>
   </card-body>
 </card>
 ```
@@ -157,7 +157,9 @@ card:has(card-media) {
 Declarative layout primitives: `<layout-center>`, `<layout-grid>`, `<layout-stack>`, `<layout-sidebar>`, `<layout-cluster>`, and more.
 
 ### UI Components
-Pre-built components: `<card>`, `<button>`, `<alert>`, `<badge>`, `<modal>`, `<tooltip>`, `<carousel>`, and more.
+Pre-built styling contracts include `<card>`, native `<button>`,
+`<alert-message>`, `<badge>`, `<dialog data-modal>`, `<tooltip>`,
+`<carousel>`, and their documented native, data, or class alternatives.
 
 ### Core System
 Foundational layers: Reset, Base, Tokens, Theme, Engine, Palette—all using modern CSS cascade layers.

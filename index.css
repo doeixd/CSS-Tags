@@ -3,7 +3,7 @@
  * Revised import structure for clarity and correctness.
  */
 
-@layer base, reset, tokens, engine, theme, palette, defaults, components, layouts, utilities, website-theme;
+@layer base, reset, tokens, engine, theme, palette, defaults, components, utilities, layouts, website-theme;
 
 /* CORE SYSTEM */
 @import url("core/reset.css") layer(reset);

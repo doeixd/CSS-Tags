@@ -12,7 +12,11 @@ Avatars represent a person, team, or account in a compact visual region. Use `<u
 The default avatar is `2.75rem`. Use `size="sm"` for dense interfaces and `size="lg"` for prominent identity surfaces. Its inline and block dimensions are invariant, so a flex or grid parent cannot compress the circle into an oval.
 
 <LiveExample title="Avatar sizes and public hosts" compact>
-  <layout-cluster gap="var(--space-lg)" align="center"><user-avatar size="sm" aria-label="Ada Lovelace">AL</user-avatar><span data-avatar aria-label="Grace Hopper">GH</span><span class="avatar" size="lg" aria-label="Katherine Johnson">KJ</span></layout-cluster>
+  <layout-cluster gap="var(--space-lg)" align="center">
+    <user-avatar size="sm" aria-label="Ada Lovelace">AL</user-avatar>
+    <span data-avatar aria-label="Grace Hopper">GH</span>
+    <span class="avatar" size="lg" aria-label="Katherine Johnson">KJ</span>
+  </layout-cluster>
 </LiveExample>
 
 ```html
@@ -26,7 +30,10 @@ The default avatar is `2.75rem`. Use `size="sm"` for dense interfaces and `size=
 Circle is the default. `shape="square"` uses the shared medium radius while preserving the same square footprint.
 
 <LiveExample title="Round and square avatars" compact>
-  <layout-cluster gap="var(--space-lg)" align="center"><user-avatar size="lg" aria-label="Round account avatar">RA</user-avatar><user-avatar size="lg" shape="square" aria-label="Square organization avatar">SO</user-avatar></layout-cluster>
+  <layout-cluster gap="var(--space-lg)" align="center">
+    <user-avatar size="lg" aria-label="Round account avatar">RA</user-avatar>
+    <user-avatar size="lg" shape="square" aria-label="Square organization avatar">SO</user-avatar>
+  </layout-cluster>
 </LiveExample>
 
 ## Image and initials fallback
@@ -34,7 +41,14 @@ Circle is the default. `shape="square"` uses the shared medium radius while pres
 An `img` or `picture` child fills the avatar and uses `object-fit: cover`. Keep meaningful identity in the image `alt`; use an empty `alt` only when nearby text already names the person.
 
 <LiveExample title="Image avatar with initials fallback" compact>
-  <layout-cluster gap="var(--space-lg)" align="center"><user-avatar size="lg"><picture><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%236d5dfc'/%3E%3Ccircle cx='50' cy='38' r='20' fill='white'/%3E%3Cpath d='M18 96c3-24 16-35 32-35s29 11 32 35' fill='white'/%3E%3C/svg%3E" alt="Ada Lovelace" /></picture></user-avatar><user-avatar size="lg" aria-label="Grace Hopper">GH</user-avatar></layout-cluster>
+  <layout-cluster gap="var(--space-lg)" align="center">
+    <user-avatar size="lg">
+      <picture>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%236d5dfc'/%3E%3Ccircle cx='50' cy='38' r='20' fill='white'/%3E%3Cpath d='M18 96c3-24 16-35 32-35s29 11 32 35' fill='white'/%3E%3C/svg%3E" alt="Ada Lovelace" />
+      </picture>
+    </user-avatar>
+    <user-avatar size="lg" aria-label="Grace Hopper">GH</user-avatar>
+  </layout-cluster>
 </LiveExample>
 
 ## Avatar groups
@@ -42,7 +56,12 @@ An `img` or `picture` child fills the avatar and uses `object-fit: cover`. Keep 
 `<avatar-group>`, `[data-avatar-group]`, and `.avatar-group` overlap direct avatar children while adding a surface-colored separation ring.
 
 <LiveExample title="Overlapping project members" compact>
-  <avatar-group aria-label="Project members"><user-avatar aria-label="Ada Lovelace">AL</user-avatar><user-avatar aria-label="Grace Hopper">GH</user-avatar><user-avatar aria-label="Katherine Johnson">KJ</user-avatar><user-avatar aria-label="Margaret Hamilton">MH</user-avatar></avatar-group>
+  <avatar-group aria-label="Project members">
+    <user-avatar aria-label="Ada Lovelace">AL</user-avatar>
+    <user-avatar aria-label="Grace Hopper">GH</user-avatar>
+    <user-avatar aria-label="Katherine Johnson">KJ</user-avatar>
+    <user-avatar aria-label="Margaret Hamilton">MH</user-avatar>
+  </avatar-group>
 </LiveExample>
 
 Give the group a useful accessible label. Each avatar should retain its own name when the individual identities matter.
@@ -52,7 +71,16 @@ Give the group a useful accessible label. Each avatar should retain its own name
 The avatar owns a fixed flex basis, minimum inline size, minimum block size, and square aspect ratio. The adjacent content receives the flexible space.
 
 <LiveExample title="Avatar beside long content" description="Narrow the preview: the text wraps while the avatar remains circular.">
-  <article class="example-panel"><flex align="flex-start" gap="var(--space-md)"><user-avatar size="lg" aria-label="Avery Gray">AG</user-avatar><div grow="1" basis="0"><h3 style="margin-block-start: 0">Avery Gray</h3><p class="example-muted">A long account description can wrap onto several lines without borrowing width from the identity marker.</p></div><button type="button" shrink="0">Follow</button></flex></article>
+  <article class="example-panel">
+    <flex align="flex-start" gap="var(--space-md)">
+      <user-avatar size="lg" aria-label="Avery Gray">AG</user-avatar>
+      <div grow="1" basis="0">
+        <h3 style="margin-block-start: 0">Avery Gray</h3>
+        <p class="example-muted">A long account description can wrap onto several lines without borrowing width from the identity marker.</p>
+      </div>
+      <button type="button" shrink="0">Follow</button>
+    </flex>
+  </article>
 </LiveExample>
 
 ## Tokens

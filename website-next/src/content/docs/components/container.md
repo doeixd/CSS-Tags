@@ -125,10 +125,11 @@ Allows per-element overrides with type checking and fallbacks.
 - **Flexible**: Breakpoints can be set dynamically or based on container size
 
 ## Browser Support
-- **Style Queries**: Chrome 111+, Safari 18+ (limited support)
-- **Logical Properties**: All modern browsers
-- **attr() with types**: Limited support (fallback to defaults)
-- **Fallback**: Behaves as a centered block element in unsupported browsers
+
+The centered container follows the shared [Browser
+Support](/CSS-Tags/guides/browser-support/) baseline. Typed attributes and style
+queries are progressive enhancements: the named custom properties and centered
+block layout remain the reliable fallback contract.
 
 ## Use Cases
 - **Page Layouts**: Main content containers

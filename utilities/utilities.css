@@ -221,27 +221,103 @@
   .border-error { border-color: var(--outline-error); }
   .border-info { border-color: var(--outline-info); }
 
-  /* Button structure and interaction live in core/defaults.css. Utilities
-     only provide visual variants so `.button` and legacy `.btn` cannot drift. */
-  :is(.button-primary, .btn-primary) {
-    --bg: var(--accent);
+  /* Button structure and interaction live in core/defaults.css. Every solid
+     variant feeds the same state variables so native buttons, `.button`,
+     `.btn`, and `.form-button` behave consistently when combined. */
+  :is(
+    .button-primary, .btn-primary,
+    .button-secondary, .btn-secondary,
+    .button-success, .btn-success,
+    .button-warning, .btn-warning,
+    .button-error, .btn-error
+  ) {
+    --button-background: var(--button-variant-background);
+    --button-color: var(--button-variant-color);
+    --button-hover-background: var(
+      --button-variant-hover-background,
+      oklch(from var(--button-variant-background) calc(l - 0.08) c h)
+    );
+    --button-hover-color: var(--button-variant-color);
+    --button-active-background: var(
+      --button-variant-active-background,
+      oklch(from var(--button-variant-background) calc(l - 0.14) c h)
+    );
+    --button-active-color: var(--button-variant-color);
+    --form-button-background: var(--button-variant-background);
+    --form-button-color: var(--button-variant-color);
+    --form-button-hover-background: var(--button-hover-background);
+    --form-button-active-background: var(--button-active-background);
+    --bg: var(--button-variant-background);
+    --fg: var(--button-variant-color);
     background-color: var(--bg);
-    border-color: var(--accent);
-    color: var(--text-on-accent);
+    border-color: var(--button-variant-border-color, var(--button-variant-background));
+    color: var(--fg);
   }
-  :is(.button-primary, .btn-primary):hover:not(:disabled):not([aria-disabled="true"]) { --bg: var(--accent-overt); background-color: var(--bg); color: var(--text-on-accent); }
-  :is(.button-primary, .btn-primary):active:not(:disabled):not([aria-disabled="true"]) { --bg: var(--accent-highlight); background-color: var(--bg); color: var(--text-on-accent); }
-  :is(.button-primary, .btn-primary):is(:disabled, [aria-disabled="true"]) { --bg: var(--accent-muted); background-color: var(--bg); color: var(--text-on-accent); }
+
+  :is(
+    .button-primary, .btn-primary,
+    .button-secondary, .btn-secondary,
+    .button-success, .btn-success,
+    .button-warning, .btn-warning,
+    .button-error, .btn-error
+  ):hover:not(:disabled):not([aria-disabled="true"]) {
+    --bg: var(--button-hover-background);
+    background-color: var(--bg);
+    color: var(--button-hover-color);
+  }
+
+  :is(
+    .button-primary, .btn-primary,
+    .button-secondary, .btn-secondary,
+    .button-success, .btn-success,
+    .button-warning, .btn-warning,
+    .button-error, .btn-error
+  ):active:not(:disabled):not([aria-disabled="true"]) {
+    --bg: var(--button-active-background);
+    background-color: var(--bg);
+    color: var(--button-active-color);
+  }
+
+  :is(
+    .button-primary, .btn-primary,
+    .button-secondary, .btn-secondary,
+    .button-success, .btn-success,
+    .button-warning, .btn-warning,
+    .button-error, .btn-error
+  ):is(:disabled, [aria-disabled="true"]) {
+    --bg: var(--button-variant-disabled-background, var(--button-variant-background));
+    background-color: var(--bg);
+    color: var(--button-variant-disabled-color, var(--button-variant-color));
+  }
+
+  :is(.button-primary, .btn-primary) {
+    --button-variant-background: var(--accent);
+    --button-variant-color: var(--text-on-accent);
+    --button-variant-hover-background: var(--accent-overt);
+    --button-variant-disabled-background: var(--accent-muted);
+  }
 
   :is(.button-secondary, .btn-secondary) {
-    --bg: var(--secondary);
-    background-color: var(--bg);
-    border-color: var(--secondary);
-    color: var(--text-on-secondary);
+    --button-variant-background: var(--secondary);
+    --button-variant-color: var(--text-on-secondary);
+    --button-variant-hover-background: var(--secondary-overt);
+    --button-variant-disabled-background: var(--secondary-muted);
   }
-  :is(.button-secondary, .btn-secondary):hover:not(:disabled):not([aria-disabled="true"]) { --bg: var(--secondary-overt); background-color: var(--bg); color: var(--text-on-secondary); }
-  :is(.button-secondary, .btn-secondary):active:not(:disabled):not([aria-disabled="true"]) { --bg: var(--secondary-highlight); background-color: var(--bg); color: var(--text-on-secondary); }
-  :is(.button-secondary, .btn-secondary):is(:disabled, [aria-disabled="true"]) { --bg: var(--secondary-muted); background-color: var(--bg); color: var(--text-on-secondary); }
+
+  :is(.button-success, .btn-success) {
+    --button-variant-background: var(--success);
+    --button-variant-color: var(--text-on-success);
+  }
+
+  :is(.button-warning, .btn-warning) {
+    --button-variant-background: var(--warning);
+    --button-variant-color: var(--text-on-warning);
+  }
+
+  :is(.button-error, .btn-error) {
+    --button-variant-background: var(--error);
+    --button-variant-color: var(--text-on-error);
+  }
 
   :is(.button-outline, .btn-outline) {
     --bg: inherit;

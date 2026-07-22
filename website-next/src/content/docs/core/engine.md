@@ -168,10 +168,11 @@ Chroma adjustments are more aggressive since saturation changes are more noticea
 - **Conservative**: Smaller steps might be too subtle
 
 ## Browser Support
-- **CSS Calculations**: All modern browsers
-- **OKLCH Color**: Chrome 111+, Firefox 113+, Safari 15.4+
-- **Custom Properties**: All modern browsers
-- **Fallback**: Basic colors work without calculations
+
+The engine feeds the generative theme and therefore follows the complete
+[Browser Support](/CSS-Tags/guides/browser-support/) baseline. Older browsers
+need precomputed semantic color tokens; invalid derived colors are not treated
+as a dependable automatic fallback.
 
 ## Performance Considerations
 - **CSS Calculations**: Computed at parse time, no runtime performance impact

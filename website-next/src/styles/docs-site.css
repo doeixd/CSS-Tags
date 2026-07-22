@@ -239,6 +239,16 @@ html[data-scroll-active="true"]::-webkit-scrollbar-thumb,
   --disclosure-padding: 0;
 }
 
+/* The server keeps the disclosure open so the desktop sidebar never shifts in
+   after hydration. At narrow widths, hide that server-open content until the
+   synchronous viewport setup closes it; the summary remains immediately
+   available and there is no expanded-menu flash. */
+@media (max-width: 64rem) {
+  .next-docs__navigation-disclosure:not([data-ready="true"]) > :not(summary) {
+    display: none;
+  }
+}
+
 @media (min-width: 64.001rem) {
   .next-docs__navigation-disclosure > summary {
     display: none;
